@@ -16,11 +16,7 @@ jobs:
         with:
           channel: 'dev'
       - run: ls
-      - run: cd example
-      - run: ls
-      - run: flutter config --enable-web
-      - run: flutter pub get
-      - run: flutter build web --release
+      - run: cd example && ls && flutter config --enable-web && flutter pub get && flutter build web --release
       - run: |
           cd build/web
           git init
