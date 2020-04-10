@@ -96,6 +96,7 @@ class MarkdownGenerator {
   }
 }
 
+///Thanks for https://github.com/flutter/flutter_markdown/blob/4cc79569f6c0f150fc4e9496f594d1bfb3a3ff54/lib/src/widget.dart
 class TaskListSyntax extends m.InlineSyntax {
   static final String _pattern = r'^ *\[([ xX])\] +';
 

@@ -5,20 +5,20 @@ Language:[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/
 [![support](https://img.shields.io/badge/platform-flutter%7Cdart%20vm-ff69b4.svg?style=flat-square)](https://github.com/asjqkkkk/markdown_widget)
 [![Flutter Web](https://github.com/asjqkkkk/markdown_widget/workflows/Flutter%20Web/badge.svg)](https://github.com/asjqkkkk/markdown_widget/actions)
 [![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget)
-[![demo](https://img.shields.io/badge/demo-online-brightgreen)](https://oldchen.top/markdown_widget/#/)
+[![demo](https://img.shields.io/badge/demo-online-brightgreen)](http://oldben.gitee.io/markdown_widget)
 
-A simple and easy-to-use markdown package created by flutter.
+完全由flutter创建,一个简单好用,支持mobile与flutter web的markdown插件
 
-- Support TOC
-- Support img and Video Tags of HTML
-- Support highlight code
+- 支持TOC功能
+- 支持html格式的 `img` 和 `video` 标签
+- 支持代码高亮
 
 
-## Getting Started
+## 开始
 
-Before the introduction,  you can have a try for [Online Demo](https://oldchen.top/markdown_widget/#/)
+在开始之前,你可以先体验一下在线 demo [点击体验](http://oldben.gitee.io/markdown_widget)
 
-### Useage
+### 简单使用
 
 
 ```
@@ -44,9 +44,9 @@ class MarkdownPage extends StatelessWidget {
 }
 ```
 
-## Image and Video
+## 图片和视频
 
-if you want to custom a widget, such as **Image** and **Video**:
+如果你想要自定义 **img** 和 **video** 这两个标签的 Widget
 
 ```
   Widget buildMarkdown() => MarkdownWidget(
@@ -62,7 +62,7 @@ if you want to custom a widget, such as **Image** and **Video**:
       );
 ```
 
-supported markdown samples:
+图片与视频标签支持的markdown格式
 
 ```
 <video src="https://xxx.mp4" controls="controls"/>
@@ -73,11 +73,11 @@ supported markdown samples:
 
 ```
 
-if you want to custom other tag widgets, you need use `WidgetConfig`
+如果你想自定义其他标签的Widget,请使用 `WidgetConfig`
 
-## Links
+## 链接
 
-you can custom link style
+你可以自定义链接样式和点击事件
 
 
 ```
@@ -94,9 +94,9 @@ you can custom link style
       );
 ```
 
-## TOC
+## TOC功能
 
-if you want to get a TOC function
+当你想使用TOC功能的时候
 
 ```
   final TocController tocController = TocController();
@@ -104,20 +104,20 @@ if you want to get a TOC function
   Widget buildMarkdown() => MarkdownWidget(
         data: data,
         tocListBuilder: (LinkedHashMap<int, Toc> tocList){
-          ///here you can get markdown toc list
+          ///这里获取TOC目录列表
         },
         controller: tocController..addListener(() {
           final currentTocNode = tocController.toc;
           if(currentTocNode != null){
-            ///do what you want to do
+            ///可以在这里做TOC列表index刷新之类的操作
           }
         }),
       );
 ```
 
-## hightlight code
+## 代码高亮
 
-you can config lots of theme for code
+代码高亮支持多种主题
 
 ```
 import 'package:markdown_widget/config/highlight_themes.dart' as theme;
@@ -133,20 +133,19 @@ import 'package:markdown_widget/config/highlight_themes.dart' as theme;
       );
 ```
 
-if you have any good idea or sugesstion, [welcome for PR and issue](https://github.com/asjqkkkk/markdown_widget)
+如果你由什么好的想法或者建议,以及使用上的问题, [欢迎来提pr或issue](https://github.com/asjqkkkk/markdown_widget)
 
 
-# appendix
+# 附录
 
-Here are the other packages used in markdown_widget
+这里是 markdown_widget 中使用到的其他库
 
-
-package | explain
+库 | 描述
 ---|---
-[markdown](https://pub.flutter-io.cn/packages/markdown) | parse markdown data
-[flutter_highlight](https://pub.flutter-io.cn/packages/flutter_highlight) | make code highlight
-[html](https://pub.flutter-io.cn/packages/html) | parse html data
-[video_player_web](https://pub.flutter-io.cn/packages/video_player_web) | play video in flutter web
-[video_player](https://pub.flutter-io.cn/packages/video_player) | video interface
-[chewie](https://pub.flutter-io.cn/packages/chewie) | a simple and beautiful video player
-[scrollable_positioned_list](https://pub.flutter-io.cn/packages/scrollable_positioned_list) | for TOC function
+[markdown](https://pub.flutter-io.cn/packages/markdown) | 解析markdown数据
+[flutter_highlight](https://pub.flutter-io.cn/packages/flutter_highlight) | 代码高亮
+[html](https://pub.flutter-io.cn/packages/html) | 解析markdown没有解析的html标签
+[video_player_web](https://pub.flutter-io.cn/packages/video_player_web) | 在flutter web上播放视频
+[video_player](https://pub.flutter-io.cn/packages/video_player) | 视频接口
+[chewie](https://pub.flutter-io.cn/packages/chewie) | 一个简单漂亮的视频播放器
+[scrollable_positioned_list](https://pub.flutter-io.cn/packages/scrollable_positioned_list) | 用于实现TOC功能
