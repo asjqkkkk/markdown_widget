@@ -23,5 +23,13 @@ Container defaultImageWidget(Map<String, String> attributes, {String url}) {
   );
 }
 
+class ImgConfig{
+  final ImgWrapper imgWrapper;
+
+  ImgConfig({this.imgWrapper});
+}
+
 typedef Widget ImgBuilder(String url, Map<String, String> attributes);
+typedef Widget ImgWrapper(Widget img);
+
 
