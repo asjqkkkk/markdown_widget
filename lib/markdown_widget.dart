@@ -69,15 +69,17 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     lazyLoadWidgets();
   }
 
-  void clearState(){
+  void clearState() {
     tocList.clear();
     widgets.clear();
     markdownGenerator = null;
+    itemPositionsListener.itemPositions.removeListener(indexListener);
+    hasInitialed = false;
   }
 
   @override
   void dispose() {
-    itemPositionsListener.itemPositions.removeListener(indexListener);
+    clearState();
     super.dispose();
   }
 
@@ -141,36 +143,16 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   void didUpdateWidget(MarkdownWidget oldWidget) {
-    if(oldWidget != widget || oldWidget.data != widget.data ){
+    if (oldWidget.data != widget.data ||
+        oldWidget.styleConfig != widget.styleConfig ||
+        oldWidget.widgetConfig != widget.widgetConfig ||
+        oldWidget.childMargin != widget.childMargin) {
       clearState();
       initialState();
       print('refresh');
     }
     super.didUpdateWidget(oldWidget);
-
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is _MarkdownWidgetState &&
-              runtimeType == other.runtimeType &&
-              markdownGenerator == other.markdownGenerator &&
-              widgets == other.widgets &&
-              tocList == other.tocList &&
-              itemPositionsListener == other.itemPositionsListener &&
-              hasInitialed == other.hasInitialed;
-
-  @override
-  int get hashCode =>
-      markdownGenerator.hashCode ^
-      widgets.hashCode ^
-      tocList.hashCode ^
-      itemPositionsListener.hashCode ^
-      hasInitialed.hashCode;
-
-
-
 }
 
 ///you need to set [ItemScrollController], so [TocListener] will be trigger
@@ -180,12 +162,12 @@ class TocController extends ChangeNotifier {
   Toc toc;
 
   void _setToc(Toc toc) {
-    if(this.toc == toc) return;
+    if (this.toc == toc) return;
     this.toc = toc;
     refresh();
   }
 
-  void refresh(){
+  void refresh() {
     notifyListeners();
   }
 }
