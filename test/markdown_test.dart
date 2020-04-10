@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:markdown_widget/markdown_generator.dart';
-import 'package:path/path.dart' as p;
 import 'package:markdown/markdown.dart' as m;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/dom.dart' as h;
@@ -48,7 +47,8 @@ void htmlPrintNode(h.Node node, int deep) {
 void main() {
   test('test for markdown', () {
     final current = Directory.current;
-    final markdownPath = p.join(current.path,'README.md');
+//    final markdownPath = p.join(current.path,'README.md');
+    final markdownPath = current.path + '/README.md';
     File mdFile = File(markdownPath);
     if (!mdFile.existsSync()) return;
     final content = mdFile.readAsStringSync();

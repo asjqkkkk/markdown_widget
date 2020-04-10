@@ -1,1 +1,1 @@
-## [0.0.1] - Complete base functions
+## [1.0.0] - Complete base functions
