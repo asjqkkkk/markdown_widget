@@ -17,8 +17,16 @@ jobs:
           channel: 'dev'
       - run: ls
       - run: cd example && ls && flutter config --enable-web && flutter pub get && flutter build web --release
-      - uses: peaceiris/actions-gh-pages@v2.5.1
-        env:
-          PERSONAL_TOKEN: ${{ secrets.ACTION_TOKEN }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ./markdown_widget/example/build/web
+      - run: |
+          cd example/build/web && git init
+          # type configurations: your user.email and user.name followed lines
+          # git config --global user.email your_email
+          # git config --global user.name your_name
+          git config --global user.email agedchen@gmail.com
+          git config --global user.name asjqkkkk
+          git status
+          git remote add origin https://${{secrets.ACTION_TOKEN}}@github.com/asjqkkkk/markdown_widget.git
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "update"
+          git push origin gh-pages -f
