@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:example/widgets/toc_list.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:markdown_widget/config/platform.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 class MarkdownPage extends StatefulWidget {

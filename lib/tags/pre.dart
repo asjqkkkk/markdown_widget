@@ -47,6 +47,8 @@ class PreConfig {
   final Decoration decoration;
   final EdgeInsetsGeometry margin;
   final TextStyle textStyle;
+
+  ///see package:flutter_highlight/themes/
   final Map<String, TextStyle> theme;
   final String language;
   final int tabSize;
