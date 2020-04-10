@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../tags/input.dart';
 import '../tags/markdown_tags.dart';
 import '../tags/all_tags.dart';
+export '../tags/all_tags.dart';
 
 class StyleConfig {
   StyleConfig._internal();
@@ -74,6 +74,44 @@ class StyleConfig {
 
   ///hr
   HrConfig hrConfig;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is StyleConfig &&
+              runtimeType == other.runtimeType &&
+              checkBoxBuilder == other.checkBoxBuilder &&
+              checkBoxConfig == other.checkBoxConfig &&
+              imgBuilder == other.imgBuilder &&
+              videoBuilder == other.videoBuilder &&
+              videoConfig == other.videoConfig &&
+              titleConfig == other.titleConfig &&
+              pConfig == other.pConfig &&
+              olConfig == other.olConfig &&
+              ulConfig == other.ulConfig &&
+              preConfig == other.preConfig &&
+              blockQuoteConfig == other.blockQuoteConfig &&
+              tableConfig == other.tableConfig &&
+              hrConfig == other.hrConfig;
+
+  @override
+  int get hashCode =>
+      checkBoxBuilder.hashCode ^
+      checkBoxConfig.hashCode ^
+      imgBuilder.hashCode ^
+      videoBuilder.hashCode ^
+      videoConfig.hashCode ^
+      titleConfig.hashCode ^
+      pConfig.hashCode ^
+      olConfig.hashCode ^
+      ulConfig.hashCode ^
+      preConfig.hashCode ^
+      blockQuoteConfig.hashCode ^
+      tableConfig.hashCode ^
+      hrConfig.hashCode;
+
+
+
 
 }
 

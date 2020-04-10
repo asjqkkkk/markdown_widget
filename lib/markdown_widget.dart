@@ -1,11 +1,14 @@
 import 'dart:collection';
-
-import 'package:flutter/material.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
 import 'markdown_generator.dart';
 import 'config/style_config.dart';
 import 'config/widget_config.dart';
+import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
+export 'dart:collection';
+export 'config/style_config.dart';
+export 'config/platform.dart';
+export 'package:markdown_widget/markdown_generator.dart';
 
 class MarkdownWidget extends StatefulWidget {
   final String data;
@@ -18,13 +21,10 @@ class MarkdownWidget extends StatefulWidget {
 
   final EdgeInsetsGeometry childMargin;
 
-  ///if [controller] is null, it will return a ListView; if not null, you can use markdown TOC feature
-  final ItemScrollController controller;
-
   ///if [controller] is not null, you can use [tocListener] to get current TOC index
-  final TocListener tocListener;
+  final TocController controller;
 
-  ///get all TOC node
+  ///get all TOC node, it will be only triggered once
   final TocList tocListBuilder;
 
   ///see [lazyLoadWidgets], if true, it will load 10、20、30..n widgets dynamic
@@ -37,7 +37,8 @@ class MarkdownWidget extends StatefulWidget {
     this.styleConfig,
     this.childMargin,
     this.controller,
-    this.tocListener, this.tocListBuilder, this.lazyLoad = true,
+    this.tocListBuilder,
+    this.lazyLoad = false,
   }) : super(key: key);
 
   @override
@@ -54,15 +55,24 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   void initState() {
+    initialState();
+    super.initState();
+  }
+
+  void initialState() {
     markdownGenerator = MarkdownGenerator(
       data: widget.data,
       childMargin: widget.childMargin,
     );
     tocList.addAll(markdownGenerator.tocList);
-    widget?.tocListBuilder?.call(markdownGenerator.tocList);
     itemPositionsListener.itemPositions.addListener(indexListener);
     lazyLoadWidgets();
-    super.initState();
+  }
+
+  void clearState(){
+    tocList.clear();
+    widgets.clear();
+    markdownGenerator = null;
   }
 
   @override
@@ -81,7 +91,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
         : ScrollablePositionedList.builder(
             itemCount: widgets.length,
             itemBuilder: (context, index) => widgets[index],
-            itemScrollController: widget.controller,
+            itemScrollController: widget?.controller?.scrollController,
             itemPositionsListener: itemPositionsListener,
           );
   }
@@ -92,12 +102,18 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   void indexListener() {
     final current = itemPositionsListener.itemPositions.value.elementAt(0);
-    final toc = tocList[current.index] ?? tocList[current.index + 1] ?? tocList[current.index - 1];
-    if(toc != null) widget?.tocListener?.call(toc);
+    final toc = tocList[current.index] ??
+        tocList[current.index + 1] ??
+        tocList[current.index - 1];
+    if (toc != null) widget?.controller?._setToc(toc);
+    if (!hasInitialed) {
+      hasInitialed = true;
+      widget?.tocListBuilder?.call(markdownGenerator.tocList);
+    }
   }
 
-  void lazyLoadWidgets(){
-    if(widget.lazyLoad && markdownGenerator.widgets.length > 20){
+  void lazyLoadWidgets() {
+    if (widget.lazyLoad && markdownGenerator.widgets.length > 20) {
       final length = markdownGenerator.widgets.length;
       int loadSize = 10;
       int index = loadSize;
@@ -105,13 +121,14 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
       widgets.addAll(first);
       refresh();
       int deep = 0;
-      while(index < length){
-        final end =  index + loadSize;
+      while (index < length) {
+        final end = index + loadSize;
         loadSize += 10;
-        final children = markdownGenerator.widgets.getRange(index, end > length ? length : end);
+        final children = markdownGenerator.widgets
+            .getRange(index, end > length ? length : end);
         index = end;
         deep++;
-        Future.delayed(Duration(milliseconds: 400 * (deep))).then((value){
+        Future.delayed(Duration(milliseconds: 400 * (deep))).then((value) {
           widgets.addAll(children);
           refresh();
         });
@@ -121,9 +138,57 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
       refresh();
     }
   }
+
+  @override
+  void didUpdateWidget(MarkdownWidget oldWidget) {
+    if(oldWidget != widget || oldWidget.data != widget.data ){
+      clearState();
+      initialState();
+      print('refresh');
+    }
+    super.didUpdateWidget(oldWidget);
+
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is _MarkdownWidgetState &&
+              runtimeType == other.runtimeType &&
+              markdownGenerator == other.markdownGenerator &&
+              widgets == other.widgets &&
+              tocList == other.tocList &&
+              itemPositionsListener == other.itemPositionsListener &&
+              hasInitialed == other.hasInitialed;
+
+  @override
+  int get hashCode =>
+      markdownGenerator.hashCode ^
+      widgets.hashCode ^
+      tocList.hashCode ^
+      itemPositionsListener.hashCode ^
+      hasInitialed.hashCode;
+
+
+
 }
 
 ///you need to set [ItemScrollController], so [TocListener] will be trigger
-typedef void TocListener(Toc toc);
+class TocController extends ChangeNotifier {
+  final ItemScrollController scrollController = ItemScrollController();
 
+  Toc toc;
+
+  void _setToc(Toc toc) {
+    if(this.toc == toc) return;
+    this.toc = toc;
+    refresh();
+  }
+
+  void refresh(){
+    notifyListeners();
+  }
+}
+
+///key is the title index in markdown
 typedef void TocList(LinkedHashMap<int, Toc> tocList);

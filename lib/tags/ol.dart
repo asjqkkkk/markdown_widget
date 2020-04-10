@@ -65,7 +65,7 @@ class Ol {
               left: deep * (config?.leftSpacing ?? 10.0)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: config?.crossAxisAlignment ?? CrossAxisAlignment.center,
+            crossAxisAlignment: config?.crossAxisAlignment ?? CrossAxisAlignment.start,
             children: <Widget>[
               _getOlDot(deep, index),
               Expanded(

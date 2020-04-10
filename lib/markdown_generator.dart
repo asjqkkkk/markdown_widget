@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'config/style_config.dart';
 import 'config/widget_config.dart';
 import 'markdown_helper.dart';
@@ -42,27 +43,27 @@ class MarkdownGenerator {
     Widget result;
     switch (tag) {
       case h1:
-        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length);
+        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length, 0);
         result = _helper.getTitleWidget(node, h1);
         break;
       case h2:
-        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length);
+        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length, 1);
         result = _helper.getTitleWidget(node, h2);
         break;
       case h3:
-        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length);
+        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length, 2);
         result = _helper.getTitleWidget(node, h3);
         break;
       case h4:
-        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length);
+        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length, 3);
         result = _helper.getTitleWidget(node, h4);
         break;
       case h5:
-        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length);
+        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length, 4);
         result = _helper.getTitleWidget(node, h5);
         break;
       case h6:
-        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length);
+        _tocList[_widgets.length] = Toc(node.textContent, tag, _widgets.length, _tocList.length, 5);
         result = _helper.getTitleWidget(node, h6);
         break;
       case p:
@@ -114,16 +115,28 @@ class TaskListSyntax extends m.InlineSyntax {
 class Toc{
   final String name;
   final String tag;
+  final int tagLevel;
   final int index;
   final int selfIndex;
 
-  Toc(this.name, this.tag, this.index, this.selfIndex);
+  Toc(this.name, this.tag, this.index, this.selfIndex, this.tagLevel);
+
 
   @override
   String toString() {
-    return 'Toc{name: $name, tag: $tag, index: $index, selfIndex: $selfIndex}';
+    return 'Toc{name: $name, tag: $tag, tagLevel: $tagLevel, index: $index, selfIndex: $selfIndex}';
   }
 
+  @override
+  bool operator ==(Object other) {
+    if(other is Toc){
+      return other.name == name && other.index == index && other.tag == tag && other.selfIndex == selfIndex && other.tagLevel == tagLevel;
+    } else return false;
+  }
 
+  @override
+  int get hashCode => super.hashCode;
 }
+
+
 
