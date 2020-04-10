@@ -41,4 +41,5 @@ class MarkdownHelper {
   ///table
   Widget getTableWidget(m.Element node) => wConfig?.table?.call(node) ?? MTable().getTableWidget(node);
 
+
 }

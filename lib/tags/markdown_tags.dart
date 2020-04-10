@@ -1,12 +1,4 @@
-///根节点tag
-///h1~h6:标题
-///p:普通文字
-///pre:大代码块
-///ul:无序列表
-///ol:有序列表
-///hr:分割线
-///table:表格
-///blockquote:块引用
+///outer tags
 const String h1 = 'h1';
 const String h2 = 'h2';
 const String h3 = 'h3';
@@ -22,14 +14,7 @@ const String table = 'table';
 const String blockquote = 'blockquote';
 
 
-///子节点tag
-///code:文字行内代码、大代码块children也有
-///em:斜体
-///strong:粗体
-///del:删除线(中划线)
-///li:列表
-///a:链接
-///input:自定义tag，支持checkbox
+///inner tags
 const String code = 'code';
 const String em = 'em';
 const String del = 'del';

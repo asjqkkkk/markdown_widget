@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 import 'p.dart';
@@ -77,21 +79,28 @@ class MTable {
   ) {
     if (node.children == null) return [];
     List<TableRow> results = [];
+    int maxRowSize = 0;
     for (var trNode in node.children) {
       if (trNode is m.Element && trNode.tag == tr) {
         List<m.Element> tdList = [];
         _buildTd(trNode, tdList);
+        List<Widget> children = [];
+        tdList.forEach((element) {
+          final child = Container(
+            margin: config?.bodyMargin ?? const EdgeInsets.all(10.0),
+            alignment: config?.bodyAlignment ?? Alignment.center,
+            child: P().getPWidget(element.children,
+                textStyle: config?.bodyStyle),
+          );
+          children.add(child);
+        });
+        maxRowSize = max(maxRowSize, tdList.length);
+        if(tdList.length < maxRowSize){
+          for(int i = 0; i < maxRowSize - tdList.length; i++) children.add(Container());
+        }
         final tableRow = TableRow(
           decoration: config?.bodyRowDecoration,
-          children: List.generate(
-            tdList.length,
-            (index) => Container(
-              margin: config?.bodyMargin ?? const EdgeInsets.all(10.0),
-              alignment: config?.bodyAlignment ?? Alignment.center,
-              child: P().getPWidget(tdList[index].children,
-                  textStyle: config?.bodyStyle),
-            ),
-          ),
+          children: children,
         );
         results.add(tableRow);
       }

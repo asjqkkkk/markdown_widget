@@ -35,28 +35,23 @@ class P {
   ///flutter web can't use WidgetSpan now.so this is another solution
   ///you can also use this in mobile，but it will finally be replaced by [buildRichText]
   Widget buildWebRichText(
-    List<m.Node> nodes,
-    TextStyle style,
-    bool selectable,
-  ) {
+      List<m.Node> nodes, TextStyle style, bool selectable) {
     if (nodes == null) return Container();
     List<Widget> children = [];
     final config = StyleConfig()?.pConfig;
-    buildBlockWidgets(
-        nodes,
-        style ?? config?.textStyle ?? defaultPStyle,
-        children,
-        selectable);
+    buildBlockWidgets(nodes, style ?? config?.textStyle ?? defaultPStyle,
+        children, selectable);
     return Wrap(
       children: children,
-      crossAxisAlignment: config?.wrapCrossAlignment ?? WrapCrossAlignment.center,
+      crossAxisAlignment:
+          config?.wrapCrossAlignment ?? WrapCrossAlignment.center,
     );
   }
 
   RichText buildRichText(
           List<m.Node> children, TextStyle textStyle, bool selectable) =>
       RichText(
-        softWrap: false,
+        softWrap: true,
         text: getBlockSpan(
           children,
           textStyle ?? StyleConfig()?.pConfig?.textStyle ?? defaultPStyle,
@@ -73,7 +68,7 @@ class P {
         (index) {
           final node = nodes[index];
           if (node is m.Text)
-            return buildTextSpan(selectable, node, parentStyle);
+            return buildTextSpan(node, parentStyle);
           else if (node is m.Element) {
             if (node.tag == code) return getCodeSpan(node, defaultCodeStyle);
             if (node.tag == img) return getImageSpan(node);
@@ -90,14 +85,12 @@ class P {
   }
 
   InlineSpan buildTextSpan(
-      bool selectable, m.Text node, TextStyle parentStyle) {
+      m.Text node, TextStyle parentStyle) {
     final nodes = parseHtml(node);
     if (nodes.isEmpty) {
-      return selectable
-          ? WidgetSpan(child: SelectableText(node.text, style: parentStyle))
-          : TextSpan(text: node.text, style: parentStyle);
+      return TextSpan(text: node.text, style: parentStyle);
     } else {
-      return getBlockSpan(nodes, parentStyle, selectable: selectable);
+      return getBlockSpan(nodes, parentStyle);
     }
   }
 
