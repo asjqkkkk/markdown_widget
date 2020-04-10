@@ -16,7 +16,7 @@ jobs:
         with:
           channel: 'dev'
       - run: flutter config --enable-web
-      - run:
+      - run: cd markdown_widget/example
       - run: flutter pub get
       - run: flutter build web --release
       - run: |
