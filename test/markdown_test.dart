@@ -47,8 +47,8 @@ void htmlPrintNode(h.Node node, int deep) {
 void main() {
   test('test for markdown', () {
     final current = Directory.current;
-//    final markdownPath = p.join(current.path,'README.md');
-    final markdownPath = current.path + '/README.md';
+//    final markdownPath = p.join(current.path,'demo_en.md');
+    final markdownPath = current.path + '/demo_en.md';
     File mdFile = File(markdownPath);
     if (!mdFile.existsSync()) return;
     final content = mdFile.readAsStringSync();
