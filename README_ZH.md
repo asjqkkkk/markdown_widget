@@ -44,6 +44,14 @@ class MarkdownPage extends StatelessWidget {
 }
 ```
 
+如果你想使用自己的 Column 或者其他列表 Widget, 你可以使用 `MarkdownGenerator`
+
+
+```
+  Widget buildMarkdown() => Column(children: MarkdownGenerator(data: data).widgets,);
+```
+
+
 ## 图片和视频
 
 如果你想要自定义 **img** 和 **video** 这两个标签的 Widget
@@ -96,23 +104,25 @@ class MarkdownPage extends StatelessWidget {
 
 ## TOC功能
 
-当你想使用TOC功能的时候
+使用TOC非常的简单
 
 ```
   final TocController tocController = TocController();
 
-  Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        tocListBuilder: (LinkedHashMap<int, Toc> tocList){
-          ///这里获取TOC目录列表
-        },
-        controller: tocController..addListener(() {
-          final currentTocNode = tocController.toc;
-          if(currentTocNode != null){
-            ///可以在这里做TOC列表index刷新之类的操作
-          }
-        }),
-      );
+  Widget buildTocWidget() => TocListWidget(controller: controller);
+
+  Widget buildMarkdown() => MarkdownWidget(data: data, controller: controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Row(
+      children: <Widget>[
+        Expanded(child: buildTocWidget()),
+        Expanded(child: buildMarkdown(), flex: 3)
+      ],
+    ));
+  }
 ```
 
 ## 代码高亮

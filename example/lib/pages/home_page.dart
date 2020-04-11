@@ -1,38 +1,48 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/config/platform.dart';
+import 'package:markdown_widget/config/platform_dector.dart';
 import 'markdown_page.dart';
 import 'edit_markdown_page.dart';
 
 class HomePage extends StatelessWidget {
 
-  final bool isMobile = PlatformDetector().isMobile();
+  final bool isMobile = PlatformDetector.isMobile() || PlatformDetector.isWebMobile();
 
   @override
   Widget build(BuildContext context) {
 
 
     return Scaffold(
-      appBar: isMobile ? AppBar(title: Text('markdown'),) : null,
+      appBar: isMobile ? AppBar(title: Text('markdown',),) : null,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            FlatButton(onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+            FlatButton(
+              color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+              padding: EdgeInsets.all(20),
+              child: Text('Markdown Demo', style: TextStyle(color: Colors.white, fontSize: 30)),
+              shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
                   return MarkdownPage(assetsPath: 'assets/demo_en.md',);
-              }));
-            }, child: Text('English Markdown Demo')),
-            FlatButton(onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-                return MarkdownPage(assetsPath: 'assets/demo_zh.md');
-              }));
-            }, child: Text('中文 Markdown Demo')),
-            FlatButton(onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-                return EditMarkdownPage();
-              }));
-            }, child: Text('Edit Markdown Demo')),
+                }));
+              },
+            ),
+            SizedBox(height: 30,),
+            FlatButton(
+              color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+              padding: EdgeInsets.all(20),
+              child: Text('Markdown Editor', style: TextStyle(color: Colors.white, fontSize: 30)),
+              shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+                  return EditMarkdownPage();
+                }));
+              },
+            ),
           ],
         ),
       ),

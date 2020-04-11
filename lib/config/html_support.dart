@@ -25,6 +25,7 @@ void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
 
 final RegExp exp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
 
+bool needParseHtml(m.Node parentNode) => (parentNode is m.Element && parentNode.tag != code);
 
 List<m.Node> parseHtml(m.Node node,){
   final text = node.textContent;

@@ -21,7 +21,7 @@ class MarkdownHelper {
   Widget getTitleWidget(m.Node node, String tag) => MTitle().getTitleWidget(node, tag);
 
   ///p
-  Widget getPWidget(m.Element node) => wConfig?.p?.call(node) ?? P().getPWidget(node.children);
+  Widget getPWidget(m.Element node) => wConfig?.p?.call(node) ?? P().getPWidget(node.children, node);
 
   ///pre
   Widget getPreWidget(m.Node node) => wConfig?.pre?.call(node) ?? Pre().getPreWidget(node);

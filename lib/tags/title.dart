@@ -74,7 +74,7 @@ class MTitle {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
+        SelectableText(
           text,
           style: configStyle ?? style,
         ),

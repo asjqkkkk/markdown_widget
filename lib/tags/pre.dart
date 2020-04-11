@@ -32,7 +32,7 @@ class Pre {
         scrollDirection: Axis.horizontal,
         child: HighlightView(
           node.textContent,
-          language: preConfig?.language ?? 'dart',
+          language: preConfig?.language ?? 'java',
           theme: preConfig?.theme ?? arduinoLightTheme,
           textStyle: preConfig?.textStyle ?? TextStyle(fontSize: 14),
           tabSize: preConfig?.tabSize ?? 8,
