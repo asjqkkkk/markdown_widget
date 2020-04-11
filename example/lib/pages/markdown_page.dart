@@ -1,7 +1,9 @@
+import '../platform_dector/platform_dector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+
 
 
 class MarkdownPage extends StatefulWidget {
@@ -51,7 +53,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = PlatformDetector.isMobile() || PlatformDetector.isWebMobile();
+    bool isMobile = PlatformDetector.isMobile || PlatformDetector.isWebMobile;
 
     return Scaffold(
       appBar: isMobile

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../platform_dector/platform_dector.dart';
 
 import 'markdown_page.dart';
 
@@ -14,7 +15,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
 
   final String initialText = '[Welcome for pull request](https://github.com/asjqkkkk/markdown_widget)😄\n\n';
   String text = '';
-  final bool isMobile = PlatformDetector.isMobile() || PlatformDetector.isWebMobile();
+  final bool isMobile = PlatformDetector.isMobile || PlatformDetector.isWebMobile;
 
 
   @override

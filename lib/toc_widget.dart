@@ -27,6 +27,8 @@ class _TocListWidgetState extends State<TocListWidget> {
   @override
   void initState() {
     final controller = widget.controller;
+    tocList = controller?.tocList;
+    currentToc = controller?.currentToc;
     controller?.addListener(() {
       bool needRefresh = false;
       final toc = controller.currentToc;
