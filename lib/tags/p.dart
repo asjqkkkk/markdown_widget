@@ -6,9 +6,10 @@ import 'img.dart';
 import 'code.dart';
 import 'video.dart';
 import 'markdown_tags.dart';
-import '../config/platform_dector.dart';
 import '../config/html_support.dart';
 import '../config/style_config.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 class P {
   P._internal();
@@ -27,9 +28,7 @@ class P {
           ? buildWebRichText(children, parentNode, textStyle, selectable)
           : buildRichText(children, parentNode, textStyle, selectable);
 
-  bool isWeb() {
-    return !PlatformDetector.isMobile();
-  }
+  bool isWeb() => kIsWeb;
 
   ///see this issue:https://github.com/flutter/flutter/issues/42086
   ///flutter web can't use WidgetSpan now.so this is another solution

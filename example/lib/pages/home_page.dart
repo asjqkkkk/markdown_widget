@@ -1,17 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/config/platform_dector.dart';
+import '../platform_dector/platform_dector.dart';
 import 'markdown_page.dart';
 import 'edit_markdown_page.dart';
 
 class HomePage extends StatelessWidget {
 
-  final bool isMobile = PlatformDetector.isMobile() || PlatformDetector.isWebMobile();
+  final bool isMobile = PlatformDetector.isMobile || PlatformDetector.isWebMobile;
 
   @override
   Widget build(BuildContext context) {
 
+    print(PlatformDetector().toString());
 
     return Scaffold(
       appBar: isMobile ? AppBar(title: Text('markdown',),) : null,

@@ -10,7 +10,6 @@ import 'toc_widget.dart';
 export 'toc_widget.dart';
 export 'dart:collection';
 export 'config/style_config.dart';
-export 'config/platform_dector.dart';
 export 'package:markdown_widget/markdown_generator.dart';
 
 class MarkdownWidget extends StatefulWidget {
