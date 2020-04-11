@@ -44,9 +44,17 @@ class MarkdownPage extends StatelessWidget {
 }
 ```
 
+if you want to use column or other list widget, you can use `MarkdownGenerator`
+
+
+```
+  Widget buildMarkdown() => Column(children: MarkdownGenerator(data: data).widgets,);
+```
+
+
 ## Image and Video
 
-if you want to custom a widget, such as **Image** and **Video**:
+if you want to custom a widget, such as **img** and **video**:
 
 ```
   Widget buildMarkdown() => MarkdownWidget(
@@ -96,23 +104,25 @@ you can custom link style
 
 ## TOC
 
-if you want to get a TOC function
+it's very easy to use TOC
 
 ```
   final TocController tocController = TocController();
 
-  Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        tocListBuilder: (LinkedHashMap<int, Toc> tocList){
-          ///here you can get markdown toc list
-        },
-        controller: tocController..addListener(() {
-          final currentTocNode = tocController.toc;
-          if(currentTocNode != null){
-            ///do what you want to do
-          }
-        }),
-      );
+  Widget buildTocWidget() => TocListWidget(controller: controller);
+
+  Widget buildMarkdown() => MarkdownWidget(data: data, controller: controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Row(
+      children: <Widget>[
+        Expanded(child: buildTocWidget()),
+        Expanded(child: buildMarkdown(), flex: 3)
+      ],
+    ));
+  }
 ```
 
 ## hightlight code

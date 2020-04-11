@@ -63,7 +63,7 @@ class Ul {
             children: <Widget>[
               dotWidget ?? _getUlDot(isBlack),
               Expanded(
-                child: P().getPWidget(otherTagNodes,
+                child: P().getPWidget(otherTagNodes, rootNode,
                     textStyle: config?.textStyle ?? defaultPStyle),
               ),
             ],

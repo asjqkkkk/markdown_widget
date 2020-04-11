@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:example/widgets/toc_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
@@ -16,21 +15,34 @@ class MarkdownPage extends StatefulWidget {
 }
 
 class _MarkdownPageState extends State<MarkdownPage> {
+
+  ///key: [isEnglish] , value: data
+  Map<bool, String> dataMap = {};
   String data;
   final TocController controller = TocController();
-  LinkedHashMap<int, Toc> tocList;
+  bool isEnglish = true;
 
   @override
   void initState() {
     if(widget.assetsPath != null) {
-      rootBundle.loadString(widget.assetsPath).then((data) {
-        this.data = data;
-        refresh();
-      });
+      loadData(widget.assetsPath);
     } else {
       this.data = widget.markdownData;
     }
     super.initState();
+  }
+
+  void loadData(String assetsPath) {
+    if(dataMap[isEnglish] != null){
+      data = dataMap[isEnglish];
+      refresh();
+      return;
+    }
+    rootBundle.loadString(assetsPath).then((data) {
+      dataMap[isEnglish] = data;
+      this.data = data;
+      refresh();
+    });
   }
 
   void refresh() {
@@ -39,7 +51,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = PlatformDetector().isMobile();
+    bool isMobile = PlatformDetector.isMobile() || PlatformDetector.isWebMobile();
 
     return Scaffold(
       appBar: isMobile
@@ -53,13 +65,14 @@ class _MarkdownPageState extends State<MarkdownPage> {
       body: data == null
           ? Center(child: CircularProgressIndicator())
           : (isMobile ? buildMobileBody() : buildWebBody()),
+      floatingActionButton: widget.assetsPath != null ? FloatingActionButton(onPressed: (){
+        isEnglish = !isEnglish;
+        loadData(isEnglish ? 'assets/demo_en.md' : 'assets/demo_zh.md');
+      }, child: Text(isEnglish ? '简中' : 'EN'),) : null,
     );
   }
 
-  Widget buildTocList() => TocListWidget(
-        tocList: tocList,
-        controller: controller,
-      );
+  Widget buildTocList() => TocListWidget(controller: controller);
 
   Widget buildMarkdown() {
     return Container(
@@ -67,11 +80,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
       child: MarkdownWidget(
         data: data,
         controller: controller,
-        lazyLoad: false,
-        tocListBuilder: (list) {
-          tocList = list;
-          refresh();
-        },
         styleConfig: StyleConfig(
           pConfig: PConfig(
             onLinkTap: (url) => _launchURL(url),

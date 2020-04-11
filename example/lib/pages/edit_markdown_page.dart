@@ -14,7 +14,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
 
   final String initialText = '[Welcome for pull request](https://github.com/asjqkkkk/markdown_widget)😄\n\n';
   String text = '';
-  final bool isMobile = PlatformDetector().isMobile();
+  final bool isMobile = PlatformDetector.isMobile() || PlatformDetector.isWebMobile();
 
 
   @override

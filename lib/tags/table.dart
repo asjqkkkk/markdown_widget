@@ -59,7 +59,7 @@ class MTable {
           (index) => Container(
             margin: config?.headerMargin ?? const EdgeInsets.all(10),
             alignment: config?.headerAlignment ?? Alignment.center,
-            child: P().getPWidget(thList[index].children,
+            child: P().getPWidget(thList[index].children, thList[index],
                 textStyle: config?.headerStyle),
           ),
         ));
@@ -89,7 +89,7 @@ class MTable {
           final child = Container(
             margin: config?.bodyMargin ?? const EdgeInsets.all(10.0),
             alignment: config?.bodyAlignment ?? Alignment.center,
-            child: P().getPWidget(element.children,
+            child: P().getPWidget(element.children, element,
                 textStyle: config?.bodyStyle),
           );
           children.add(child);

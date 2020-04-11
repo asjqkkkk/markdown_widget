@@ -6,7 +6,7 @@ import 'img.dart';
 import 'code.dart';
 import 'video.dart';
 import 'markdown_tags.dart';
-import '../config/platform.dart';
+import '../config/platform_dector.dart';
 import '../config/html_support.dart';
 import '../config/style_config.dart';
 
@@ -21,54 +21,57 @@ class P {
   }
 
   ///Tag:  p
-  Widget getPWidget(List<m.Node> children,
+  Widget getPWidget(List<m.Node> children, m.Node parentNode,
           {TextStyle textStyle, bool selectable = true}) =>
       isWeb()
-          ? buildWebRichText(children, textStyle, selectable)
-          : buildRichText(children, textStyle, selectable);
+          ? buildWebRichText(children, parentNode, textStyle, selectable)
+          : buildRichText(children, parentNode, textStyle, selectable);
 
   bool isWeb() {
-    return !PlatformDetector().isMobile();
+    return !PlatformDetector.isMobile();
   }
 
   ///see this issue:https://github.com/flutter/flutter/issues/42086
   ///flutter web can't use WidgetSpan now.so this is another solution
   ///you can also use this in mobile，but it will finally be replaced by [buildRichText]
   Widget buildWebRichText(
-      List<m.Node> nodes, TextStyle style, bool selectable) {
+      List<m.Node> nodes, m.Node parentNode, TextStyle style, bool selectable) {
     if (nodes == null) return Container();
     List<Widget> children = [];
     final config = StyleConfig()?.pConfig;
-    buildBlockWidgets(nodes, style ?? config?.textStyle ?? defaultPStyle,
+    buildBlockWidgets(nodes, parentNode, style ?? config?.textStyle ?? defaultPStyle,
         children, selectable);
     return Wrap(
       children: children,
       crossAxisAlignment:
-          config?.wrapCrossAlignment ?? WrapCrossAlignment.center,
+          config?.wrapCrossAlignment ?? WrapCrossAlignment.start,
     );
   }
 
-  RichText buildRichText(
-          List<m.Node> children, TextStyle textStyle, bool selectable) =>
+  RichText buildRichText(List<m.Node> children, m.Node parentNode,
+          TextStyle textStyle, bool selectable) =>
       RichText(
         softWrap: true,
         text: getBlockSpan(
           children,
+          parentNode,
           textStyle ?? StyleConfig()?.pConfig?.textStyle ?? defaultPStyle,
           selectable: selectable,
         ),
       );
 
-  InlineSpan getBlockSpan(List<m.Node> nodes, TextStyle parentStyle,
+  InlineSpan getBlockSpan(
+      List<m.Node> nodes, m.Node parentNode, TextStyle parentStyle,
       {bool selectable = true}) {
     if (nodes == null || nodes.isEmpty) return TextSpan();
     return TextSpan(
       children: List.generate(
         nodes.length,
         (index) {
+          bool shouldParseHtml = needParseHtml(parentNode);
           final node = nodes[index];
           if (node is m.Text)
-            return buildTextSpan(node, parentStyle);
+            return buildTextSpan(node, parentStyle, shouldParseHtml);
           else if (node is m.Element) {
             if (node.tag == code) return getCodeSpan(node, defaultCodeStyle);
             if (node.tag == img) return getImageSpan(node);
@@ -76,7 +79,7 @@ class P {
             if (node.tag == a) return getLinkSpan(node);
             if (node.tag == input) return getInputSpan(node);
             return getBlockSpan(
-                node.children, parentStyle.merge(getTextStyle(node.tag)));
+                node.children, node, parentStyle.merge(getTextStyle(node.tag)));
           }
           return TextSpan();
         },
@@ -85,21 +88,23 @@ class P {
   }
 
   InlineSpan buildTextSpan(
-      m.Text node, TextStyle parentStyle) {
-    final nodes = parseHtml(node);
+      m.Text node, TextStyle parentStyle, bool shouldParseHtml) {
+    final nodes = shouldParseHtml ? parseHtml(node) : [];
     if (nodes.isEmpty) {
       return TextSpan(text: node.text, style: parentStyle);
     } else {
-      return getBlockSpan(nodes, parentStyle);
+      return getBlockSpan(nodes, node, parentStyle);
     }
   }
 
-  void buildBlockWidgets(List<m.Node> nodes, TextStyle parentStyle,
+  void buildBlockWidgets(List<m.Node> nodes, m.Node parentNode, TextStyle parentStyle,
       List<Widget> widgets, bool selectable) {
     if (nodes == null || nodes.isEmpty) return;
     nodes.forEach((node) {
+      bool shouldParseHtml = needParseHtml(parentNode);
       if (node is m.Text)
-        buildWebTextWidget(widgets, selectable, node, parentStyle);
+        buildWebTextWidget(
+            widgets, node, selectable, shouldParseHtml, parentStyle);
       else if (node is m.Element) {
         if (node.tag == code)
           widgets.add(defaultCodeWidget(node, defaultCodeStyle));
@@ -112,22 +117,22 @@ class P {
         else if (node.tag == input)
           widgets.add(defaultCheckBox(node.attributes));
         else
-          buildBlockWidgets(node.children,
+          buildBlockWidgets(node.children, node,
               parentStyle.merge(getTextStyle(node.tag)), widgets, selectable);
       }
     });
   }
 
-  void buildWebTextWidget(List<Widget> widgets, bool selectable, m.Text node,
-      TextStyle parentStyle) {
-    final nodes = parseHtml(node);
+  void buildWebTextWidget(List<Widget> widgets, m.Text node, bool selectable,
+      bool shouldParseHtml, TextStyle parentStyle) {
+    final nodes = shouldParseHtml ? parseHtml(node) : [];
     if (nodes.isEmpty) {
       widgets.add(selectable
           ? SelectableText(node.text, style: parentStyle)
           : Text(node.text, style: parentStyle));
     } else {
-      widgets.add(
-          getPWidget(nodes, textStyle: parentStyle, selectable: selectable));
+      widgets.add(getPWidget(nodes, node,
+          textStyle: parentStyle, selectable: selectable));
     }
   }
 }

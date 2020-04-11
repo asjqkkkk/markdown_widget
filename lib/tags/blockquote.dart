@@ -26,7 +26,7 @@ class Bq {
         color: blockConfig?.backgroundColor
       ),
       padding: EdgeInsets.only(left: blockConfig?.leftSpace ?? 10),
-      child: P().getPWidget(node.children,
+      child: P().getPWidget(node.children, node,
           textStyle: blockConfig?.blockStyle ?? defaultBlockStyle),
     );
   }
