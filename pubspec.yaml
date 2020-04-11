@@ -1,12 +1,12 @@
 name: markdown_widget
 description: markdown widget support TOC、video、highlight code...
-version: 1.0.2
+version: 1.0.3
 verified publisher:
   - agedchen@gmail.com
 homepage: https://github.com/asjqkkkk/markdown_widget
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
