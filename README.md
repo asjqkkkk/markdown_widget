@@ -1,6 +1,6 @@
 Language:[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md)|[English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
-# markdown_widget
+# 📖markdown_widget
 
 [![support](https://img.shields.io/badge/platform-flutter%7Cdart%20vm-ff69b4.svg?style=flat-square)](https://github.com/asjqkkkk/markdown_widget)
 [![Flutter Web](https://github.com/asjqkkkk/markdown_widget/workflows/Flutter%20Web/badge.svg)](https://github.com/asjqkkkk/markdown_widget/actions)
@@ -14,11 +14,11 @@ A simple and easy-to-use markdown package created by flutter.
 - Support highlight code
 
 
-## Getting Started
+## 🚀Getting Started
 
 Before the introduction,  you can have a try for [Online Demo](https://oldchen.top/markdown_widget/#/)
 
-### Useage
+### 🔑Useage
 
 
 ```
@@ -52,7 +52,7 @@ if you want to use column or other list widget, you can use `MarkdownGenerator`
 ```
 
 
-## Image and Video
+## 🏞Image and Video
 
 if you want to custom a widget, such as **img** and **video**:
 
@@ -83,7 +83,7 @@ supported markdown samples:
 
 if you want to custom other tag widgets, you need use `WidgetConfig`
 
-## Links
+## 🔗Links
 
 you can custom link style
 
@@ -102,7 +102,7 @@ you can custom link style
       );
 ```
 
-## TOC
+## 📜TOC
 
 it's very easy to use TOC
 
@@ -125,7 +125,7 @@ it's very easy to use TOC
   }
 ```
 
-## hightlight code
+## 🎈hightlight code
 
 you can config lots of theme for code
 

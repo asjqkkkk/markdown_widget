@@ -1,6 +1,6 @@
 Language:[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md)|[English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
-# markdown_widget
+# 📖markdown_widget
 
 [![support](https://img.shields.io/badge/platform-flutter%7Cdart%20vm-ff69b4.svg?style=flat-square)](https://github.com/asjqkkkk/markdown_widget)
 [![Flutter Web](https://github.com/asjqkkkk/markdown_widget/workflows/Flutter%20Web/badge.svg)](https://github.com/asjqkkkk/markdown_widget/actions)
@@ -14,11 +14,11 @@ Language:[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/
 - 支持代码高亮
 
 
-## 开始
+## 🚀开始
 
 在开始之前,你可以先体验一下在线 demo [点击体验](http://oldben.gitee.io/markdown_widget)
 
-### 简单使用
+### 🔑简单使用
 
 
 ```
@@ -52,7 +52,7 @@ class MarkdownPage extends StatelessWidget {
 ```
 
 
-## 图片和视频
+## 🏞图片和视频
 
 如果你想要自定义 **img** 和 **video** 这两个标签的 Widget
 
@@ -83,7 +83,7 @@ class MarkdownPage extends StatelessWidget {
 
 如果你想自定义其他标签的Widget,请使用 `WidgetConfig`
 
-## 链接
+## 🔗链接
 
 你可以自定义链接样式和点击事件
 
@@ -102,7 +102,7 @@ class MarkdownPage extends StatelessWidget {
       );
 ```
 
-## TOC功能
+## 📜TOC功能
 
 使用TOC非常的简单
 
@@ -125,7 +125,7 @@ class MarkdownPage extends StatelessWidget {
   }
 ```
 
-## 代码高亮
+## 🎈代码高亮
 
 代码高亮支持多种主题
 

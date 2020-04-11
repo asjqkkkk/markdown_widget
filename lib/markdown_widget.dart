@@ -5,9 +5,9 @@ import 'config/widget_config.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'toc_widget.dart';
+import 'markdown_toc.dart';
 
-export 'toc_widget.dart';
+export 'markdown_toc.dart';
 export 'dart:collection';
 export 'config/style_config.dart';
 export 'package:markdown_widget/markdown_generator.dart';
