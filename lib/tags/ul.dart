@@ -63,8 +63,12 @@ class Ul {
             children: <Widget>[
               dotWidget ?? _getUlDot(isBlack),
               Expanded(
-                child: P().getPWidget(otherTagNodes, rootNode,
-                    textStyle: config?.textStyle ?? defaultPStyle),
+                child: P().getPWidget(
+                  otherTagNodes,
+                  rootNode,
+                  textStyle: config?.textStyle ?? defaultPStyle,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                ),
               ),
             ],
           ),
@@ -83,7 +87,8 @@ class Ul {
     return Container(
       width: dotSize,
       height: dotSize,
-      margin: config?.dotMargin ?? EdgeInsets.only(left: 5, right: 5, top: marginTop),
+      margin: config?.dotMargin ??
+          EdgeInsets.only(left: 5, right: 5, top: marginTop),
       decoration: BoxDecoration(
         border: isBlack ? null : Border.all(color: Colors.black),
         shape: BoxShape.circle,

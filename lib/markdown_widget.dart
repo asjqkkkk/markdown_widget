@@ -61,7 +61,6 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     tocList.addAll(markdownGenerator.tocList);
     widgets.addAll(markdownGenerator.widgets);
     if(widget.controller != null) itemPositionsListener.itemPositions.addListener(indexListener);
-    refresh();
   }
 
   void clearState() {
@@ -128,5 +127,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     }
     super.didUpdateWidget(widget);
   }
+
+
 }
 

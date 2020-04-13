@@ -136,8 +136,8 @@ TextStyle getTextStyle(String tag){
   return style;
 }
 
-TextStyle defaultPStyle = TextStyle(color: Color.fromRGBO(30, 34, 38, 1.0),);
-TextStyle defaultCodeStyle = TextStyle(color: Colors.grey,fontSize: 12, );
+TextStyle defaultPStyle = TextStyle(color: Color.fromRGBO(30, 34, 38, 1.0));
+TextStyle defaultCodeStyle = TextStyle(fontSize: 12);
 TextStyle defaultDelStyle = TextStyle(decoration: TextDecoration.lineThrough);
 TextStyle defaultEmStyle = TextStyle(fontStyle: FontStyle.italic);
 TextStyle defaultStrongStyle = TextStyle(fontWeight: FontWeight.bold);

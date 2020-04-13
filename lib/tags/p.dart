@@ -10,7 +10,6 @@ import '../config/html_support.dart';
 import '../config/style_config.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-
 class P {
   P._internal();
 
@@ -22,10 +21,16 @@ class P {
   }
 
   ///Tag:  p
-  Widget getPWidget(List<m.Node> children, m.Node parentNode,
-          {TextStyle textStyle, bool selectable = true}) =>
+  Widget getPWidget(
+    List<m.Node> children,
+    m.Node parentNode, {
+    TextStyle textStyle,
+    bool selectable = true,
+    WrapCrossAlignment crossAxisAlignment = WrapCrossAlignment.center,
+  }) =>
       isWeb()
-          ? buildWebRichText(children, parentNode, textStyle, selectable)
+          ? buildWebRichText(
+              children, parentNode, textStyle, selectable, crossAxisAlignment)
           : buildRichText(children, parentNode, textStyle, selectable);
 
   bool isWeb() => kIsWeb;
@@ -33,17 +38,16 @@ class P {
   ///see this issue:https://github.com/flutter/flutter/issues/42086
   ///flutter web can't use WidgetSpan now.so this is another solution
   ///you can also use this in mobile，but it will finally be replaced by [buildRichText]
-  Widget buildWebRichText(
-      List<m.Node> nodes, m.Node parentNode, TextStyle style, bool selectable) {
+  Widget buildWebRichText(List<m.Node> nodes, m.Node parentNode,
+      TextStyle style, bool selectable, WrapCrossAlignment crossAxisAlignment) {
     if (nodes == null) return Container();
     List<Widget> children = [];
     final config = StyleConfig()?.pConfig;
-    buildBlockWidgets(nodes, parentNode, style ?? config?.textStyle ?? defaultPStyle,
-        children, selectable);
+    buildBlockWidgets(nodes, parentNode,
+        style ?? config?.textStyle ?? defaultPStyle, children, selectable);
     return Wrap(
       children: children,
-      crossAxisAlignment:
-          config?.wrapCrossAlignment ?? WrapCrossAlignment.start,
+      crossAxisAlignment: crossAxisAlignment,
     );
   }
 
@@ -96,8 +100,8 @@ class P {
     }
   }
 
-  void buildBlockWidgets(List<m.Node> nodes, m.Node parentNode, TextStyle parentStyle,
-      List<Widget> widgets, bool selectable) {
+  void buildBlockWidgets(List<m.Node> nodes, m.Node parentNode,
+      TextStyle parentStyle, List<Widget> widgets, bool selectable) {
     if (nodes == null || nodes.isEmpty) return;
     nodes.forEach((node) {
       bool shouldParseHtml = needParseHtml(parentNode);
@@ -146,7 +150,6 @@ class PConfig {
 
   final CodeWidget codeWidget;
   final OnLinkTap onLinkTap;
-  final WrapCrossAlignment wrapCrossAlignment;
 
   PConfig({
     this.textStyle,
@@ -157,11 +160,8 @@ class PConfig {
     this.emStyle,
     this.strongStyle,
     this.onLinkTap,
-    this.wrapCrossAlignment,
   });
 }
 
 typedef Widget CodeWidget(String text);
-typedef void OnLinkTap(
-  String url,
-);
+typedef void OnLinkTap(String url);

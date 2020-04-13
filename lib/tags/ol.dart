@@ -69,7 +69,7 @@ class Ol {
             children: <Widget>[
               _getOlDot(deep, index),
               Expanded(
-                child: P().getPWidget(otherTagNodes, rootNode,textStyle: config?.textStyle ?? defaultPStyle,),
+                child: P().getPWidget(otherTagNodes, rootNode,textStyle: config?.textStyle ?? defaultPStyle, crossAxisAlignment: WrapCrossAlignment.start),
               ),
             ],
           ),

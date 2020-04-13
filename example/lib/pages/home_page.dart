@@ -14,6 +14,7 @@ class HomePage extends StatelessWidget {
 
     print(PlatformDetector().toString());
 
+
     return Scaffold(
       appBar: isMobile ? AppBar(title: Text('markdown',),) : null,
       body: Center(
