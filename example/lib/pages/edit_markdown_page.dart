@@ -7,6 +7,11 @@ import '../platform_dector/platform_dector.dart';
 import 'markdown_page.dart';
 
 class EditMarkdownPage extends StatefulWidget {
+
+  final String initialData;
+
+  const EditMarkdownPage({Key key, this.initialData = ''}) : super(key: key);
+
   @override
   _EditMarkdownPageState createState() => _EditMarkdownPageState();
 }
@@ -16,6 +21,12 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
   final String initialText = '[Welcome for pull request](https://github.com/asjqkkkk/markdown_widget)😄\n\n';
   String text = '';
   final bool isMobile = PlatformDetector.isMobile || PlatformDetector.isWebMobile;
+
+  @override
+  void initState() {
+    text = widget.initialData;
+    super.initState();
+  }
 
 
   @override
@@ -69,6 +80,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
         expands: true,
         maxLines: null,
         textInputAction: TextInputAction.newline,
+        initialValue: initialText + text,
         onChanged: (text) {
           this.text = text;
           refresh();

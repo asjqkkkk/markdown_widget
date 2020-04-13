@@ -11,6 +11,7 @@ class StyleConfig {
   factory StyleConfig({
     CheckBoxBuilder checkBoxBuilder,
     ImgBuilder imgBuilder,
+    ImgConfig imgConfig,
     VideoBuilder videoBuilder,
     VideoConfig videoConfig,
     TitleConfig titleConfig,
@@ -25,6 +26,7 @@ class StyleConfig {
   }) {
     _obj ??= StyleConfig._internal();
     _obj.imgBuilder = imgBuilder ?? _obj.imgBuilder;
+    _obj.imgConfig = imgConfig ?? _obj.imgConfig;
     _obj.videoBuilder = videoBuilder ?? _obj.videoBuilder;
     _obj.checkBoxBuilder = checkBoxBuilder ?? _obj.checkBoxBuilder;
     _obj.titleConfig = titleConfig ?? _obj.titleConfig;
@@ -46,6 +48,7 @@ class StyleConfig {
 
   ///img
   ImgBuilder imgBuilder;
+  ImgConfig imgConfig;
 
   ///video
   VideoBuilder videoBuilder;

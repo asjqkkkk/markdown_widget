@@ -141,4 +141,43 @@ class TocController extends ChangeNotifier {
   }
 }
 
+class Toc {
+  ///title name
+  final String name;
+
+  ///h1~h6
+  final String tag;
+
+  ///0~5   ->   h1~h6
+  final int tagLevel;
+
+  ///index of [MarkdownGenerator]'s _children
+  final int index;
+
+  ///index of [TocController.tocList]
+  final int selfIndex;
+
+  Toc(this.name, this.tag, this.index, this.selfIndex, this.tagLevel);
+
+  @override
+  String toString() {
+    return 'Toc{name: $name, tag: $tag, tagLevel: $tagLevel, index: $index, selfIndex: $selfIndex}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is Toc) {
+      return other.name == name &&
+          other.index == index &&
+          other.tag == tag &&
+          other.selfIndex == selfIndex &&
+          other.tagLevel == tagLevel;
+    } else
+      return false;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
+}
+
 typedef Widget TocItem(Toc toc, bool isCurrent);
