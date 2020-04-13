@@ -23,13 +23,13 @@ void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
   }
 }
 
-final RegExp exp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
+final RegExp htmlRep = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
 
 bool needParseHtml(m.Node parentNode) => (parentNode is m.Element && parentNode.tag != code);
 
 List<m.Node> parseHtml(m.Node node,){
   final text = node.textContent;
-  if(!text.contains(exp)) return [];
+  if(!text.contains(htmlRep)) return [];
   h.Document document = parse(text);
   List<m.Node> nodes = [];
   document.nodes.forEach((element) {
