@@ -80,7 +80,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
         expands: true,
         maxLines: null,
         textInputAction: TextInputAction.newline,
-        initialValue: initialText + text,
+        initialValue: text,
         onChanged: (text) {
           this.text = text;
           refresh();
