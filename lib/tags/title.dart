@@ -15,26 +15,26 @@ class MTitle {
   }
 
   ///h1~h6
-  Widget getTitleWidget(m.Node node, String tag) {
+  Widget getTitleWidget(m.Element node, String tag) {
     Widget titleWidget;
     switch (tag) {
       case h1:
-        titleWidget = textWithDivider(node.textContent, _titleStyle(28), h1);
+        titleWidget = textWithDivider(node, _titleStyle(28), h1);
         break;
       case h2:
-        titleWidget = textWithDivider(node.textContent, _titleStyle(25), h2);
+        titleWidget = textWithDivider(node, _titleStyle(25), h2);
         break;
       case h3:
-        titleWidget = textWithDivider(node.textContent, _titleStyle(22), h3);
+        titleWidget = textWithDivider(node, _titleStyle(22), h3);
         break;
       case h4:
-        titleWidget = textWithDivider(node.textContent, _titleStyle(19), h4);
+        titleWidget = textWithDivider(node, _titleStyle(19), h4);
         break;
       case h5:
-        titleWidget = textWithDivider(node.textContent, _titleStyle(17), h5);
+        titleWidget = textWithDivider(node, _titleStyle(17), h5);
         break;
       case h6:
-        titleWidget = textWithDivider(node.textContent, _titleStyle(12), h6);
+        titleWidget = textWithDivider(node, _titleStyle(12), h6);
         break;
     }
     return titleWidget;
@@ -45,7 +45,7 @@ class MTitle {
 
   Widget buildDivider() => Container(height: 1, color: defaultDividerColor);
 
-  Widget textWithDivider(String text, TextStyle style, String tag) {
+  Widget textWithDivider(m.Element node, TextStyle style, String tag) {
     final config = StyleConfig().titleConfig;
     bool showDivider = config?.showDivider ?? true;
     TextStyle configStyle;
@@ -74,13 +74,8 @@ class MTitle {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SelectableText(
-          text,
-          style: configStyle ?? style,
-        ),
-        SizedBox(
-          height: config?.space ?? 4.0,
-        ),
+        P().getPWidget(node.children, node, textStyle: configStyle ?? style),
+        SizedBox(height: config?.space ?? 4.0),
         showDivider ? (config?.divider ?? buildDivider()) : Container()
       ],
     );

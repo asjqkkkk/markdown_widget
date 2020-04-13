@@ -55,6 +55,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Widget build(BuildContext context) {
     bool isMobile = PlatformDetector.isMobile || PlatformDetector.isWebMobile;
 
+
     return Scaffold(
       appBar: isMobile
           ? AppBar(
