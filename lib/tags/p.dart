@@ -76,7 +76,7 @@ class P {
           if (node is m.Text)
             return buildTextSpan(node, parentStyle, shouldParseHtml);
           else if (node is m.Element) {
-            if (node.tag == code) return getCodeSpan(node, defaultCodeStyle);
+            if (node.tag == code) return getCodeSpan(node);
             if (node.tag == img) return getImageSpan(node);
             if (node.tag == video) return getVideoSpan(node);
             if (node.tag == a) return getLinkSpan(node);
@@ -110,7 +110,7 @@ class P {
             widgets, node, selectable, shouldParseHtml, parentStyle);
       else if (node is m.Element) {
         if (node.tag == code)
-          widgets.add(defaultCodeWidget(node, defaultCodeStyle));
+          widgets.add(defaultCodeWidget(node));
         else if (node.tag == img)
           widgets.add(defaultImageWidget(node.attributes));
         else if (node.tag == video)
@@ -143,19 +143,15 @@ class P {
 class PConfig {
   final TextStyle textStyle;
   final TextStyle linkStyle;
-  final TextStyle codeStyle;
   final TextStyle delStyle;
   final TextStyle emStyle;
   final TextStyle strongStyle;
 
-  final CodeWidget codeWidget;
   final OnLinkTap onLinkTap;
 
   PConfig({
     this.textStyle,
     this.linkStyle,
-    this.codeStyle,
-    this.codeWidget,
     this.delStyle,
     this.emStyle,
     this.strongStyle,
@@ -163,5 +159,4 @@ class PConfig {
   });
 }
 
-typedef Widget CodeWidget(String text);
 typedef void OnLinkTap(String url);

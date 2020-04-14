@@ -43,33 +43,57 @@ class MarkdownGenerator {
     Widget result;
     switch (tag) {
       case h1:
-        _tocList[_widgets.length] =
-            Toc(node.textContent.replaceAll(htmlRep, ''), tag, _widgets.length, _tocList.length, 0);
+        _tocList[_widgets.length] = Toc(
+            node.textContent.replaceAll(htmlRep, ''),
+            tag,
+            _widgets.length,
+            _tocList.length,
+            0);
         result = _helper.getTitleWidget(node, h1);
         break;
       case h2:
-        _tocList[_widgets.length] =
-            Toc(node.textContent.replaceAll(htmlRep, ''), tag, _widgets.length, _tocList.length, 1);
+        _tocList[_widgets.length] = Toc(
+            node.textContent.replaceAll(htmlRep, ''),
+            tag,
+            _widgets.length,
+            _tocList.length,
+            1);
         result = _helper.getTitleWidget(node, h2);
         break;
       case h3:
-        _tocList[_widgets.length] =
-            Toc(node.textContent.replaceAll(htmlRep, ''), tag, _widgets.length, _tocList.length, 2);
+        _tocList[_widgets.length] = Toc(
+            node.textContent.replaceAll(htmlRep, ''),
+            tag,
+            _widgets.length,
+            _tocList.length,
+            2);
         result = _helper.getTitleWidget(node, h3);
         break;
       case h4:
-        _tocList[_widgets.length] =
-            Toc(node.textContent.replaceAll(htmlRep, ''), tag, _widgets.length, _tocList.length, 3);
+        _tocList[_widgets.length] = Toc(
+            node.textContent.replaceAll(htmlRep, ''),
+            tag,
+            _widgets.length,
+            _tocList.length,
+            3);
         result = _helper.getTitleWidget(node, h4);
         break;
       case h5:
-        _tocList[_widgets.length] =
-            Toc(node.textContent.replaceAll(htmlRep, ''), tag, _widgets.length, _tocList.length, 4);
+        _tocList[_widgets.length] = Toc(
+            node.textContent.replaceAll(htmlRep, ''),
+            tag,
+            _widgets.length,
+            _tocList.length,
+            4);
         result = _helper.getTitleWidget(node, h5);
         break;
       case h6:
-        _tocList[_widgets.length] =
-            Toc(node.textContent.replaceAll(htmlRep, ''), tag, _widgets.length, _tocList.length, 5);
+        _tocList[_widgets.length] = Toc(
+            node.textContent.replaceAll(htmlRep, ''),
+            tag,
+            _widgets.length,
+            _tocList.length,
+            5);
         result = _helper.getTitleWidget(node, h6);
         break;
       case p:
@@ -97,15 +121,15 @@ class MarkdownGenerator {
     if (result == null) print('tag:$tag not catched!');
     return Container(
       child: result ?? Container(),
-      margin: childMargin ?? (result == null ? null : EdgeInsets.only(top: 5, bottom: 5)),
+      margin: childMargin ??
+          (result == null ? null : EdgeInsets.only(top: 5, bottom: 5)),
     );
   }
 
-  void clear(){
+  void clear() {
     _tocList.clear();
     _widgets.clear();
   }
-
 }
 
 ///Thanks for https://github.com/flutter/flutter_markdown/blob/4cc79569f6c0f150fc4e9496f594d1bfb3a3ff54/lib/src/widget.dart

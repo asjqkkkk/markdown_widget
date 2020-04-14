@@ -130,12 +130,9 @@ class HighlightView extends StatelessWidget {
       _textStyle = _textStyle.merge(textStyle);
     }
 
-    return SelectableText.rich(
-        TextSpan(
-          style: _textStyle,
-          children:
-          _convert(hi.highlight.parse(source, language: language).nodes),
-        )
-    );
+    return SelectableText.rich(TextSpan(
+      style: _textStyle,
+      children: _convert(hi.highlight.parse(source, language: language).nodes),
+    ));
   }
 }

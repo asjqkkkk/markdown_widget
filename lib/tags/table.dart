@@ -6,7 +6,6 @@ import 'p.dart';
 import 'markdown_tags.dart';
 import '../config/style_config.dart';
 
-
 class MTable {
   MTable._internal();
 
@@ -34,8 +33,7 @@ class MTable {
     if (header != null) body.insert(0, header);
     final table = Table(
       columnWidths: config?.columnWidths,
-      defaultColumnWidth:
-          config?.defaultColumnWidth ?? const FlexColumnWidth(),
+      defaultColumnWidth: config?.defaultColumnWidth ?? const FlexColumnWidth(),
       textBaseline: config?.textBaseline,
       textDirection: config?.textDirection,
       border: config?.border ?? TableBorder.all(color: defaultTableBorderColor),
@@ -95,8 +93,9 @@ class MTable {
           children.add(child);
         });
         maxRowSize = max(maxRowSize, tdList.length);
-        if(tdList.length < maxRowSize){
-          for(int i = 0; i < maxRowSize - tdList.length; i++) children.add(Container());
+        if (tdList.length < maxRowSize) {
+          for (int i = 0; i < maxRowSize - tdList.length; i++)
+            children.add(Container());
         }
         final tableRow = TableRow(
           decoration: config?.bodyRowDecoration,

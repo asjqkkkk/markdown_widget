@@ -61,15 +61,17 @@ class Ol {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(
-              left: deep * (config?.leftSpacing ?? 10.0)),
+          margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: config?.crossAxisAlignment ?? CrossAxisAlignment.start,
+            crossAxisAlignment:
+                config?.crossAxisAlignment ?? CrossAxisAlignment.start,
             children: <Widget>[
               _getOlDot(deep, index),
               Expanded(
-                child: P().getPWidget(otherTagNodes, rootNode,textStyle: config?.textStyle ?? defaultPStyle, crossAxisAlignment: WrapCrossAlignment.start),
+                child: P().getPWidget(otherTagNodes, rootNode,
+                    textStyle: config?.textStyle ?? defaultPStyle,
+                    crossAxisAlignment: WrapCrossAlignment.start),
               ),
             ],
           ),
@@ -99,8 +101,11 @@ class OlConfig {
   final double leftSpacing;
   final CrossAxisAlignment crossAxisAlignment;
 
-
-  OlConfig({this.textStyle, this.indexWidget, this.leftSpacing, this.crossAxisAlignment});
+  OlConfig(
+      {this.textStyle,
+      this.indexWidget,
+      this.leftSpacing,
+      this.crossAxisAlignment});
 }
 
 typedef Widget IndexWidget(int deep, int index);

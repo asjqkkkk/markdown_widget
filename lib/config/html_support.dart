@@ -11,7 +11,7 @@ void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
     mNodes.add(m.Text(node.text));
   } else if (node is h.Element) {
     final tag = node.localName;
-    if(tag == img || tag == video){
+    if (tag == img || tag == video) {
       final element = m.Element(tag, null);
       element.attributes.addAll(node.attributes.cast());
       mNodes.add(element);
@@ -25,11 +25,14 @@ void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
 
 final RegExp htmlRep = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
 
-bool needParseHtml(m.Node parentNode) => (parentNode is m.Element && parentNode.tag != code);
+bool needParseHtml(m.Node parentNode) =>
+    (parentNode is m.Element && parentNode.tag != code);
 
-List<m.Node> parseHtml(m.Node node,){
+List<m.Node> parseHtml(
+  m.Node node,
+) {
   final text = node.textContent;
-  if(!text.contains(htmlRep)) return [];
+  if (!text.contains(htmlRep)) return [];
   h.Document document = parse(text);
   List<m.Node> nodes = [];
   document.nodes.forEach((element) {

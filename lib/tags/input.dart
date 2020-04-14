@@ -23,7 +23,10 @@ Widget defaultCheckBox(
   }
   if (checked == null) checked = true;
   final config = StyleConfig()?.checkBoxConfig;
-  return MCheckBox(value: checked,config: config,);
+  return MCheckBox(
+    value: checked,
+    config: config,
+  );
 }
 
 typedef Widget CheckBoxBuilder(bool checked, Map<String, String> attributes);
@@ -36,7 +39,6 @@ class CheckBoxConfig {
 }
 
 class MCheckBox extends StatefulWidget {
-
   final CheckBoxConfig config;
   final bool value;
 
@@ -63,13 +65,11 @@ class _MCheckBoxState extends State<MCheckBox> {
         size: widget.config?.size ?? 15,
         color: widget.config?.color,
       ),
-      onTap: (){
+      onTap: () {
         setState(() {
           value = !value;
         });
       },
-
     );
   }
 }
-

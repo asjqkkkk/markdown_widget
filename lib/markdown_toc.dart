@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'markdown_widget.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -10,7 +9,9 @@ class TocListWidget extends StatefulWidget {
 
   const TocListWidget({
     Key key,
-    @required this.controller, this.tocItem, this.emptyWidget,
+    @required this.controller,
+    this.tocItem,
+    this.emptyWidget,
   }) : super(key: key);
 
   @override
@@ -19,7 +20,7 @@ class TocListWidget extends StatefulWidget {
 
 class _TocListWidgetState extends State<TocListWidget> {
   final ItemPositionsListener itemPositionsListener =
-  ItemPositionsListener.create();
+      ItemPositionsListener.create();
   final ItemScrollController itemScrollController = ItemScrollController();
   Toc currentToc;
   LinkedHashMap<int, Toc> tocList;
@@ -32,18 +33,19 @@ class _TocListWidgetState extends State<TocListWidget> {
     controller?.addListener(() {
       bool needRefresh = false;
       final toc = controller.currentToc;
-      if(tocList != controller.tocList){
+      if (tocList != controller.tocList) {
         tocList = controller.tocList;
         needRefresh = true;
       }
-      if (toc != null && currentToc != toc){
+      if (toc != null && currentToc != toc) {
         currentToc = toc;
         if (itemScrollController.isAttached)
           itemScrollController.scrollTo(
-              index: currentToc.selfIndex, duration: Duration(milliseconds: 50));
+              index: currentToc.selfIndex,
+              duration: Duration(milliseconds: 50));
         needRefresh = true;
       }
-      if(needRefresh) refresh();
+      if (needRefresh) refresh();
     });
     super.initState();
   }
@@ -54,47 +56,55 @@ class _TocListWidgetState extends State<TocListWidget> {
     return (tocList == null || tocList.isEmpty)
         ? buildEmptyWidget()
         : NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (overScroll) {
-        overScroll.disallowGlow();
-        return true;
-      },
-      child: ScrollablePositionedList.builder(
-        itemCount: keys.length,
-        itemBuilder: (context, index) {
-          final tocIndex = keys[index];
-          final toc = tocList[tocIndex];
-          bool isCurrent = (toc == currentToc);
-          if(toc == null) return Container();
-          return widget?.tocItem?.call(toc, isCurrent) ?? ListTile(
-            title: Container(
-              margin: EdgeInsets.only(left: 20.0 * toc.tagLevel),
-              child: Text(
-                toc.name,
-                style: TextStyle(
-                  color: toc == currentToc ? Colors.blue : null,
-                ),
-              ),
-            ),
-            onTap: () {
-              widget?.controller?.scrollController?.jumpTo(
-                  index: tocIndex);
+            onNotification: (overScroll) {
+              overScroll.disallowGlow();
+              return true;
             },
+            child: ScrollablePositionedList.builder(
+              itemCount: keys.length,
+              itemBuilder: (context, index) {
+                final tocIndex = keys[index];
+                final toc = tocList[tocIndex];
+                bool isCurrent = (toc == currentToc);
+                if (toc == null) return Container();
+                return widget?.tocItem?.call(toc, isCurrent) ??
+                    ListTile(
+                      title: Container(
+                        margin: EdgeInsets.only(left: 20.0 * toc.tagLevel),
+                        child: Text(
+                          toc.name,
+                          style: TextStyle(
+                            color: toc == currentToc ? Colors.blue : null,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        widget?.controller?.scrollController
+                            ?.jumpTo(index: tocIndex);
+                      },
+                    );
+              },
+              initialScrollIndex:
+                  widget?.controller?.currentToc?.selfIndex ?? 0,
+              itemScrollController: itemScrollController,
+              itemPositionsListener: itemPositionsListener,
+            ),
           );
-        },
-        initialScrollIndex: widget?.controller?.currentToc?.selfIndex ?? 0,
-        itemScrollController: itemScrollController,
-        itemPositionsListener: itemPositionsListener,
-      ),
-    );
   }
 
-  Widget buildEmptyWidget() => widget.emptyWidget ?? Center(child: Text('🤷‍', style: TextStyle(fontSize: 30),),);
+  Widget buildEmptyWidget() =>
+      widget.emptyWidget ??
+      Center(
+        child: Text(
+          '🤷‍',
+          style: TextStyle(fontSize: 30),
+        ),
+      );
 
   void refresh() {
     if (mounted) setState(() {});
   }
 }
-
 
 ///you need to set [ItemScrollController], so [TocListener] will be trigger
 class TocController extends ChangeNotifier {
@@ -110,22 +120,24 @@ class TocController extends ChangeNotifier {
     return true;
   }
 
-  bool setTocList(LinkedHashMap<int, Toc> tocList){
-    if(this.tocList == tocList) return false;
+  bool setTocList(LinkedHashMap<int, Toc> tocList) {
+    if (this.tocList == tocList) return false;
     this.tocList = tocList;
     return true;
   }
 
   Future<void> scrollTo(
-      {@required int index,
-        double alignment = 0,
-        @required Duration duration,
-        Curve curve = Curves.linear})  => scrollController.scrollTo(index: index, duration: duration, curve: curve);
+          {@required int index,
+          double alignment = 0,
+          @required Duration duration,
+          Curve curve = Curves.linear}) =>
+      scrollController.scrollTo(index: index, duration: duration, curve: curve);
 
-  void jumpTo({@required int index, double alignment = 0}) => scrollController.jumpTo(index: index, alignment: alignment);
+  void jumpTo({@required int index, double alignment = 0}) =>
+      scrollController.jumpTo(index: index, alignment: alignment);
 
   int get endIndex {
-    if(tocList == null || tocList.isEmpty) return 0;
+    if (tocList == null || tocList.isEmpty) return 0;
     final keys = tocList.keys.toList();
     final lastKey = keys.last;
     final index = tocList[lastKey].index;

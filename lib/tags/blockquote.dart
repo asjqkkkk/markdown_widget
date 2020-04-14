@@ -18,13 +18,12 @@ class Bq {
 
     return Container(
       decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(
-              color: blockConfig?.blockColor ?? defaultBlockColor,
-              width: blockConfig?.blockWidth ?? 4),
-        ),
-        color: blockConfig?.backgroundColor
-      ),
+          border: Border(
+            left: BorderSide(
+                color: blockConfig?.blockColor ?? defaultBlockColor,
+                width: blockConfig?.blockWidth ?? 4),
+          ),
+          color: blockConfig?.backgroundColor),
       padding: EdgeInsets.only(left: blockConfig?.leftSpace ?? 10),
       child: P().getPWidget(node.children, node,
           textStyle: blockConfig?.blockStyle ?? defaultBlockStyle),

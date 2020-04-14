@@ -13,7 +13,6 @@ const String hr = 'hr';
 const String table = 'table';
 const String blockquote = 'blockquote';
 
-
 ///inner tags
 const String code = 'code';
 const String em = 'em';
@@ -29,4 +28,3 @@ const String tr = 'tr';
 const String th = 'th';
 const String td = 'td';
 const String input = 'input';
-

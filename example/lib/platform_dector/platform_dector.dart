@@ -13,7 +13,7 @@ class PlatformDetector {
 
   @override
   String toString() {
-    return 'Platform:  isMobile-${isMobile}   isIOS-${isIOS}   isAndroid-${isAndroid}   isWebMobile-${isWebMobile}';
+    return "Platform:  isMobile-$isMobile   isIOS-$isIOS   isAndroid-$isAndroid   isWebMobile-$isWebMobile";
   }
 
 

@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 import '../config/style_config.dart';
 
-class Hr{
-
+class Hr {
   Hr._internal();
 
   static Hr _instance;
 
-  factory Hr(){
+  factory Hr() {
     _instance ??= Hr._internal();
     return _instance;
   }
 
-  Widget getHrWidget(m.Element node){
-
+  Widget getHrWidget(m.Element node) {
     final HrConfig hrConfig = StyleConfig().hrConfig;
 
     return Container(
@@ -24,7 +22,7 @@ class Hr{
   }
 }
 
-class HrConfig{
+class HrConfig {
   final double height;
   final Color color;
 
