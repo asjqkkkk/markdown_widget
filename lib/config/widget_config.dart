@@ -1,8 +1,7 @@
 import 'package:markdown/markdown.dart' as m;
 import 'package:flutter/material.dart';
 
-class WidgetConfig{
-
+class WidgetConfig {
   WidgetBuilder p;
   WidgetBuilder pre;
   WidgetBuilder ul;
@@ -11,9 +10,15 @@ class WidgetConfig{
   WidgetBuilder hr;
   WidgetBuilder table;
 
-  WidgetConfig({this.p, this.pre, this.ul,
-      this.ol, this.block, this.hr, this.table});
-
+  WidgetConfig({
+    this.p,
+    this.pre,
+    this.ul,
+    this.ol,
+    this.block,
+    this.hr,
+    this.table,
+  });
 }
 
 typedef Widget WidgetBuilder(m.Element node);

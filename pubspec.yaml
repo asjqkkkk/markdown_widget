@@ -1,6 +1,6 @@
 name: markdown_widget
-description: markdown widget support TOC、video、highlight code...
-version: 1.0.4
+description: A new markdown package. It supports TOC function, HTML video and img tag，and it works well on both the web and mobile
+version: 1.0.5
 verified publisher:
   - agedchen@gmail.com
 homepage: https://github.com/asjqkkkk/markdown_widget
@@ -12,15 +12,21 @@ dependencies:
   flutter:
     sdk: flutter
 
+  #markdown data parser
   markdown: ^2.1.3
+
   #highlight code
   highlight: ^0.6.0
   flutter_highlight: ^0.6.0
+
+  #html tag parser
   html: ^0.14.0+3
+
   # for 'video' tag
   video_player_web: ^0.1.2+1
   video_player: ^0.10.5
   chewie: ^0.9.10
+
   # for TOC
   scrollable_positioned_list: ^0.1.3
 

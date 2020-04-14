@@ -60,7 +60,8 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     );
     tocList.addAll(markdownGenerator.tocList);
     widgets.addAll(markdownGenerator.widgets);
-    if(widget.controller != null) itemPositionsListener.itemPositions.addListener(indexListener);
+    if (widget.controller != null)
+      itemPositionsListener.itemPositions.addListener(indexListener);
   }
 
   void clearState() {
@@ -68,7 +69,8 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     widgets.clear();
     markdownGenerator.clear();
     markdownGenerator = null;
-    if(widget.controller != null) itemPositionsListener.itemPositions.removeListener(indexListener);
+    if (widget.controller != null)
+      itemPositionsListener.itemPositions.removeListener(indexListener);
     hasInitialed = false;
   }
 
@@ -80,7 +82,6 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return widget.controller == null
         ? ListView.builder(
             itemBuilder: (ctx, index) => widgets[index],
@@ -101,7 +102,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   void indexListener() {
     bool needRefresh = false;
     final controller = widget?.controller;
-    if(itemPositionsListener.itemPositions.value.isNotEmpty){
+    if (itemPositionsListener.itemPositions.value.isNotEmpty) {
       final current = itemPositionsListener.itemPositions.value.elementAt(0);
       final toc = tocList[current.index] ??
           tocList[current.index + 1] ??
@@ -110,11 +111,11 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     }
     if (!hasInitialed) {
       hasInitialed = true;
-      if(controller?.setTocList(markdownGenerator.tocList) ?? false) needRefresh = true;
+      if (controller?.setTocList(markdownGenerator.tocList) ?? false)
+        needRefresh = true;
     }
-    if(needRefresh) controller?.refresh();
+    if (needRefresh) controller?.refresh();
   }
-
 
   @override
   void didUpdateWidget(MarkdownWidget oldWidget) {
@@ -128,7 +129,4 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     }
     super.didUpdateWidget(widget);
   }
-
-
 }
-

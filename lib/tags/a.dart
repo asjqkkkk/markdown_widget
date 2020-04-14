@@ -12,7 +12,8 @@ Widget defaultAWidget(m.Element element) {
 
   return GestureDetector(
     child: P().getPWidget(
-      element.children, element,
+      element.children,
+      element,
       textStyle: pConfig?.linkStyle ?? TextStyle(color: Colors.blue),
       selectable: false,
     ),
