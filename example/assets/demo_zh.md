@@ -159,3 +159,13 @@ import 'package:markdown_widget/config/highlight_themes.dart' as theme;
 [video_player](https://pub.flutter-io.cn/packages/video_player) | 视频接口
 [chewie](https://pub.flutter-io.cn/packages/chewie) | 一个简单漂亮的视频播放器
 [scrollable_positioned_list](https://pub.flutter-io.cn/packages/scrollable_positioned_list) | 用于实现TOC功能
+
+## 为什么我要创建这个库
+
+既然已经有了 [flutter_markdown](https://pub.flutter-io.cn/packages/flutter_markdown) ，为什么我还要费时费力去写一个与之类似的新库呢？
+
+这是因为在我用flutter web创建我的[个人博客](http://oldben.gitee.io/flutter-blog/#/)的过程中，发现flutter_markdown有很多功能都不支持，比如TOC功能、HTML tag的图片等
+
+提了3个issue也没有回音，在这个前提下也就没打算去提pr了，并且flutter_markdown的源码并没有那么容易修改，可读性不高
+
+最后索性自己重新创建一个啦！
