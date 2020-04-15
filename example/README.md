@@ -160,3 +160,15 @@ package | explain
 [video_player](https://pub.flutter-io.cn/packages/video_player) | video interface
 [chewie](https://pub.flutter-io.cn/packages/chewie) | a simple and beautiful video player
 [scrollable_positioned_list](https://pub.flutter-io.cn/packages/scrollable_positioned_list) | for TOC function
+
+## The reason why I created this package
+
+Since there is already [flutter_markdown](https://pub.flutter-io.cn/packages/flutter_markdown) package, why should I create another one?
+
+Because when I was creating a [personal blog](https://oldchen.top/flutter-blog/#/) using flutter web, I found that flutter_markdown has many functions that are not available
+
+ I have submitted [3 issues](https://github.com/flutter/flutter_markdown/issues/188) without any responding. So I have to create a new one.
+
+
+
+
