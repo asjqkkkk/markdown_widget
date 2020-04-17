@@ -6,8 +6,7 @@ import '../config/style_config.dart';
 InlineSpan getImageSpan(m.Element node) {
   String url = node.attributes['src'];
   return WidgetSpan(
-    child: StyleConfig()?.imgBuilder?.call(url, node.attributes) ??
-        defaultImageWidget(node.attributes, url: url),
+    child: defaultImageWidget(node.attributes, url: url),
   );
 }
 
@@ -23,7 +22,7 @@ Widget defaultImageWidget(Map<String, String> attributes, {String url}) {
     fit: BoxFit.cover,
   );
   final config = StyleConfig()?.imgConfig;
-  return config?.imgWrapper?.call(image) ?? image;
+  return StyleConfig()?.imgBuilder?.call(url, attributes) ?? config?.imgWrapper?.call(image) ?? image;
 }
 
 class ImgConfig {

@@ -1,3 +1,5 @@
+#### [1.0.6] - fix `ImgBuilder` not working correctly
+
 #### [1.0.5] - Add `CodeConfig`, format code and change `markdown_widget` description
 
 #### [1.0.4] - Add `ImgConfig`, Improve code description and online demo
