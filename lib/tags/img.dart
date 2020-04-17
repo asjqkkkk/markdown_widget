@@ -15,14 +15,15 @@ Widget defaultImageWidget(Map<String, String> attributes, {String url}) {
   double height;
   if (attributes['width'] != null) width = double.parse(attributes['width']);
   if (attributes['height'] != null) height = double.parse(attributes['height']);
+  final imageUrl = url ?? attributes['src'];
   final image = Image.network(
-    url ?? attributes['src'],
+    imageUrl,
     width: width,
     height: height,
     fit: BoxFit.cover,
   );
   final config = StyleConfig()?.imgConfig;
-  return StyleConfig()?.imgBuilder?.call(url, attributes) ?? config?.imgWrapper?.call(image) ?? image;
+  return StyleConfig()?.imgBuilder?.call(imageUrl, attributes) ?? config?.imgWrapper?.call(image) ?? image;
 }
 
 class ImgConfig {

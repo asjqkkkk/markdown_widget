@@ -1,3 +1,5 @@
+#### [1.0.7] - fix `ImgBuilder` send a null image url
+
 #### [1.0.6] - fix `ImgBuilder` not working correctly
 
 #### [1.0.5] - Add `CodeConfig`, format code and change `markdown_widget` description
