@@ -41,7 +41,7 @@ class MTitle {
   }
 
   TextStyle _titleStyle(double fontSize) =>
-      TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.black,);
 
   Widget buildDivider() => Container(height: 1, color: defaultDividerColor);
 
@@ -74,7 +74,7 @@ class MTitle {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        P().getPWidget(node.children, node, textStyle: configStyle ?? style),
+        P().getPWidget(node.children, node, textStyle: (configStyle ?? style).merge(config?.commonStyle)),
         SizedBox(height: config?.space ?? 4.0),
         showDivider ? (config?.divider ?? buildDivider()) : Container()
       ],
@@ -89,6 +89,7 @@ class TitleConfig {
   final TextStyle h4;
   final TextStyle h5;
   final TextStyle h6;
+  final TextStyle commonStyle;
   final bool showDivider;
   final Widget divider;
   final double space;
@@ -100,6 +101,7 @@ class TitleConfig {
       this.h4,
       this.h5,
       this.h6,
+      this.commonStyle,
       this.showDivider,
       this.divider,
       this.space});

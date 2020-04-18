@@ -25,13 +25,16 @@ class P {
     List<m.Node> children,
     m.Node parentNode, {
     TextStyle textStyle,
-    bool selectable = true,
+    bool selectable,
     WrapCrossAlignment crossAxisAlignment = WrapCrossAlignment.center,
-  }) =>
-      isWeb()
-          ? buildWebRichText(
-              children, parentNode, textStyle, selectable, crossAxisAlignment)
-          : buildRichText(children, parentNode, textStyle, selectable);
+  }) {
+    final configSelectable =
+        selectable ?? StyleConfig().pConfig.selectable ?? true;
+    return isWeb()
+        ? buildWebRichText(children, parentNode, textStyle, configSelectable,
+            crossAxisAlignment)
+        : buildRichText(children, parentNode, textStyle, configSelectable);
+  }
 
   bool isWeb() => kIsWeb;
 
@@ -74,7 +77,8 @@ class P {
           bool shouldParseHtml = needParseHtml(parentNode);
           final node = nodes[index];
           if (node is m.Text)
-            return buildTextSpan(node, parentStyle, shouldParseHtml);
+            return buildTextSpan(
+                node, parentStyle, shouldParseHtml, selectable);
           else if (node is m.Element) {
             if (node.tag == code) return getCodeSpan(node);
             if (node.tag == img) return getImageSpan(node);
@@ -82,7 +86,13 @@ class P {
             if (node.tag == a) return getLinkSpan(node);
             if (node.tag == input) return getInputSpan(node);
             return getBlockSpan(
-                node.children, node, parentStyle.merge(getTextStyle(node.tag)));
+              node.children,
+              node,
+              parentStyle.merge(
+                getTextStyle(node.tag),
+              ),
+              selectable: selectable,
+            );
           }
           return TextSpan();
         },
@@ -90,11 +100,16 @@ class P {
     );
   }
 
-  InlineSpan buildTextSpan(
-      m.Text node, TextStyle parentStyle, bool shouldParseHtml) {
+  InlineSpan buildTextSpan(m.Text node, TextStyle parentStyle,
+      bool shouldParseHtml, bool selectable) {
     final nodes = shouldParseHtml ? parseHtml(node) : [];
     if (nodes.isEmpty) {
-      return TextSpan(text: node.text, style: parentStyle);
+      return selectable
+          ? WidgetSpan(child: SelectableText(node.text, style: parentStyle))
+          : TextSpan(
+              text: node.text,
+              style: parentStyle,
+            );
     } else {
       return getBlockSpan(nodes, node, parentStyle);
     }
@@ -146,6 +161,7 @@ class PConfig {
   final TextStyle delStyle;
   final TextStyle emStyle;
   final TextStyle strongStyle;
+  final bool selectable;
 
   final OnLinkTap onLinkTap;
 
@@ -156,6 +172,7 @@ class PConfig {
     this.emStyle,
     this.strongStyle,
     this.onLinkTap,
+    this.selectable,
   });
 }
 

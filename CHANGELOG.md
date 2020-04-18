@@ -1,3 +1,5 @@
+#### [1.0.8] - add `CommonStyle` to title, add `selectable` to `PConfig`
+
 #### [1.0.7] - fix `ImgBuilder` send a null image url
 
 #### [1.0.6] - fix `ImgBuilder` not working correctly
