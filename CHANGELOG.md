@@ -1,3 +1,5 @@
+#### [1.0.9] - add `LinkGesture` to  `PConfig` to fix issue [#4](https://github.com/asjqkkkk/markdown_widget/issues/4)
+
 #### [1.0.8] - add `CommonStyle` to title, add `selectable` to `PConfig`
 
 #### [1.0.7] - fix `ImgBuilder` send a null image url
