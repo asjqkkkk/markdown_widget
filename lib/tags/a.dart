@@ -9,17 +9,15 @@ InlineSpan getLinkSpan(m.Element element) =>
 
 Widget defaultAWidget(m.Element element) {
   PConfig pConfig = StyleConfig().pConfig;
-
-  return GestureDetector(
-    child: P().getPWidget(
-      element.children,
-      element,
-      textStyle: pConfig?.linkStyle ?? TextStyle(color: Colors.blue),
-      selectable: false,
-    ),
-    onTap: () {
-      final url = element.attributes['href'];
-      pConfig?.onLinkTap?.call(url);
-    },
+  final url = element.attributes['href'];
+  final linkWidget = P().getPWidget(
+    element.children,
+    element,
+    textStyle: pConfig?.linkStyle ?? TextStyle(color: Colors.blue),
+    selectable: false,
+  );
+  return pConfig?.linkGesture?.call(linkWidget, url) ?? GestureDetector(
+    child: linkWidget,
+    onTap: () => pConfig?.onLinkTap?.call(url),
   );
 }
