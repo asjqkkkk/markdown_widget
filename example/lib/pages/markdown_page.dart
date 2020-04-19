@@ -85,7 +85,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
         controller: controller,
         styleConfig: StyleConfig(
           pConfig: PConfig(
-            onLinkTap: (url) => _launchURL(url),
+            linkGesture: (linkChild, url){
+              return GestureDetector(child: linkChild,
+                  onTap: () => _launchURL(url));
+            },
           ),
         ),
       ),

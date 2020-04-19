@@ -164,6 +164,7 @@ class PConfig {
   final bool selectable;
 
   final OnLinkTap onLinkTap;
+  final LinkGesture linkGesture;
 
   PConfig({
     this.textStyle,
@@ -173,7 +174,9 @@ class PConfig {
     this.strongStyle,
     this.onLinkTap,
     this.selectable,
+    this.linkGesture,
   });
 }
 
 typedef void OnLinkTap(String url);
+typedef Widget LinkGesture(Widget linkWidget, String url);
