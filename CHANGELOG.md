@@ -1,3 +1,5 @@
+#### [1.1.0] - fix issue [#6](https://github.com/asjqkkkk/markdown_widget/issues/6)
+
 #### [1.0.9] - add `LinkGesture` to  `PConfig` to fix issue [#4](https://github.com/asjqkkkk/markdown_widget/issues/4)
 
 #### [1.0.8] - add `CommonStyle` to title, add `selectable` to `PConfig`
