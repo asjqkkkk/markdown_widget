@@ -102,6 +102,47 @@ you can custom link style
       );
 ```
 
+## 🍑Custom Tag
+
+you can do custom tag like this
+
+- add the following snippets in your markdown data
+
+```markdown
+<avatar size="12" name="tom" />
+```
+
+- add `custom widgetConfig` like this
+
+```dart
+      MarkdownWidget(
+        data: data,
+        widgetConfig: WidgetConfig(
+          custom: (m.Element node) {
+            if (node.tag == 'avatar') {
+              var size = 10.0;
+              var name = 'jerry';
+              if (node.attributes['size'] != null) {
+                size = double.parse(node.attributes['size']);
+              }
+              if (node.attributes['name'] != null) {
+                name = node.attributes['name'];
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(child: Icon(Icons.ac_unit), radius: size),
+                  SizedBox(width: 10),
+                  Text(name),
+                ],
+              );
+            }
+            return Container();
+          },
+        ),
+      ),
+```
+
 ## 📜TOC
 
 it's very easy to use TOC

@@ -102,6 +102,47 @@ class MarkdownPage extends StatelessWidget {
       );
 ```
 
+## 🍑自定义标签
+
+你可以定制自定义标签的行为
+
+- 例如添加以下内容在你的markdown文件中
+
+```markdown
+<avatar size="12" name="tom" />
+```
+
+- 添加配置以下 `custom widgetConfig` 配置
+
+```dart
+      MarkdownWidget(
+        data: data,
+        widgetConfig: WidgetConfig(
+          custom: (m.Element node) {
+            if (node.tag == 'avatar') {
+              var size = 10.0;
+              var name = 'jerry';
+              if (node.attributes['size'] != null) {
+                size = double.parse(node.attributes['size']);
+              }
+              if (node.attributes['name'] != null) {
+                name = node.attributes['name'];
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(child: Icon(Icons.ac_unit), radius: size),
+                  SizedBox(width: 10),
+                  Text(name),
+                ],
+              );
+            }
+            return Container();
+          },
+        ),
+      ),
+```
+
 ## 📜TOC功能
 
 使用TOC非常的简单
