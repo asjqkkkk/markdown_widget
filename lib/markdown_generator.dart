@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
+
 import 'config/html_support.dart';
 import 'config/style_config.dart';
 import 'config/widget_config.dart';
@@ -37,8 +38,39 @@ class MarkdownGenerator {
 
   LinkedHashMap<int, Toc> get tocList => _tocList;
 
+  final _customTagPattern = RegExp(r'<(?<tag>\w+).*?/>');
+
+  final _customTagAttributesPattern =
+      RegExp(r'(?<name>\w+)\s*=\s*"(?<value>\w+)"');
+
+  bool _canParseCustomTag(m.Text node) => _customTagPattern.hasMatch(node.text);
+
+  m.Element _parseCustomTag(m.Text node) {
+    String text = node.text;
+    var tagMatch = _customTagPattern.firstMatch(text);
+    String tag = tagMatch.namedGroup('tag');
+    Map<String, String> attributes = {};
+    for (var attributeMatch in _customTagAttributesPattern.allMatches(text)) {
+      attributes[attributeMatch.namedGroup('name')] =
+          attributeMatch.namedGroup('value');
+    }
+    return m.Element.withTag(tag)..attributes.addAll(attributes);
+  }
+
   Widget _generatorWidget(m.Node node, EdgeInsetsGeometry childMargin) {
-    if (node is m.Text) return _helper.getPWidget(m.Element(p, [node]));
+    if (node is m.Text) {
+      // markdown can not parse custom html tag, see dart-lang/markdown/issues/285.
+      // So we parse it manually here.
+      // Now in order for simplicity, we only support self close custom tag
+      // with attributes like <avatar name="cow" size="24" />.
+      // Alternative we can parse more complex custom tag using html lib using
+      // parseFragment('<avatar name="cow" size="24">nickName: <span>Tom</span>.</avatar>')
+      if (!_canParseCustomTag(node)) {
+        return _helper.getPWidget(m.Element(p, [node]));
+      }
+      node = _parseCustomTag(node);
+    }
+    ;
     final tag = (node as m.Element).tag;
     Widget result;
     switch (tag) {
@@ -117,6 +149,8 @@ class MarkdownGenerator {
       case blockquote:
         result = _helper.getBlockQuote(node);
         break;
+      default:
+        result = _helper.getCustomWidget(node);
     }
     if (result == null) print('tag:$tag not catched!');
     return Container(

@@ -1,8 +1,11 @@
-import '../platform_dector/platform_dector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:markdown/markdown.dart' as m;
+import 'package:markdown_widget/config/widget_config.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../platform_dector/platform_dector.dart';
 
 
 
@@ -90,6 +93,29 @@ class _MarkdownPageState extends State<MarkdownPage> {
                   onTap: () => _launchURL(url));
             },
           ),
+        ),
+        widgetConfig: WidgetConfig(
+          custom: (m.Element node) {
+            if (node.tag == 'avatar') {
+              var size = 10.0;
+              var name = 'jerry';
+              if (node.attributes['size'] != null) {
+                size = double.parse(node.attributes['size']);
+              }
+              if (node.attributes['name'] != null) {
+                name = node.attributes['name'];
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(child: Icon(Icons.ac_unit), radius: size),
+                  SizedBox(width: 10),
+                  Text(name),
+                ],
+              );
+            }
+            return Container();
+          },
         ),
       ),
     );

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
-export 'tags/markdown_tags.dart';
+
 import 'config/widget_config.dart';
-import 'tags/p.dart';
-import 'tags/title.dart';
-import 'tags/pre.dart';
-import 'tags/ul.dart';
 import 'tags/blockquote.dart';
-import 'tags/ol.dart';
 import 'tags/hr.dart';
+import 'tags/ol.dart';
+import 'tags/p.dart';
+import 'tags/pre.dart';
 import 'tags/table.dart';
+import 'tags/title.dart';
+import 'tags/ul.dart';
+
+export 'tags/markdown_tags.dart';
 
 class MarkdownHelper {
   WidgetConfig wConfig;
@@ -47,4 +49,8 @@ class MarkdownHelper {
   ///table
   Widget getTableWidget(m.Element node) =>
       wConfig?.table?.call(node) ?? MTable().getTableWidget(node);
+
+  ///table
+  Widget getCustomWidget(m.Element node) =>
+      wConfig?.custom?.call(node) ?? Container();
 }
