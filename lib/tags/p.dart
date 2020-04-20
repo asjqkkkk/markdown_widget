@@ -29,7 +29,7 @@ class P {
     WrapCrossAlignment crossAxisAlignment = WrapCrossAlignment.center,
   }) {
     final configSelectable =
-        selectable ?? StyleConfig().pConfig.selectable ?? true;
+        selectable ?? StyleConfig().pConfig?.selectable ?? true;
     return isWeb()
         ? buildWebRichText(children, parentNode, textStyle, configSelectable,
             crossAxisAlignment)
