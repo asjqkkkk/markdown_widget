@@ -81,6 +81,3 @@ Video:
 
 <video src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
 
-Custom tag:
-
-<avatar size="12" name="tom" />

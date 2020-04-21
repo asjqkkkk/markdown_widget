@@ -38,25 +38,6 @@ class MarkdownGenerator {
 
   LinkedHashMap<int, Toc> get tocList => _tocList;
 
-  final _customTagPattern = RegExp(r'<(?<tag>\w+).*?/>');
-
-  final _customTagAttributesPattern =
-      RegExp(r'(?<name>\w+)\s*=\s*"(?<value>\w+)"');
-
-  bool _canParseCustomTag(m.Text node) => _customTagPattern.hasMatch(node.text);
-
-  m.Element _parseCustomTag(m.Text node) {
-    String text = node.text;
-    var tagMatch = _customTagPattern.firstMatch(text);
-    String tag = tagMatch.namedGroup('tag');
-    Map<String, String> attributes = {};
-    for (var attributeMatch in _customTagAttributesPattern.allMatches(text)) {
-      attributes[attributeMatch.namedGroup('name')] =
-          attributeMatch.namedGroup('value');
-    }
-    return m.Element.withTag(tag)..attributes.addAll(attributes);
-  }
-
   Widget _generatorWidget(m.Node node, EdgeInsetsGeometry childMargin) {
     if (node is m.Text) return _helper.getPWidget(m.Element(p, [node]));
     final tag = (node as m.Element).tag;

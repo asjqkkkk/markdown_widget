@@ -9,7 +9,6 @@ class WidgetConfig {
   WidgetBuilder block;
   WidgetBuilder hr;
   WidgetBuilder table;
-  WidgetBuilder custom;
 
   WidgetConfig({
     this.p,
@@ -19,7 +18,6 @@ class WidgetConfig {
     this.block,
     this.hr,
     this.table,
-    this.custom,
   });
 }
 

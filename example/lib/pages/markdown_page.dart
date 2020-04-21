@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:markdown/markdown.dart' as m;
-import 'package:markdown_widget/config/widget_config.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -93,7 +91,9 @@ class _MarkdownPageState extends State<MarkdownPage> {
         styleConfig: StyleConfig(
           pConfig: PConfig(linkGesture: (linkChild, url) {
             return GestureDetector(
-                child: linkChild, onTap: () => _launchURL(url));
+              child: linkChild,
+              onTap: () => _launchURL(url),
+            );
           }),
         ),
       ),
