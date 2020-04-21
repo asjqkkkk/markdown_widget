@@ -85,6 +85,7 @@ class P {
             if (node.tag == video) return getVideoSpan(node);
             if (node.tag == a) return getLinkSpan(node);
             if (node.tag == input) return getInputSpan(node);
+            if (node.tag == other) return getOtherWidgetSpan(node);
             return getBlockSpan(
               node.children,
               node,
@@ -134,8 +135,9 @@ class P {
           widgets.add(defaultAWidget(node));
         else if (node.tag == input)
           widgets.add(defaultCheckBox(node.attributes));
-        else
-          buildBlockWidgets(node.children, node,
+        else if (node.tag == other)
+          widgets.add(getOtherWidget(node));
+        else buildBlockWidgets(node.children, node,
               parentStyle.merge(getTextStyle(node.tag)), widgets, selectable);
       }
     });
@@ -165,6 +167,7 @@ class PConfig {
 
   final OnLinkTap onLinkTap;
   final LinkGesture linkGesture;
+  final Custom custom;
 
   PConfig({
     this.textStyle,
@@ -175,8 +178,10 @@ class PConfig {
     this.onLinkTap,
     this.selectable,
     this.linkGesture,
+    this.custom,
   });
 }
 
 typedef void OnLinkTap(String url);
 typedef Widget LinkGesture(Widget linkWidget, String url);
+typedef Widget Custom(m.Element element);
