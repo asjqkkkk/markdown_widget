@@ -112,7 +112,7 @@ you can do custom tag like this
 <avatar size="12" name="tom" />
 ```
 
-- add `custom widgetConfig` like this
+- add `custom` like this
 
 ```dart
       MarkdownWidget(

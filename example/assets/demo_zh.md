@@ -112,7 +112,7 @@ class MarkdownPage extends StatelessWidget {
 <avatar size="12" name="tom" />
 ```
 
-- 添加配置以下 `custom widgetConfig` 配置
+- 添加配置以下 `custom` 配置
 
 ```dart
       MarkdownWidget(
