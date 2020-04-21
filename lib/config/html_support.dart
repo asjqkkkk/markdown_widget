@@ -15,6 +15,11 @@ void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
       final element = m.Element(tag, null);
       element.attributes.addAll(node.attributes.cast());
       mNodes.add(element);
+    } else {
+      final element = m.Element(tag, null);
+      element.attributes.addAll(node.attributes.cast());
+      final customElement = m.Element(other, [element]);
+      mNodes.add(customElement);
     }
     if (node.nodes == null || node.nodes.isEmpty) return;
     node.nodes.forEach((n) {
@@ -29,11 +34,11 @@ bool needParseHtml(m.Node parentNode) =>
     (parentNode is m.Element && parentNode.tag != code);
 
 List<m.Node> parseHtml(
-  m.Node node,
-) {
+    m.Node node,
+    ) {
   final text = node.textContent;
   if (!text.contains(htmlRep)) return [];
-  h.Document document = parse(text);
+  h.DocumentFragment document = parseFragment(text);
   List<m.Node> nodes = [];
   document.nodes.forEach((element) {
     htmlToMarkdown(element, 0, nodes);

@@ -1,23 +1,22 @@
-import '../platform_dector/platform_dector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-
+import '../platform_dector/platform_dector.dart';
 
 class MarkdownPage extends StatefulWidget {
   final String assetsPath;
   final String markdownData;
 
-  const MarkdownPage({Key key, this.assetsPath, this.markdownData}) : super(key: key);
+  const MarkdownPage({Key key, this.assetsPath, this.markdownData})
+      : super(key: key);
 
   @override
   _MarkdownPageState createState() => _MarkdownPageState();
 }
 
 class _MarkdownPageState extends State<MarkdownPage> {
-
   ///key: [isEnglish] , value: data
   Map<bool, String> dataMap = {};
   String data;
@@ -26,7 +25,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   @override
   void initState() {
-    if(widget.assetsPath != null) {
+    if (widget.assetsPath != null) {
       loadData(widget.assetsPath);
     } else {
       this.data = widget.markdownData;
@@ -35,7 +34,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   }
 
   void loadData(String assetsPath) {
-    if(dataMap[isEnglish] != null){
+    if (dataMap[isEnglish] != null) {
       data = dataMap[isEnglish];
       refresh();
       return;
@@ -55,7 +54,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Widget build(BuildContext context) {
     bool isMobile = PlatformDetector.isMobile || PlatformDetector.isWebMobile;
 
-
     return Scaffold(
       appBar: isMobile
           ? AppBar(
@@ -64,14 +62,21 @@ class _MarkdownPageState extends State<MarkdownPage> {
               backgroundColor: Colors.black,
             )
           : null,
-      drawer: (isMobile && widget.assetsPath != null) ? Drawer(child: buildTocList()) : null,
+      drawer: (isMobile && widget.assetsPath != null)
+          ? Drawer(child: buildTocList())
+          : null,
       body: data == null
           ? Center(child: CircularProgressIndicator())
           : (isMobile ? buildMobileBody() : buildWebBody()),
-      floatingActionButton: widget.assetsPath != null ? FloatingActionButton(onPressed: (){
-        isEnglish = !isEnglish;
-        loadData(isEnglish ? 'assets/demo_en.md' : 'assets/demo_zh.md');
-      }, child: Text(isEnglish ? '简中' : 'EN'),) : null,
+      floatingActionButton: widget.assetsPath != null
+          ? FloatingActionButton(
+              onPressed: () {
+                isEnglish = !isEnglish;
+                loadData(isEnglish ? 'assets/demo_en.md' : 'assets/demo_zh.md');
+              },
+              child: Text(isEnglish ? '简中' : 'EN'),
+            )
+          : null,
     );
   }
 
@@ -84,12 +89,12 @@ class _MarkdownPageState extends State<MarkdownPage> {
         data: data,
         controller: controller,
         styleConfig: StyleConfig(
-          pConfig: PConfig(
-            linkGesture: (linkChild, url){
-              return GestureDetector(child: linkChild,
-                  onTap: () => _launchURL(url));
-            },
-          ),
+          pConfig: PConfig(linkGesture: (linkChild, url) {
+            return GestureDetector(
+              child: linkChild,
+              onTap: () => _launchURL(url),
+            );
+          }),
         ),
       ),
     );
