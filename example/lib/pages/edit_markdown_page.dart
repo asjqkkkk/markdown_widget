@@ -7,7 +7,6 @@ import '../platform_dector/platform_dector.dart';
 import 'markdown_page.dart';
 
 class EditMarkdownPage extends StatefulWidget {
-
   final String initialData;
 
   const EditMarkdownPage({Key key, this.initialData = ''}) : super(key: key);
@@ -17,10 +16,11 @@ class EditMarkdownPage extends StatefulWidget {
 }
 
 class _EditMarkdownPageState extends State<EditMarkdownPage> {
-
-  final String initialText = '[Welcome for pull request](https://github.com/asjqkkkk/markdown_widget)😄\n\n';
+  final String initialText =
+      '[Welcome for pull request](https://github.com/asjqkkkk/markdown_widget)😄\n\n';
   String text = '';
-  final bool isMobile = PlatformDetector.isMobile || PlatformDetector.isWebMobile;
+  final bool isMobile =
+      PlatformDetector.isMobile || PlatformDetector.isWebMobile;
 
   @override
   void initState() {
@@ -28,20 +28,30 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: isMobile ? AppBar(
-        title: Text('Edit Markdown'), backgroundColor: Colors.black,) : null,
+      appBar: isMobile
+          ? AppBar(
+              title: Text('Edit Markdown'),
+              backgroundColor: Colors.black,
+            )
+          : null,
       body: isMobile ? buildMobileBody() : buildWebBody(),
-      floatingActionButton: isMobile ? FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-            return MarkdownPage(markdownData: text,);
-          }));
-        }, child: Icon(Icons.remove_red_eye,),) : null,
+      floatingActionButton: isMobile
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                  return MarkdownPage(
+                    markdownData: text,
+                  );
+                }));
+              },
+              child: Icon(
+                Icons.remove_red_eye,
+              ),
+            )
+          : null,
     );
   }
 
@@ -53,35 +63,16 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
     return Row(
       children: <Widget>[
         Expanded(child: buildEditText()),
-        Expanded(child: MarkdownWidget(
-          data: initialText + text,
-          styleConfig: StyleConfig(
-            pConfig: PConfig(
-              onLinkTap: (url) => _launchURL(url),
-                custom: (node) {
-                  if (node.tag == 'avatar') {
-                    var size = 10.0;
-                    var name = 'jerry';
-                    if (node.attributes['size'] != null) {
-                      size = double.parse(node.attributes['size']);
-                    }
-                    if (node.attributes['name'] != null) {
-                      name = node.attributes['name'];
-                    }
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(child: Icon(Icons.ac_unit), radius: size),
-                        SizedBox(width: 10),
-                        Text(name),
-                      ],
-                    );
-                  }
-                  return Container();
-                }
+        Expanded(
+          child: MarkdownWidget(
+            data: initialText + text,
+            styleConfig: StyleConfig(
+              pConfig: PConfig(
+                onLinkTap: (url) => _launchURL(url),
+              ),
             ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -106,8 +97,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
           this.text = text;
           refresh();
         },
-        style: TextStyle(
-            textBaseline: TextBaseline.alphabetic),
+        style: TextStyle(textBaseline: TextBaseline.alphabetic),
         decoration: InputDecoration(
             contentPadding: EdgeInsets.all(10),
             border: InputBorder.none,
@@ -128,5 +118,4 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
       throw 'Could not launch $url';
     }
   }
-
 }
