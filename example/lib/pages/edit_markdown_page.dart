@@ -58,6 +58,27 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
           styleConfig: StyleConfig(
             pConfig: PConfig(
               onLinkTap: (url) => _launchURL(url),
+                custom: (node) {
+                  if (node.tag == 'avatar') {
+                    var size = 10.0;
+                    var name = 'jerry';
+                    if (node.attributes['size'] != null) {
+                      size = double.parse(node.attributes['size']);
+                    }
+                    if (node.attributes['name'] != null) {
+                      name = node.attributes['name'];
+                    }
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(child: Icon(Icons.ac_unit), radius: size),
+                        SizedBox(width: 10),
+                        Text(name),
+                      ],
+                    );
+                  }
+                  return Container();
+                }
             ),
           ),
         )),

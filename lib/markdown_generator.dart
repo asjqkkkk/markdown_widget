@@ -58,19 +58,7 @@ class MarkdownGenerator {
   }
 
   Widget _generatorWidget(m.Node node, EdgeInsetsGeometry childMargin) {
-    if (node is m.Text) {
-      // markdown can not parse custom html tag, see dart-lang/markdown/issues/285.
-      // So we parse it manually here.
-      // Now in order for simplicity, we only support self close custom tag
-      // with attributes like <avatar name="cow" size="24" />.
-      // Alternative we can parse more complex custom tag using html lib using
-      // parseFragment('<avatar name="cow" size="24">nickName: <span>Tom</span>.</avatar>')
-      if (!_canParseCustomTag(node)) {
-        return _helper.getPWidget(m.Element(p, [node]));
-      }
-      node = _parseCustomTag(node);
-    }
-    ;
+    if (node is m.Text) return _helper.getPWidget(m.Element(p, [node]));
     final tag = (node as m.Element).tag;
     Widget result;
     switch (tag) {
@@ -149,8 +137,6 @@ class MarkdownGenerator {
       case blockquote:
         result = _helper.getBlockQuote(node);
         break;
-      default:
-        result = _helper.getCustomWidget(node);
     }
     if (result == null) print('tag:$tag not catched!');
     return Container(
