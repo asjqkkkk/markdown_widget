@@ -1,3 +1,5 @@
+#### [1.1.1] - offer custon html tag to user, fix issue [#8](https://github.com/asjqkkkk/markdown_widget/issues/8)
+
 #### [1.1.0] - fix issue [#6](https://github.com/asjqkkkk/markdown_widget/issues/6)
 
 #### [1.0.9] - add `LinkGesture` to  `PConfig` to fix issue [#4](https://github.com/asjqkkkk/markdown_widget/issues/4)
