@@ -11,3 +11,4 @@ export 'table.dart';
 export 'title.dart';
 export 'ul.dart';
 export 'video.dart';
+export 'other.dart';

@@ -1,5 +1,5 @@
-import 'package:markdown/markdown.dart' as m;
 import 'package:flutter/material.dart';
+import 'package:markdown/markdown.dart' as m;
 
 class WidgetConfig {
   WidgetBuilder p;

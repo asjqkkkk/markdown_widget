@@ -28,3 +28,8 @@ const String tr = 'tr';
 const String th = 'th';
 const String td = 'td';
 const String input = 'input';
+
+
+///custom tag
+const String other = 'other';
+

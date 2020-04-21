@@ -102,6 +102,33 @@ class MarkdownPage extends StatelessWidget {
       );
 ```
 
+## 🍑自定义标签
+
+你可以定制自定义标签的行为
+
+- 例如添加以下内容在你的markdown文件中
+
+```markdown
+<avatar size="12" name="tom" />
+```
+
+- 添加配置以下 `custom widgetConfig` 配置
+
+```dart
+      MarkdownWidget(
+        data: data,
+            styleConfig: StyleConfig(
+              pConfig: PConfig(
+                custom: (m.Element node) {
+                  ...
+                  return YourCustomWidget();
+                },
+              ),
+            ),
+          ),
+```
+```
+
 ## 📜TOC功能
 
 使用TOC非常的简单

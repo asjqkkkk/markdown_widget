@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
+
 import 'config/html_support.dart';
 import 'config/style_config.dart';
 import 'config/widget_config.dart';

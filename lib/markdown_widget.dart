@@ -1,16 +1,16 @@
 import 'dart:collection';
+import 'markdown_toc.dart';
 import 'markdown_generator.dart';
 import 'config/style_config.dart';
 import 'config/widget_config.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'markdown_toc.dart';
-
-export 'markdown_toc.dart';
 export 'dart:collection';
+export 'markdown_toc.dart';
+export 'markdown_generator.dart';
 export 'config/style_config.dart';
-export 'package:markdown_widget/markdown_generator.dart';
+
 
 class MarkdownWidget extends StatefulWidget {
   final String data;
@@ -56,6 +56,8 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   void initialState() {
     markdownGenerator = MarkdownGenerator(
       data: widget.data,
+      widgetConfig: widget.widgetConfig,
+      styleConfig: widget.styleConfig,
       childMargin: widget.childMargin,
     );
     tocList.addAll(markdownGenerator.tocList);
