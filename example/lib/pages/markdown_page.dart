@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../my_app.dart';
 import '../platform_dector/platform_dector.dart';
 
 class MarkdownPage extends StatefulWidget {
@@ -89,12 +90,15 @@ class _MarkdownPageState extends State<MarkdownPage> {
         data: data,
         controller: controller,
         styleConfig: StyleConfig(
-          pConfig: PConfig(linkGesture: (linkChild, url) {
-            return GestureDetector(
-              child: linkChild,
-              onTap: () => _launchURL(url),
-            );
-          }),
+          pConfig: PConfig(
+            linkGesture: (linkChild, url) {
+              return GestureDetector(
+                child: linkChild,
+                onTap: () => _launchURL(url),
+              );
+            },
+          ),
+            markdownTheme: isDarkNow ? MarkdownTheme.darkTheme : MarkdownTheme.lightTheme
         ),
       ),
     );

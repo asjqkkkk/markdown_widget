@@ -8,8 +8,15 @@ class MyApp extends StatelessWidget {
       title: 'Markdown Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        brightness: isDarkNow ? Brightness.dark : Brightness.light
       ),
       home: HomePage(),
     );
   }
+
+}
+
+bool get isDarkNow{
+  final int curHour = DateTime.now().hour;
+  return curHour > 18 || curHour < 7;
 }

@@ -41,7 +41,7 @@ class MTitle {
   }
 
   TextStyle _titleStyle(double fontSize) =>
-      TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.black,);
+      TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: defaultTitleColor,);
 
   Widget buildDivider() => Container(height: 1, color: defaultDividerColor);
 

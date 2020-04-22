@@ -35,7 +35,7 @@ class Ul {
   Widget _getLiWidget(m.Element rootNode, int deep, int index) {
     final children = rootNode?.children;
     final List<m.Node> otherTagNodes = [];
-    final isBlack = deep % 2 == 0;
+    final isSolid = deep % 2 == 0;
     Widget ulWidget;
 //    Widget
     for (var node in children) {
@@ -61,7 +61,7 @@ class Ul {
             crossAxisAlignment:
                 config?.crossAxisAlignment ?? CrossAxisAlignment.start,
             children: <Widget>[
-              dotWidget ?? _getUlDot(isBlack),
+              dotWidget ?? _getUlDot(isSolid),
               Expanded(
                 child: P().getPWidget(
                   otherTagNodes,
@@ -78,7 +78,7 @@ class Ul {
     );
   }
 
-  Widget _getUlDot(bool isBlack) {
+  Widget _getUlDot(bool isSolid) {
     final config = StyleConfig().ulConfig;
     final dotSize = config?.dotSize ?? 6;
     final marginTop =
@@ -90,9 +90,9 @@ class Ul {
       margin: config?.dotMargin ??
           EdgeInsets.only(left: 5, right: 5, top: marginTop),
       decoration: BoxDecoration(
-        border: isBlack ? null : Border.all(color: Colors.black),
+        border: isSolid ? null : Border.all(color: defaultUlDotColor),
         shape: BoxShape.circle,
-        color: isBlack ? Colors.black : null,
+        color: isSolid ? defaultUlDotColor : null,
       ),
     );
   }
