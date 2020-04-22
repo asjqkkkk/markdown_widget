@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../markdown_themes/all_themes.dart';
 import '../tags/markdown_tags.dart';
 import '../tags/all_tags.dart';
 export '../tags/all_tags.dart';
@@ -24,6 +25,7 @@ class StyleConfig {
     TableConfig tableConfig,
     HrConfig hrConfig,
     CheckBoxConfig checkBoxConfig,
+    Map<String, dynamic> markdownTheme,
   }) {
     _obj ??= StyleConfig._internal();
     _obj.imgBuilder = imgBuilder ?? _obj.imgBuilder;
@@ -41,6 +43,7 @@ class StyleConfig {
     _obj.tableConfig = tableConfig ?? _obj.tableConfig;
     _obj.hrConfig = hrConfig ?? _obj.hrConfig;
     _obj.checkBoxConfig = checkBoxConfig ?? _obj.checkBoxConfig;
+    _obj.markdownTheme = markdownTheme ?? _obj.markdownTheme;
     return _obj;
   }
 
@@ -83,26 +86,30 @@ class StyleConfig {
   ///hr
   HrConfig hrConfig;
 
+  ///MarkdownTheme, default is light
+  Map<String, dynamic> markdownTheme;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StyleConfig &&
-          runtimeType == other.runtimeType &&
-          checkBoxBuilder == other.checkBoxBuilder &&
-          checkBoxConfig == other.checkBoxConfig &&
-          imgBuilder == other.imgBuilder &&
-          imgConfig == other.imgConfig &&
-          videoBuilder == other.videoBuilder &&
-          videoConfig == other.videoConfig &&
-          titleConfig == other.titleConfig &&
-          pConfig == other.pConfig &&
-          codeConfig == other.codeConfig &&
-          olConfig == other.olConfig &&
-          ulConfig == other.ulConfig &&
-          preConfig == other.preConfig &&
-          blockQuoteConfig == other.blockQuoteConfig &&
-          tableConfig == other.tableConfig &&
-          hrConfig == other.hrConfig;
+          other is StyleConfig &&
+              runtimeType == other.runtimeType &&
+              checkBoxBuilder == other.checkBoxBuilder &&
+              checkBoxConfig == other.checkBoxConfig &&
+              imgBuilder == other.imgBuilder &&
+              imgConfig == other.imgConfig &&
+              videoBuilder == other.videoBuilder &&
+              videoConfig == other.videoConfig &&
+              titleConfig == other.titleConfig &&
+              pConfig == other.pConfig &&
+              codeConfig == other.codeConfig &&
+              olConfig == other.olConfig &&
+              ulConfig == other.ulConfig &&
+              preConfig == other.preConfig &&
+              blockQuoteConfig == other.blockQuoteConfig &&
+              tableConfig == other.tableConfig &&
+              hrConfig == other.hrConfig &&
+              markdownTheme == other.markdownTheme;
 
   @override
   int get hashCode =>
@@ -120,7 +127,16 @@ class StyleConfig {
       preConfig.hashCode ^
       blockQuoteConfig.hashCode ^
       tableConfig.hashCode ^
-      hrConfig.hashCode;
+      hrConfig.hashCode ^
+      markdownTheme.hashCode;
+
+
+
+}
+
+class MarkdownTheme{
+  static const Map<String, dynamic> lightTheme = light_theme;
+  static const Map<String, dynamic> darkTheme = dark_theme;
 }
 
 TextStyle getTextStyle(String tag) {
@@ -140,16 +156,21 @@ TextStyle getTextStyle(String tag) {
   return style;
 }
 
-TextStyle defaultPStyle = TextStyle(color: Color.fromRGBO(30, 34, 38, 1.0));
-TextStyle defaultCodeStyle = TextStyle(fontSize: 12);
+Map<String, dynamic> _theme = StyleConfig().markdownTheme ?? light_theme;
+
+TextStyle defaultPStyle = _theme['PStyle'] ?? light_theme['PStyle'];
+TextStyle defaultCodeStyle = _theme['CodeStyle'] ?? light_theme['CodeStyle'];
 TextStyle defaultDelStyle = TextStyle(decoration: TextDecoration.lineThrough);
 TextStyle defaultEmStyle = TextStyle(fontStyle: FontStyle.italic);
 TextStyle defaultStrongStyle = TextStyle(fontWeight: FontWeight.bold);
-TextStyle defaultBlockStyle =
-    TextStyle(color: Color.fromRGBO(169, 170, 180, 1.0));
+TextStyle defaultBlockStyle = _theme['BlockStyle'] ?? light_theme['BlockStyle'];
 
-Color defaultCodeBackground = Color.fromRGBO(245, 245, 245, 1.0);
-Color defaultTableBorderColor = Color.fromRGBO(215, 219, 223, 1.0);
-Color defaultDividerColor = Color.fromRGBO(229, 230, 235, 1.0);
-Color defaultBlockColor = Color.fromRGBO(215, 219, 223, 1.0);
-Color defaultPreBackground = Color.fromRGBO(243, 246, 249, 1);
+Color defaultCodeBackground = _theme['CodeBackground'] ?? light_theme['CodeBackground'];
+Color defaultTableBorderColor = _theme['TableBorderColor'] ?? light_theme['TableBorderColor'];
+Color defaultDividerColor = _theme['DividerColor'] ?? light_theme['DividerColor'];
+Color defaultBlockColor = _theme['BlockColor'] ?? light_theme['BlockColor'];
+Color defaultPreBackground = _theme['PreBackground'] ?? light_theme['PreBackground'];
+Color defaultTitleColor = _theme['TitleColor'] ?? light_theme['TitleColor'];
+Color defaultUlDotColor = _theme['UlDotColor'] ?? light_theme['UlDotColor'];
+
+Map<String, TextStyle> defaultHighLightCodeTheme = _theme['HightLightCodeTheme'] ?? light_theme['HightLightCodeTheme'];

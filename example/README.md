@@ -51,6 +51,24 @@ if you want to use column or other list widget, you can use `MarkdownGenerator`
   Widget buildMarkdown() => Column(children: MarkdownGenerator(data: data).widgets,);
 ```
 
+## 🌠Dark theme
+
+`markdown_widget` supports dark mode by default，you can use it by setting the `markdownTheme` of `StyleConfig`
+
+```
+  Widget buildMarkdown() => MarkdownWidget(
+        data: data,
+        controller: controller,
+        styleConfig: StyleConfig(
+          markdownTheme: MarkdownTheme.lightTheme
+        ),
+      );
+```
+
+<img src="https://user-images.githubusercontent.com/30992818/79996264-d476f180-84ea-11ea-8ea2-b82a85b8c6db.png" width=400> <img src="https://user-images.githubusercontent.com/30992818/79996304-e6589480-84ea-11ea-950a-5c4fb89c1ad3.png" width=400>
+
+you can also custom your own `markdownTheme`
+
 
 ## 🏞Image and Video
 
@@ -100,6 +118,30 @@ you can custom link style
           )
         ),
       );
+```
+
+## 🍑Custom Tag
+
+you can use custom tag like this
+
+```markdown
+<avatar size="12" name="tom" />
+```
+
+then add `custom` like this
+
+```dart
+      MarkdownWidget(
+        data: data,
+            styleConfig: StyleConfig(
+              pConfig: PConfig(
+                custom: (m.Element node) {
+                  ...
+                  return YourCustomWidget();
+                },
+              ),
+            ),
+          ),
 ```
 
 ## 📜TOC
@@ -168,7 +210,4 @@ Since there is already [flutter_markdown](https://pub.flutter-io.cn/packages/flu
 Because when I was creating a [personal blog](https://oldchen.top/flutter-blog/#/) using flutter web, I found that flutter_markdown has many functions that are not available
 
  I have submitted [3 issues](https://github.com/flutter/flutter_markdown/issues/188) without any responding. So I have to create a new one.
-
-
-
 

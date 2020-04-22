@@ -51,6 +51,24 @@ class MarkdownPage extends StatelessWidget {
   Widget buildMarkdown() => Column(children: MarkdownGenerator(data: data).widgets,);
 ```
 
+## 🌠夜间模式
+
+`markdown_widget` 默认支持夜间模式，你只需要对 `StyleConfig` 的 `markdownTheme` 属性进行配置即可
+
+
+```
+  Widget buildMarkdown() => MarkdownWidget(
+        data: data,
+        controller: controller,
+        styleConfig: StyleConfig(
+          markdownTheme: MarkdownTheme.lightTheme
+        ),
+      );
+```
+<img src="https://user-images.githubusercontent.com/30992818/79996396-02f4cc80-84eb-11ea-9c17-cf14979708a1.png" width=400> <img src="https://user-images.githubusercontent.com/30992818/79996326-ece70c00-84ea-11ea-811c-9ad7d1e81a19.png" width=400>
+
+这里你也可以自定义 `markdownTheme`
+
 
 ## 🏞图片和视频
 
@@ -104,15 +122,15 @@ class MarkdownPage extends StatelessWidget {
 
 ## 🍑自定义标签
 
-你可以定制自定义标签的行为
+你可以使用自定义标签
 
-- 例如添加以下内容在你的markdown文件中
+例如添加以下内容在你的markdown文件中
 
 ```markdown
 <avatar size="12" name="tom" />
 ```
 
-- 添加配置以下 `custom` 配置
+然后添加配置以下 `custom` 配置
 
 ```dart
       MarkdownWidget(
@@ -126,7 +144,6 @@ class MarkdownPage extends StatelessWidget {
               ),
             ),
           ),
-```
 ```
 
 ## 📜TOC功能

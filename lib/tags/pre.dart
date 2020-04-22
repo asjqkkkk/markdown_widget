@@ -33,7 +33,7 @@ class Pre {
         child: HighlightView(
           node.textContent,
           language: preConfig?.language ?? 'java',
-          theme: preConfig?.theme ?? arduinoLightTheme,
+          theme: preConfig?.theme ?? defaultHighLightCodeTheme,
           textStyle: preConfig?.textStyle ?? TextStyle(fontSize: 14),
           tabSize: preConfig?.tabSize ?? 8,
         ),
