@@ -92,24 +92,24 @@ class StyleConfig {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is StyleConfig &&
-              runtimeType == other.runtimeType &&
-              checkBoxBuilder == other.checkBoxBuilder &&
-              checkBoxConfig == other.checkBoxConfig &&
-              imgBuilder == other.imgBuilder &&
-              imgConfig == other.imgConfig &&
-              videoBuilder == other.videoBuilder &&
-              videoConfig == other.videoConfig &&
-              titleConfig == other.titleConfig &&
-              pConfig == other.pConfig &&
-              codeConfig == other.codeConfig &&
-              olConfig == other.olConfig &&
-              ulConfig == other.ulConfig &&
-              preConfig == other.preConfig &&
-              blockQuoteConfig == other.blockQuoteConfig &&
-              tableConfig == other.tableConfig &&
-              hrConfig == other.hrConfig &&
-              markdownTheme == other.markdownTheme;
+      other is StyleConfig &&
+          runtimeType == other.runtimeType &&
+          checkBoxBuilder == other.checkBoxBuilder &&
+          checkBoxConfig == other.checkBoxConfig &&
+          imgBuilder == other.imgBuilder &&
+          imgConfig == other.imgConfig &&
+          videoBuilder == other.videoBuilder &&
+          videoConfig == other.videoConfig &&
+          titleConfig == other.titleConfig &&
+          pConfig == other.pConfig &&
+          codeConfig == other.codeConfig &&
+          olConfig == other.olConfig &&
+          ulConfig == other.ulConfig &&
+          preConfig == other.preConfig &&
+          blockQuoteConfig == other.blockQuoteConfig &&
+          tableConfig == other.tableConfig &&
+          hrConfig == other.hrConfig &&
+          markdownTheme == other.markdownTheme;
 
   @override
   int get hashCode =>
@@ -129,12 +129,9 @@ class StyleConfig {
       tableConfig.hashCode ^
       hrConfig.hashCode ^
       markdownTheme.hashCode;
-
-
-
 }
 
-class MarkdownTheme{
+class MarkdownTheme {
   static const Map<String, dynamic> lightTheme = light_theme;
   static const Map<String, dynamic> darkTheme = dark_theme;
 }
@@ -165,12 +162,17 @@ TextStyle defaultEmStyle = TextStyle(fontStyle: FontStyle.italic);
 TextStyle defaultStrongStyle = TextStyle(fontWeight: FontWeight.bold);
 TextStyle defaultBlockStyle = _theme['BlockStyle'] ?? light_theme['BlockStyle'];
 
-Color defaultCodeBackground = _theme['CodeBackground'] ?? light_theme['CodeBackground'];
-Color defaultTableBorderColor = _theme['TableBorderColor'] ?? light_theme['TableBorderColor'];
-Color defaultDividerColor = _theme['DividerColor'] ?? light_theme['DividerColor'];
+Color defaultCodeBackground =
+    _theme['CodeBackground'] ?? light_theme['CodeBackground'];
+Color defaultTableBorderColor =
+    _theme['TableBorderColor'] ?? light_theme['TableBorderColor'];
+Color defaultDividerColor =
+    _theme['DividerColor'] ?? light_theme['DividerColor'];
 Color defaultBlockColor = _theme['BlockColor'] ?? light_theme['BlockColor'];
-Color defaultPreBackground = _theme['PreBackground'] ?? light_theme['PreBackground'];
+Color defaultPreBackground =
+    _theme['PreBackground'] ?? light_theme['PreBackground'];
 Color defaultTitleColor = _theme['TitleColor'] ?? light_theme['TitleColor'];
 Color defaultUlDotColor = _theme['UlDotColor'] ?? light_theme['UlDotColor'];
 
-Map<String, TextStyle> defaultHighLightCodeTheme = _theme['HightLightCodeTheme'] ?? light_theme['HightLightCodeTheme'];
+Map<String, TextStyle> defaultHighLightCodeTheme =
+    _theme['HightLightCodeTheme'] ?? light_theme['HightLightCodeTheme'];

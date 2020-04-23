@@ -11,7 +11,6 @@ export 'markdown_toc.dart';
 export 'markdown_generator.dart';
 export 'config/style_config.dart';
 
-
 class MarkdownWidget extends StatefulWidget {
   final String data;
 

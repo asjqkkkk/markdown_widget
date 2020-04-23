@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:html/dom.dart' as h;
 import 'package:html/parser.dart';
 
-
 void printNode(m.Node node, int deep) {
   if (node == null) return;
   if (node is m.Text) {
@@ -18,7 +17,6 @@ void printNode(m.Node node, int deep) {
       document.nodes.forEach((element) {
         htmlPrintNode(element, 0);
       });
-
     }
     print('${'  ' * deep}Text:${node.text}');
   } else if (node is m.Element) {

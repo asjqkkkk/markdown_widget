@@ -137,7 +137,8 @@ class P {
           widgets.add(defaultCheckBox(node.attributes));
         else if (node.tag == other)
           widgets.add(getOtherWidget(node));
-        else buildBlockWidgets(node.children, node,
+        else
+          buildBlockWidgets(node.children, node,
               parentStyle.merge(getTextStyle(node.tag)), widgets, selectable);
       }
     });

@@ -2,8 +2,8 @@ import 'dart:html' as html;
 import 'platform_dector.dart';
 
 PlatformType get currentType {
-  if(isWebIOS()) return PlatformType.WebIos;
-  if(isWebAndroid()) return PlatformType.WebAndroid;
+  if (isWebIOS()) return PlatformType.WebIos;
+  if (isWebAndroid()) return PlatformType.WebAndroid;
   return PlatformType.Web;
 }
 
