@@ -16,8 +16,9 @@ Widget defaultAWidget(m.Element element) {
     textStyle: pConfig?.linkStyle ?? TextStyle(color: Colors.blue),
     selectable: false,
   );
-  return pConfig?.linkGesture?.call(linkWidget, url) ?? GestureDetector(
-    child: linkWidget,
-    onTap: () => pConfig?.onLinkTap?.call(url),
-  );
+  return pConfig?.linkGesture?.call(linkWidget, url) ??
+      GestureDetector(
+        child: linkWidget,
+        onTap: () => pConfig?.onLinkTap?.call(url),
+      );
 }

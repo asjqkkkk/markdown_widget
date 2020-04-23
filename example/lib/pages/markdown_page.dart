@@ -90,16 +90,16 @@ class _MarkdownPageState extends State<MarkdownPage> {
         data: data,
         controller: controller,
         styleConfig: StyleConfig(
-          pConfig: PConfig(
-            linkGesture: (linkChild, url) {
-              return GestureDetector(
-                child: linkChild,
-                onTap: () => _launchURL(url),
-              );
-            },
-          ),
-            markdownTheme: isDarkNow ? MarkdownTheme.darkTheme : MarkdownTheme.lightTheme
-        ),
+            pConfig: PConfig(
+              linkGesture: (linkChild, url) {
+                return GestureDetector(
+                  child: linkChild,
+                  onTap: () => _launchURL(url),
+                );
+              },
+            ),
+            markdownTheme:
+                isDarkNow ? MarkdownTheme.darkTheme : MarkdownTheme.lightTheme),
       ),
     );
   }

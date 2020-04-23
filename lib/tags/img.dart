@@ -23,7 +23,9 @@ Widget defaultImageWidget(Map<String, String> attributes, {String url}) {
     fit: BoxFit.cover,
   );
   final config = StyleConfig()?.imgConfig;
-  return StyleConfig()?.imgBuilder?.call(imageUrl, attributes) ?? config?.imgWrapper?.call(image) ?? image;
+  return StyleConfig()?.imgBuilder?.call(imageUrl, attributes) ??
+      config?.imgWrapper?.call(image) ??
+      image;
 }
 
 class ImgConfig {

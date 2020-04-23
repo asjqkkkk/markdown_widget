@@ -1,8 +1,8 @@
+import '../config/style_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_highlight/themes/arduino-light.dart';
 import 'package:markdown/markdown.dart' as m;
 import 'package:highlight/highlight.dart' as hi;
-import '../config/style_config.dart';
+
 
 class Pre {
   Pre._internal();

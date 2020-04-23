@@ -34,8 +34,8 @@ bool needParseHtml(m.Node parentNode) =>
     (parentNode is m.Element && parentNode.tag != code);
 
 List<m.Node> parseHtml(
-    m.Node node,
-    ) {
+  m.Node node,
+) {
   final text = node.textContent;
   if (!text.contains(htmlRep)) return [];
   h.DocumentFragment document = parseFragment(text);
