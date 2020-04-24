@@ -4,6 +4,7 @@ import 'markdown_generator.dart';
 import 'config/style_config.dart';
 import 'config/widget_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 export 'dart:collection';
@@ -25,6 +26,9 @@ class MarkdownWidget extends StatefulWidget {
   ///if [controller] is not null, you can use [tocListener] to get current TOC index
   final TocController controller;
 
+  ///show loading before data is ready
+  final Widget loadingWidget;
+
   const MarkdownWidget({
     Key key,
     @required this.data,
@@ -32,6 +36,7 @@ class MarkdownWidget extends StatefulWidget {
     this.styleConfig,
     this.childMargin,
     this.controller,
+    this.loadingWidget,
   }) : super(key: key);
 
   @override
@@ -52,7 +57,28 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     super.initState();
   }
 
+  ///at the first time, we need to use isolate to create data to avoid UI thread stuck
   void initialState() {
+    _MarkdownData _markdownData = _MarkdownData(
+      data: widget.data,
+      widgetConfig: widget.widgetConfig,
+      styleConfig: widget.styleConfig,
+      childMargin: widget.childMargin,
+    );
+
+    ///use a new isolate to create [MarkdownGenerator]
+    compute(buildMarkdownGenerator, _markdownData).then((value) {
+      markdownGenerator = value;
+      tocList.addAll(markdownGenerator.tocList);
+      widgets.addAll(markdownGenerator.widgets);
+      if (widget.controller != null)
+        itemPositionsListener.itemPositions.addListener(indexListener);
+      refresh();
+    });
+  }
+
+  ///when we've got the data, we need update data without setState() to avoid the flicker of the view
+  void updateState() {
     markdownGenerator = MarkdownGenerator(
       data: widget.data,
       widgetConfig: widget.widgetConfig,
@@ -65,10 +91,20 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
       itemPositionsListener.itemPositions.addListener(indexListener);
   }
 
+  Future<MarkdownGenerator> buildMarkdownGenerator(
+      _MarkdownData markdownData) async {
+    return MarkdownGenerator(
+      data: markdownData.data,
+      widgetConfig: markdownData.widgetConfig,
+      styleConfig: markdownData.styleConfig,
+      childMargin: markdownData.childMargin,
+    );
+  }
+
   void clearState() {
     tocList.clear();
     widgets.clear();
-    markdownGenerator.clear();
+    markdownGenerator?.clear();
     markdownGenerator = null;
     if (widget.controller != null)
       itemPositionsListener.itemPositions.removeListener(indexListener);
@@ -83,6 +119,13 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return widgets.isEmpty ? buildLoadingWidget() : buildMarkdownWidget();
+  }
+
+  Center buildLoadingWidget() =>
+      widget.loadingWidget ?? Center(child: CircularProgressIndicator());
+
+  Widget buildMarkdownWidget() {
     return widget.controller == null
         ? ListView.builder(
             itemBuilder: (ctx, index) => widgets[index],
@@ -100,6 +143,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     if (mounted) setState(() {});
   }
 
+  ///the listener of [ScrollablePositionedList]
   void indexListener() {
     bool needRefresh = false;
     final controller = widget?.controller;
@@ -126,8 +170,18 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
         oldWidget.childMargin != widget.childMargin) {
       clearState();
       widget?.controller?.jumpTo(index: 0);
-      initialState();
+      updateState();
     }
     super.didUpdateWidget(widget);
   }
+}
+
+class _MarkdownData {
+  final String data;
+  final WidgetConfig widgetConfig;
+  final StyleConfig styleConfig;
+  final EdgeInsetsGeometry childMargin;
+
+  _MarkdownData(
+      {this.data, this.widgetConfig, this.styleConfig, this.childMargin});
 }
