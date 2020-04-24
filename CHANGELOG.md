@@ -1,3 +1,5 @@
+#### [1.1.3] - add `loadingWidget` before data is ready, improve performance in the first rendering
+
 #### [1.1.2] - support dark mode now! see issue [#12](https://github.com/asjqkkkk/markdown_widget/issues/12)
 
 #### [1.1.1] - offer custon html tag to user, fix issue [#8](https://github.com/asjqkkkk/markdown_widget/issues/8)

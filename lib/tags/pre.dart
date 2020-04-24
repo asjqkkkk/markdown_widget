@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 import 'package:highlight/highlight.dart' as hi;
 
-
 class Pre {
   Pre._internal();
 
