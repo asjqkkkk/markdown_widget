@@ -64,9 +64,9 @@ class MTable {
   }
 
   void _buildTh(m.Node node, List<m.Element> thList) {
-    if (node != null && node is m.Element && !node.isEmpty) {
+    if (node != null && node is m.Element) {
       if (node.tag == th) thList.add(node);
-      List.generate(node.children.length,
+      List.generate(node?.children?.length ?? 0,
           (index) => _buildTh(node.children[index], thList));
     }
   }
@@ -108,9 +108,9 @@ class MTable {
   }
 
   void _buildTd(m.Node node, List<m.Element> tdList) {
-    if (node != null && node is m.Element && !node.isEmpty) {
+    if (node != null && node is m.Element) {
       if (node.tag == td) tdList.add(node);
-      List.generate(node.children.length,
+      List.generate(node.children?.length ?? 0,
           (index) => _buildTd(node.children[index], tdList));
     }
   }

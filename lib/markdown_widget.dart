@@ -53,11 +53,12 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   void initState() {
-    initialState();
+    updateState();
     super.initState();
   }
 
   ///at the first time, we need to use isolate to create data to avoid UI thread stuck
+  @Deprecated('Not working on phone now')
   void initialState() {
     _MarkdownData _markdownData = _MarkdownData(
       data: widget.data,
@@ -68,6 +69,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
     ///use a new isolate to create [MarkdownGenerator]
     compute(buildMarkdownGenerator, _markdownData).then((value) {
+      print('value:$value');
       markdownGenerator = value;
       tocList.addAll(markdownGenerator.tocList);
       widgets.addAll(markdownGenerator.widgets);
@@ -89,16 +91,6 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     widgets.addAll(markdownGenerator.widgets);
     if (widget.controller != null)
       itemPositionsListener.itemPositions.addListener(indexListener);
-  }
-
-  Future<MarkdownGenerator> buildMarkdownGenerator(
-      _MarkdownData markdownData) async {
-    return MarkdownGenerator(
-      data: markdownData.data,
-      widgetConfig: markdownData.widgetConfig,
-      styleConfig: markdownData.styleConfig,
-      childMargin: markdownData.childMargin,
-    );
   }
 
   void clearState() {
@@ -184,4 +176,14 @@ class _MarkdownData {
 
   _MarkdownData(
       {this.data, this.widgetConfig, this.styleConfig, this.childMargin});
+}
+
+MarkdownGenerator buildMarkdownGenerator(
+    _MarkdownData markdownData) {
+  return MarkdownGenerator(
+    data: markdownData.data,
+    widgetConfig: markdownData.widgetConfig,
+    styleConfig: markdownData.styleConfig,
+    childMargin: markdownData.childMargin,
+  );
 }
