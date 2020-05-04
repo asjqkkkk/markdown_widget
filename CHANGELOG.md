@@ -1,3 +1,5 @@
+#### [1.1.4] - fix issue [#13](https://github.com/asjqkkkk/markdown_widget/issues/13) and [#16](https://github.com/asjqkkkk/markdown_widget/issues/16), deprecated `compute` function
+
 #### [1.1.3] - add `loadingWidget` before data is ready, improve performance in the first rendering
 
 #### [1.1.2] - support dark mode now! see issue [#12](https://github.com/asjqkkkk/markdown_widget/issues/12)
