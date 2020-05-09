@@ -16,8 +16,7 @@ class Pre {
   ///Tag:  pre
   Widget getPreWidget(m.Node node) {
     final preConfig = StyleConfig().preConfig;
-
-    return Container(
+    final preWidget = Container(
       decoration: preConfig?.decoration ??
           BoxDecoration(
             color: defaultPreBackground,
@@ -31,13 +30,15 @@ class Pre {
         scrollDirection: Axis.horizontal,
         child: HighlightView(
           node.textContent,
-          language: preConfig?.language ?? 'java',
+          language: preConfig?.language,
           theme: preConfig?.theme ?? defaultHighLightCodeTheme,
           textStyle: preConfig?.textStyle ?? TextStyle(fontSize: 14),
           tabSize: preConfig?.tabSize ?? 8,
         ),
       ),
     );
+
+    return preConfig.preWrapper?.call(preWidget) ?? preWidget;
   }
 }
 
@@ -46,21 +47,26 @@ class PreConfig {
   final Decoration decoration;
   final EdgeInsetsGeometry margin;
   final TextStyle textStyle;
+  final PreWrapper preWrapper;
 
   ///see package:flutter_highlight/themes/
   final Map<String, TextStyle> theme;
   final String language;
   final int tabSize;
 
-  PreConfig(
-      {this.padding,
-      this.decoration,
-      this.margin,
-      this.textStyle,
-      this.theme,
-      this.language,
-      this.tabSize});
+  PreConfig({
+    this.padding,
+    this.decoration,
+    this.margin,
+    this.textStyle,
+    this.theme,
+    this.language,
+    this.tabSize,
+    this.preWrapper,
+  });
 }
+
+typedef Widget PreWrapper(Widget preWidget);
 
 class HighlightView extends StatelessWidget {
   /// The original code to be highlighted
@@ -131,7 +137,9 @@ class HighlightView extends StatelessWidget {
 
     return SelectableText.rich(TextSpan(
       style: _textStyle,
-      children: _convert(hi.highlight.parse(source, language: language).nodes),
+      children: _convert(hi.highlight
+          .parse(source, language: language, autoDetection: language == null)
+          .nodes),
     ));
   }
 }

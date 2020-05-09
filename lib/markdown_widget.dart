@@ -178,8 +178,7 @@ class _MarkdownData {
       {this.data, this.widgetConfig, this.styleConfig, this.childMargin});
 }
 
-MarkdownGenerator buildMarkdownGenerator(
-    _MarkdownData markdownData) {
+MarkdownGenerator buildMarkdownGenerator(_MarkdownData markdownData) {
   return MarkdownGenerator(
     data: markdownData.data,
     widgetConfig: markdownData.widgetConfig,
