@@ -1,3 +1,5 @@
+#### [1.1.7] -  make PreWidget match its parent's size
+
 #### [1.1.6] -  add `text` to `PreWrapper`
 
 #### [1.1.5] -  add `PreWrapper`, and **HighlightCode** can be automatically detected with null `language`
