@@ -26,6 +26,7 @@ class Pre {
           ),
       margin: preConfig?.margin,
       padding: preConfig?.padding ?? const EdgeInsets.fromLTRB(10, 20, 10, 20),
+      width: double.infinity,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: HighlightView(
