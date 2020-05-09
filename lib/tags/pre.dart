@@ -38,7 +38,7 @@ class Pre {
       ),
     );
 
-    return preConfig.preWrapper?.call(preWidget) ?? preWidget;
+    return preConfig.preWrapper?.call(preWidget, node.textContent) ?? preWidget;
   }
 }
 
@@ -66,7 +66,7 @@ class PreConfig {
   });
 }
 
-typedef Widget PreWrapper(Widget preWidget);
+typedef Widget PreWrapper(Widget preWidget, String text);
 
 class HighlightView extends StatelessWidget {
   /// The original code to be highlighted
