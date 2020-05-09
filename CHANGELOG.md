@@ -1,3 +1,5 @@
+#### [1.1.6] -  add `text` to `PreWrapper`
+
 #### [1.1.5] -  add `PreWrapper`, and **HighlightCode** can be automatically detected with null `language`
 
 #### [1.1.4] - fix issue [#13](https://github.com/asjqkkkk/markdown_widget/issues/13) and [#16](https://github.com/asjqkkkk/markdown_widget/issues/16), deprecated `compute` function
