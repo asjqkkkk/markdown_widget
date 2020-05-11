@@ -1,3 +1,5 @@
+#### [1.1.8] -  add some property to `MarkdownWidget`, fix `PreWidget` null error
+
 #### [1.1.7] -  make PreWidget match its parent's size
 
 #### [1.1.6] -  add `text` to `PreWrapper`
