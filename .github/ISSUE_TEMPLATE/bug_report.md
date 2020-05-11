@@ -26,5 +26,8 @@ If applicable, add screenshots to help explain your problem.
 **Environment(please complete the following information):**
 Please use `flutter doctor -v` to show your flutter enviroment
 
+**Platform**
+Does the problem appear on the **Web** or on the **Mobile**？
+
 **Additional context**
 Add any other context about the problem here.
