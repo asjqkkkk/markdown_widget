@@ -29,6 +29,9 @@ class MarkdownWidget extends StatefulWidget {
   ///show loading before data is ready
   final Widget loadingWidget;
 
+  ///jump to position 0 when widget is updating
+  final bool clearPositionWhenUpdate;
+
   const MarkdownWidget({
     Key key,
     @required this.data,
@@ -37,6 +40,7 @@ class MarkdownWidget extends StatefulWidget {
     this.childMargin,
     this.controller,
     this.loadingWidget,
+    this.clearPositionWhenUpdate = false,
   }) : super(key: key);
 
   @override
@@ -156,14 +160,9 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   void didUpdateWidget(MarkdownWidget oldWidget) {
-    if (oldWidget.data != widget.data ||
-        oldWidget.styleConfig != widget.styleConfig ||
-        oldWidget.widgetConfig != widget.widgetConfig ||
-        oldWidget.childMargin != widget.childMargin) {
-      clearState();
-      widget?.controller?.jumpTo(index: 0);
-      updateState();
-    }
+    clearState();
+    if(widget.clearPositionWhenUpdate) widget?.controller?.jumpTo(index: 0);
+    updateState();
     super.didUpdateWidget(widget);
   }
 }
