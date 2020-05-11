@@ -66,19 +66,19 @@ class _MarkdownPageState extends State<MarkdownPage> {
       body: data == null
           ? Center(child: CircularProgressIndicator())
           : (isMobile ? buildMobileBody() : buildWebBody()),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: isMobile ? FloatingActionButtonLocation.centerFloat : FloatingActionButtonLocation.endFloat,
       floatingActionButton: widget.assetsPath != null
           ? Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: isMobile ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.end,
               children: <Widget>[
-                FloatingActionButton(
+                isMobile ? FloatingActionButton(
                   onPressed: () {
                     showModalBottomSheet(
                         context: context, builder: (ctx) => buildTocList());
                   },
                   child: Icon(Icons.format_list_bulleted),
                   heroTag: 'list',
-                ),
+                ) : SizedBox(),
                 FloatingActionButton(
                   onPressed: () {
                     isEnglish = !isEnglish;
@@ -111,10 +111,57 @@ class _MarkdownPageState extends State<MarkdownPage> {
                 );
               },
             ),
+            preConfig: PreConfig(preWrapper: (child, text) {
+              return buildCodeBlock(child, text,isEnglish);
+            }),
             markdownTheme:
                 isDarkNow ? MarkdownTheme.darkTheme : MarkdownTheme.lightTheme),
       ),
     );
+  }
+
+  Widget buildCodeBlock(Widget child, String text, bool isEnglish) {
+    return Stack(
+              children: <Widget>[
+                child,
+                Container(
+                  margin: EdgeInsets.only(top: 5, right: 5),
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: text));
+                      Widget toastWidget = Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 50),
+                          decoration: BoxDecoration(
+                              border:
+                              Border.all(color: Color(0xff006EDF), width: 2),
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                4,
+                              )),
+                              color: Color(0xff007FFF)
+                          ),
+                          width: 150,
+                          height: 40,
+                          child: Center(
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Text(
+                                isEnglish ? 'Copy successful' : '复制成功',
+                                style: TextStyle(fontSize: 15, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                      ToastWidget().showToast(context, toastWidget, 500);
+                    },
+                    icon: Icon(Icons.content_copy, size: 10,),
+                  ),
+                )
+              ],
+            );
   }
 
   Widget buildMobileBody() {
@@ -139,5 +186,59 @@ class _MarkdownPageState extends State<MarkdownPage> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+}
+
+
+class ToastWidget{
+  ToastWidget._internal();
+
+  static ToastWidget _instance;
+
+  factory ToastWidget(){
+    _instance ??= ToastWidget._internal();
+    return _instance;
+  }
+
+  bool isShowing = false;
+
+  void showToast(BuildContext context, Widget widget, int milliseconds) {
+    if(!isShowing){
+      isShowing = true;
+      FullScreenDialog.getInstance().showDialog(
+        context,
+        widget,
+      );
+      Future.delayed(Duration(milliseconds: milliseconds,),(){
+        if(Navigator.of(context).canPop()){
+          Navigator.of(context).pop();
+          isShowing = false;
+        } else{
+          isShowing = false;
+        }
+      });
+    }
+  }
+
+}
+
+class FullScreenDialog {
+  static FullScreenDialog _instance;
+
+  static FullScreenDialog getInstance() {
+    if (_instance == null) {
+      _instance = FullScreenDialog._internal();
+    }
+    return _instance;
+  }
+
+  FullScreenDialog._internal();
+
+  void showDialog(BuildContext context, Widget child) {
+    Navigator.of(context).push(PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (ctx, anm1, anm2) {
+          return child;
+        }));
   }
 }
