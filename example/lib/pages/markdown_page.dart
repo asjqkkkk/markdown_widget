@@ -63,19 +63,32 @@ class _MarkdownPageState extends State<MarkdownPage> {
               backgroundColor: Colors.black,
             )
           : null,
-      drawer: (isMobile && widget.assetsPath != null)
-          ? Drawer(child: buildTocList())
-          : null,
       body: data == null
           ? Center(child: CircularProgressIndicator())
           : (isMobile ? buildMobileBody() : buildWebBody()),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: widget.assetsPath != null
-          ? FloatingActionButton(
-              onPressed: () {
-                isEnglish = !isEnglish;
-                loadData(isEnglish ? 'assets/demo_en.md' : 'assets/demo_zh.md');
-              },
-              child: Text(isEnglish ? '简中' : 'EN'),
+          ? Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                FloatingActionButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context, builder: (ctx) => buildTocList());
+                  },
+                  child: Icon(Icons.format_list_bulleted),
+                  heroTag: 'list',
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    isEnglish = !isEnglish;
+                    loadData(
+                        isEnglish ? 'assets/demo_en.md' : 'assets/demo_zh.md');
+                  },
+                  child: Text(isEnglish ? '简中' : 'EN'),
+                  heroTag: 'language',
+                ),
+              ],
             )
           : null,
     );
