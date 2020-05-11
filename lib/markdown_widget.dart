@@ -61,11 +61,13 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   void initState() {
-    if(widget.delayLoadDuration == null) updateState();
-    else Future.delayed(widget.delayLoadDuration).then((value){
+    if (widget.delayLoadDuration == null)
       updateState();
-      refresh();
-    });
+    else
+      Future.delayed(widget.delayLoadDuration).then((value) {
+        updateState();
+        refresh();
+      });
     super.initState();
   }
 
@@ -168,7 +170,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void didUpdateWidget(MarkdownWidget oldWidget) {
     clearState();
-    if(widget.clearPositionWhenUpdate) widget?.controller?.jumpTo(index: 0);
+    if (widget.clearPositionWhenUpdate) widget?.controller?.jumpTo(index: 0);
     updateState();
     super.didUpdateWidget(widget);
   }

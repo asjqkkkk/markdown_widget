@@ -39,7 +39,8 @@ class Pre {
       ),
     );
 
-    return preConfig?.preWrapper?.call(preWidget, node.textContent) ?? preWidget;
+    return preConfig?.preWrapper?.call(preWidget, node.textContent) ??
+        preWidget;
   }
 }
 
