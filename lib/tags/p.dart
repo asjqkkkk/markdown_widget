@@ -89,9 +89,7 @@ class P {
             return getBlockSpan(
               node.children,
               node,
-              parentStyle.merge(
-                getTextStyle(node.tag),
-              ),
+              parentStyle.merge(getTextStyle(node.tag)),
               selectable: selectable,
             );
           }
