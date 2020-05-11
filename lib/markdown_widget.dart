@@ -32,6 +32,9 @@ class MarkdownWidget extends StatefulWidget {
   ///jump to position 0 when widget is updating
   final bool clearPositionWhenUpdate;
 
+  ///delay refresh when initial markdown widget
+  final Duration delayLoadDuration;
+
   const MarkdownWidget({
     Key key,
     @required this.data,
@@ -41,6 +44,7 @@ class MarkdownWidget extends StatefulWidget {
     this.controller,
     this.loadingWidget,
     this.clearPositionWhenUpdate = false,
+    this.delayLoadDuration,
   }) : super(key: key);
 
   @override
@@ -57,7 +61,11 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   void initState() {
-    updateState();
+    if(widget.delayLoadDuration == null) updateState();
+    else Future.delayed(widget.delayLoadDuration).then((value){
+      updateState();
+      refresh();
+    });
     super.initState();
   }
 
@@ -73,7 +81,6 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
     ///use a new isolate to create [MarkdownGenerator]
     compute(buildMarkdownGenerator, _markdownData).then((value) {
-      print('value:$value');
       markdownGenerator = value;
       tocList.addAll(markdownGenerator.tocList);
       widgets.addAll(markdownGenerator.widgets);
