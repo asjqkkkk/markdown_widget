@@ -28,13 +28,13 @@ class _TocListWidgetState extends State<TocListWidget> {
   @override
   void initState() {
     final controller = widget.controller;
-    tocList = controller?.tocList;
-    currentToc = controller?.currentToc;
+    tocList = controller?._tocList;
+    currentToc = controller?._currentToc;
     controller?.addListener(() {
       bool needRefresh = false;
-      final toc = controller.currentToc;
-      if (tocList != controller.tocList) {
-        tocList = controller.tocList;
+      final toc = controller._currentToc;
+      if (tocList != controller._tocList) {
+        tocList = controller._tocList;
         needRefresh = true;
       }
       if (toc != null && currentToc != toc) {
@@ -85,7 +85,7 @@ class _TocListWidgetState extends State<TocListWidget> {
                     );
               },
               initialScrollIndex:
-                  widget?.controller?.currentToc?.selfIndex ?? 0,
+                  widget?.controller?._currentToc?.selfIndex ?? 0,
               itemScrollController: itemScrollController,
               itemPositionsListener: itemPositionsListener,
             ),
@@ -110,19 +110,26 @@ class _TocListWidgetState extends State<TocListWidget> {
 class TocController extends ChangeNotifier {
   final ItemScrollController scrollController = ItemScrollController();
 
-  Toc currentToc;
+  final int initialIndex;
 
-  LinkedHashMap<int, Toc> tocList;
+  ///if false, the [initialIndex] will be the index of all widgets
+  final bool isInitialIndexForTitle;
+
+  TocController({this.initialIndex = 0, this.isInitialIndexForTitle = true});
+
+  Toc _currentToc;
+
+  LinkedHashMap<int, Toc> _tocList;
 
   bool setToc(Toc toc) {
-    if (this.currentToc == toc) return false;
-    this.currentToc = toc;
+    if (this._currentToc == toc) return false;
+    this._currentToc = toc;
     return true;
   }
 
   bool setTocList(LinkedHashMap<int, Toc> tocList) {
-    if (this.tocList == tocList) return false;
-    this.tocList = tocList;
+    if (this._tocList == tocList) return false;
+    this._tocList = tocList;
     return true;
   }
 
@@ -137,11 +144,18 @@ class TocController extends ChangeNotifier {
       scrollController.jumpTo(index: index, alignment: alignment);
 
   int get endIndex {
-    if (tocList == null || tocList.isEmpty) return 0;
-    final keys = tocList.keys.toList();
+    if (_tocList == null || _tocList.isEmpty) return 0;
+    final keys = _tocList.keys.toList();
     final lastKey = keys.last;
-    final index = tocList[lastKey].index;
+    final index = _tocList[lastKey].index;
     return index;
+  }
+
+  int getTitleIndexWithWidgetIndex(int index) {
+    final tocList = _tocList?.values?.toList();
+    if (tocList == null || tocList.isEmpty) return 0;
+    if (tocList.length <= index) return tocList.length - 1;
+    return tocList[index].index;
   }
 
   int get startIndex => 0;
@@ -166,7 +180,7 @@ class Toc {
   ///index of [MarkdownGenerator]'s _children
   final int index;
 
-  ///index of [TocController.tocList]
+  ///index of [TocController._tocList]
   final int selfIndex;
 
   Toc(this.name, this.tag, this.index, this.selfIndex, this.tagLevel);

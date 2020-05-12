@@ -118,9 +118,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
                 );
               },
             ),
-            preConfig: PreConfig(preWrapper: (child, text) {
-              return buildCodeBlock(child, text, isEnglish);
-            }),
+            preConfig: PreConfig(
+              preWrapper: (child, text) =>
+                  buildCodeBlock(child, text, isEnglish),
+            ),
             markdownTheme:
                 isDarkNow ? MarkdownTheme.darkTheme : MarkdownTheme.lightTheme),
       ),

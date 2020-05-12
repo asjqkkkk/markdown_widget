@@ -61,9 +61,9 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
 
   @override
   void initState() {
-    if (widget.delayLoadDuration == null)
+    if (widget.delayLoadDuration == null) {
       updateState();
-    else
+    } else
       Future.delayed(widget.delayLoadDuration).then((value) {
         updateState();
         refresh();
@@ -102,8 +102,11 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     );
     tocList.addAll(markdownGenerator.tocList);
     widgets.addAll(markdownGenerator.widgets);
-    if (widget.controller != null)
+    if (widget.controller != null) {
+      if (!hasInitialed)
+        widget.controller.setTocList(markdownGenerator.tocList);
       itemPositionsListener.itemPositions.addListener(indexListener);
+    }
   }
 
   void clearState() {
@@ -139,8 +142,9 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
         : ScrollablePositionedList.builder(
             itemCount: widgets.length,
             itemBuilder: (context, index) => widgets[index],
-            itemScrollController: widget?.controller?.scrollController,
+            itemScrollController: widget.controller.scrollController,
             itemPositionsListener: itemPositionsListener,
+            initialScrollIndex: getInitialScrollIndex(),
           );
   }
 
@@ -148,10 +152,19 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     if (mounted) setState(() {});
   }
 
+  int getInitialScrollIndex() {
+    final controller = widget.controller;
+    if (controller == null) return 0;
+    final index = controller.initialIndex;
+    return controller.isInitialIndexForTitle
+        ? controller.getTitleIndexWithWidgetIndex(index)
+        : index;
+  }
+
   ///the listener of [ScrollablePositionedList]
   void indexListener() {
     bool needRefresh = false;
-    final controller = widget?.controller;
+    final controller = widget.controller;
     if (itemPositionsListener.itemPositions.value.isNotEmpty) {
       final current = itemPositionsListener.itemPositions.value.elementAt(0);
       final toc = tocList[current.index] ??
@@ -161,8 +174,8 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     }
     if (!hasInitialed) {
       hasInitialed = true;
-      if (controller?.setTocList(markdownGenerator.tocList) ?? false)
-        needRefresh = true;
+      controller?.setTocList(markdownGenerator.tocList);
+      needRefresh = true;
     }
     if (needRefresh) controller?.refresh();
   }
