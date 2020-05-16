@@ -38,6 +38,9 @@ class MarkdownWidget extends StatefulWidget {
   ///set the desired scroll physics for the markdown item list
   final ScrollPhysics physics;
 
+  ///set shrinkWrap to obtained [ListView] (only available when [controller] is null)
+  final bool shrinkWrap;
+
   const MarkdownWidget({
     Key key,
     @required this.data,
@@ -49,6 +52,7 @@ class MarkdownWidget extends StatefulWidget {
     this.clearPositionWhenUpdate = false,
     this.delayLoadDuration,
     this.physics,
+    this.shrinkWrap = false,
   }) : super(key: key);
 
   @override
@@ -140,7 +144,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   Widget buildMarkdownWidget() {
     return widget.controller == null
         ? ListView.builder(
-            shrinkWrap: widget.physics != null,
+            shrinkWrap: widget.shrinkWrap,
             physics: widget.physics,
             itemBuilder: (ctx, index) => widgets[index],
             itemCount: widgets.length,
