@@ -31,7 +31,7 @@ class Pre {
         scrollDirection: Axis.horizontal,
         child: HighlightView(
           node.textContent,
-          language: preConfig?.language,
+          language: preConfig?.language ?? 'dart',
           autoDetectionLanguage: preConfig?.autoDetectionLanguage ?? false,
           theme: preConfig?.theme ?? defaultHighLightCodeTheme,
           textStyle: preConfig?.textStyle ?? TextStyle(fontSize: 14),
@@ -98,8 +98,8 @@ class HighlightView extends StatelessWidget {
 
   HighlightView(
     String input, {
-    this.language = 'dart',
-    this.autoDetectionLanguage = false,
+    this.language,
+    this.autoDetectionLanguage,
     this.theme = const {},
     this.textStyle,
     int tabSize = 8, // TODO: https://github.com/flutter/flutter/issues/50087
