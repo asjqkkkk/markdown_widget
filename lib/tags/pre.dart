@@ -32,6 +32,7 @@ class Pre {
         child: HighlightView(
           node.textContent,
           language: preConfig?.language,
+          autoDetectionLanguage: preConfig?.autoDetectionLanguage ?? false,
           theme: preConfig?.theme ?? defaultHighLightCodeTheme,
           textStyle: preConfig?.textStyle ?? TextStyle(fontSize: 14),
           tabSize: preConfig?.tabSize ?? 8,
@@ -53,7 +54,13 @@ class PreConfig {
 
   ///see package:flutter_highlight/themes/
   final Map<String, TextStyle> theme;
+
   final String language;
+
+  ///set [autoDetectionLanguage] `true` to enable language auto detection, but it will cause performance issue
+  ///so it is not recommended
+  ///see https://github.com/git-touch/highlight/blob/251505aae568e95ad941e023c110495fa5ad0a16/highlight/lib/src/highlight.dart#L247
+  final bool autoDetectionLanguage;
   final int tabSize;
 
   PreConfig({
@@ -65,6 +72,7 @@ class PreConfig {
     this.language,
     this.tabSize,
     this.preWrapper,
+    this.autoDetectionLanguage,
   });
 }
 
@@ -75,6 +83,8 @@ class HighlightView extends StatelessWidget {
   final String source;
 
   final String language;
+  final bool autoDetectionLanguage;
+
 
   /// Highlight theme
   ///
@@ -88,7 +98,8 @@ class HighlightView extends StatelessWidget {
 
   HighlightView(
     String input, {
-    this.language,
+    this.language = 'dart',
+    this.autoDetectionLanguage = false,
     this.theme = const {},
     this.textStyle,
     int tabSize = 8, // TODO: https://github.com/flutter/flutter/issues/50087
@@ -140,7 +151,7 @@ class HighlightView extends StatelessWidget {
     return SelectableText.rich(TextSpan(
       style: _textStyle,
       children: _convert(hi.highlight
-          .parse(source, language: language, autoDetection: language == null)
+          .parse(source, language: autoDetectionLanguage ? null : language, autoDetection: autoDetectionLanguage)
           .nodes),
     ));
   }
