@@ -17,7 +17,7 @@ class MTable {
   }
 
   Widget getTableWidget(m.Element node) {
-    if (node.children == null) return Container();
+    if (node.children == null) return SizedBox();
     final config = StyleConfig().tableConfig;
 
     TableRow header;
@@ -50,16 +50,16 @@ class MTable {
   ) {
     List<m.Element> thList = [];
     _buildTh(node, thList);
+
     return TableRow(
         decoration: config?.headerRowDecoration,
         children: List.generate(
           thList.length,
-          (index) => Container(
-            margin: config?.headerMargin ?? const EdgeInsets.all(10),
-            alignment: config?.headerAlignment ?? Alignment.center,
-            child: P().getPWidget(thList[index].children, thList[index],
-                textStyle: config?.headerStyle),
-          ),
+          (index){
+            final child = P().getPWidget(thList[index].children, thList[index],
+                textStyle: config?.headerStyle);
+            return config?.headChildWrapper?.call(child) ?? child;
+          }
         ));
   }
 
@@ -84,18 +84,14 @@ class MTable {
         _buildTd(trNode, tdList);
         List<Widget> children = [];
         tdList.forEach((element) {
-          final child = Container(
-            margin: config?.bodyMargin ?? const EdgeInsets.all(10.0),
-            alignment: config?.bodyAlignment ?? Alignment.center,
-            child: P().getPWidget(element.children, element,
-                textStyle: config?.bodyStyle),
-          );
-          children.add(child);
+          final child = P().getPWidget(element.children, element,
+              textStyle: config?.bodyStyle);
+          children.add(config?.bodyChildWrapper?.call(child) ?? child);
         });
         maxRowSize = max(maxRowSize, tdList.length);
         if (tdList.length < maxRowSize) {
           for (int i = 0; i < maxRowSize - tdList.length; i++)
-            children.add(Container());
+            children.add(SizedBox());
         }
         final tableRow = TableRow(
           decoration: config?.bodyRowDecoration,
@@ -127,10 +123,8 @@ class TableConfig {
   final Decoration bodyRowDecoration;
   final TextStyle headerStyle;
   final TextStyle bodyStyle;
-  final EdgeInsetsGeometry headerMargin;
-  final EdgeInsetsGeometry bodyMargin;
-  final Alignment headerAlignment;
-  final Alignment bodyAlignment;
+  final HeadChildWrapper headChildWrapper;
+  final BodyChildWrapper bodyChildWrapper;
   final TableWrapper wrapBuilder;
 
   TableConfig({
@@ -144,12 +138,12 @@ class TableConfig {
     this.bodyRowDecoration,
     this.headerStyle,
     this.bodyStyle,
-    this.headerMargin,
-    this.bodyMargin,
-    this.headerAlignment,
-    this.bodyAlignment,
+    this.headChildWrapper,
+    this.bodyChildWrapper,
     this.wrapBuilder,
   });
 }
 
 typedef Widget TableWrapper(Table table);
+typedef Widget HeadChildWrapper(Widget child);
+typedef Widget BodyChildWrapper(Widget child);
