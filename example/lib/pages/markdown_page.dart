@@ -122,6 +122,19 @@ class _MarkdownPageState extends State<MarkdownPage> {
               preWrapper: (child, text) =>
                   buildCodeBlock(child, text, isEnglish),
             ),
+            tableConfig: TableConfig(
+              defaultColumnWidth: FixedColumnWidth(50),
+              headChildWrapper: (child) => Container(
+                margin: EdgeInsets.all(10.0),
+                child: child,
+                alignment: Alignment.center,
+              ),
+              bodyChildWrapper: (child) => Container(
+                margin: EdgeInsets.all(10.0),
+                child: child,
+                alignment: Alignment.centerLeft,
+              ),
+            ),
             markdownTheme:
                 isDarkNow ? MarkdownTheme.darkTheme : MarkdownTheme.lightTheme),
       ),

@@ -46,16 +46,15 @@ void main() {
   test('test for markdown', () {
     final current = Directory.current;
 //    final markdownPath = p.join(current.path,'demo_en.md');
-    final markdownPath = current.path + '/demo_en.md';
+    final markdownPath = current.path + '/example/assets/editor.md';
+    print(markdownPath);
     File mdFile = File(markdownPath);
     if (!mdFile.existsSync()) return;
     final content = mdFile.readAsStringSync();
 
     final m.Document document = m.Document(
         extensionSet: m.ExtensionSet.gitHubFlavored,
-        inlineSyntaxes: [
-          TaskListSyntax(),
-        ]);
+        encodeHtml: false);
 
     final List<String> lines = content.split(RegExp(r'\r?\n'));
 
