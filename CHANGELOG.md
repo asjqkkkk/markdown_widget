@@ -1,3 +1,5 @@
+#### [1.2.0] -  add `TextConfig` to set `TextAlign` and `TextDirection`,solve issue [#21](https://github.com/asjqkkkk/markdown_widget/issues/21)
+
 #### [1.1.9] -  add `initialIndex` and `isInitialIndexForTitle` in `TocController` to solve [#22](https://github.com/asjqkkkk/markdown_widget/issues/22)
 
 #### [1.1.8] -  add some property to `MarkdownWidget`, fix `PreWidget` null error
