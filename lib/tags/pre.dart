@@ -50,6 +50,8 @@ class PreConfig {
   final Decoration decoration;
   final EdgeInsetsGeometry margin;
   final TextStyle textStyle;
+  final TextAlign textAlign;
+  final TextDirection textDirection;
   final PreWrapper preWrapper;
 
   ///see package:flutter_highlight/themes/
@@ -68,6 +70,8 @@ class PreConfig {
     this.decoration,
     this.margin,
     this.textStyle,
+    this.textAlign,
+    this.textDirection,
     this.theme,
     this.language,
     this.tabSize,
@@ -84,7 +88,6 @@ class HighlightView extends StatelessWidget {
 
   final String language;
   final bool autoDetectionLanguage;
-
 
   /// Highlight theme
   ///
@@ -148,11 +151,17 @@ class HighlightView extends StatelessWidget {
       _textStyle = _textStyle.merge(textStyle);
     }
 
-    return SelectableText.rich(TextSpan(
-      style: _textStyle,
-      children: _convert(hi.highlight
-          .parse(source, language: autoDetectionLanguage ? null : language, autoDetection: autoDetectionLanguage)
-          .nodes),
-    ));
+    return SelectableText.rich(
+      TextSpan(
+        style: _textStyle,
+        children: _convert(hi.highlight
+            .parse(source,
+                language: autoDetectionLanguage ? null : language,
+                autoDetection: autoDetectionLanguage)
+            .nodes),
+      ),
+      textAlign: StyleConfig().preConfig?.textAlign,
+      textDirection: StyleConfig().preConfig?.textDirection,
+    );
   }
 }

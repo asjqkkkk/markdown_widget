@@ -53,14 +53,12 @@ class MTable {
 
     return TableRow(
         decoration: config?.headerRowDecoration,
-        children: List.generate(
-          thList.length,
-          (index){
-            final child = P().getPWidget(thList[index].children, thList[index],
-                textStyle: config?.headerStyle);
-            return config?.headChildWrapper?.call(child) ?? child;
-          }
-        ));
+        children: List.generate(thList.length, (index) {
+          final child = P().getPWidget(thList[index].children, thList[index],
+              textStyle: config?.headerStyle,
+              textConfig: config?.headerTextConfig);
+          return config?.headChildWrapper?.call(child) ?? child;
+        }));
   }
 
   void _buildTh(m.Node node, List<m.Element> thList) {
@@ -85,7 +83,7 @@ class MTable {
         List<Widget> children = [];
         tdList.forEach((element) {
           final child = P().getPWidget(element.children, element,
-              textStyle: config?.bodyStyle);
+              textStyle: config?.bodyStyle, textConfig: config?.bodyTextConfig);
           children.add(config?.bodyChildWrapper?.call(child) ?? child);
         });
         maxRowSize = max(maxRowSize, tdList.length);
@@ -123,6 +121,8 @@ class TableConfig {
   final Decoration bodyRowDecoration;
   final TextStyle headerStyle;
   final TextStyle bodyStyle;
+  final TextConfig headerTextConfig;
+  final TextConfig bodyTextConfig;
   final HeadChildWrapper headChildWrapper;
   final BodyChildWrapper bodyChildWrapper;
   final TableWrapper wrapBuilder;
@@ -138,6 +138,8 @@ class TableConfig {
     this.bodyRowDecoration,
     this.headerStyle,
     this.bodyStyle,
+    this.headerTextConfig,
+    this.bodyTextConfig,
     this.headChildWrapper,
     this.bodyChildWrapper,
     this.wrapBuilder,

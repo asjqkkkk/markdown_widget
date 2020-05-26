@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:markdown_widget/markdown_generator.dart';
 import 'package:markdown/markdown.dart' as m;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/dom.dart' as h;
@@ -53,8 +52,7 @@ void main() {
     final content = mdFile.readAsStringSync();
 
     final m.Document document = m.Document(
-        extensionSet: m.ExtensionSet.gitHubFlavored,
-        encodeHtml: false);
+        extensionSet: m.ExtensionSet.gitHubFlavored, encodeHtml: false);
 
     final List<String> lines = content.split(RegExp(r'\r?\n'));
 

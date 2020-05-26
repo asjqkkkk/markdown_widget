@@ -71,7 +71,8 @@ class Ol {
               Expanded(
                 child: P().getPWidget(otherTagNodes, rootNode,
                     textStyle: config?.textStyle ?? defaultPStyle,
-                    crossAxisAlignment: WrapCrossAlignment.start),
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    textConfig: config?.textConfig),
               ),
             ],
           ),
@@ -97,12 +98,14 @@ class Ol {
 
 class OlConfig {
   final TextStyle textStyle;
+  final TextConfig textConfig;
   final IndexWidget indexWidget;
   final double leftSpacing;
   final CrossAxisAlignment crossAxisAlignment;
 
   OlConfig(
       {this.textStyle,
+      this.textConfig,
       this.indexWidget,
       this.leftSpacing,
       this.crossAxisAlignment});
