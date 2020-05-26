@@ -117,7 +117,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
                   onTap: () => _launchURL(url),
                 );
               },
-              selectable: false,
             ),
             preConfig: PreConfig(
               preWrapper: (child, text) =>
@@ -133,7 +132,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
               bodyChildWrapper: (child) => Container(
                 margin: EdgeInsets.all(10.0),
                 child: child,
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
               ),
             ),
             markdownTheme:
