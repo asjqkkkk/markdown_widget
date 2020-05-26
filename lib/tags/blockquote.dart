@@ -14,25 +14,27 @@ class Bq {
   }
 
   Widget getBlockQuote(m.Element node) {
-    final blockConfig = StyleConfig().blockQuoteConfig;
+    final config = StyleConfig().blockQuoteConfig;
 
     return Container(
       decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
-                color: blockConfig?.blockColor ?? defaultBlockColor,
-                width: blockConfig?.blockWidth ?? 4),
+                color: config?.blockColor ?? defaultBlockColor,
+                width: config?.blockWidth ?? 4),
           ),
-          color: blockConfig?.backgroundColor),
-      padding: EdgeInsets.only(left: blockConfig?.leftSpace ?? 10),
+          color: config?.backgroundColor),
+      padding: EdgeInsets.only(left: config?.leftSpace ?? 10),
       child: P().getPWidget(node.children, node,
-          textStyle: blockConfig?.blockStyle ?? defaultBlockStyle),
+          textStyle: config?.blockStyle ?? defaultBlockStyle,
+          textConfig: config?.textConfig),
     );
   }
 }
 
 class BlockQuoteConfig {
   final TextStyle blockStyle;
+  final TextConfig textConfig;
   final Color blockColor;
   final Color backgroundColor;
   final double blockWidth;
@@ -40,6 +42,7 @@ class BlockQuoteConfig {
 
   BlockQuoteConfig({
     this.blockStyle,
+    this.textConfig,
     this.blockColor,
     this.backgroundColor,
     this.blockWidth,

@@ -117,6 +117,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
                   onTap: () => _launchURL(url),
                 );
               },
+              selectable: false,
             ),
             preConfig: PreConfig(
               preWrapper: (child, text) =>

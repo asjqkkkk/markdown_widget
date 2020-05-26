@@ -72,17 +72,22 @@ class MTitle {
         configStyle = config?.h6;
         break;
     }
+    final child = P().getPWidget(node.children, node,
+        textStyle: (configStyle ?? style).merge(config?.commonStyle),
+        textConfig: config?.textConfig);
+    final title = config?.titleWrapper?.call(child) ?? child;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        P().getPWidget(node.children, node,
-            textStyle: (configStyle ?? style).merge(config?.commonStyle)),
-        SizedBox(height: config?.space ?? 4.0),
-        showDivider ? (config?.divider ?? buildDivider()) : Container()
-      ],
-    );
+    return showDivider
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              title,
+              SizedBox(height: config?.space ?? 4.0),
+              config?.divider ?? buildDivider()
+            ],
+          )
+        : title;
   }
 }
 
@@ -94,6 +99,8 @@ class TitleConfig {
   final TextStyle h5;
   final TextStyle h6;
   final TextStyle commonStyle;
+  final TextConfig textConfig;
+  final TitleWrapper titleWrapper;
   final bool showDivider;
   final Widget divider;
   final double space;
@@ -106,7 +113,11 @@ class TitleConfig {
       this.h5,
       this.h6,
       this.commonStyle,
+      this.textConfig,
+      this.titleWrapper,
       this.showDivider,
       this.divider,
       this.space});
 }
+
+typedef Widget TitleWrapper(Widget title);

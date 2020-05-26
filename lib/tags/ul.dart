@@ -63,12 +63,10 @@ class Ul {
             children: <Widget>[
               dotWidget ?? _getUlDot(isSolid),
               Expanded(
-                child: P().getPWidget(
-                  otherTagNodes,
-                  rootNode,
-                  textStyle: config?.textStyle ?? defaultPStyle,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                ),
+                child: P().getPWidget(otherTagNodes, rootNode,
+                    textStyle: config?.textStyle ?? defaultPStyle,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    textConfig: config?.textConfig),
               ),
             ],
           ),
@@ -100,6 +98,7 @@ class Ul {
 
 class UlConfig {
   final TextStyle textStyle;
+  final TextConfig textConfig;
   final DotWidget dotWidget;
   final double leftSpacing;
   final double dotSize;
@@ -108,6 +107,7 @@ class UlConfig {
 
   UlConfig({
     this.textStyle,
+    this.textConfig,
     this.dotWidget,
     this.leftSpacing,
     this.crossAxisAlignment,
