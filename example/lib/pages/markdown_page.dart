@@ -1,3 +1,4 @@
+import 'package:easy_model/easy_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
@@ -61,6 +62,9 @@ class _MarkdownPageState extends State<MarkdownPage> {
               title: Text('Markdown Page'),
               elevation: 0.0,
               backgroundColor: Colors.black,
+              actions: <Widget>[
+                buildThemeButton(),
+              ],
             )
           : null,
       body: data == null
@@ -86,6 +90,9 @@ class _MarkdownPageState extends State<MarkdownPage> {
                         heroTag: 'list',
                       )
                     : SizedBox(),
+                isMobile
+                    ? SizedBox()
+                    : buildThemeButton(),
                 FloatingActionButton(
                   onPressed: () {
                     isEnglish = !isEnglish;
@@ -101,9 +108,26 @@ class _MarkdownPageState extends State<MarkdownPage> {
     );
   }
 
+  IconButton buildThemeButton() {
+    GlobalModel model = ModelGroup.findModel<GlobalModel>();
+    bool isDarkNow = model.brightness == Brightness.dark;
+
+    return IconButton(
+                  icon: Icon(
+                      isDarkNow ? Icons.brightness_7 : Icons.brightness_2),
+                  onPressed: () {
+                    model.brightness = isDarkNow ? Brightness.light : Brightness.dark;
+                    model.refresh();
+                    model = null;
+                  });
+  }
+
   Widget buildTocList() => TocListWidget(controller: controller);
 
   Widget buildMarkdown() {
+    GlobalModel model = ModelGroup.findModel<GlobalModel>();
+    bool isDarkNow = model.brightness == Brightness.dark;
+    model = null;
     return Container(
       margin: EdgeInsets.all(10.0),
       child: MarkdownWidget(

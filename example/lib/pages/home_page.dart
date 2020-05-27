@@ -12,7 +12,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(PlatformDetector().toString());
 
     return Scaffold(
       appBar: isMobile
