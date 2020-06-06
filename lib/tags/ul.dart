@@ -36,43 +36,45 @@ class Ul {
     final children = rootNode?.children;
     final List<m.Node> otherTagNodes = [];
     final isSolid = deep % 2 == 0;
-    Widget ulWidget;
+    List<Widget> listChildren = [];
 //    Widget
     for (var node in children) {
       if (node is m.Element && node.tag == ul) {
-        ulWidget = getUlWidget(node, deep + 1);
-      }
-      if (node is m.Element && node.tag == input) {
+        final child = getUlWidget(node, deep + 1);
+        listChildren.add(child);
+      } else if (node is m.Element && node.tag == ol) {
+        final child = Ol().getOlWidget(node, deep + 1);
+        listChildren.add(child);
+      } else if (node is m.Element && node.tag == input) {
       } else
         otherTagNodes.add(node);
     }
     final config = StyleConfig().ulConfig;
     final Widget dotWidget =
         StyleConfig()?.ulConfig?.dotWidget?.call(deep, index);
-
+    final ulChild = Container(
+      margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment:
+            config?.crossAxisAlignment ?? CrossAxisAlignment.start,
+        children: <Widget>[
+          dotWidget ?? _getUlDot(isSolid),
+          Expanded(
+            child: P().getPWidget(otherTagNodes, rootNode,
+                textStyle: config?.textStyle ?? defaultPStyle,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                textConfig: config?.textConfig,
+                selectable: config?.selectable),
+          ),
+        ],
+      ),
+    );
+    listChildren.insert(0, config?.ulWrapper?.call(ulChild) ?? ulChild);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment:
-                config?.crossAxisAlignment ?? CrossAxisAlignment.start,
-            children: <Widget>[
-              dotWidget ?? _getUlDot(isSolid),
-              Expanded(
-                child: P().getPWidget(otherTagNodes, rootNode,
-                    textStyle: config?.textStyle ?? defaultPStyle,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    textConfig: config?.textConfig),
-              ),
-            ],
-          ),
-        ),
-        ulWidget ?? Container(),
-      ],
+      children: listChildren,
     );
   }
 
@@ -100,8 +102,10 @@ class UlConfig {
   final TextStyle textStyle;
   final TextConfig textConfig;
   final DotWidget dotWidget;
+  final UlWrapper ulWrapper;
   final double leftSpacing;
   final double dotSize;
+  final bool selectable;
   final EdgeInsetsGeometry dotMargin;
   final CrossAxisAlignment crossAxisAlignment;
 
@@ -109,7 +113,9 @@ class UlConfig {
     this.textStyle,
     this.textConfig,
     this.dotWidget,
+    this.ulWrapper,
     this.leftSpacing,
+    this.selectable,
     this.crossAxisAlignment,
     this.dotSize,
     this.dotMargin,
@@ -117,3 +123,4 @@ class UlConfig {
 }
 
 typedef Widget DotWidget(int deep, int index);
+typedef Widget UlWrapper(Widget child);

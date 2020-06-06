@@ -156,11 +156,14 @@ TextStyle getTextStyle(String tag) {
 Map<String, dynamic> get _theme => StyleConfig().markdownTheme ?? light_theme;
 
 TextStyle get defaultPStyle => _theme['PStyle'] ?? light_theme['PStyle'];
-TextStyle get defaultCodeStyle => _theme['CodeStyle'] ?? light_theme['CodeStyle'];
-TextStyle get defaultDelStyle => TextStyle(decoration: TextDecoration.lineThrough);
+TextStyle get defaultCodeStyle =>
+    _theme['CodeStyle'] ?? light_theme['CodeStyle'];
+TextStyle get defaultDelStyle =>
+    TextStyle(decoration: TextDecoration.lineThrough);
 TextStyle get defaultEmStyle => TextStyle(fontStyle: FontStyle.italic);
 TextStyle get defaultStrongStyle => TextStyle(fontWeight: FontWeight.bold);
-TextStyle get defaultBlockStyle => _theme['BlockStyle'] ?? light_theme['BlockStyle'];
+TextStyle get defaultBlockStyle =>
+    _theme['BlockStyle'] ?? light_theme['BlockStyle'];
 
 Color get defaultCodeBackground =>
     _theme['CodeBackground'] ?? light_theme['CodeBackground'];
@@ -168,11 +171,14 @@ Color get defaultTableBorderColor =>
     _theme['TableBorderColor'] ?? light_theme['TableBorderColor'];
 Color get defaultDividerColor =>
     _theme['DividerColor'] ?? light_theme['DividerColor'];
-Color get defaultBlockColor => _theme['BlockColor'] ?? light_theme['BlockColor'];
+Color get defaultBlockColor =>
+    _theme['BlockColor'] ?? light_theme['BlockColor'];
 Color get defaultPreBackground =>
     _theme['PreBackground'] ?? light_theme['PreBackground'];
-Color get defaultTitleColor => _theme['TitleColor'] ?? light_theme['TitleColor'];
-Color get defaultUlDotColor => _theme['UlDotColor'] ?? light_theme['UlDotColor'];
+Color get defaultTitleColor =>
+    _theme['TitleColor'] ?? light_theme['TitleColor'];
+Color get defaultUlDotColor =>
+    _theme['UlDotColor'] ?? light_theme['UlDotColor'];
 
 Map<String, TextStyle> get defaultHighLightCodeTheme =>
     _theme['HightLightCodeTheme'] ?? light_theme['HightLightCodeTheme'];

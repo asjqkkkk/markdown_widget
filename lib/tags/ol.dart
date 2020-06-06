@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../config/style_config.dart';
 import 'package:markdown/markdown.dart' as m;
 
-import 'markdown_tags.dart';
 import 'p.dart';
+import 'markdown_tags.dart';
 
 class Ol {
   Ol._internal();
@@ -15,10 +15,7 @@ class Ol {
     return _instance;
   }
 
-  Widget getOlWidget(
-    m.Element rootNode,
-    int deep,
-  ) {
+  Widget getOlWidget(m.Element rootNode, int deep) {
     final children = rootNode?.children;
     if (children == null) return Container();
     return Column(
@@ -27,12 +24,7 @@ class Ol {
         (index) {
           final node = children[index];
           if (node is m.Element) {
-            if (node.tag == li)
-              return _getLiWidget(
-                node,
-                deep,
-                index,
-              );
+            if (node.tag == li) return _getLiWidget(node, deep, index);
             if (node.tag == ol) return getOlWidget(node, deep + 1);
           }
           return Container();
@@ -41,44 +33,44 @@ class Ol {
     );
   }
 
-  Widget _getLiWidget(
-    m.Element rootNode,
-    int deep,
-    int index,
-  ) {
+  Widget _getLiWidget(m.Element rootNode, int deep, int index) {
     final children = rootNode?.children;
     final List<m.Node> otherTagNodes = [];
-    Widget olWidget;
+    List<Widget> listChildren = [];
     for (var node in children) {
       if (node is m.Element && node.tag == ol) {
-        olWidget = getOlWidget(node, deep + 1);
+        final child = getOlWidget(node, deep + 1);
+        listChildren.add(child);
+      } else if (node is m.Element && node.tag == ul) {
+        final child = Ul().getUlWidget(node, deep + 1);
+        listChildren.add(child);
       } else
         otherTagNodes.add(node);
     }
     final config = StyleConfig().olConfig;
+    final olChild = Container(
+      margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment:
+            config?.crossAxisAlignment ?? CrossAxisAlignment.start,
+        children: <Widget>[
+          _getOlDot(deep, index),
+          Expanded(
+            child: P().getPWidget(otherTagNodes, rootNode,
+                textStyle: config?.textStyle ?? defaultPStyle,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                textConfig: config?.textConfig,
+                selectable: config?.selectable),
+          ),
+        ],
+      ),
+    );
+    listChildren.insert(0, config?.olWrapper?.call(olChild) ?? olChild);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment:
-                config?.crossAxisAlignment ?? CrossAxisAlignment.start,
-            children: <Widget>[
-              _getOlDot(deep, index),
-              Expanded(
-                child: P().getPWidget(otherTagNodes, rootNode,
-                    textStyle: config?.textStyle ?? defaultPStyle,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    textConfig: config?.textConfig),
-              ),
-            ],
-          ),
-        ),
-        olWidget ?? Container(),
-      ],
+      children: listChildren,
     );
   }
 
@@ -100,15 +92,20 @@ class OlConfig {
   final TextStyle textStyle;
   final TextConfig textConfig;
   final IndexWidget indexWidget;
+  final OlWrapper olWrapper;
   final double leftSpacing;
+  final bool selectable;
   final CrossAxisAlignment crossAxisAlignment;
 
   OlConfig(
       {this.textStyle,
       this.textConfig,
+      this.olWrapper,
       this.indexWidget,
       this.leftSpacing,
+      this.selectable,
       this.crossAxisAlignment});
 }
 
 typedef Widget IndexWidget(int deep, int index);
+typedef Widget OlWrapper(Widget child);
