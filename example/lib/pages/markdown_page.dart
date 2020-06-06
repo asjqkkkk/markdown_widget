@@ -90,9 +90,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
                         heroTag: 'list',
                       )
                     : SizedBox(),
-                isMobile
-                    ? SizedBox()
-                    : buildThemeButton(),
+                isMobile ? SizedBox() : buildThemeButton(),
                 FloatingActionButton(
                   onPressed: () {
                     isEnglish = !isEnglish;
@@ -111,15 +109,15 @@ class _MarkdownPageState extends State<MarkdownPage> {
   IconButton buildThemeButton() {
     GlobalModel model = ModelGroup.findModel<GlobalModel>();
     bool isDarkNow = model.brightness == Brightness.dark;
-
+    model = null;
     return IconButton(
-                  icon: Icon(
-                      isDarkNow ? Icons.brightness_7 : Icons.brightness_2),
-                  onPressed: () {
-                    model.brightness = isDarkNow ? Brightness.light : Brightness.dark;
-                    model.refresh();
-                    model = null;
-                  });
+        icon: Icon(isDarkNow ? Icons.brightness_7 : Icons.brightness_2),
+        onPressed: () {
+          GlobalModel model = ModelGroup.findModel<GlobalModel>();
+          model.brightness = isDarkNow ? Brightness.light : Brightness.dark;
+          model.refresh();
+          model = null;
+        });
   }
 
   Widget buildTocList() => TocListWidget(controller: controller);
@@ -135,13 +133,13 @@ class _MarkdownPageState extends State<MarkdownPage> {
         controller: controller,
         styleConfig: StyleConfig(
             pConfig: PConfig(
-              linkGesture: (linkChild, url) {
-                return GestureDetector(
-                  child: linkChild,
-                  onTap: () => _launchURL(url),
-                );
-              },
-            ),
+                linkGesture: (linkChild, url) {
+                  return GestureDetector(
+                    child: linkChild,
+                    onTap: () => _launchURL(url),
+                  );
+                },
+                selectable: false),
             preConfig: PreConfig(
               preWrapper: (child, text) =>
                   buildCodeBlock(child, text, isEnglish),

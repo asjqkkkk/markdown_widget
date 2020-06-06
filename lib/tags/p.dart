@@ -124,12 +124,9 @@ class P {
     if (nodes.isEmpty) {
       return selectable
           ? WidgetSpan(child: SelectableText(node.text, style: parentStyle))
-          : TextSpan(
-              text: node.text,
-              style: parentStyle,
-            );
+          : TextSpan(text: node.text, style: parentStyle);
     } else {
-      return getBlockSpan(nodes, node, parentStyle);
+      return getBlockSpan(nodes, node, parentStyle, selectable: selectable);
     }
   }
 
