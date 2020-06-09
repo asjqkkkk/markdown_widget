@@ -81,9 +81,7 @@ class Ol {
     return configWidget ??
         Container(
           margin: EdgeInsets.only(left: 5, right: 5),
-          child: Text(
-            '$index.',
-          ),
+          child: Text('${index + 1}.'),
         );
   }
 }
