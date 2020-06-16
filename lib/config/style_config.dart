@@ -88,47 +88,6 @@ class StyleConfig {
 
   ///MarkdownTheme, default is light
   Map<String, dynamic> markdownTheme;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is StyleConfig &&
-          runtimeType == other.runtimeType &&
-          checkBoxBuilder == other.checkBoxBuilder &&
-          checkBoxConfig == other.checkBoxConfig &&
-          imgBuilder == other.imgBuilder &&
-          imgConfig == other.imgConfig &&
-          videoBuilder == other.videoBuilder &&
-          videoConfig == other.videoConfig &&
-          titleConfig == other.titleConfig &&
-          pConfig == other.pConfig &&
-          codeConfig == other.codeConfig &&
-          olConfig == other.olConfig &&
-          ulConfig == other.ulConfig &&
-          preConfig == other.preConfig &&
-          blockQuoteConfig == other.blockQuoteConfig &&
-          tableConfig == other.tableConfig &&
-          hrConfig == other.hrConfig &&
-          markdownTheme == other.markdownTheme;
-
-  @override
-  int get hashCode =>
-      checkBoxBuilder.hashCode ^
-      checkBoxConfig.hashCode ^
-      imgBuilder.hashCode ^
-      imgConfig.hashCode ^
-      videoBuilder.hashCode ^
-      videoConfig.hashCode ^
-      titleConfig.hashCode ^
-      pConfig.hashCode ^
-      codeConfig.hashCode ^
-      olConfig.hashCode ^
-      ulConfig.hashCode ^
-      preConfig.hashCode ^
-      blockQuoteConfig.hashCode ^
-      tableConfig.hashCode ^
-      hrConfig.hashCode ^
-      markdownTheme.hashCode;
 }
 
 class MarkdownTheme {
@@ -156,27 +115,41 @@ TextStyle getTextStyle(String tag) {
 Map<String, dynamic> get _theme => StyleConfig().markdownTheme ?? light_theme;
 
 TextStyle get defaultPStyle => _theme['PStyle'] ?? light_theme['PStyle'];
+
 TextStyle get defaultCodeStyle =>
     _theme['CodeStyle'] ?? light_theme['CodeStyle'];
+
 TextStyle get defaultDelStyle =>
     TextStyle(decoration: TextDecoration.lineThrough);
+
 TextStyle get defaultEmStyle => TextStyle(fontStyle: FontStyle.italic);
+
 TextStyle get defaultStrongStyle => TextStyle(fontWeight: FontWeight.bold);
+
 TextStyle get defaultBlockStyle =>
     _theme['BlockStyle'] ?? light_theme['BlockStyle'];
 
+TextStyle get defaultLinkStyle =>
+    _theme['LinkStyle'] ?? light_theme['LinkStyle'];
+
 Color get defaultCodeBackground =>
     _theme['CodeBackground'] ?? light_theme['CodeBackground'];
+
 Color get defaultTableBorderColor =>
     _theme['TableBorderColor'] ?? light_theme['TableBorderColor'];
+
 Color get defaultDividerColor =>
     _theme['DividerColor'] ?? light_theme['DividerColor'];
+
 Color get defaultBlockColor =>
     _theme['BlockColor'] ?? light_theme['BlockColor'];
+
 Color get defaultPreBackground =>
     _theme['PreBackground'] ?? light_theme['PreBackground'];
+
 Color get defaultTitleColor =>
     _theme['TitleColor'] ?? light_theme['TitleColor'];
+
 Color get defaultUlDotColor =>
     _theme['UlDotColor'] ?? light_theme['UlDotColor'];
 

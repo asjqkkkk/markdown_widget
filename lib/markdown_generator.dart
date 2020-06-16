@@ -119,7 +119,9 @@ class MarkdownGenerator {
         result = _helper.getBlockQuote(node);
         break;
     }
-    if (result == null) print('tag:$tag not catched!');
+    if (result == null)
+      print('tag:$tag not catched! --- Text:${node.textContent} \n'
+          'report bug:https://github.com/asjqkkkk/markdown_widget/issues/new/choose');
     return Container(
       child: result ?? Container(),
       margin: childMargin ??

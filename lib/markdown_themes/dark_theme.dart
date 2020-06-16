@@ -5,6 +5,7 @@ const dark_theme = {
   'PStyle': TextStyle(color: Color(0xffFAFAFA)),
   'CodeStyle': TextStyle(fontSize: 12, color: Color(0xffFAFAFA)),
   'BlockStyle': TextStyle(color: Color(0xffFAFAFA)),
+  'LinkStyle': TextStyle(color: Color(0xff1D81F0)),
   'CodeBackground': Color(0xff555555),
   'TableBorderColor': Color(0xffD7DBDF),
   'DividerColor': Color(0xFF646464),
