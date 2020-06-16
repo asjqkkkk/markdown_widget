@@ -13,7 +13,7 @@ Widget defaultAWidget(m.Element element) {
   final linkWidget = P().getPWidget(
     element.children,
     element,
-    textStyle: pConfig?.linkStyle ?? TextStyle(color: Colors.blue),
+    textStyle: pConfig?.linkStyle ?? defaultLinkStyle,
     selectable: false,
   );
   return pConfig?.linkGesture?.call(linkWidget, url) ??

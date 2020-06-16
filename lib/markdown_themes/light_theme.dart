@@ -5,6 +5,7 @@ const light_theme = {
   'PStyle': TextStyle(color: Color(0xff1E2226)),
   'CodeStyle': TextStyle(fontSize: 12, color: Color(0xff1E2226)),
   'BlockStyle': TextStyle(color: Color(0xffA9AAB4)),
+  'LinkStyle': TextStyle(color: Color(0xff1D81F0)),
   'CodeBackground': Color(0xffF5F5F5),
   'TableBorderColor': Color(0xffD7DBDF),
   'DividerColor': Color(0xffE5E6EB),
