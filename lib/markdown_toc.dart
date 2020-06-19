@@ -121,6 +121,11 @@ class TocController extends ChangeNotifier {
 
   LinkedHashMap<int, Toc> _tocList;
 
+  Toc get currentToc => _currentToc;
+
+  /// List of toc (table of content) items
+  Map<int, Toc> get tocList => _tocList;
+
   bool setToc(Toc toc) {
     if (this._currentToc == toc) return false;
     this._currentToc = toc;
