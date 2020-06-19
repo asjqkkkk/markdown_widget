@@ -1,3 +1,5 @@
+#### [1.2.1+1] - expose `tocList` and `currentToc` properties in `TocController` (thanks to @[jarekb123](https://github.com/jarekb123))
+
 #### [1.2.1] -  fix issue [#25](https://github.com/asjqkkkk/markdown_widget/issues/25) [#28](https://github.com/asjqkkkk/markdown_widget/issues/28) [#29](https://github.com/asjqkkkk/markdown_widget/issues/29) [#32](https://github.com/asjqkkkk/markdown_widget/issues/32)
 
 #### [1.2.0] -  add `TextConfig` to set `TextAlign` and `TextDirection`,solve issue [#21](https://github.com/asjqkkkk/markdown_widget/issues/21)
