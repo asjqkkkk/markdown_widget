@@ -118,8 +118,10 @@ class TocController extends ChangeNotifier {
   TocController({this.initialIndex = 0, this.isInitialIndexForTitle = true});
 
   Toc _currentToc;
-
   LinkedHashMap<int, Toc> _tocList;
+
+  Toc get currentToc => _currentToc;
+  Map<int, Toc> get tocList => _tocList;
 
   bool setToc(Toc toc) {
     if (this._currentToc == toc) return false;
