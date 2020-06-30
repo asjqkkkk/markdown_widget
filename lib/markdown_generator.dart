@@ -20,7 +20,7 @@ class MarkdownGenerator {
         extensionSet: m.ExtensionSet.gitHubFlavored,
         encodeHtml: false,
         inlineSyntaxes: [TaskListSyntax()]);
-    final List<String> lines = data.split(RegExp(r'\r?\n'));
+    final List<String> lines = data.split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
     List<m.Node> nodes = document.parseLines(lines);
     _tocList = LinkedHashMap();
     _helper = MarkdownHelper(wConfig: widgetConfig);
