@@ -80,7 +80,10 @@ class MTitle {
     return showDivider
         ? Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+                config?.textConfig?.textDirection == TextDirection.rtl
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
             children: <Widget>[
               title,
               SizedBox(height: config?.space ?? 4.0),
