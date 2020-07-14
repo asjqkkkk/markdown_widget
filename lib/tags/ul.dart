@@ -53,8 +53,15 @@ class Ul {
     final Widget dotWidget =
         StyleConfig()?.ulConfig?.dotWidget?.call(deep, index);
     final ulChild = Container(
-      margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
+      margin: EdgeInsets.only(
+          left: config?.textConfig?.textDirection == TextDirection.rtl
+              ? 0.0
+              : deep * (config?.leftSpacing ?? 10.0),
+          right: config?.textConfig?.textDirection == TextDirection.rtl
+              ? deep * (config?.leftSpacing ?? 10.0)
+              : 0.0),
       child: Row(
+        textDirection: config?.textConfig?.textDirection,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment:
             config?.crossAxisAlignment ?? CrossAxisAlignment.start,
