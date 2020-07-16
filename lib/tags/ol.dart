@@ -49,8 +49,16 @@ class Ol {
     }
     final config = StyleConfig().olConfig;
     final olChild = Container(
-      margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
+      margin: EdgeInsets.only(
+        left: config?.textConfig?.textDirection == TextDirection.rtl
+            ? 0.0
+            : deep * (config?.leftSpacing ?? 10.0),
+        right: config?.textConfig?.textDirection == TextDirection.rtl
+            ? deep * (config?.leftSpacing ?? 10.0)
+            : 0.0,
+      ),
       child: Row(
+        textDirection: config?.textConfig?.textDirection,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment:
             config?.crossAxisAlignment ?? CrossAxisAlignment.start,
@@ -75,13 +83,16 @@ class Ol {
   }
 
   Widget _getOlDot(int deep, int index) {
+    final config = StyleConfig().olConfig;
     final Widget configWidget =
         StyleConfig()?.olConfig?.indexWidget?.call(deep, index);
 
     return configWidget ??
         Container(
           margin: EdgeInsets.only(left: 5, right: 5),
-          child: Text('${index + 1}.'),
+          child: config?.textConfig?.textDirection == TextDirection.rtl
+              ? Text('.${index + 1}')
+              : Text('${index + 1}.'),
         );
   }
 }
