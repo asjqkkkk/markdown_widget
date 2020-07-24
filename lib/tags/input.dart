@@ -14,6 +14,7 @@ InlineSpan getInputSpan(m.Element node) {
   );
 }
 
+///the check box widget
 Widget defaultCheckBox(
   Map<String, String> attributes, {
   bool checked,

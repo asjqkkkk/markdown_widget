@@ -4,6 +4,7 @@ import 'package:video_player/video_player.dart';
 import 'package:markdown/markdown.dart' as m;
 import '../config/style_config.dart';
 
+///Tag: video(this is not markdown's tag)
 InlineSpan getVideoSpan(m.Element node) {
   String url = node.attributes['src'];
   return WidgetSpan(
@@ -12,6 +13,7 @@ InlineSpan getVideoSpan(m.Element node) {
   );
 }
 
+///the video widget
 Widget defaultVideoWidget(Map<String, String> attributes, {String url}) {
   double width;
   double height;

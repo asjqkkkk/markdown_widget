@@ -4,9 +4,11 @@ import '../config/style_config.dart';
 
 import 'p.dart';
 
+///Tag: a
 InlineSpan getLinkSpan(m.Element element) =>
     WidgetSpan(child: defaultAWidget(element));
 
+///the link widget
 Widget defaultAWidget(m.Element element) {
   PConfig pConfig = StyleConfig().pConfig;
   final url = element.attributes['href'];

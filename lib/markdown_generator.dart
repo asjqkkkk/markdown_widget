@@ -9,6 +9,7 @@ import 'config/widget_config.dart';
 import 'markdown_helper.dart';
 import 'markdown_toc.dart';
 
+///use [MarkdownGenerator] to transform markdown data to [Widget] list, so you can render it by any type of [ListView]
 class MarkdownGenerator {
   MarkdownGenerator({
     @required String data,
@@ -38,6 +39,7 @@ class MarkdownGenerator {
 
   LinkedHashMap<int, Toc> get tocList => _tocList;
 
+  ///generator all widget from markdown data by this method
   Widget _generatorWidget(m.Node node, EdgeInsetsGeometry childMargin) {
     if (node is m.Text) return _helper.getPWidget(m.Element(p, [node]));
     final tag = (node as m.Element).tag;

@@ -6,6 +6,7 @@ import 'p.dart';
 import 'markdown_tags.dart';
 import '../config/style_config.dart';
 
+///Tag: table
 class MTable {
   MTable._internal();
 
@@ -16,6 +17,7 @@ class MTable {
     return _instance;
   }
 
+  ///the table widget
   Widget getTableWidget(m.Element node) {
     if (node.children == null) return SizedBox();
     final config = StyleConfig().tableConfig;
@@ -44,6 +46,7 @@ class MTable {
     return config?.wrapBuilder?.call(table) ?? table;
   }
 
+  ///get the head of table
   TableRow _buildHeader(
     m.Element node,
     TableConfig config,
@@ -69,6 +72,7 @@ class MTable {
     }
   }
 
+  ///get the body of table
   List<TableRow> _buildBody(
     m.Element node,
     TableConfig config,

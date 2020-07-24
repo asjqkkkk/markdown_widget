@@ -5,6 +5,7 @@ import 'package:markdown/markdown.dart' as m;
 import 'p.dart';
 import 'markdown_tags.dart';
 
+///Tag: ol
 class Ol {
   Ol._internal();
 
@@ -15,6 +16,7 @@ class Ol {
     return _instance;
   }
 
+  ///the orderly list widget
   Widget getOlWidget(m.Element rootNode, int deep) {
     final children = rootNode?.children;
     if (children == null) return Container();
@@ -82,6 +84,7 @@ class Ol {
     );
   }
 
+  ///the index widget of orderly list
   Widget _getOlDot(int deep, int index) {
     final config = StyleConfig().olConfig;
     final Widget configWidget =

@@ -4,6 +4,7 @@ import '../config/style_config.dart';
 
 import 'markdown_tags.dart';
 
+///Tag: h1~h6
 class MTitle {
   MTitle._internal();
 
@@ -14,7 +15,7 @@ class MTitle {
     return _instance;
   }
 
-  ///h1~h6
+  ///the title widget
   Widget getTitleWidget(m.Element node, String tag) {
     Widget titleWidget;
     switch (tag) {
