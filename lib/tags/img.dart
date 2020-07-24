@@ -10,6 +10,7 @@ InlineSpan getImageSpan(m.Element node) {
   );
 }
 
+///the image widget
 Widget defaultImageWidget(Map<String, String> attributes, {String url}) {
   double width;
   double height;

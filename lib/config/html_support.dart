@@ -30,9 +30,11 @@ void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
 
 final RegExp htmlRep = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
 
+///return [true] if need parse [m.Node] to [h.Node]
 bool needParseHtml(m.Node parentNode) =>
     (parentNode is m.Element && parentNode.tag != code);
 
+///parse [m.Node] to [h.Node]
 List<m.Node> parseHtml(
   m.Node node,
 ) {
