@@ -1,3 +1,5 @@
+#### [1.2.3] - add comments for some methods, merge pr [#42](https://github.com/asjqkkkk/markdown_widget/pull/42)
+
 #### [1.2.2] - fix issue [#36](https://github.com/asjqkkkk/markdown_widget/issues/36), expose some properties in `TocController` by [#40](https://github.com/asjqkkkk/markdown_widget/pull/40)
 
 #### [1.2.1] -  fix issue [#25](https://github.com/asjqkkkk/markdown_widget/issues/25) [#28](https://github.com/asjqkkkk/markdown_widget/issues/28) [#29](https://github.com/asjqkkkk/markdown_widget/issues/29) [#32](https://github.com/asjqkkkk/markdown_widget/issues/32)
