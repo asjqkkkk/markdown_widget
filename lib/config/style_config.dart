@@ -95,6 +95,7 @@ class MarkdownTheme {
   static const Map<String, dynamic> darkTheme = dark_theme;
 }
 
+///merge the style of [del]、[em]、[strong]
 TextStyle getTextStyle(String tag) {
   final pConfig = StyleConfig().pConfig;
   TextStyle style = TextStyle();
@@ -114,44 +115,59 @@ TextStyle getTextStyle(String tag) {
 
 Map<String, dynamic> get _theme => StyleConfig().markdownTheme ?? light_theme;
 
+/// default style of tag: p
 TextStyle get defaultPStyle => _theme['PStyle'] ?? light_theme['PStyle'];
 
+/// default style of tag: code
 TextStyle get defaultCodeStyle =>
     _theme['CodeStyle'] ?? light_theme['CodeStyle'];
 
+/// default style of delete text
 TextStyle get defaultDelStyle =>
     TextStyle(decoration: TextDecoration.lineThrough);
 
+/// default style of slanting text
 TextStyle get defaultEmStyle => TextStyle(fontStyle: FontStyle.italic);
 
+/// default style of bold text
 TextStyle get defaultStrongStyle => TextStyle(fontWeight: FontWeight.bold);
 
+/// default style of tag: blockquote
 TextStyle get defaultBlockStyle =>
     _theme['BlockStyle'] ?? light_theme['BlockStyle'];
 
+/// default style of tag: a
 TextStyle get defaultLinkStyle =>
     _theme['LinkStyle'] ?? light_theme['LinkStyle'];
 
+/// default background color of tag: code
 Color get defaultCodeBackground =>
     _theme['CodeBackground'] ?? light_theme['CodeBackground'];
 
+/// default border color of tag: table
 Color get defaultTableBorderColor =>
     _theme['TableBorderColor'] ?? light_theme['TableBorderColor'];
 
+/// default divider color of tag: hr and h1~h6
 Color get defaultDividerColor =>
     _theme['DividerColor'] ?? light_theme['DividerColor'];
 
+/// default background color of tag: blockquote
 Color get defaultBlockColor =>
     _theme['BlockColor'] ?? light_theme['BlockColor'];
 
+/// default background color of tag: pre
 Color get defaultPreBackground =>
     _theme['PreBackground'] ?? light_theme['PreBackground'];
 
+/// default text color of tag: h1~h5
 Color get defaultTitleColor =>
     _theme['TitleColor'] ?? light_theme['TitleColor'];
 
+/// default color of unOrderly index widget
 Color get defaultUlDotColor =>
     _theme['UlDotColor'] ?? light_theme['UlDotColor'];
 
+/// default theme of highlight code
 Map<String, TextStyle> get defaultHighLightCodeTheme =>
     _theme['HightLightCodeTheme'] ?? light_theme['HightLightCodeTheme'];

@@ -3,6 +3,7 @@ import 'package:markdown/markdown.dart' as m;
 import '../config/style_config.dart';
 import 'p.dart';
 
+///Tag: blockquote
 class Bq {
   Bq._internal();
 
@@ -13,6 +14,7 @@ class Bq {
     return _instance;
   }
 
+  ///the blockQuote widget
   Widget getBlockQuote(m.Element node) {
     final config = StyleConfig().blockQuoteConfig;
 

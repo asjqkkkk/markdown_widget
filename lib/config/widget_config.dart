@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 
+/// you can use [WidgetConfig] to custom your tag widget
 class WidgetConfig {
   WidgetBuilder p;
   WidgetBuilder pre;

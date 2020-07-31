@@ -4,6 +4,7 @@ import '../config/style_config.dart';
 
 import 'markdown_tags.dart';
 
+///Tag: h1~h6
 class MTitle {
   MTitle._internal();
 
@@ -14,7 +15,7 @@ class MTitle {
     return _instance;
   }
 
-  ///h1~h6
+  ///the title widget
   Widget getTitleWidget(m.Element node, String tag) {
     Widget titleWidget;
     switch (tag) {
@@ -80,7 +81,10 @@ class MTitle {
     return showDivider
         ? Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+                config?.textConfig?.textDirection == TextDirection.rtl
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
             children: <Widget>[
               title,
               SizedBox(height: config?.space ?? 4.0),
