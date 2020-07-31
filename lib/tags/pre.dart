@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 import 'package:highlight/highlight.dart' as hi;
 
+///Tag: pre
 class Pre {
   Pre._internal();
 
@@ -13,7 +14,7 @@ class Pre {
     return _instance;
   }
 
-  ///Tag:  pre
+  ///the pre widget
   Widget getPreWidget(m.Node node) {
     final preConfig = StyleConfig().preConfig;
     final preWidget = Container(

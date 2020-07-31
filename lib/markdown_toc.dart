@@ -3,8 +3,13 @@ import 'markdown_widget.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TocListWidget extends StatefulWidget {
+
   final TocController controller;
+
+  ///you can custom your item widget by [TocItem]
   final TocItem tocItem;
+
+  ///when there is no tocList, the [emptyWidget] will be shown
   final Widget emptyWidget;
 
   const TocListWidget({
@@ -126,18 +131,21 @@ class TocController extends ChangeNotifier {
   /// List of toc (table of content) items
   Map<int, Toc> get tocList => _tocList;
 
+  ///update current [Toc],  it's not recommended to call this method
   bool setToc(Toc toc) {
     if (this._currentToc == toc) return false;
     this._currentToc = toc;
     return true;
   }
 
+  ///update current [_tocList],  it's not recommended to call this method
   bool setTocList(LinkedHashMap<int, Toc> tocList) {
     if (this._tocList == tocList) return false;
     this._tocList = tocList;
     return true;
   }
 
+  ///call [scrollController.scrollTo] by it
   Future<void> scrollTo(
           {@required int index,
           double alignment = 0,
@@ -145,9 +153,11 @@ class TocController extends ChangeNotifier {
           Curve curve = Curves.linear}) =>
       scrollController.scrollTo(index: index, duration: duration, curve: curve);
 
+  ///call [scrollController.jumpTo] by it
   void jumpTo({@required int index, double alignment = 0}) =>
       scrollController.jumpTo(index: index, alignment: alignment);
 
+  ///get last index in [_tocList]
   int get endIndex {
     if (_tocList == null || _tocList.isEmpty) return 0;
     final keys = _tocList.keys.toList();
@@ -156,6 +166,7 @@ class TocController extends ChangeNotifier {
     return index;
   }
 
+  ///get the index of [MTitle]
   int getTitleIndexWithWidgetIndex(int index) {
     final tocList = _tocList?.values?.toList();
     if (tocList == null || tocList.isEmpty) return 0;

@@ -4,6 +4,7 @@ import '../config/style_config.dart';
 import 'markdown_tags.dart';
 import 'p.dart';
 
+///Tag: ul
 class Ul {
   Ul._internal();
 
@@ -14,6 +15,7 @@ class Ul {
     return _instance;
   }
 
+  ///the unOrderly list widget
   Widget getUlWidget(m.Element rootNode, int deep) {
     final children = rootNode?.children;
     if (children == null) return Container();
@@ -37,7 +39,6 @@ class Ul {
     final List<m.Node> otherTagNodes = [];
     final isSolid = deep % 2 == 0;
     List<Widget> listChildren = [];
-//    Widget
     for (var node in children) {
       if (node is m.Element && node.tag == ul) {
         final child = getUlWidget(node, deep + 1);
@@ -53,8 +54,15 @@ class Ul {
     final Widget dotWidget =
         StyleConfig()?.ulConfig?.dotWidget?.call(deep, index);
     final ulChild = Container(
-      margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
+      margin: EdgeInsets.only(
+          left: config?.textConfig?.textDirection == TextDirection.rtl
+              ? 0.0
+              : deep * (config?.leftSpacing ?? 10.0),
+          right: config?.textConfig?.textDirection == TextDirection.rtl
+              ? deep * (config?.leftSpacing ?? 10.0)
+              : 0.0),
       child: Row(
+        textDirection: config?.textConfig?.textDirection,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment:
             config?.crossAxisAlignment ?? CrossAxisAlignment.start,
@@ -78,6 +86,7 @@ class Ul {
     );
   }
 
+  ///the index widget of unOrderly list
   Widget _getUlDot(bool isSolid) {
     final config = StyleConfig().ulConfig;
     final dotSize = config?.dotSize ?? 6;

@@ -121,6 +121,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     }
   }
 
+  ///this method will be called when update
   void clearState() {
     tocList.clear();
     widgets.clear();
@@ -165,10 +166,12 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
           );
   }
 
+  ///call [setState] method
   void refresh() {
     if (mounted) setState(() {});
   }
 
+  ///calculate for the initial index for [ScrollablePositionedList]
   int getInitialScrollIndex() {
     final controller = widget.controller;
     if (controller == null) return 0;
@@ -206,6 +209,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   }
 }
 
+///use for [compute] to improve performance
 class _MarkdownData {
   final String data;
   final WidgetConfig widgetConfig;

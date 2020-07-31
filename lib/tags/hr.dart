@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 import '../config/style_config.dart';
 
+///Tag: hr
 class Hr {
   Hr._internal();
 
@@ -12,6 +13,7 @@ class Hr {
     return _instance;
   }
 
+  ///the hr widget
   Widget getHrWidget(m.Element node) {
     final HrConfig hrConfig = StyleConfig().hrConfig;
 

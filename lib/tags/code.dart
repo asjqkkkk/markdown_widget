@@ -6,6 +6,7 @@ import '../config/style_config.dart';
 InlineSpan getCodeSpan(m.Element node) =>
     WidgetSpan(child: defaultCodeWidget(node));
 
+///the code widget
 Widget defaultCodeWidget(m.Element node) {
   final config = StyleConfig().codeConfig;
 

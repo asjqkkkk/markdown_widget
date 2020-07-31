@@ -5,6 +5,7 @@ import 'package:markdown/markdown.dart' as m;
 import 'p.dart';
 import 'markdown_tags.dart';
 
+///Tag: ol
 class Ol {
   Ol._internal();
 
@@ -15,6 +16,7 @@ class Ol {
     return _instance;
   }
 
+  ///the orderly list widget
   Widget getOlWidget(m.Element rootNode, int deep) {
     final children = rootNode?.children;
     if (children == null) return Container();
@@ -49,8 +51,16 @@ class Ol {
     }
     final config = StyleConfig().olConfig;
     final olChild = Container(
-      margin: EdgeInsets.only(left: deep * (config?.leftSpacing ?? 10.0)),
+      margin: EdgeInsets.only(
+        left: config?.textConfig?.textDirection == TextDirection.rtl
+            ? 0.0
+            : deep * (config?.leftSpacing ?? 10.0),
+        right: config?.textConfig?.textDirection == TextDirection.rtl
+            ? deep * (config?.leftSpacing ?? 10.0)
+            : 0.0,
+      ),
       child: Row(
+        textDirection: config?.textConfig?.textDirection,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment:
             config?.crossAxisAlignment ?? CrossAxisAlignment.start,
@@ -74,14 +84,18 @@ class Ol {
     );
   }
 
+  ///the index widget of orderly list
   Widget _getOlDot(int deep, int index) {
+    final config = StyleConfig().olConfig;
     final Widget configWidget =
         StyleConfig()?.olConfig?.indexWidget?.call(deep, index);
 
     return configWidget ??
         Container(
           margin: EdgeInsets.only(left: 5, right: 5),
-          child: Text('${index + 1}.'),
+          child: config?.textConfig?.textDirection == TextDirection.rtl
+              ? Text('.${index + 1}')
+              : Text('${index + 1}.'),
         );
   }
 }
