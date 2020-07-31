@@ -41,6 +41,9 @@ class MarkdownWidget extends StatefulWidget {
   ///set shrinkWrap to obtained [ListView] (only available when [controller] is null)
   final bool shrinkWrap;
 
+  /// [ListView] padding
+  final EdgeInsetsGeometry padding;
+
   const MarkdownWidget({
     Key key,
     @required this.data,
@@ -53,6 +56,7 @@ class MarkdownWidget extends StatefulWidget {
     this.delayLoadDuration,
     this.physics,
     this.shrinkWrap = false,
+    this.padding,
   }) : super(key: key);
 
   @override
@@ -149,6 +153,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
             physics: widget.physics,
             itemBuilder: (ctx, index) => widgets[index],
             itemCount: widgets.length,
+            padding: widget.padding,
           )
         : ScrollablePositionedList.builder(
             physics: widget.physics,
@@ -157,6 +162,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
             itemScrollController: widget.controller.scrollController,
             itemPositionsListener: itemPositionsListener,
             initialScrollIndex: getInitialScrollIndex(),
+            padding: widget.padding,
           );
   }
 
