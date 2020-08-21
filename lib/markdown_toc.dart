@@ -3,7 +3,6 @@ import 'markdown_widget.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TocListWidget extends StatefulWidget {
-
   final TocController controller;
 
   ///you can custom your item widget by [TocItem]
@@ -29,6 +28,8 @@ class _TocListWidgetState extends State<TocListWidget> {
   final ItemScrollController itemScrollController = ItemScrollController();
   Toc currentToc;
   LinkedHashMap<int, Toc> tocList;
+  int minIndex = 0;
+  int maxIndex = 0;
 
   @override
   void initState() {
@@ -44,15 +45,26 @@ class _TocListWidgetState extends State<TocListWidget> {
       }
       if (toc != null && currentToc != toc) {
         currentToc = toc;
-        if (itemScrollController.isAttached)
-          itemScrollController.scrollTo(
-              index: currentToc.selfIndex,
-              duration: Duration(milliseconds: 50));
+        final selfIndex = currentToc.selfIndex;
+        if (selfIndex < minIndex || selfIndex > maxIndex) {
+          itemScrollController.jumpTo(index: selfIndex);
+        }
+//        if (itemScrollController.isAttached)
+//          itemScrollController.scrollTo(
+//              index: currentToc.selfIndex,
+//              duration: Duration(milliseconds: 50));
         needRefresh = true;
       }
       if (needRefresh) refresh();
     });
+    itemPositionsListener.itemPositions.addListener(_scrollListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    itemPositionsListener.itemPositions.removeListener(_scrollListener);
+    super.dispose();
   }
 
   @override
@@ -108,6 +120,24 @@ class _TocListWidgetState extends State<TocListWidget> {
 
   void refresh() {
     if (mounted) setState(() {});
+  }
+
+  void _scrollListener() {
+    final positions = itemPositionsListener.itemPositions.value;
+    if (positions.isNotEmpty) {
+      final min = positions
+          .where((ItemPosition position) => position.itemTrailingEdge > 0)
+          .reduce((ItemPosition min, ItemPosition position) =>
+              position.itemTrailingEdge < min.itemTrailingEdge ? position : min)
+          .index;
+      final max = positions
+          .where((ItemPosition position) => position.itemLeadingEdge < 1)
+          .reduce((ItemPosition max, ItemPosition position) =>
+              position.itemLeadingEdge > max.itemLeadingEdge ? position : max)
+          .index;
+      minIndex = min;
+      maxIndex = max;
+    }
   }
 }
 
