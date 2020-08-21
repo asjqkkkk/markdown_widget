@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   markdown_widget:
     path: ../
-  easy_model: ^1.0.0
+  easy_model: ^1.0.1
 
   cupertino_icons: ^0.1.3
 

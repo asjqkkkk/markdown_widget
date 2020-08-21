@@ -1,6 +1,5 @@
 name: markdown_widget
 description: A new markdown package. It supports TOC function, HTML video and img tag，and it works well on both the web and mobile
-
 version: 1.2.4
 verified publisher:
   - agedchen@gmail.com
@@ -14,9 +13,8 @@ dependencies:
     sdk: flutter
 
   #markdown data parser
-⁣  markdown:
-  git: https://github.com/dart-lang/markdown.git
-
+  markdown:
+      git: https://github.com/dart-lang/markdown.git
   #highlight code
   highlight: ^0.6.0
   flutter_highlight: ^0.6.0
