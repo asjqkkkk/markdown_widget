@@ -120,7 +120,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
         });
   }
 
-  Widget buildTocList() => TocListWidget(controller: controller);
+  Widget buildTocList() => TocListWidget(
+        controller: controller,
+        key: ValueKey(controller),
+      );
 
   Widget buildMarkdown() {
     GlobalModel model = ModelGroup.findModel<GlobalModel>();
