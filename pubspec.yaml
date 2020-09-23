@@ -36,3 +36,7 @@ dev_dependencies:
 
 
 flutter:
+  fonts:
+    - family: RobotoMono
+      fonts:
+        - asset: fonts/RobotoMono-Regular.ttf
