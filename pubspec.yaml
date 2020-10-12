@@ -13,22 +13,21 @@ dependencies:
     sdk: flutter
 
   #markdown data parser
-  markdown:
-      git: https://github.com/dart-lang/markdown.git
+  markdown: ^2.1.8
   #highlight code
   highlight: ^0.6.0
   flutter_highlight: ^0.6.0
 
   #html tag parser
-  html: ^0.14.0+3
+  html: ^0.14.0+4
 
   # for 'video' tag
-  video_player_web: ^0.1.2+1
-  video_player: ^0.10.5
+  video_player_web: ^0.1.4
+  video_player: ^0.10.12+5
   chewie: ^0.9.10
 
   # for TOC
-  scrollable_positioned_list: ^0.1.7
+  scrollable_positioned_list: ^0.1.8
 
 dev_dependencies:
   flutter_test:
