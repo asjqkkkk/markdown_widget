@@ -1,4 +1,7 @@
-#### [1.2.4] - update markdown package to fix the [issue](https://github.com/dart-lang/markdown/issues/300), improve TOC widget performance
+
+#### [1.2.5] - update markdown package to fix the [issue](https://github.com/dart-lang/markdown/issues/300), improve TOC widget performance
+
+#### [1.2.4] - update dependencies
 
 #### [1.2.3] - add comments for some methods, merge pr [#42](https://github.com/asjqkkkk/markdown_widget/pull/42)
 
