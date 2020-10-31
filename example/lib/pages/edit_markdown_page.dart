@@ -67,10 +67,10 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
           child: MarkdownWidget(
             data: initialText + text,
             styleConfig: StyleConfig(
-              pConfig: PConfig(
-                onLinkTap: (url) => _launchURL(url),
-              ),
-            ),
+                pConfig: PConfig(
+                  onLinkTap: (url) => _launchURL(url),
+                ),
+                videoConfig: VideoConfig(autoInitialize: true)),
           ),
         ),
       ],

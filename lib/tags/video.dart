@@ -1,4 +1,3 @@
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:markdown/markdown.dart' as m;
@@ -23,7 +22,7 @@ Widget defaultVideoWidget(Map<String, String> attributes, {String url}) {
   final video = Container(
     width: width,
     height: height,
-    child: CheWieVideoWidget(
+    child: VideoWidget(
       url: url ?? attributes['src'],
       config: config,
     ),
@@ -39,57 +38,132 @@ class VideoConfig {
   final bool autoPlay;
   final bool autoInitialize;
   final bool looping;
-  final bool allowMuting;
+
+//  final bool allowMuting;
   final VideoWrapper wrapperBuilder;
 
-  VideoConfig(this.wrapperBuilder,
-      {this.aspectRatio,
-      this.autoPlay,
-      this.autoInitialize,
-      this.looping,
-      this.allowMuting});
+  VideoConfig({
+    this.aspectRatio,
+    this.wrapperBuilder,
+    this.autoPlay,
+    this.autoInitialize,
+    this.looping,
+//    this.allowMuting,
+  });
 }
 
-class CheWieVideoWidget extends StatefulWidget {
+class VideoWidget extends StatefulWidget {
   final String url;
   final VideoConfig config;
 
-  const CheWieVideoWidget({Key key, @required this.url, this.config})
+  const VideoWidget({Key key, @required this.url, this.config})
       : super(key: key);
 
   @override
-  _CheWieVideoWidgetState createState() => _CheWieVideoWidgetState();
+  _VideoWidgetState createState() => _VideoWidgetState();
 }
 
-class _CheWieVideoWidgetState extends State<CheWieVideoWidget> {
+class _VideoWidgetState extends State<VideoWidget> {
   VideoPlayerController _videoPlayerController;
-  ChewieController _chewieController;
+
+  bool isButtonHiding = false;
 
   @override
   void initState() {
     final config = widget.config;
     _videoPlayerController = VideoPlayerController.network(widget.url);
-    _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController,
-        aspectRatio: config?.aspectRatio ?? 3 / 2,
-        autoPlay: config?.autoPlay ?? false,
-        autoInitialize: config?.autoInitialize ?? true,
-        looping: config?.looping ?? false,
-        allowMuting: config?.allowMuting ?? false);
+    if (config?.autoInitialize ?? false) {
+      _videoPlayerController.initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        refresh();
+      });
+    }
+    if (config?.autoPlay ?? false) _videoPlayerController.play();
+    _videoPlayerController.addListener(onListen);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Chewie(
-      controller: _chewieController,
+    final hasSize = _videoPlayerController.value.size != null;
+    final config = widget.config;
+    final initialized = _videoPlayerController.value.initialized;
+    final isPlaying = _videoPlayerController.value.isPlaying;
+    final aspectRatio =
+        config?.aspectRatio ?? _videoPlayerController.value.aspectRatio;
+
+    return initialized
+        ? AspectRatio(
+            aspectRatio: aspectRatio,
+            child: Stack(
+              children: [
+                GestureDetector(
+                  child: VideoPlayer(_videoPlayerController),
+                  onPanDown: (detail) {
+                    if (isButtonHiding) {
+                      isButtonHiding = false;
+                      refresh();
+                      hideButton();
+                    }
+                  },
+                ),
+                buildPlayButton(isPlaying)
+              ],
+            ),
+          )
+        : Container();
+  }
+
+  Widget buildPlayButton(bool isPlaying) {
+    if (isButtonHiding && isPlaying) return Container();
+    return Center(
+      child: Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+            shape: BoxShape.circle, color: Colors.grey.withOpacity(0.3)),
+        child: IconButton(
+          icon: Icon(
+            isPlaying ? Icons.pause : Icons.play_arrow,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            isPlaying
+                ? _videoPlayerController.pause()
+                : _videoPlayerController.play();
+            refresh();
+            hideButton();
+          },
+        ),
+      ),
     );
+  }
+
+  void hideButton() {
+    if (!isButtonHiding) {
+      Future.delayed(Duration(seconds: 1), () {
+        if (isButtonHiding) return;
+        isButtonHiding = true;
+        refresh();
+      });
+    }
+  }
+
+  void onListen() {
+    if (_videoPlayerController.value.position ==
+        _videoPlayerController.value.duration) {
+      if (widget.config?.looping ?? false) _videoPlayerController.play();
+    }
   }
 
   @override
   void dispose() {
+    _videoPlayerController.removeListener(onListen);
     _videoPlayerController.dispose();
-    _chewieController.dispose();
     super.dispose();
+  }
+
+  void refresh() {
+    if (mounted) setState(() {});
   }
 }
