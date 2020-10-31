@@ -1,5 +1,5 @@
 
-#### [1.2.5] - update markdown package to fix the [issue](https://github.com/dart-lang/markdown/issues/300), improve TOC widget performance
+#### [1.2.5] - update markdown package to fix the [issue](https://github.com/dart-lang/markdown/issues/300), remove `chewie` package
 
 #### [1.2.4] - update dependencies
 
