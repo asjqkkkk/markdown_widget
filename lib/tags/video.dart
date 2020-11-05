@@ -85,7 +85,6 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final hasSize = _videoPlayerController.value.size != null;
     final config = widget.config;
     final initialized = _videoPlayerController.value.initialized;
     final isPlaying = _videoPlayerController.value.isPlaying;
