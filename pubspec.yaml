@@ -1,6 +1,6 @@
 name: markdown_widget
 description: A new markdown package. It supports TOC function, HTML video and img tag，and it works well on both the web and mobile
-version: 1.2.5
+version: 1.2.6
 verified publisher:
   - agedchen@gmail.com
 homepage: https://github.com/asjqkkkk/markdown_widget
@@ -23,7 +23,7 @@ dependencies:
 
   # for 'video' tag
   video_player_web: ^0.1.4
-  video_player: ^0.11.1+2
+  video_player: ^1.0.0
 
   # for TOC
   scrollable_positioned_list: ^0.1.8
