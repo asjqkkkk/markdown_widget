@@ -29,5 +29,8 @@ Please use `flutter doctor -v` to show your flutter enviroment
 **Platform**
 Does the problem appear on the **Web** or on the **Mobile**？
 
+**Environment**
+Use `flutter doctor` to provider your environment infomation
+
 **Additional context**
 Add any other context about the problem here.
