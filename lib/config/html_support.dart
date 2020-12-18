@@ -7,9 +7,7 @@ import '../tags/markdown_tags.dart';
 ///use [htmlToMarkdown] to convert HTML in [m.Text] to [m.Node]
 void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
   if (node == null) return;
-  if (node is h.Text) {
-    mNodes.add(m.Text(node.text));
-  } else if (node is h.Element) {
+  if (node is h.Element) {
     final tag = node.localName;
     if (tag == img || tag == video) {
       final element = m.Element(tag, null);
