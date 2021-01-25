@@ -22,8 +22,8 @@ dependencies:
   html: ^0.14.0+4
 
   # for 'video' tag
-  video_player_web: ^0.1.4
-  video_player: ^1.0.0
+#  video_player_web: ^0.1.4
+#  video_player: ^1.0.0
 
   # for TOC
   scrollable_positioned_list: ^0.1.8

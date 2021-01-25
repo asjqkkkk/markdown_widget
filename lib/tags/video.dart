@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import 'package:markdown/markdown.dart' as m;
 import '../config/style_config.dart';
 
@@ -64,53 +63,34 @@ class VideoWidget extends StatefulWidget {
 }
 
 class _VideoWidgetState extends State<VideoWidget> {
-  VideoPlayerController _videoPlayerController;
+  // VideoPlayerController _videoPlayerController;
 
   bool isButtonHiding = false;
 
   @override
   void initState() {
     final config = widget.config;
-    _videoPlayerController = VideoPlayerController.network(widget.url);
-    if (config?.autoInitialize ?? false) {
-      _videoPlayerController.initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        refresh();
-      });
-    }
-    if (config?.autoPlay ?? false) _videoPlayerController.play();
-    _videoPlayerController.addListener(onListen);
+    // _videoPlayerController = VideoPlayerController.network(widget.url);
+    // if (config?.autoInitialize ?? false) {
+    //   _videoPlayerController.initialize().then((_) {
+    //     // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+    //     refresh();
+    //   });
+    // }
+    // if (config?.autoPlay ?? false) _videoPlayerController.play();
+    // _videoPlayerController.addListener(onListen);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final config = widget.config;
-    final initialized = _videoPlayerController.value.initialized;
-    final isPlaying = _videoPlayerController.value.isPlaying;
-    final aspectRatio =
-        config?.aspectRatio ?? _videoPlayerController.value.aspectRatio;
+    // final initialized = _videoPlayerController.value.initialized;
+    // final isPlaying = _videoPlayerController.value.isPlaying;
+    // final aspectRatio =
+    //     config?.aspectRatio ?? _videoPlayerController.value.aspectRatio;
 
-    return initialized
-        ? AspectRatio(
-            aspectRatio: aspectRatio,
-            child: Stack(
-              children: [
-                GestureDetector(
-                  child: VideoPlayer(_videoPlayerController),
-                  onPanDown: (detail) {
-                    if (isButtonHiding) {
-                      isButtonHiding = false;
-                      refresh();
-                      hideButton();
-                    }
-                  },
-                ),
-                buildPlayButton(isPlaying)
-              ],
-            ),
-          )
-        : Container();
+    return Container();
   }
 
   Widget buildPlayButton(bool isPlaying) {
@@ -127,9 +107,9 @@ class _VideoWidgetState extends State<VideoWidget> {
             color: Colors.white,
           ),
           onPressed: () {
-            isPlaying
-                ? _videoPlayerController.pause()
-                : _videoPlayerController.play();
+            // isPlaying
+            //     ? _videoPlayerController.pause()
+            //     : _videoPlayerController.play();
             refresh();
             hideButton();
           },
@@ -149,16 +129,16 @@ class _VideoWidgetState extends State<VideoWidget> {
   }
 
   void onListen() {
-    if (_videoPlayerController.value.position ==
-        _videoPlayerController.value.duration) {
-      if (widget.config?.looping ?? false) _videoPlayerController.play();
-    }
+    // if (_videoPlayerController.value.position ==
+    //     _videoPlayerController.value.duration) {
+    //   if (widget.config?.looping ?? false) _videoPlayerController.play();
+    // }
   }
 
   @override
   void dispose() {
-    _videoPlayerController.removeListener(onListen);
-    _videoPlayerController.dispose();
+    // _videoPlayerController.removeListener(onListen);
+    // _videoPlayerController.dispose();
     super.dispose();
   }
 
