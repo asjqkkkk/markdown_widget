@@ -200,7 +200,6 @@ package | explain
 [html](https://pub.flutter-io.cn/packages/html) | parse html data
 [video_player_web](https://pub.flutter-io.cn/packages/video_player_web) | play video in flutter web
 [video_player](https://pub.flutter-io.cn/packages/video_player) | video interface
-[chewie](https://pub.flutter-io.cn/packages/chewie) | a simple and beautiful video player
 [scrollable_positioned_list](https://pub.flutter-io.cn/packages/scrollable_positioned_list) | for TOC function
 
 ## The reason why I created this package
