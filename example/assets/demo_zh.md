@@ -201,7 +201,6 @@ import 'package:markdown_widget/config/highlight_themes.dart' as theme;
 [html](https://pub.flutter-io.cn/packages/html) | 解析markdown没有解析的html标签
 [video_player_web](https://pub.flutter-io.cn/packages/video_player_web) | 在flutter web上播放视频
 [video_player](https://pub.flutter-io.cn/packages/video_player) | 视频接口
-[chewie](https://pub.flutter-io.cn/packages/chewie) | 一个简单漂亮的视频播放器
 [scrollable_positioned_list](https://pub.flutter-io.cn/packages/scrollable_positioned_list) | 用于实现TOC功能
 
 ## 为什么我要创建这个库
