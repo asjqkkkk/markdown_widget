@@ -5,11 +5,19 @@ import '../tags/markdown_tags.dart';
 
 ///see this issue: https://github.com/dart-lang/markdown/issues/284#event-3216258013
 ///use [htmlToMarkdown] to convert HTML in [m.Text] to [m.Node]
-void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
+
+///if [deep]>1 , parent will always not be null
+void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes,
+    {m.Element parent}) {
   if (node == null) return;
   if (node is h.Text) {
-    mNodes.add(m.Text(node.text));
+    if (deep == 0) {
+      mNodes.add(m.Text(node.text));
+    } else {
+      parent.children.add(m.Text(node.text));
+    }
   } else if (node is h.Element) {
+
     final tag = node.localName;
     if (tag == img || tag == video) {
       final element = m.Element(tag, null);
@@ -19,12 +27,21 @@ void htmlToMarkdown(h.Node node, int deep, List<m.Node> mNodes) {
       final element = m.Element(tag, null);
       element.attributes.addAll(node.attributes.cast());
       final customElement = m.Element(other, [element]);
-      mNodes.add(customElement);
+
+      if (deep == 0) {
+        mNodes.add(customElement);
+        if (node.nodes == null || node.nodes.isEmpty) return;
+        node.nodes.forEach((child) {
+          htmlToMarkdown(child, deep + 1, mNodes, parent: customElement);
+        });
+      } else {
+        parent.children.add(customElement);
+        if (node.nodes == null || node.nodes.isEmpty) return;
+        node.nodes.forEach((child) {
+          htmlToMarkdown(child, deep + 1, mNodes, parent: customElement);
+        });
+      }
     }
-    if (node.nodes == null || node.nodes.isEmpty) return;
-    node.nodes.forEach((n) {
-      htmlToMarkdown(n, deep + 1, mNodes);
-    });
   }
 }
 
