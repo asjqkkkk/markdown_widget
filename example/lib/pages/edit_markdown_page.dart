@@ -68,12 +68,6 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
             data: initialText + text,
             styleConfig: StyleConfig(
                 pConfig: PConfig(
-                  custom: (n){
-                    if(n.tag=='font'){
-                      return Container(color: Colors.red,child: Text('childCount ${n.children?.length}'),);
-                    }
-                    return Container();
-                  },
                   onLinkTap: (url) => _launchURL(url),
                 ),
                 videoConfig: VideoConfig(autoInitialize: true)),
