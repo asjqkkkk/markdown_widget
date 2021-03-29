@@ -89,7 +89,6 @@ class P {
       List<m.Node> nodes, m.Node parentNode, TextStyle parentStyle,
       {bool selectable = true}) {
     if (nodes == null || nodes.isEmpty) return TextSpan();
-    final textContent = StyleConfig().pConfig?.textContent;
     return TextSpan(
       children: List.generate(
         nodes.length,
@@ -98,7 +97,7 @@ class P {
           final node = nodes[index];
           if (node is m.Text)
             return buildTextSpan(
-                node, parentStyle, shouldParseHtml, selectable,textContent);
+                node, parentStyle, shouldParseHtml, selectable);
           else if (node is m.Element) {
             if (node.tag == code) return getCodeSpan(node);
             if (node.tag == img) return getImageSpan(node);
@@ -120,10 +119,9 @@ class P {
   }
 
   InlineSpan buildTextSpan(m.Text node, TextStyle parentStyle,
-      bool shouldParseHtml, bool selectable,Function textContent) {
+      bool shouldParseHtml, bool selectable) {
     final nodes = shouldParseHtml ? parseHtml(node) : [];
     if (nodes.isEmpty) {
-      textContent(node.text);
       return selectable
           ? WidgetSpan(child: SelectableText(node.text, style: parentStyle))
           : TextSpan(text: node.text, style: parentStyle);
@@ -216,7 +214,6 @@ class PConfig {
   final OnLinkTap onLinkTap;
   final LinkGesture linkGesture;
   final Custom custom;
-  final TextContent textContent;
 
   PConfig({
     this.textStyle,
@@ -229,7 +226,6 @@ class PConfig {
     this.selectable,
     this.linkGesture,
     this.custom,
-    this.textContent
   });
 }
 
