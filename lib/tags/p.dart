@@ -239,3 +239,4 @@ class TextConfig {
 typedef void OnLinkTap(String url);
 typedef Widget LinkGesture(Widget linkWidget, String url);
 typedef Widget Custom(m.Element element);
+typedef void TextContent(String text);
