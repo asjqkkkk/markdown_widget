@@ -163,6 +163,8 @@ class HighlightView extends StatelessWidget {
       ),
       textAlign: StyleConfig().preConfig?.textAlign,
       textDirection: StyleConfig().preConfig?.textDirection,
+      scrollPhysics: NeverScrollableScrollPhysics(),
+
     );
   }
 }
