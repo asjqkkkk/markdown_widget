@@ -7,87 +7,87 @@ export '../tags/all_tags.dart';
 class StyleConfig {
   StyleConfig._internal();
 
-  static StyleConfig _obj;
+  static StyleConfig? _obj;
 
   factory StyleConfig({
-    CheckBoxBuilder checkBoxBuilder,
-    ImgBuilder imgBuilder,
-    ImgConfig imgConfig,
-    VideoBuilder videoBuilder,
-    VideoConfig videoConfig,
-    TitleConfig titleConfig,
-    PConfig pConfig,
-    CodeConfig codeConfig,
-    OlConfig olConfig,
-    UlConfig ulConfig,
-    PreConfig preConfig,
-    BlockQuoteConfig blockQuoteConfig,
-    TableConfig tableConfig,
-    HrConfig hrConfig,
-    CheckBoxConfig checkBoxConfig,
-    Map<String, dynamic> markdownTheme,
+    CheckBoxBuilder? checkBoxBuilder,
+    ImgBuilder? imgBuilder,
+    ImgConfig? imgConfig,
+    VideoBuilder? videoBuilder,
+    VideoConfig? videoConfig,
+    TitleConfig? titleConfig,
+    PConfig? pConfig,
+    CodeConfig? codeConfig,
+    OlConfig? olConfig,
+    UlConfig? ulConfig,
+    PreConfig? preConfig,
+    BlockQuoteConfig? blockQuoteConfig,
+    TableConfig? tableConfig,
+    HrConfig? hrConfig,
+    CheckBoxConfig? checkBoxConfig,
+    Map<String, dynamic>? markdownTheme,
   }) {
     _obj ??= StyleConfig._internal();
-    _obj.imgBuilder = imgBuilder ?? _obj.imgBuilder;
-    _obj.imgConfig = imgConfig ?? _obj.imgConfig;
-    _obj.videoBuilder = videoBuilder ?? _obj.videoBuilder;
-    _obj.checkBoxBuilder = checkBoxBuilder ?? _obj.checkBoxBuilder;
-    _obj.titleConfig = titleConfig ?? _obj.titleConfig;
-    _obj.videoConfig = videoConfig ?? _obj.videoConfig;
-    _obj.pConfig = pConfig ?? _obj.pConfig;
-    _obj.codeConfig = codeConfig ?? _obj.codeConfig;
-    _obj.olConfig = olConfig ?? _obj.olConfig;
-    _obj.ulConfig = ulConfig ?? _obj.ulConfig;
-    _obj.preConfig = preConfig ?? _obj.preConfig;
-    _obj.blockQuoteConfig = blockQuoteConfig ?? _obj.blockQuoteConfig;
-    _obj.tableConfig = tableConfig ?? _obj.tableConfig;
-    _obj.hrConfig = hrConfig ?? _obj.hrConfig;
-    _obj.checkBoxConfig = checkBoxConfig ?? _obj.checkBoxConfig;
-    _obj.markdownTheme = markdownTheme ?? _obj.markdownTheme;
-    return _obj;
+    _obj!.imgBuilder = imgBuilder ?? _obj!.imgBuilder;
+    _obj!.imgConfig = imgConfig ?? _obj!.imgConfig;
+    _obj!.videoBuilder = videoBuilder ?? _obj!.videoBuilder;
+    _obj!.checkBoxBuilder = checkBoxBuilder ?? _obj!.checkBoxBuilder;
+    _obj!.titleConfig = titleConfig ?? _obj!.titleConfig;
+    _obj!.videoConfig = videoConfig ?? _obj!.videoConfig;
+    _obj!.pConfig = pConfig ?? _obj!.pConfig;
+    _obj!.codeConfig = codeConfig ?? _obj!.codeConfig;
+    _obj!.olConfig = olConfig ?? _obj!.olConfig;
+    _obj!.ulConfig = ulConfig ?? _obj!.ulConfig;
+    _obj!.preConfig = preConfig ?? _obj!.preConfig;
+    _obj!.blockQuoteConfig = blockQuoteConfig ?? _obj!.blockQuoteConfig;
+    _obj!.tableConfig = tableConfig ?? _obj!.tableConfig;
+    _obj!.hrConfig = hrConfig ?? _obj!.hrConfig;
+    _obj!.checkBoxConfig = checkBoxConfig ?? _obj!.checkBoxConfig;
+    _obj!.markdownTheme = markdownTheme ?? _obj!.markdownTheme;
+    return _obj!;
   }
 
   ///input
-  CheckBoxBuilder checkBoxBuilder;
-  CheckBoxConfig checkBoxConfig;
+  CheckBoxBuilder? checkBoxBuilder;
+  CheckBoxConfig? checkBoxConfig;
 
   ///img
-  ImgBuilder imgBuilder;
-  ImgConfig imgConfig;
+  ImgBuilder? imgBuilder;
+  ImgConfig? imgConfig;
 
   ///video
-  VideoBuilder videoBuilder;
-  VideoConfig videoConfig;
+  VideoBuilder? videoBuilder;
+  VideoConfig? videoConfig;
 
   ///h1~h5
-  TitleConfig titleConfig;
+  TitleConfig? titleConfig;
 
   ///p
-  PConfig pConfig;
+  PConfig? pConfig;
 
   ///code
-  CodeConfig codeConfig;
+  CodeConfig? codeConfig;
 
   ///ol
-  OlConfig olConfig;
+  OlConfig? olConfig;
 
   ///ul
-  UlConfig ulConfig;
+  UlConfig? ulConfig;
 
   ///pre
-  PreConfig preConfig;
+  PreConfig? preConfig;
 
   ///blockquote
-  BlockQuoteConfig blockQuoteConfig;
+  BlockQuoteConfig? blockQuoteConfig;
 
   ///table
-  TableConfig tableConfig;
+  TableConfig? tableConfig;
 
   ///hr
-  HrConfig hrConfig;
+  HrConfig? hrConfig;
 
   ///MarkdownTheme, default is light
-  Map<String, dynamic> markdownTheme;
+  Map<String, dynamic>? markdownTheme;
 }
 
 class MarkdownTheme {
@@ -116,11 +116,11 @@ TextStyle getTextStyle(String tag) {
 Map<String, dynamic> get _theme => StyleConfig().markdownTheme ?? light_theme;
 
 /// default style of tag: p
-TextStyle get defaultPStyle => _theme['PStyle'] ?? light_theme['PStyle'];
+TextStyle? get defaultPStyle => _theme['PStyle'] ?? light_theme['PStyle'] as TextStyle?;
 
 /// default style of tag: code
-TextStyle get defaultCodeStyle =>
-    _theme['CodeStyle'] ?? light_theme['CodeStyle'];
+TextStyle? get defaultCodeStyle =>
+    _theme['CodeStyle'] ?? light_theme['CodeStyle'] as TextStyle?;
 
 /// default style of delete text
 TextStyle get defaultDelStyle =>
@@ -133,41 +133,41 @@ TextStyle get defaultEmStyle => TextStyle(fontStyle: FontStyle.italic);
 TextStyle get defaultStrongStyle => TextStyle(fontWeight: FontWeight.bold);
 
 /// default style of tag: blockquote
-TextStyle get defaultBlockStyle =>
-    _theme['BlockStyle'] ?? light_theme['BlockStyle'];
+TextStyle? get defaultBlockStyle =>
+    _theme['BlockStyle'] ?? light_theme['BlockStyle'] as TextStyle?;
 
 /// default style of tag: a
-TextStyle get defaultLinkStyle =>
-    _theme['LinkStyle'] ?? light_theme['LinkStyle'];
+TextStyle? get defaultLinkStyle =>
+    _theme['LinkStyle'] ?? light_theme['LinkStyle'] as TextStyle?;
 
 /// default background color of tag: code
-Color get defaultCodeBackground =>
-    _theme['CodeBackground'] ?? light_theme['CodeBackground'];
+Color? get defaultCodeBackground =>
+    _theme['CodeBackground'] ?? light_theme['CodeBackground'] as Color?;
 
 /// default border color of tag: table
-Color get defaultTableBorderColor =>
-    _theme['TableBorderColor'] ?? light_theme['TableBorderColor'];
+Color? get defaultTableBorderColor =>
+    _theme['TableBorderColor'] ?? light_theme['TableBorderColor'] as Color?;
 
 /// default divider color of tag: hr and h1~h6
-Color get defaultDividerColor =>
-    _theme['DividerColor'] ?? light_theme['DividerColor'];
+Color? get defaultDividerColor =>
+    _theme['DividerColor'] ?? light_theme['DividerColor'] as Color?;
 
 /// default background color of tag: blockquote
-Color get defaultBlockColor =>
-    _theme['BlockColor'] ?? light_theme['BlockColor'];
+Color? get defaultBlockColor =>
+    _theme['BlockColor'] ?? light_theme['BlockColor'] as Color?;
 
 /// default background color of tag: pre
-Color get defaultPreBackground =>
-    _theme['PreBackground'] ?? light_theme['PreBackground'];
+Color? get defaultPreBackground =>
+    _theme['PreBackground'] ?? light_theme['PreBackground'] as Color?;
 
 /// default text color of tag: h1~h5
-Color get defaultTitleColor =>
-    _theme['TitleColor'] ?? light_theme['TitleColor'];
+Color? get defaultTitleColor =>
+    _theme['TitleColor'] ?? light_theme['TitleColor'] as Color?;
 
 /// default color of unOrderly index widget
-Color get defaultUlDotColor =>
-    _theme['UlDotColor'] ?? light_theme['UlDotColor'];
+Color? get defaultUlDotColor =>
+    _theme['UlDotColor'] ?? light_theme['UlDotColor'] as Color?;
 
 /// default theme of highlight code
-Map<String, TextStyle> get defaultHighLightCodeTheme =>
-    _theme['HightLightCodeTheme'] ?? light_theme['HightLightCodeTheme'];
+Map<String, TextStyle>? get defaultHighLightCodeTheme =>
+    _theme['HightLightCodeTheme'] ?? light_theme['HightLightCodeTheme'] as Map<String, TextStyle>?;

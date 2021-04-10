@@ -13,20 +13,20 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class P {
   P._internal();
 
-  static P _instance;
+  static P? _instance;
 
   factory P() {
     _instance ??= P._internal();
-    return _instance;
+    return _instance!;
   }
 
   ///Tag:  p
   Widget getPWidget(
-    List<m.Node> children,
+    List<m.Node>? children,
     m.Node parentNode, {
-    TextStyle textStyle,
-    bool selectable,
-    TextConfig textConfig,
+    TextStyle? textStyle,
+    bool? selectable,
+    TextConfig? textConfig,
     WrapCrossAlignment crossAxisAlignment = WrapCrossAlignment.center,
   }) {
     final configSelectable =
@@ -44,15 +44,15 @@ class P {
   ///flutter web can't use WidgetSpan now.so this is another solution
   ///you can also use this in mobile，but it will finally be replaced by [buildRichText]
   Widget buildWebRichText(
-      List<m.Node> nodes,
+      List<m.Node>? nodes,
       m.Node parentNode,
-      TextStyle style,
+      TextStyle? style,
       bool selectable,
       WrapCrossAlignment crossAxisAlignment,
-      TextConfig textConfig) {
+      TextConfig? textConfig) {
     if (nodes == null) return Container();
     List<Widget> children = [];
-    final config = StyleConfig()?.pConfig;
+    final config = StyleConfig().pConfig;
     buildBlockWidgets(
         nodes,
         parentNode,
@@ -66,8 +66,8 @@ class P {
     );
   }
 
-  RichText buildRichText(List<m.Node> children, m.Node parentNode,
-      TextStyle textStyle, bool selectable, TextConfig textConfig) {
+  RichText buildRichText(List<m.Node>? children, m.Node parentNode,
+      TextStyle? textStyle, bool selectable, TextConfig? textConfig) {
     final config = StyleConfig().pConfig;
     return RichText(
       softWrap: true,
@@ -86,7 +86,7 @@ class P {
   }
 
   InlineSpan getBlockSpan(
-      List<m.Node> nodes, m.Node parentNode, TextStyle parentStyle,
+      List<m.Node>? nodes, m.Node parentNode, TextStyle? parentStyle,
       {bool selectable = true}) {
     if (nodes == null || nodes.isEmpty) return TextSpan();
     return TextSpan(
@@ -108,7 +108,7 @@ class P {
             return getBlockSpan(
               node.children,
               node,
-              parentStyle.merge(getTextStyle(node.tag)),
+              parentStyle!.merge(getTextStyle(node.tag)),
               selectable: selectable,
             );
           }
@@ -118,7 +118,7 @@ class P {
     );
   }
 
-  InlineSpan buildTextSpan(m.Text node, TextStyle parentStyle,
+  InlineSpan buildTextSpan(m.Text node, TextStyle? parentStyle,
       bool shouldParseHtml, bool selectable) {
     final nodes = shouldParseHtml ? parseHtml(node) : [];
     if (nodes.isEmpty) {
@@ -126,17 +126,17 @@ class P {
           ? WidgetSpan(child: SelectableText(node.text, style: parentStyle))
           : TextSpan(text: node.text, style: parentStyle);
     } else {
-      return getBlockSpan(nodes, node, parentStyle, selectable: selectable);
+      return getBlockSpan(nodes as List<m.Node>?, node, parentStyle, selectable: selectable);
     }
   }
 
   void buildBlockWidgets(
-      List<m.Node> nodes,
+      List<m.Node>? nodes,
       m.Node parentNode,
-      TextStyle parentStyle,
+      TextStyle? parentStyle,
       List<Widget> widgets,
       bool selectable,
-      TextConfig textConfig) {
+      TextConfig? textConfig) {
     if (nodes == null || nodes.isEmpty) return;
     nodes.forEach((node) {
       bool shouldParseHtml = needParseHtml(parentNode);
@@ -160,7 +160,7 @@ class P {
           buildBlockWidgets(
               node.children,
               node,
-              parentStyle.merge(getTextStyle(node.tag)),
+              parentStyle!.merge(getTextStyle(node.tag)),
               widgets,
               selectable,
               textConfig);
@@ -173,11 +173,11 @@ class P {
     m.Text node,
     bool selectable,
     bool shouldParseHtml,
-    TextStyle parentStyle,
-    TextConfig textConfig,
+    TextStyle? parentStyle,
+    TextConfig? textConfig,
   ) {
     final nodes = shouldParseHtml ? parseHtml(node) : [];
-    final config = StyleConfig()?.pConfig;
+    final config = StyleConfig().pConfig;
     if (nodes.isEmpty) {
       widgets.add(selectable
           ? SelectableText(
@@ -195,7 +195,7 @@ class P {
                   config?.textConfig?.textDirection,
             ));
     } else {
-      widgets.add(getPWidget(nodes, node,
+      widgets.add(getPWidget(nodes as List<m.Node>?, node,
           textStyle: parentStyle,
           selectable: selectable,
           textConfig: textConfig));
@@ -204,16 +204,16 @@ class P {
 }
 
 class PConfig {
-  final TextStyle textStyle;
-  final TextStyle linkStyle;
-  final TextStyle delStyle;
-  final TextStyle emStyle;
-  final TextStyle strongStyle;
-  final TextConfig textConfig;
-  final bool selectable;
-  final OnLinkTap onLinkTap;
-  final LinkGesture linkGesture;
-  final Custom custom;
+  final TextStyle? textStyle;
+  final TextStyle? linkStyle;
+  final TextStyle? delStyle;
+  final TextStyle? emStyle;
+  final TextStyle? strongStyle;
+  final TextConfig? textConfig;
+  final bool? selectable;
+  final OnLinkTap? onLinkTap;
+  final LinkGesture? linkGesture;
+  final Custom? custom;
 
   PConfig({
     this.textStyle,
@@ -230,12 +230,12 @@ class PConfig {
 }
 
 class TextConfig {
-  final TextAlign textAlign;
-  final TextDirection textDirection;
+  final TextAlign? textAlign;
+  final TextDirection? textDirection;
 
   TextConfig({this.textAlign, this.textDirection});
 }
 
-typedef void OnLinkTap(String url);
-typedef Widget LinkGesture(Widget linkWidget, String url);
+typedef void OnLinkTap(String? url);
+typedef Widget LinkGesture(Widget linkWidget, String? url);
 typedef Widget Custom(m.Element element);

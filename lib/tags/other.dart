@@ -9,7 +9,7 @@ InlineSpan getOtherWidgetSpan(m.Element node) =>
 ///the custom widget
 Widget getOtherWidget(m.Element node) {
   final customWidget = StyleConfig().pConfig?.custom;
-  final m.Element customNode = node.children[0];
+  final m.Element customNode = node.children![0] as m.Element;
   if (customWidget != null) {
     return customWidget.call(customNode);
   } else {

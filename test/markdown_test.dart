@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:html/dom.dart' as h;
 import 'package:html/parser.dart';
 
-void printNode(m.Node node, int deep) {
+void printNode(m.Node? node, int deep) {
   if (node == null) return;
   if (node is m.Text) {
     final text = node.text;
@@ -21,19 +21,19 @@ void printNode(m.Node node, int deep) {
   } else if (node is m.Element) {
     print('${'  ' * deep}Tag:${node.tag}   attr:${node.attributes}');
     if (node.children == null) return;
-    node.children.forEach((n) {
+    node.children!.forEach((n) {
       printNode(n, deep + 1);
     });
   }
 }
 
-void htmlPrintNode(h.Node node, int deep) {
+void htmlPrintNode(h.Node? node, int deep) {
   if (node == null) return;
   if (node is h.Text) {
     print('${'  ' * deep}h.Text:${node.text}');
   } else if (node is h.Element) {
     print('${'  ' * deep}h.Tag:${node.localName}   h.attr:${node.attributes}');
-    if (node.nodes == null || node.nodes.isEmpty) return;
+    if (node.nodes.isEmpty) return;
     node.nodes.forEach((n) {
       htmlPrintNode(n, deep + 1);
     });

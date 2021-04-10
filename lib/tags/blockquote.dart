@@ -7,11 +7,11 @@ import 'p.dart';
 class Bq {
   Bq._internal();
 
-  static Bq _instance;
+  static Bq? _instance;
 
   factory Bq() {
     _instance ??= Bq._internal();
-    return _instance;
+    return _instance!;
   }
 
   ///the blockQuote widget
@@ -22,7 +22,7 @@ class Bq {
       decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
-                color: config?.blockColor ?? defaultBlockColor,
+                color: config?.blockColor ?? defaultBlockColor!,
                 width: config?.blockWidth ?? 4),
           ),
           color: config?.backgroundColor),
@@ -35,12 +35,12 @@ class Bq {
 }
 
 class BlockQuoteConfig {
-  final TextStyle blockStyle;
-  final TextConfig textConfig;
-  final Color blockColor;
-  final Color backgroundColor;
-  final double blockWidth;
-  final double leftSpace;
+  final TextStyle? blockStyle;
+  final TextConfig? textConfig;
+  final Color? blockColor;
+  final Color? backgroundColor;
+  final double? blockWidth;
+  final double? leftSpace;
 
   BlockQuoteConfig({
     this.blockStyle,

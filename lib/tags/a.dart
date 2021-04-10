@@ -10,7 +10,7 @@ InlineSpan getLinkSpan(m.Element element) =>
 
 ///the link widget
 Widget defaultAWidget(m.Element element) {
-  PConfig pConfig = StyleConfig().pConfig;
+  PConfig? pConfig = StyleConfig().pConfig;
   final url = element.attributes['href'];
   final linkWidget = P().getPWidget(
     element.children,
