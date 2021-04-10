@@ -1,3 +1,5 @@
+#### [1.2.6-nullsafety] - migrating to null safety
+
 #### [1.2.6] - modify some description in README, upgrade `video_player` dependencies
 
 #### [1.2.5] - update markdown package to fix the [issue](https://github.com/dart-lang/markdown/issues/300), remove `chewie` package

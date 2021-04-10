@@ -10,11 +10,11 @@ import '../config/style_config.dart';
 class MTable {
   MTable._internal();
 
-  static MTable _instance;
+  static MTable? _instance;
 
   factory MTable() {
     _instance ??= MTable._internal();
-    return _instance;
+    return _instance!;
   }
 
   ///the table widget
@@ -22,9 +22,9 @@ class MTable {
     if (node.children == null) return SizedBox();
     final config = StyleConfig().tableConfig;
 
-    TableRow header;
+    TableRow? header;
     List<TableRow> body = [];
-    for (var childNode in node.children) {
+    for (var childNode in node.children!) {
       if (childNode is m.Element) {
         if (childNode.tag == thead)
           header = _buildHeader(childNode, config);
@@ -38,7 +38,7 @@ class MTable {
       defaultColumnWidth: config?.defaultColumnWidth ?? const FlexColumnWidth(),
       textBaseline: config?.textBaseline,
       textDirection: config?.textDirection,
-      border: config?.border ?? TableBorder.all(color: defaultTableBorderColor),
+      border: config?.border ?? TableBorder.all(color: defaultTableBorderColor!),
       defaultVerticalAlignment:
           config?.defaultVerticalAlignment ?? TableCellVerticalAlignment.middle,
       children: body,
@@ -49,7 +49,7 @@ class MTable {
   ///get the head of table
   TableRow _buildHeader(
     m.Element node,
-    TableConfig config,
+    TableConfig? config,
   ) {
     List<m.Element> thList = [];
     _buildTh(node, thList);
@@ -64,23 +64,23 @@ class MTable {
         }));
   }
 
-  void _buildTh(m.Node node, List<m.Element> thList) {
+  void _buildTh(m.Node? node, List<m.Element> thList) {
     if (node != null && node is m.Element) {
       if (node.tag == th) thList.add(node);
-      List.generate(node?.children?.length ?? 0,
-          (index) => _buildTh(node.children[index], thList));
+      List.generate(node.children?.length ?? 0,
+          (index) => _buildTh(node.children![index], thList));
     }
   }
 
   ///get the body of table
   List<TableRow> _buildBody(
     m.Element node,
-    TableConfig config,
+    TableConfig? config,
   ) {
     if (node.children == null) return [];
     List<TableRow> results = [];
     int maxRowSize = 0;
-    for (var trNode in node.children) {
+    for (var trNode in node.children!) {
       if (trNode is m.Element && trNode.tag == tr) {
         List<m.Element> tdList = [];
         _buildTd(trNode, tdList);
@@ -105,31 +105,31 @@ class MTable {
     return results;
   }
 
-  void _buildTd(m.Node node, List<m.Element> tdList) {
+  void _buildTd(m.Node? node, List<m.Element> tdList) {
     if (node != null && node is m.Element) {
       if (node.tag == td) tdList.add(node);
       List.generate(node.children?.length ?? 0,
-          (index) => _buildTd(node.children[index], tdList));
+          (index) => _buildTd(node.children![index], tdList));
     }
   }
 }
 
 class TableConfig {
-  final Map<int, TableColumnWidth> columnWidths;
-  final TableColumnWidth defaultColumnWidth;
-  final TextDirection textDirection;
-  final TableBorder border;
-  final TableCellVerticalAlignment defaultVerticalAlignment;
-  final TextBaseline textBaseline;
-  final Decoration headerRowDecoration;
-  final Decoration bodyRowDecoration;
-  final TextStyle headerStyle;
-  final TextStyle bodyStyle;
-  final TextConfig headerTextConfig;
-  final TextConfig bodyTextConfig;
-  final HeadChildWrapper headChildWrapper;
-  final BodyChildWrapper bodyChildWrapper;
-  final TableWrapper wrapBuilder;
+  final Map<int, TableColumnWidth>? columnWidths;
+  final TableColumnWidth? defaultColumnWidth;
+  final TextDirection? textDirection;
+  final TableBorder? border;
+  final TableCellVerticalAlignment? defaultVerticalAlignment;
+  final TextBaseline? textBaseline;
+  final Decoration? headerRowDecoration;
+  final Decoration? bodyRowDecoration;
+  final TextStyle? headerStyle;
+  final TextStyle? bodyStyle;
+  final TextConfig? headerTextConfig;
+  final TextConfig? bodyTextConfig;
+  final HeadChildWrapper? headChildWrapper;
+  final BodyChildWrapper? bodyChildWrapper;
+  final TableWrapper? wrapBuilder;
 
   TableConfig({
     this.columnWidths,

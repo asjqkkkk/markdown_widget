@@ -3,13 +3,13 @@ import 'package:markdown/markdown.dart' as m;
 
 /// you can use [WidgetConfig] to custom your tag widget
 class WidgetConfig {
-  WidgetBuilder p;
-  WidgetBuilder pre;
-  WidgetBuilder ul;
-  WidgetBuilder ol;
-  WidgetBuilder block;
-  WidgetBuilder hr;
-  WidgetBuilder table;
+  WidgetBuilder? p;
+  WidgetBuilder? pre;
+  WidgetBuilder? ul;
+  WidgetBuilder? ol;
+  WidgetBuilder? block;
+  WidgetBuilder? hr;
+  WidgetBuilder? table;
 
   WidgetConfig({
     this.p,

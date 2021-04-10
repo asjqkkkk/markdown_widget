@@ -6,10 +6,10 @@ import '../config/style_config.dart';
 InlineSpan getInputSpan(m.Element node) {
   bool checked = true;
   if (node.attributes['checked'] != null) {
-    checked = node.attributes['checked'].toLowerCase() == 'true';
+    checked = node.attributes['checked']!.toLowerCase() == 'true';
   }
   return WidgetSpan(
-    child: StyleConfig()?.checkBoxBuilder?.call(checked, node.attributes) ??
+    child: StyleConfig().checkBoxBuilder?.call(checked, node.attributes) ??
         defaultCheckBox(node.attributes, checked: checked),
   );
 }
@@ -17,13 +17,13 @@ InlineSpan getInputSpan(m.Element node) {
 ///the check box widget
 Widget defaultCheckBox(
   Map<String, String> attributes, {
-  bool checked,
+  bool? checked,
 }) {
   if (checked == null && attributes['checked'] != null) {
-    checked = attributes['checked'].toLowerCase() == 'true';
+    checked = attributes['checked']!.toLowerCase() == 'true';
   }
   if (checked == null) checked = true;
-  final config = StyleConfig()?.checkBoxConfig;
+  final config = StyleConfig().checkBoxConfig;
   return MCheckBox(
     value: checked,
     config: config,
@@ -33,24 +33,24 @@ Widget defaultCheckBox(
 typedef Widget CheckBoxBuilder(bool checked, Map<String, String> attributes);
 
 class CheckBoxConfig {
-  final Color color;
-  final double size;
+  final Color? color;
+  final double? size;
 
   CheckBoxConfig({this.color, this.size});
 }
 
 class MCheckBox extends StatefulWidget {
-  final CheckBoxConfig config;
+  final CheckBoxConfig? config;
   final bool value;
 
-  const MCheckBox({Key key, this.config, this.value = true}) : super(key: key);
+  const MCheckBox({Key? key, this.config, this.value = true}) : super(key: key);
 
   @override
   _MCheckBoxState createState() => _MCheckBoxState();
 }
 
 class _MCheckBoxState extends State<MCheckBox> {
-  bool value;
+  late bool value;
 
   @override
   void initState() {

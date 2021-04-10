@@ -6,14 +6,14 @@ class TocListWidget extends StatefulWidget {
   final TocController controller;
 
   ///you can custom your item widget by [TocItem]
-  final TocItem tocItem;
+  final TocItem? tocItem;
 
   ///when there is no tocList, the [emptyWidget] will be shown
-  final Widget emptyWidget;
+  final Widget? emptyWidget;
 
   const TocListWidget({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.tocItem,
     this.emptyWidget,
   }) : super(key: key);
@@ -26,17 +26,17 @@ class _TocListWidgetState extends State<TocListWidget> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
   final ItemScrollController itemScrollController = ItemScrollController();
-  Toc currentToc;
-  LinkedHashMap<int, Toc> tocList;
+  Toc? currentToc;
+  LinkedHashMap<int, Toc>? tocList;
   int minIndex = 0;
   int maxIndex = 0;
 
   @override
   void initState() {
     final controller = widget.controller;
-    tocList = controller?._tocList;
-    currentToc = controller?._currentToc;
-    controller?.addListener(() {
+    tocList = controller._tocList;
+    currentToc = controller._currentToc;
+    controller.addListener(() {
       bool needRefresh = false;
       final toc = controller._currentToc;
       if (tocList != controller._tocList) {
@@ -45,7 +45,7 @@ class _TocListWidgetState extends State<TocListWidget> {
       }
       if (toc != null && currentToc != toc) {
         currentToc = toc;
-        final selfIndex = currentToc.selfIndex;
+        final selfIndex = currentToc!.selfIndex;
         if (selfIndex < minIndex || selfIndex > maxIndex) {
           itemScrollController.jumpTo(index: selfIndex);
         }
@@ -69,8 +69,8 @@ class _TocListWidgetState extends State<TocListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final keys = tocList?.keys?.toList();
-    return (tocList == null || tocList.isEmpty)
+    final keys = tocList?.keys.toList();
+    return (tocList == null || tocList!.isEmpty)
         ? buildEmptyWidget()
         : NotificationListener<OverscrollIndicatorNotification>(
             onNotification: (overScroll) {
@@ -78,13 +78,13 @@ class _TocListWidgetState extends State<TocListWidget> {
               return true;
             },
             child: ScrollablePositionedList.builder(
-              itemCount: keys.length,
+              itemCount: keys!.length,
               itemBuilder: (context, index) {
                 final tocIndex = keys[index];
-                final toc = tocList[tocIndex];
+                final toc = tocList![tocIndex];
                 bool isCurrent = (toc == currentToc);
                 if (toc == null) return Container();
-                return widget?.tocItem?.call(toc, isCurrent) ??
+                return widget.tocItem?.call(toc, isCurrent) ??
                     ListTile(
                       title: Container(
                         margin: EdgeInsets.only(left: 20.0 * toc.tagLevel),
@@ -96,13 +96,13 @@ class _TocListWidgetState extends State<TocListWidget> {
                         ),
                       ),
                       onTap: () {
-                        widget?.controller?.scrollController
-                            ?.jumpTo(index: tocIndex);
+                        widget.controller.scrollController
+                            .jumpTo(index: tocIndex);
                       },
                     );
               },
               initialScrollIndex:
-                  widget?.controller?._currentToc?.selfIndex ?? 0,
+                  widget.controller._currentToc?.selfIndex ?? 0,
               itemScrollController: itemScrollController,
               itemPositionsListener: itemPositionsListener,
             ),
@@ -152,14 +152,14 @@ class TocController extends ChangeNotifier {
 
   TocController({this.initialIndex = 0, this.isInitialIndexForTitle = true});
 
-  Toc _currentToc;
+  Toc? _currentToc;
 
-  LinkedHashMap<int, Toc> _tocList;
+  LinkedHashMap<int, Toc>? _tocList;
 
-  Toc get currentToc => _currentToc;
+  Toc? get currentToc => _currentToc;
 
   /// List of toc (table of content) items
-  Map<int, Toc> get tocList => _tocList;
+  Map<int, Toc>? get tocList => _tocList;
 
   ///update current [Toc],  it's not recommended to call this method
   bool setToc(Toc toc) {
@@ -169,7 +169,7 @@ class TocController extends ChangeNotifier {
   }
 
   ///update current [_tocList],  it's not recommended to call this method
-  bool setTocList(LinkedHashMap<int, Toc> tocList) {
+  bool setTocList(LinkedHashMap<int, Toc>? tocList) {
     if (this._tocList == tocList) return false;
     this._tocList = tocList;
     return true;
@@ -177,28 +177,28 @@ class TocController extends ChangeNotifier {
 
   ///call [scrollController.scrollTo] by it
   Future<void> scrollTo(
-          {@required int index,
+          {required int index,
           double alignment = 0,
-          @required Duration duration,
+          required Duration duration,
           Curve curve = Curves.linear}) =>
       scrollController.scrollTo(index: index, duration: duration, curve: curve);
 
   ///call [scrollController.jumpTo] by it
-  void jumpTo({@required int index, double alignment = 0}) =>
+  void jumpTo({required int index, double alignment = 0}) =>
       scrollController.jumpTo(index: index, alignment: alignment);
 
   ///get last index in [_tocList]
   int get endIndex {
-    if (_tocList == null || _tocList.isEmpty) return 0;
-    final keys = _tocList.keys.toList();
+    if (_tocList == null || _tocList!.isEmpty) return 0;
+    final keys = _tocList!.keys.toList();
     final lastKey = keys.last;
-    final index = _tocList[lastKey].index;
+    final index = _tocList![lastKey]!.index;
     return index;
   }
 
   ///get the index of [MTitle]
   int getTitleIndexWithWidgetIndex(int index) {
-    final tocList = _tocList?.values?.toList();
+    final tocList = _tocList?.values.toList();
     if (tocList == null || tocList.isEmpty) return 0;
     if (tocList.length <= index) return tocList.length - 1;
     return tocList[index].index;

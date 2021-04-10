@@ -26,9 +26,9 @@ Widget defaultCodeWidget(m.Element node) {
 }
 
 class CodeConfig {
-  final EdgeInsetsGeometry padding;
-  final Decoration decoration;
-  final TextStyle codeStyle;
+  final EdgeInsetsGeometry? padding;
+  final Decoration? decoration;
+  final TextStyle? codeStyle;
 
   CodeConfig({this.padding, this.decoration, this.codeStyle});
 }
