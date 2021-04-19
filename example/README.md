@@ -18,6 +18,15 @@ A simple and easy-to-use markdown package created by flutter.
 
 Before the introduction,  you can have a try for [Online Demo](https://oldchen.top/markdown_widget/#/)
 
+## CI
+
+The github action workflow will publish the example to your github pages on any push to master.
+
+Here are the paths. Just adjust the github org to your own:
+
+- Demo: https://asjqkkkk.github.io/markdown_widget/#/
+- SetuP. https://github.com/asjqkkkk/markdown_widget/settings/pages for your repo.
+
 ### 🔑Useage
 
 
