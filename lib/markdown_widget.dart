@@ -145,7 +145,8 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   }
 
   Center buildLoadingWidget() =>
-      widget.loadingWidget as Center? ?? Center(child: CircularProgressIndicator());
+      widget.loadingWidget as Center? ??
+      Center(child: CircularProgressIndicator());
 
   Widget buildMarkdownWidget() {
     return widget.controller == null

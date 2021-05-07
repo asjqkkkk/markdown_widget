@@ -35,7 +35,6 @@ class P {
         children, parentNode, textStyle, configSelectable, textConfig);
   }
 
-
   RichText buildRichText(List<m.Node>? children, m.Node parentNode,
       TextStyle? textStyle, bool selectable, TextConfig? textConfig) {
     final config = StyleConfig().pConfig;
@@ -96,7 +95,8 @@ class P {
           ? WidgetSpan(child: SelectableText(node.text, style: parentStyle))
           : TextSpan(text: node.text, style: parentStyle);
     } else {
-      return getBlockSpan(nodes as List<m.Node>?, node, parentStyle, selectable: selectable);
+      return getBlockSpan(nodes as List<m.Node>?, node, parentStyle,
+          selectable: selectable);
     }
   }
 }

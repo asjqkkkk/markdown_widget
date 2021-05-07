@@ -110,8 +110,7 @@ class _TocListWidgetState extends State<TocListWidget> {
                       },
                     );
               },
-              initialScrollIndex:
-                  widget.controller._currentToc?.selfIndex ?? 0,
+              initialScrollIndex: widget.controller._currentToc?.selfIndex ?? 0,
               itemScrollController: itemScrollController,
               itemPositionsListener: itemPositionsListener,
             ),

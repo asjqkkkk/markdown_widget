@@ -3,7 +3,10 @@ import 'package:flutter_highlight/themes/dark.dart';
 
 const dark_theme = {
   'PStyle': TextStyle(color: Color(0xffFAFAFA)),
-  'CodeStyle': TextStyle(fontSize: 12, color: Color(0xffFAFAFA)),
+  'CodeStyle': TextStyle(
+      fontSize: 12,
+      color: Color(0xffFAFAFA),
+      backgroundColor: Color(0xff9c9c9c)),
   'BlockStyle': TextStyle(color: Color(0xffFAFAFA)),
   'LinkStyle': TextStyle(color: Color(0xff1D81F0)),
   'CodeBackground': Color(0xff555555),

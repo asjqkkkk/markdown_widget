@@ -116,7 +116,8 @@ TextStyle getTextStyle(String tag) {
 Map<String, dynamic> get _theme => StyleConfig().markdownTheme ?? light_theme;
 
 /// default style of tag: p
-TextStyle? get defaultPStyle => _theme['PStyle'] ?? light_theme['PStyle'] as TextStyle?;
+TextStyle? get defaultPStyle =>
+    _theme['PStyle'] ?? light_theme['PStyle'] as TextStyle?;
 
 /// default style of tag: code
 TextStyle? get defaultCodeStyle =>
@@ -170,4 +171,5 @@ Color? get defaultUlDotColor =>
 
 /// default theme of highlight code
 Map<String, TextStyle>? get defaultHighLightCodeTheme =>
-    _theme['HightLightCodeTheme'] ?? light_theme['HightLightCodeTheme'] as Map<String, TextStyle>?;
+    _theme['HightLightCodeTheme'] ??
+    light_theme['HightLightCodeTheme'] as Map<String, TextStyle>?;

@@ -121,7 +121,8 @@ class HighlightView extends StatelessWidget {
             : TextSpan(text: node.value, style: theme![node.className!]));
       } else if (node.children != null) {
         List<TextSpan> tmp = [];
-        currentSpans.add(TextSpan(children: tmp, style: theme![node.className!]));
+        currentSpans
+            .add(TextSpan(children: tmp, style: theme![node.className!]));
         stack.add(currentSpans);
         currentSpans = tmp;
 
@@ -164,7 +165,6 @@ class HighlightView extends StatelessWidget {
       textAlign: StyleConfig().preConfig?.textAlign,
       textDirection: StyleConfig().preConfig?.textDirection,
       scrollPhysics: NeverScrollableScrollPhysics(),
-
     );
   }
 }

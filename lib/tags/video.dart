@@ -17,7 +17,8 @@ Widget defaultVideoWidget(Map<String, String> attributes, {String? url}) {
   double? width;
   double? height;
   if (attributes['width'] != null) width = double.parse(attributes['width']!);
-  if (attributes['height'] != null) height = double.parse(attributes['height']!);
+  if (attributes['height'] != null)
+    height = double.parse(attributes['height']!);
   final config = StyleConfig().videoConfig;
   final video = Container(
     width: width,

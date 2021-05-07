@@ -3,7 +3,10 @@ import 'package:flutter_highlight/themes/arduino-light.dart';
 
 const light_theme = {
   'PStyle': TextStyle(color: Color(0xff1E2226)),
-  'CodeStyle': TextStyle(fontSize: 12, color: Color(0xff1E2226)),
+  'CodeStyle': TextStyle(
+      fontSize: 12,
+      color: Color(0xff1e2226),
+      backgroundColor: Color(0xffdcdcdc)),
   'BlockStyle': TextStyle(color: Color(0xffA9AAB4)),
   'LinkStyle': TextStyle(color: Color(0xff1D81F0)),
   'CodeBackground': Color(0xffF5F5F5),

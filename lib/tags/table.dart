@@ -38,7 +38,8 @@ class MTable {
       defaultColumnWidth: config?.defaultColumnWidth ?? const FlexColumnWidth(),
       textBaseline: config?.textBaseline,
       textDirection: config?.textDirection,
-      border: config?.border ?? TableBorder.all(color: defaultTableBorderColor!),
+      border:
+          config?.border ?? TableBorder.all(color: defaultTableBorderColor!),
       defaultVerticalAlignment:
           config?.defaultVerticalAlignment ?? TableCellVerticalAlignment.middle,
       children: body,
