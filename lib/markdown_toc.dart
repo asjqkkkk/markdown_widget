@@ -62,6 +62,15 @@ class _TocListWidgetState extends State<TocListWidget> {
   }
 
   @override
+  void didUpdateWidget(covariant TocListWidget oldWidget) {
+    final controller = widget.controller;
+    if (tocList != controller._tocList) {
+      tocList = controller._tocList;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     itemPositionsListener.itemPositions.removeListener(_scrollListener);
     super.dispose();
@@ -143,7 +152,7 @@ class _TocListWidgetState extends State<TocListWidget> {
 
 ///you need to set [ItemScrollController], so [TocListener] will be trigger
 class TocController extends ChangeNotifier {
-  final ItemScrollController scrollController = ItemScrollController();
+  ItemScrollController scrollController = ItemScrollController();
 
   final int initialIndex;
 
@@ -172,6 +181,7 @@ class TocController extends ChangeNotifier {
   bool setTocList(LinkedHashMap<int, Toc>? tocList) {
     if (this._tocList == tocList) return false;
     this._tocList = tocList;
+    scrollController = ItemScrollController();
     return true;
   }
 
