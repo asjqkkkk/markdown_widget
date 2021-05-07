@@ -5,22 +5,13 @@ import '../config/style_config.dart';
 import 'p.dart';
 
 ///Tag: a
-InlineSpan getLinkSpan(m.Element element) =>
-    WidgetSpan(child: defaultAWidget(element));
+InlineSpan getLinkSpan(m.Element element) => defaultASpan(element);
 
 ///the link widget
-Widget defaultAWidget(m.Element element) {
-  PConfig? pConfig = StyleConfig().pConfig;
+TextSpan defaultASpan(m.Element element){
+  final config = StyleConfig().pConfig;
   final url = element.attributes['href'];
-  final linkWidget = P().getPWidget(
-    element.children,
-    element,
-    textStyle: pConfig?.linkStyle ?? defaultLinkStyle,
-    selectable: false,
-  );
-  return pConfig?.linkGesture?.call(linkWidget, url) ??
-      GestureDetector(
-        child: linkWidget,
-        onTap: () => pConfig?.onLinkTap?.call(url),
-      );
+  final style = config?.linkStyle ?? defaultLinkStyle;
+  final gesture = config?.linkGesture;
+  return TextSpan(text: element.textContent, style: style, recognizer: gesture?.call(url));
 }
