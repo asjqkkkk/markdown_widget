@@ -117,6 +117,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     if (widget.controller != null) {
       if (!hasInitialed)
         widget.controller!.setTocList(markdownGenerator!.tocList);
+      itemPositionsListener.itemPositions.removeListener(indexListener);
       itemPositionsListener.itemPositions.addListener(indexListener);
     }
   }

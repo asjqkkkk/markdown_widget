@@ -1,8 +1,12 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'web_dector.dart' if (dart.library.io) 'mobile_dector.dart';
 
 class PlatformDetector {
-  static bool get isMobile => !kIsWeb;
+  static bool get isMobile =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
 
   static bool get isIOS => currentType == PlatformType.IOS;
 
