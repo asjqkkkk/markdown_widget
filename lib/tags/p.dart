@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 import 'input.dart';
@@ -135,5 +134,5 @@ class TextConfig {
 }
 
 typedef void OnLinkTap(String? url);
-typedef GestureRecognizer LinkGesture(String? url);
+typedef Widget LinkGesture(Widget linkWidget, String? url);
 typedef Widget Custom(m.Element element);

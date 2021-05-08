@@ -1,5 +1,4 @@
 import 'package:easy_model/easy_model.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
@@ -137,8 +136,11 @@ class _MarkdownPageState extends State<MarkdownPage> {
         controller: controller,
         styleConfig: StyleConfig(
             pConfig: PConfig(
-                linkGesture: (url) {
-                  return TapGestureRecognizer()..onTap = () => _launchURL(url);
+                linkGesture: (linkChild, url) {
+                  return GestureDetector(
+                    child: linkChild,
+                    onTap: () => _launchURL(url),
+                  );
                 },
                 selectable: false),
             preConfig: PreConfig(
