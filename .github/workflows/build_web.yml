@@ -1,32 +1,62 @@
-name: Flutter Web
+name: Build & deploy
+
 on:
   push:
     branches:
       - dev
-      - master
+  pull_request:
+    branches:
+      - dev
+
 jobs:
   build:
-    name: Build Web
-    env:
-      my_secret: ${{secrets.ACTION_TOKEN}}
+    name: Build
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v1
         with:
-          channel: 'dev'
-      - run: ls
-      - run: cd example && ls && flutter config --enable-web && flutter pub get && flutter build web --release
-      - run: |
-          cd example/build/web && git init
-          # type configurations: your user.email and user.name followed lines
-          # git config --global user.email your_email
-          # git config --global user.name your_name
-          git config --global user.email agedchen@gmail.com
-          git config --global user.name asjqkkkk
-          git status
-          git remote add origin https://${{secrets.ACTION_TOKEN}}@github.com/asjqkkkk/markdown_widget.git
-          git checkout -b gh-pages
-          git add --all
-          git commit -m "update"
-          git push origin gh-pages -f
+          flutter-version: '2.8.1'
+
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Test project
+        run: flutter test
+
+      - name: Build release project
+        run: cd example && flutter build web
+
+      - name: Show dir
+        run: ls && cd example && ls
+
+
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v2
+        with:
+          name: production-files
+          path: example/build/web
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: production-files
+          path: example/build/web
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.ACTION_TOKEN }}
+          publish_dir: example/build/web
