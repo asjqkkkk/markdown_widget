@@ -4,18 +4,17 @@ import 'package:markdown/markdown.dart' as m;
 import 'package:highlight/highlight.dart' as hi;
 
 ///Tag: pre
-class Pre {
-  Pre._internal();
+///the pre widget
+class PreWidget extends StatelessWidget {
+  final m.Node node;
 
-  static Pre? _instance;
+  const PreWidget({
+    Key? key,
+    required this.node,
+  }) : super(key: key);
 
-  factory Pre() {
-    _instance ??= Pre._internal();
-    return _instance!;
-  }
-
-  ///the pre widget
-  Widget getPreWidget(m.Node node) {
+  @override
+  Widget build(BuildContext context) {
     final preConfig = StyleConfig().preConfig;
     final preWidget = Container(
       decoration: preConfig?.decoration ??
@@ -46,6 +45,7 @@ class Pre {
   }
 }
 
+///config class for [PreWidget]
 class PreConfig {
   final EdgeInsetsGeometry? padding;
   final Decoration? decoration;

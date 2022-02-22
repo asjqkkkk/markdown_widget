@@ -1,18 +1,21 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:easy_model/easy_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../my_app.dart';
 import '../platform_dector/platform_dector.dart';
+import 'edit_markdown_page.dart';
 
 class MarkdownPage extends StatefulWidget {
-  final String assetsPath;
-  final String markdownData;
+  final String? assetsPath;
+  final String? markdownData;
 
-  const MarkdownPage({Key key, this.assetsPath, this.markdownData})
-      : super(key: key);
+  const MarkdownPage({Key? key, this.assetsPath, this.markdownData})
+      : assert(assetsPath != null || markdownData != null),
+        super(key: key);
 
   @override
   _MarkdownPageState createState() => _MarkdownPageState();
@@ -21,23 +24,23 @@ class MarkdownPage extends StatefulWidget {
 class _MarkdownPageState extends State<MarkdownPage> {
   ///key: [isEnglish] , value: data
   Map<bool, String> dataMap = {};
-  String data;
+  String? data;
   final TocController controller = TocController();
   bool isEnglish = true;
 
   @override
   void initState() {
     if (widget.assetsPath != null) {
-      loadData(widget.assetsPath);
+      loadData(widget.assetsPath!);
     } else {
-      this.data = widget.markdownData;
+      this.data = widget.markdownData!;
     }
     super.initState();
   }
 
   void loadData(String assetsPath) {
     if (dataMap[isEnglish] != null) {
-      data = dataMap[isEnglish];
+      data = dataMap[isEnglish]!;
       refresh();
       return;
     }
@@ -109,14 +112,12 @@ class _MarkdownPageState extends State<MarkdownPage> {
   IconButton buildThemeButton() {
     GlobalModel model = ModelGroup.findModel<GlobalModel>();
     bool isDarkNow = model.brightness == Brightness.dark;
-    model = null;
     return IconButton(
         icon: Icon(isDarkNow ? Icons.brightness_7 : Icons.brightness_2),
         onPressed: () {
           GlobalModel model = ModelGroup.findModel<GlobalModel>();
           model.brightness = isDarkNow ? Brightness.light : Brightness.dark;
           model.refresh();
-          model = null;
         });
   }
 
@@ -128,18 +129,17 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Widget buildMarkdown() {
     GlobalModel model = ModelGroup.findModel<GlobalModel>();
     bool isDarkNow = model.brightness == Brightness.dark;
-    model = null;
     return Container(
       margin: EdgeInsets.all(10.0),
       child: MarkdownWidget(
-        data: data,
+        data: data!,
         controller: controller,
         styleConfig: StyleConfig(
             pConfig: PConfig(
                 linkGesture: (linkChild, url) {
                   return GestureDetector(
                     child: linkChild,
-                    onTap: () => _launchURL(url),
+                    onTap: () => launchURL(url),
                   );
                 },
                 selectable: false),
@@ -226,24 +226,16 @@ class _MarkdownPageState extends State<MarkdownPage> {
       ],
     );
   }
-
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 }
 
 class ToastWidget {
   ToastWidget._internal();
 
-  static ToastWidget _instance;
+  static ToastWidget? _instance;
 
   factory ToastWidget() {
     _instance ??= ToastWidget._internal();
-    return _instance;
+    return _instance!;
   }
 
   bool isShowing = false;
@@ -271,13 +263,13 @@ class ToastWidget {
 }
 
 class FullScreenDialog {
-  static FullScreenDialog _instance;
+  static FullScreenDialog? _instance;
 
   static FullScreenDialog getInstance() {
     if (_instance == null) {
       _instance = FullScreenDialog._internal();
     }
-    return _instance;
+    return _instance!;
   }
 
   FullScreenDialog._internal();

@@ -3,18 +3,17 @@ import 'package:markdown/markdown.dart' as m;
 import '../config/style_config.dart';
 
 ///Tag: hr
-class Hr {
-  Hr._internal();
+///the hr widget
+class HrWidget extends StatelessWidget {
+  final m.Element node;
 
-  static Hr? _instance;
+  const HrWidget({
+    Key? key,
+    required this.node,
+  }) : super(key: key);
 
-  factory Hr() {
-    _instance ??= Hr._internal();
-    return _instance!;
-  }
-
-  ///the hr widget
-  Widget getHrWidget(m.Element node) {
+  @override
+  Widget build(BuildContext context) {
     final HrConfig? hrConfig = StyleConfig().hrConfig;
 
     return Container(
@@ -24,6 +23,7 @@ class Hr {
   }
 }
 
+///config class for [HrWidget]
 class HrConfig {
   final double? height;
   final Color? color;

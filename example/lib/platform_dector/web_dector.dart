@@ -20,8 +20,8 @@ final _iOS = [
 bool isWebIOS() {
   var matches = false;
   _iOS.forEach((name) {
-    if (html.window.navigator.platform.contains(name) ||
-        html.window.navigator.userAgent.contains(name)) {
+    if (html.window.navigator.platform?.contains(name) ??
+        false || html.window.navigator.userAgent.contains(name)) {
       matches = true;
     }
   });

@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import '../config/style_config.dart';
 import 'package:markdown/markdown.dart' as m;
 
-import 'p.dart';
 import 'markdown_tags.dart';
 
-///Tag: ol
-class Ol {
-  Ol._internal();
+///the orderly list widget
+class OLWidget extends StatelessWidget {
+  final m.Element rootNode;
+  final int deep;
 
-  static Ol? _instance;
+  const OLWidget({
+    Key? key,
+    required this.rootNode,
+    required this.deep,
+  }) : super(key: key);
 
-  factory Ol() {
-    _instance ??= Ol._internal();
-    return _instance!;
-  }
-
-  ///the orderly list widget
-  Widget getOlWidget(m.Element rootNode, int deep) {
+  @override
+  Widget build(BuildContext context) {
     final children = rootNode.children;
     if (children == null) return Container();
     return Column(
@@ -26,25 +25,41 @@ class Ol {
         (index) {
           final node = children[index];
           if (node is m.Element) {
-            if (node.tag == li) return _getLiWidget(node, deep, index);
-            if (node.tag == ol) return getOlWidget(node, deep + 1);
+            if (node.tag == li)
+              return _LiWidget(rootNode: node, deep: deep, index: index);
+            if (node.tag == ol) return OLWidget(rootNode: node, deep: deep + 1);
           }
           return Container();
         },
       ),
     );
   }
+}
 
-  Widget _getLiWidget(m.Element rootNode, int deep, int index) {
+///the orderly or unOrderly list inside [ULWidget]
+class _LiWidget extends StatelessWidget {
+  final m.Element rootNode;
+  final int deep;
+  final int index;
+
+  const _LiWidget({
+    Key? key,
+    required this.rootNode,
+    required this.deep,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final children = rootNode.children ?? [];
     final List<m.Node> otherTagNodes = [];
     List<Widget> listChildren = [];
     for (var node in children) {
       if (node is m.Element && node.tag == ol) {
-        final child = getOlWidget(node, deep + 1);
+        final child = OLWidget(rootNode: node, deep: deep + 1);
         listChildren.add(child);
       } else if (node is m.Element && node.tag == ul) {
-        final child = Ul().getUlWidget(node, deep + 1);
+        final child = ULWidget(rootNode: node, deep: deep + 1);
         listChildren.add(child);
       } else
         otherTagNodes.add(node);
@@ -65,13 +80,16 @@ class Ol {
         crossAxisAlignment:
             config?.crossAxisAlignment ?? CrossAxisAlignment.start,
         children: <Widget>[
-          _getOlDot(deep, index),
+          _OlDot(deep: deep, index: index),
           Expanded(
-            child: P().getPWidget(otherTagNodes, rootNode,
-                textStyle: config?.textStyle ?? defaultPStyle,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                textConfig: config?.textConfig,
-                selectable: config?.selectable),
+            child: PWidget(
+              children: otherTagNodes,
+              parentNode: rootNode,
+              textStyle: config?.textStyle ?? defaultPStyle,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              textConfig: config?.textConfig,
+              selectable: config?.selectable,
+            ),
           ),
         ],
       ),
@@ -83,9 +101,21 @@ class Ol {
       children: listChildren,
     );
   }
+}
 
-  ///the index widget of orderly list
-  Widget _getOlDot(int deep, int index) {
+///the index widget of orderly list
+class _OlDot extends StatelessWidget {
+  final int deep;
+  final int index;
+
+  const _OlDot({
+    Key? key,
+    required this.deep,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final config = StyleConfig().olConfig;
     final Widget? configWidget =
         StyleConfig().olConfig?.indexWidget?.call(deep, index);
@@ -100,6 +130,7 @@ class Ol {
   }
 }
 
+///Config class for orderly list
 class OlConfig {
   final TextStyle? textStyle;
   final TextConfig? textConfig;

@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
-import 'input.dart';
-import 'a.dart';
-import 'img.dart';
-import 'code.dart';
-import 'video.dart';
 import 'markdown_tags.dart';
 import '../config/html_support.dart';
 import '../config/style_config.dart';
 
-class P {
-  P._internal();
+///Tag:  p
+///the paragraph widget
+class PWidget extends StatelessWidget {
+  final List<m.Node>? children;
+  final m.Node parentNode;
+  final TextStyle? textStyle;
+  final bool? selectable;
+  final TextConfig? textConfig;
+  final WrapCrossAlignment crossAxisAlignment;
 
-  static P? _instance;
+  const PWidget({
+    Key? key,
+    this.children,
+    required this.parentNode,
+    this.textStyle,
+    this.selectable,
+    this.textConfig,
+    this.crossAxisAlignment = WrapCrossAlignment.center,
+  }) : super(key: key);
 
-  factory P() {
-    _instance ??= P._internal();
-    return _instance!;
-  }
-
-  ///Tag:  p
-  Widget getPWidget(
-    List<m.Node>? children,
-    m.Node parentNode, {
-    TextStyle? textStyle,
-    bool? selectable,
-    TextConfig? textConfig,
-    WrapCrossAlignment crossAxisAlignment = WrapCrossAlignment.center,
-  }) {
+  @override
+  Widget build(BuildContext context) {
     final configSelectable =
         selectable ?? StyleConfig().pConfig?.selectable ?? true;
     return buildRichText(
@@ -100,6 +98,7 @@ class P {
   }
 }
 
+///config class for [PWidget]
 class PConfig {
   final TextStyle? textStyle;
   final TextStyle? linkStyle;
@@ -126,6 +125,7 @@ class PConfig {
   });
 }
 
+///config class for [TextStyle]
 class TextConfig {
   final TextAlign? textAlign;
   final TextDirection? textDirection;

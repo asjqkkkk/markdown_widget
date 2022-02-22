@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,7 +11,7 @@ import 'markdown_page.dart';
 class EditMarkdownPage extends StatefulWidget {
   final String initialData;
 
-  const EditMarkdownPage({Key key, this.initialData = ''}) : super(key: key);
+  const EditMarkdownPage({Key? key, this.initialData = ''}) : super(key: key);
 
   @override
   _EditMarkdownPageState createState() => _EditMarkdownPageState();
@@ -68,7 +70,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
             data: initialText + text,
             styleConfig: StyleConfig(
                 pConfig: PConfig(
-                  onLinkTap: (url) => _launchURL(url),
+                  onLinkTap: (url) => launchURL(url),
                 ),
                 videoConfig: VideoConfig(autoInitialize: true)),
           ),
@@ -110,12 +112,13 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
   void refresh() {
     if (mounted && !isMobile) setState(() {});
   }
+}
 
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+launchURL(String? url) async {
+  if (url == null) throw 'No url found!';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }

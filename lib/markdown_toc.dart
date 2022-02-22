@@ -83,7 +83,6 @@ class _TocListWidgetState extends State<TocListWidget> {
         ? buildEmptyWidget()
         : NotificationListener<OverscrollIndicatorNotification>(
             onNotification: (overScroll) {
-              overScroll.disallowGlow();
               return true;
             },
             child: ScrollablePositionedList.builder(

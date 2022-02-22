@@ -5,37 +5,49 @@ import '../config/style_config.dart';
 import 'markdown_tags.dart';
 
 ///Tag: h1~h6
-class MTitle {
-  MTitle._internal();
+///the title widget
+class TitleWidget extends StatelessWidget {
+  final m.Element node;
+  final String tag;
 
-  static MTitle? _instance;
+  const TitleWidget({
+    Key? key,
+    required this.node,
+    required this.tag,
+  }) : super(key: key);
 
-  factory MTitle() {
-    _instance ??= MTitle._internal();
-    return _instance!;
-  }
-
-  ///the title widget
-  Widget? getTitleWidget(m.Element node, String tag) {
-    Widget? titleWidget;
+  @override
+  Widget build(BuildContext context) {
+    Widget titleWidget = Container();
     switch (tag) {
       case h1:
-        titleWidget = textWithDivider(node, _titleStyle(28), h1);
+        titleWidget =
+            _TextWithDivider(node: node, style: _titleStyle(28), tag: h1);
         break;
       case h2:
-        titleWidget = textWithDivider(node, _titleStyle(25), h2);
+        titleWidget =
+            _TextWithDivider(node: node, style: _titleStyle(25), tag: h2);
+
         break;
       case h3:
-        titleWidget = textWithDivider(node, _titleStyle(22), h3);
+        titleWidget =
+            _TextWithDivider(node: node, style: _titleStyle(22), tag: h3);
+
         break;
       case h4:
-        titleWidget = textWithDivider(node, _titleStyle(19), h4);
+        titleWidget =
+            _TextWithDivider(node: node, style: _titleStyle(19), tag: h4);
+
         break;
       case h5:
-        titleWidget = textWithDivider(node, _titleStyle(17), h5);
+        titleWidget =
+            _TextWithDivider(node: node, style: _titleStyle(17), tag: h5);
+
         break;
       case h6:
-        titleWidget = textWithDivider(node, _titleStyle(12), h6);
+        titleWidget =
+            _TextWithDivider(node: node, style: _titleStyle(12), tag: h6);
+
         break;
     }
     return titleWidget;
@@ -46,10 +58,33 @@ class MTitle {
         fontWeight: FontWeight.bold,
         color: defaultTitleColor,
       );
+}
 
-  Widget buildDivider() => Container(height: 1, color: defaultDividerColor);
+///divider widget
+class _Divider extends StatelessWidget {
+  const _Divider({Key? key}) : super(key: key);
 
-  Widget textWithDivider(m.Element node, TextStyle style, String tag) {
+  @override
+  Widget build(BuildContext context) {
+    return Container(height: 1, color: defaultDividerColor);
+  }
+}
+
+///the divider and title text widget
+class _TextWithDivider extends StatelessWidget {
+  final m.Element node;
+  final TextStyle style;
+  final String tag;
+
+  const _TextWithDivider({
+    Key? key,
+    required this.node,
+    required this.style,
+    required this.tag,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final config = StyleConfig().titleConfig;
     bool showDivider = config?.showDivider ?? true;
     TextStyle? configStyle;
@@ -73,9 +108,12 @@ class MTitle {
         configStyle = config?.h6;
         break;
     }
-    final child = P().getPWidget(node.children, node,
-        textStyle: (configStyle ?? style).merge(config?.commonStyle),
-        textConfig: config?.textConfig);
+    final child = PWidget(
+      children: node.children,
+      parentNode: node,
+      textStyle: (configStyle ?? style).merge(config?.commonStyle),
+      textConfig: config?.textConfig,
+    );
     final title = config?.titleWrapper?.call(child) ?? child;
 
     return showDivider
@@ -88,13 +126,14 @@ class MTitle {
             children: <Widget>[
               title,
               SizedBox(height: config?.space ?? 4.0),
-              config?.divider ?? buildDivider()
+              config?.divider ?? _Divider()
             ],
           )
         : title;
   }
 }
 
+///config class for [TitleWidget]
 class TitleConfig {
   final TextStyle? h1;
   final TextStyle? h2;

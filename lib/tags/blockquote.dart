@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 import '../config/style_config.dart';
-import 'p.dart';
 
 ///Tag: blockquote
-class Bq {
-  Bq._internal();
+///the blockQuote widget
+class BlockQuoteWidget extends StatelessWidget {
+  final m.Element node;
 
-  static Bq? _instance;
+  const BlockQuoteWidget({
+    Key? key,
+    required this.node,
+  }) : super(key: key);
 
-  factory Bq() {
-    _instance ??= Bq._internal();
-    return _instance!;
-  }
-
-  ///the blockQuote widget
-  Widget getBlockQuote(m.Element node) {
+  @override
+  Widget build(BuildContext context) {
     final config = StyleConfig().blockQuoteConfig;
 
     return Container(
@@ -27,13 +25,17 @@ class Bq {
           ),
           color: config?.backgroundColor),
       padding: EdgeInsets.only(left: config?.leftSpace ?? 10),
-      child: P().getPWidget(node.children, node,
-          textStyle: config?.blockStyle ?? defaultBlockStyle,
-          textConfig: config?.textConfig),
+      child: PWidget(
+        children: node.children,
+        parentNode: node,
+        textStyle: config?.blockStyle ?? defaultBlockStyle,
+        textConfig: config?.textConfig,
+      ),
     );
   }
 }
 
+///config class for [BlockQuoteWidget]
 class BlockQuoteConfig {
   final TextStyle? blockStyle;
   final TextConfig? textConfig;

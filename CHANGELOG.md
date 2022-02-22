@@ -1,3 +1,7 @@
+#### [1.2.8] - get tag widget from class instead of function
+
+#### [1.2.7] - update dependencies
+
 #### [1.2.6-nullsafety] - migrating to null safety
 
 #### [1.2.6] - modify some description in README, upgrade `video_player` dependencies

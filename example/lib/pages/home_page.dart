@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            FlatButton(
+            CustomButton(
               color:
                   Colors.primaries[Random().nextInt(Colors.primaries.length)],
               padding: EdgeInsets.all(20),
@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            FlatButton(
+            CustomButton(
               color:
                   Colors.primaries[Random().nextInt(Colors.primaries.length)],
               padding: EdgeInsets.all(20),
@@ -67,5 +67,40 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final Widget child;
+  final Color? color;
+  final EdgeInsetsGeometry? padding;
+  final OutlinedBorder? shape;
+
+  const CustomButton({
+    Key? key,
+    this.onPressed,
+    this.color,
+    this.padding,
+    this.shape,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      child: child,
+      style: ButtonStyle(
+        backgroundColor: getProperty(color),
+        padding: getProperty(padding),
+        shape: getProperty(shape),
+      ),
+    );
+  }
+
+  MaterialStateProperty<T?>? getProperty<T>(T? property) {
+    if (property == null) return null;
+    return MaterialStateProperty.all<T?>(property);
   }
 }

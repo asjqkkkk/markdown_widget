@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/foundation.dart';
 import 'web_dector.dart' if (dart.library.io) 'mobile_dector.dart';
 

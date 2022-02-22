@@ -2,23 +2,21 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
-import 'p.dart';
 import 'markdown_tags.dart';
 import '../config/style_config.dart';
 
 ///Tag: table
-class MTable {
-  MTable._internal();
+///the table widget
+class TableWidget extends StatelessWidget {
+  final m.Element node;
 
-  static MTable? _instance;
+  const TableWidget({
+    Key? key,
+    required this.node,
+  }) : super(key: key);
 
-  factory MTable() {
-    _instance ??= MTable._internal();
-    return _instance!;
-  }
-
-  ///the table widget
-  Widget getTableWidget(m.Element node) {
+  @override
+  Widget build(BuildContext context) {
     if (node.children == null) return SizedBox();
     final config = StyleConfig().tableConfig;
 
@@ -58,9 +56,12 @@ class MTable {
     return TableRow(
         decoration: config?.headerRowDecoration,
         children: List.generate(thList.length, (index) {
-          final child = P().getPWidget(thList[index].children, thList[index],
-              textStyle: config?.headerStyle,
-              textConfig: config?.headerTextConfig);
+          final child = PWidget(
+            children: thList[index].children,
+            parentNode: thList[index],
+            textStyle: config?.headerStyle,
+            textConfig: config?.headerTextConfig,
+          );
           return config?.headChildWrapper?.call(child) ?? child;
         }));
   }
@@ -87,8 +88,12 @@ class MTable {
         _buildTd(trNode, tdList);
         List<Widget> children = [];
         tdList.forEach((element) {
-          final child = P().getPWidget(element.children, element,
-              textStyle: config?.bodyStyle, textConfig: config?.bodyTextConfig);
+          final child = PWidget(
+            children: element.children,
+            parentNode: element,
+            textStyle: config?.bodyStyle,
+            textConfig: config?.bodyTextConfig,
+          );
           children.add(config?.bodyChildWrapper?.call(child) ?? child);
         });
         maxRowSize = max(maxRowSize, tdList.length);
@@ -115,6 +120,7 @@ class MTable {
   }
 }
 
+///config class for [TableWidget]
 class TableConfig {
   final Map<int, TableColumnWidth>? columnWidths;
   final TableColumnWidth? defaultColumnWidth;

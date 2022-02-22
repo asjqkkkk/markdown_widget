@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 import '../config/style_config.dart';
 import 'markdown_tags.dart';
-import 'p.dart';
 
-///Tag: ul
-class Ul {
-  Ul._internal();
+///the unOrderly list widget
+class ULWidget extends StatelessWidget {
+  final m.Element rootNode;
+  final int deep;
 
-  static Ul? _instance;
+  const ULWidget({
+    Key? key,
+    required this.rootNode,
+    required this.deep,
+  }) : super(key: key);
 
-  factory Ul() {
-    _instance ??= Ul._internal();
-    return _instance!;
-  }
-
-  ///the unOrderly list widget
-  Widget getUlWidget(m.Element rootNode, int deep) {
+  @override
+  Widget build(BuildContext context) {
     final children = rootNode.children;
     if (children == null) return Container();
     return Column(
@@ -25,26 +24,42 @@ class Ul {
         (index) {
           final node = children[index];
           if (node is m.Element) {
-            if (node.tag == li) return _getLiWidget(node, deep, index);
-            if (node.tag == ul) return getUlWidget(node, deep + 1);
+            if (node.tag == li)
+              return _LiWidget(rootNode: node, deep: deep, index: index);
+            if (node.tag == ul) return ULWidget(rootNode: node, deep: deep + 1);
           }
           return Container();
         },
       ),
     );
   }
+}
 
-  Widget _getLiWidget(m.Element rootNode, int deep, int index) {
+///the orderly or unOrderly list inside [ULWidget]
+class _LiWidget extends StatelessWidget {
+  final m.Element rootNode;
+  final int deep;
+  final int index;
+
+  const _LiWidget({
+    Key? key,
+    required this.rootNode,
+    required this.deep,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final children = rootNode.children ?? [];
     final List<m.Node> otherTagNodes = [];
     final isSolid = deep % 2 == 0;
     List<Widget> listChildren = [];
     for (var node in children) {
       if (node is m.Element && node.tag == ul) {
-        final child = getUlWidget(node, deep + 1);
+        final child = ULWidget(rootNode: node, deep: deep + 1);
         listChildren.add(child);
       } else if (node is m.Element && node.tag == ol) {
-        final child = Ol().getOlWidget(node, deep + 1);
+        final child = OLWidget(rootNode: node, deep: deep + 1);
         listChildren.add(child);
       } else if (node is m.Element && node.tag == input) {
       } else
@@ -67,13 +82,16 @@ class Ul {
         crossAxisAlignment:
             config?.crossAxisAlignment ?? CrossAxisAlignment.start,
         children: <Widget>[
-          dotWidget ?? _getUlDot(isSolid),
+          dotWidget ?? _UlDot(isSolid: isSolid),
           Expanded(
-            child: P().getPWidget(otherTagNodes, rootNode,
-                textStyle: config?.textStyle ?? defaultPStyle,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                textConfig: config?.textConfig,
-                selectable: config?.selectable),
+            child: PWidget(
+              children: otherTagNodes,
+              parentNode: rootNode,
+              textStyle: config?.textStyle ?? defaultPStyle,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              textConfig: config?.textConfig,
+              selectable: config?.selectable,
+            ),
           ),
         ],
       ),
@@ -85,9 +103,16 @@ class Ul {
       children: listChildren,
     );
   }
+}
 
-  ///the index widget of unOrderly list
-  Widget _getUlDot(bool isSolid) {
+///the index widget of unOrderly list
+class _UlDot extends StatelessWidget {
+  final bool isSolid;
+
+  const _UlDot({Key? key, required this.isSolid}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final config = StyleConfig().ulConfig;
     final dotSize = config?.dotSize ?? 6;
     final marginTop =
@@ -107,6 +132,7 @@ class Ul {
   }
 }
 
+///Config class for unOrderly list
 class UlConfig {
   final TextStyle? textStyle;
   final TextConfig? textConfig;
