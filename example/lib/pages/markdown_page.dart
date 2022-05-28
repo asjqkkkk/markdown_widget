@@ -1,11 +1,8 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe
-
-import 'package:easy_model/easy_model.dart';
+import 'package:example/state/root_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
-import '../my_app.dart';
 import '../platform_dector/platform_dector.dart';
 import 'edit_markdown_page.dart';
 
@@ -54,6 +51,9 @@ class _MarkdownPageState extends State<MarkdownPage> {
   void refresh() {
     if (mounted) setState(() {});
   }
+
+  bool get isDarkNow =>
+      rootStore.state.themeState.brightness == Brightness.dark;
 
   @override
   Widget build(BuildContext context) {
@@ -110,14 +110,12 @@ class _MarkdownPageState extends State<MarkdownPage> {
   }
 
   IconButton buildThemeButton() {
-    GlobalModel model = ModelGroup.findModel<GlobalModel>();
-    bool isDarkNow = model.brightness == Brightness.dark;
+    Brightness brightness = rootStore.state.themeState.brightness;
+    bool isDarkNow = brightness == Brightness.dark;
     return IconButton(
         icon: Icon(isDarkNow ? Icons.brightness_7 : Icons.brightness_2),
         onPressed: () {
-          GlobalModel model = ModelGroup.findModel<GlobalModel>();
-          model.brightness = isDarkNow ? Brightness.light : Brightness.dark;
-          model.refresh();
+          rootStore.dispatch(new ChangeThemeEvent());
         });
   }
 
@@ -127,8 +125,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
       );
 
   Widget buildMarkdown() {
-    GlobalModel model = ModelGroup.findModel<GlobalModel>();
-    bool isDarkNow = model.brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.all(10.0),
       child: MarkdownWidget(

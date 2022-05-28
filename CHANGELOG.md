@@ -1,3 +1,5 @@
+#### [1.2.9] - support flutter 3.0
+
 #### [1.2.8] - get tag widget from class instead of function
 
 #### [1.2.7] - update dependencies
