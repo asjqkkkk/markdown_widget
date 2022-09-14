@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'markdown_widget.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TocListWidget extends StatefulWidget {
   final TocController controller;

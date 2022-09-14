@@ -1,3 +1,11 @@
+#### [1.3.0]
+- support flutter 3.3
+- embedded `scrollable_positioned_list` until it publishes new version
+- fix some issues
+    - [#2](https://github.com/asjqkkkk/markdown_widget/issues/2)
+    - [#68](https://github.com/asjqkkkk/markdown_widget/issues/68)
+    - [#70](https://github.com/asjqkkkk/markdown_widget/issues/70)
+
 #### [1.2.9] - support flutter 3.0
 
 #### [1.2.8] - get tag widget from class instead of function

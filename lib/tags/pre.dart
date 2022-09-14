@@ -27,9 +27,8 @@ class PreWidget extends StatelessWidget {
       margin: preConfig?.margin,
       padding: preConfig?.padding ?? const EdgeInsets.fromLTRB(10, 20, 10, 20),
       width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: HighlightView(
+      child: Text.rich(TextSpan(
+        children: highLightSpans(
           node.textContent,
           language: preConfig?.language ?? 'dart',
           autoDetectionLanguage: preConfig?.autoDetectionLanguage ?? false,
@@ -37,7 +36,7 @@ class PreWidget extends StatelessWidget {
           textStyle: preConfig?.textStyle ?? TextStyle(fontSize: 14),
           tabSize: preConfig?.tabSize ?? 8,
         ),
-      ),
+      )),
     );
 
     return preConfig?.preWrapper?.call(preWidget, node.textContent) ??
@@ -83,88 +82,50 @@ class PreConfig {
 
 typedef Widget PreWrapper(Widget preWidget, String text);
 
-class HighlightView extends StatelessWidget {
-  /// The original code to be highlighted
-  final String source;
+List<InlineSpan> highLightSpans(
+  String input, {
+  String? language,
+  bool autoDetectionLanguage = false,
+  Map<String, TextStyle>? theme = const {},
+  TextStyle? textStyle,
+  int tabSize = 8,
+}) {
+  return _convert(
+      hi.highlight
+          .parse(input,
+              language: autoDetectionLanguage ? null : language,
+              autoDetection: autoDetectionLanguage)
+          .nodes!,
+      theme ?? {});
+}
 
-  final String? language;
-  final bool? autoDetectionLanguage;
+List<TextSpan> _convert(List<hi.Node> nodes, Map<String, TextStyle> theme) {
+  List<TextSpan> spans = [];
+  var currentSpans = spans;
+  List<List<TextSpan>> stack = [];
 
-  /// Highlight theme
-  ///
-  /// [All available themes](https://github.com/pd4d10/highlight/blob/master/flutter_highlight/lib/themes)
-  final Map<String, TextStyle>? theme;
+  _traverse(hi.Node node) {
+    if (node.value != null) {
+      currentSpans.add(node.className == null
+          ? TextSpan(text: node.value)
+          : TextSpan(text: node.value, style: theme[node.className!]));
+    } else if (node.children != null) {
+      List<TextSpan> tmp = [];
+      currentSpans.add(TextSpan(children: tmp, style: theme[node.className!]));
+      stack.add(currentSpans);
+      currentSpans = tmp;
 
-  /// Text styles
-  ///
-  /// Specify text styles such as font family and font size
-  final TextStyle? textStyle;
-
-  HighlightView(
-    String input, {
-    this.language,
-    this.autoDetectionLanguage,
-    this.theme = const {},
-    this.textStyle,
-    int tabSize = 8, // TODO: https://github.com/flutter/flutter/issues/50087
-  }) : source = input.replaceAll('\t', ' ' * tabSize);
-
-  List<TextSpan> _convert(List<hi.Node> nodes) {
-    List<TextSpan> spans = [];
-    var currentSpans = spans;
-    List<List<TextSpan>> stack = [];
-
-    _traverse(hi.Node node) {
-      if (node.value != null) {
-        currentSpans.add(node.className == null
-            ? TextSpan(text: node.value)
-            : TextSpan(text: node.value, style: theme![node.className!]));
-      } else if (node.children != null) {
-        List<TextSpan> tmp = [];
-        currentSpans
-            .add(TextSpan(children: tmp, style: theme![node.className!]));
-        stack.add(currentSpans);
-        currentSpans = tmp;
-
-        node.children!.forEach((n) {
-          _traverse(n);
-          if (n == node.children!.last) {
-            currentSpans = stack.isEmpty ? spans : stack.removeLast();
-          }
-        });
-      }
+      node.children!.forEach((n) {
+        _traverse(n);
+        if (n == node.children!.last) {
+          currentSpans = stack.isEmpty ? spans : stack.removeLast();
+        }
+      });
     }
-
-    for (var node in nodes) {
-      _traverse(node);
-    }
-    return spans;
   }
 
-  static const _rootKey = 'root';
-  static const _defaultFontColor = Color(0xff000000);
-
-  @override
-  Widget build(BuildContext context) {
-    var _textStyle = TextStyle(
-      color: theme![_rootKey]?.color ?? _defaultFontColor,
-    );
-    if (textStyle != null) {
-      _textStyle = _textStyle.merge(textStyle);
-    }
-
-    return SelectableText.rich(
-      TextSpan(
-        style: _textStyle,
-        children: _convert(hi.highlight
-            .parse(source,
-                language: autoDetectionLanguage! ? null : language,
-                autoDetection: autoDetectionLanguage!)
-            .nodes!),
-      ),
-      textAlign: StyleConfig().preConfig?.textAlign,
-      textDirection: StyleConfig().preConfig?.textDirection,
-      scrollPhysics: NeverScrollableScrollPhysics(),
-    );
+  for (var node in nodes) {
+    _traverse(node);
   }
+  return spans;
 }

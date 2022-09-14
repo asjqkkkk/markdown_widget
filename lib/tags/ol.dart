@@ -88,7 +88,6 @@ class _LiWidget extends StatelessWidget {
               textStyle: config?.textStyle ?? defaultPStyle,
               crossAxisAlignment: WrapCrossAlignment.start,
               textConfig: config?.textConfig,
-              selectable: config?.selectable,
             ),
           ),
         ],

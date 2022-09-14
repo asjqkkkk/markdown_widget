@@ -77,3 +77,4 @@ Podfile
 update.sh
 example/pubspec.lock
 pubspec.lock
+.fvm/

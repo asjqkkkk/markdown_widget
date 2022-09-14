@@ -61,7 +61,6 @@ class _LiWidget extends StatelessWidget {
       } else if (node is m.Element && node.tag == ol) {
         final child = OLWidget(rootNode: node, deep: deep + 1);
         listChildren.add(child);
-      } else if (node is m.Element && node.tag == input) {
       } else
         otherTagNodes.add(node);
     }
@@ -90,7 +89,6 @@ class _LiWidget extends StatelessWidget {
               textStyle: config?.textStyle ?? defaultPStyle,
               crossAxisAlignment: WrapCrossAlignment.start,
               textConfig: config?.textConfig,
-              selectable: config?.selectable,
             ),
           ),
         ],

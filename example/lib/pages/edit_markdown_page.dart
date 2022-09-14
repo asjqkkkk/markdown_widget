@@ -53,7 +53,12 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                 Icons.remove_red_eye,
               ),
             )
-          : null,
+          : FloatingActionButton(
+              onPressed: () => Navigator.pop(context),
+              child: Icon(
+                Icons.arrow_back,
+              ),
+            ),
     );
   }
 
@@ -116,8 +121,10 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
 
 launchURL(String? url) async {
   if (url == null) throw 'No url found!';
-  if (await canLaunch(url)) {
-    await launch(url);
+  Uri? uri = Uri.tryParse(url);
+  if(uri == null) throw '$url unavailable';
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
   } else {
     throw 'Could not launch $url';
   }

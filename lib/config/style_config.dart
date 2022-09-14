@@ -91,8 +91,8 @@ class StyleConfig {
 }
 
 class MarkdownTheme {
-  static const Map<String, dynamic> lightTheme = light_theme;
-  static const Map<String, dynamic> darkTheme = dark_theme;
+  static final Map<String, dynamic> lightTheme = lightThemeMap;
+  static final Map<String, dynamic> darkTheme = darkThemeMap;
 }
 
 ///merge the style of [del]、[em]、[strong]
@@ -113,15 +113,15 @@ TextStyle getTextStyle(String tag) {
   return style;
 }
 
-Map<String, dynamic> get _theme => StyleConfig().markdownTheme ?? light_theme;
+Map<String, dynamic> get _theme => StyleConfig().markdownTheme ?? lightThemeMap;
 
 /// default style of tag: p
 TextStyle? get defaultPStyle =>
-    _theme['PStyle'] ?? light_theme['PStyle'] as TextStyle?;
+    _theme['PStyle'] ?? lightThemeMap['PStyle'] as TextStyle?;
 
 /// default style of tag: code
 TextStyle? get defaultCodeStyle =>
-    _theme['CodeStyle'] ?? light_theme['CodeStyle'] as TextStyle?;
+    _theme['CodeStyle'] ?? lightThemeMap['CodeStyle'] as TextStyle?;
 
 /// default style of delete text
 TextStyle get defaultDelStyle =>
@@ -135,41 +135,42 @@ TextStyle get defaultStrongStyle => TextStyle(fontWeight: FontWeight.bold);
 
 /// default style of tag: blockquote
 TextStyle? get defaultBlockStyle =>
-    _theme['BlockStyle'] ?? light_theme['BlockStyle'] as TextStyle?;
+    _theme['BlockStyle'] ?? lightThemeMap['BlockStyle'] as TextStyle?;
 
 /// default style of tag: a
 TextStyle? get defaultLinkStyle =>
-    _theme['LinkStyle'] ?? light_theme['LinkStyle'] as TextStyle?;
+    _theme['LinkStyle'] ?? lightThemeMap['LinkStyle'] as TextStyle?;
 
 /// default background color of tag: code
 Color? get defaultCodeBackground =>
-    _theme['CodeBackground'] ?? light_theme['CodeBackground'] as Color?;
+    _theme['CodeBackground'] ?? lightThemeMap['CodeBackground'] as Color?;
+
 
 /// default border color of tag: table
 Color? get defaultTableBorderColor =>
-    _theme['TableBorderColor'] ?? light_theme['TableBorderColor'] as Color?;
+    _theme['TableBorderColor'] ?? lightThemeMap['TableBorderColor'] as Color?;
 
 /// default divider color of tag: hr and h1~h6
 Color? get defaultDividerColor =>
-    _theme['DividerColor'] ?? light_theme['DividerColor'] as Color?;
+    _theme['DividerColor'] ?? lightThemeMap['DividerColor'] as Color?;
 
 /// default background color of tag: blockquote
 Color? get defaultBlockColor =>
-    _theme['BlockColor'] ?? light_theme['BlockColor'] as Color?;
+    _theme['BlockColor'] ?? lightThemeMap['BlockColor'] as Color?;
 
 /// default background color of tag: pre
 Color? get defaultPreBackground =>
-    _theme['PreBackground'] ?? light_theme['PreBackground'] as Color?;
+    _theme['PreBackground'] ?? lightThemeMap['PreBackground'] as Color?;
 
 /// default text color of tag: h1~h5
 Color? get defaultTitleColor =>
-    _theme['TitleColor'] ?? light_theme['TitleColor'] as Color?;
+    _theme['TitleColor'] ?? lightThemeMap['TitleColor'] as Color?;
 
 /// default color of unOrderly index widget
 Color? get defaultUlDotColor =>
-    _theme['UlDotColor'] ?? light_theme['UlDotColor'] as Color?;
+    _theme['UlDotColor'] ?? lightThemeMap['UlDotColor'] as Color?;
 
 /// default theme of highlight code
 Map<String, TextStyle>? get defaultHighLightCodeTheme =>
     _theme['HightLightCodeTheme'] ??
-    light_theme['HightLightCodeTheme'] as Map<String, TextStyle>?;
+    lightThemeMap['HightLightCodeTheme'] as Map<String, TextStyle>?;

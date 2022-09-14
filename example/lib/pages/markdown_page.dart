@@ -93,6 +93,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
                         heroTag: 'list',
                       )
                     : SizedBox(),
+                isMobile ? SizedBox() : buildBackButton(),
                 isMobile ? SizedBox() : buildThemeButton(),
                 FloatingActionButton(
                   onPressed: () {
@@ -119,6 +120,11 @@ class _MarkdownPageState extends State<MarkdownPage> {
         });
   }
 
+  IconButton buildBackButton() {
+    return IconButton(
+        icon: Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context));
+  }
+
   Widget buildTocList() => TocListWidget(
         controller: controller,
         key: ValueKey(controller),
@@ -131,14 +137,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
         data: data!,
         controller: controller,
         styleConfig: StyleConfig(
-            pConfig: PConfig(
-                linkGesture: (linkChild, url) {
-                  return GestureDetector(
-                    child: linkChild,
-                    onTap: () => launchURL(url),
-                  );
-                },
-                selectable: false),
+            pConfig: PConfig(onLinkTap: (url) => launchURL(url)),
             preConfig: PreConfig(
               preWrapper: (child, text) =>
                   buildCodeBlock(child, text, isEnglish),
