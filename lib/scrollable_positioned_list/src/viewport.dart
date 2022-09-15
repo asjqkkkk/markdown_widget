@@ -123,7 +123,6 @@ class UnboundedRenderViewport extends RenderViewport {
 
   @override
   Rect describeSemanticsClip(RenderSliver? child) {
-
     if (_calculatedCacheExtent == null) {
       return semanticBounds;
     }

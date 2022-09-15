@@ -145,7 +145,6 @@ TextStyle? get defaultLinkStyle =>
 Color? get defaultCodeBackground =>
     _theme['CodeBackground'] ?? lightThemeMap['CodeBackground'] as Color?;
 
-
 /// default border color of tag: table
 Color? get defaultTableBorderColor =>
     _theme['TableBorderColor'] ?? lightThemeMap['TableBorderColor'] as Color?;

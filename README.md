@@ -3,7 +3,7 @@ Language:[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/
 # 📖markdown_widget
 
 [![support](https://img.shields.io/badge/platform-flutter%7Cdart%20vm-ff69b4.svg?style=flat-square)](https://github.com/asjqkkkk/markdown_widget)
-[![Flutter Web](https://github.com/asjqkkkk/markdown_widget/workflows/Flutter%20Web/badge.svg)](https://github.com/asjqkkkk/markdown_widget/actions)
+[![Flutter Web](https://github.com/asjqkkkk/markdown_widget/actions/workflows/build_web.yml/badge.svg)](https://github.com/asjqkkkk/markdown_widget/actions)
 [![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget)
 [![demo](https://img.shields.io/badge/demo-online-brightgreen)](https://asjqkkkk.github.io/markdown_widget/)
 

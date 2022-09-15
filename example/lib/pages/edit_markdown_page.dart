@@ -122,7 +122,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
 launchURL(String? url) async {
   if (url == null) throw 'No url found!';
   Uri? uri = Uri.tryParse(url);
-  if(uri == null) throw '$url unavailable';
+  if (uri == null) throw '$url unavailable';
   if (await canLaunchUrl(uri)) {
     await launchUrl(uri);
   } else {
