@@ -96,10 +96,12 @@ List<InlineSpan> highLightSpans(
               language: autoDetectionLanguage ? null : language,
               autoDetection: autoDetectionLanguage)
           .nodes!,
-      theme ?? {});
+      theme ?? {},
+      textStyle);
 }
 
-List<TextSpan> _convert(List<hi.Node> nodes, Map<String, TextStyle> theme) {
+List<TextSpan> _convert(
+    List<hi.Node> nodes, Map<String, TextStyle> theme, TextStyle? style) {
   List<TextSpan> spans = [];
   var currentSpans = spans;
   List<List<TextSpan>> stack = [];
@@ -107,11 +109,13 @@ List<TextSpan> _convert(List<hi.Node> nodes, Map<String, TextStyle> theme) {
   _traverse(hi.Node node) {
     if (node.value != null) {
       currentSpans.add(node.className == null
-          ? TextSpan(text: node.value)
-          : TextSpan(text: node.value, style: theme[node.className!]));
+          ? TextSpan(text: node.value, style: style)
+          : TextSpan(
+              text: node.value, style: theme[node.className!]?.merge(style)));
     } else if (node.children != null) {
       List<TextSpan> tmp = [];
-      currentSpans.add(TextSpan(children: tmp, style: theme[node.className!]));
+      currentSpans.add(
+          TextSpan(children: tmp, style: theme[node.className!]?.merge(style)));
       stack.add(currentSpans);
       currentSpans = tmp;
 

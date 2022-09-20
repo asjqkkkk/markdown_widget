@@ -1,3 +1,7 @@
+#### [1.3.0+2] - fix textStyle not working for `pre` config 
+
+#### [1.3.0+1] - fix static analysis issues
+
 #### [1.3.0]
 - support flutter 3.3
 - embedded `scrollable_positioned_list` until it publishes new version
