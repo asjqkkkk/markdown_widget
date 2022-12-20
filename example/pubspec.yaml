@@ -16,9 +16,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  url_launcher: ^6.0.20
   flutter_redux: ^0.10.0
+  #html tag parser
+  html: ^0.15.0
 
+  # for 'video' tag
+  video_player: ^2.4.10
 
 flutter:
 

@@ -1,9 +1,12 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'package:markdown_widget/config/configs.dart';
+import 'package:markdown_widget/config/markdown_generator.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../markdown_custom/video.dart';
 import '../platform_dector/platform_dector.dart';
 
 import 'markdown_page.dart';
@@ -67,17 +70,20 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
   }
 
   Widget buildWebBody() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: <Widget>[
         Expanded(child: buildEditText()),
         Expanded(
           child: MarkdownWidget(
             data: initialText + text,
-            styleConfig: StyleConfig(
-                pConfig: PConfig(
-                  onLinkTap: (url) => launchURL(url),
-                ),
-                videoConfig: VideoConfig(autoInitialize: true)),
+            config: isDark
+                ? MarkdownConfig.darkConfig
+                : MarkdownConfig.defaultConfig,
+            markdownGeneratorConfig: MarkdownGeneratorConfig(
+                generators: [videoGeneratorWithTag],
+                textGenerator: (node, config, visitor) =>
+                    CustomTextNode(node.textContent, config, visitor)),
           ),
         ),
       ],

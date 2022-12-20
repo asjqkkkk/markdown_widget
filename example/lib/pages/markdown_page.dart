@@ -1,10 +1,10 @@
 import 'package:example/state/root_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 import '../platform_dector/platform_dector.dart';
-import 'edit_markdown_page.dart';
 
 class MarkdownPage extends StatefulWidget {
   final String? assetsPath;
@@ -22,8 +22,8 @@ class _MarkdownPageState extends State<MarkdownPage> {
   ///key: [isEnglish] , value: data
   Map<bool, String> dataMap = {};
   String? data;
-  final TocController controller = TocController();
   bool isEnglish = true;
+  final TocController controller = TocController();
 
   @override
   void initState() {
@@ -46,6 +46,12 @@ class _MarkdownPageState extends State<MarkdownPage> {
       this.data = data;
       refresh();
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   void refresh() {
@@ -125,38 +131,17 @@ class _MarkdownPageState extends State<MarkdownPage> {
         icon: Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context));
   }
 
-  Widget buildTocList() => TocListWidget(
-        controller: controller,
-        key: ValueKey(controller),
-      );
+  Widget buildTocList() => TocWidget(controller: controller);
 
   Widget buildMarkdown() {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.all(10.0),
       child: MarkdownWidget(
         data: data!,
-        controller: controller,
-        styleConfig: StyleConfig(
-            pConfig: PConfig(onLinkTap: (url) => launchURL(url)),
-            preConfig: PreConfig(
-              preWrapper: (child, text) =>
-                  buildCodeBlock(child, text, isEnglish),
-            ),
-            tableConfig: TableConfig(
-              defaultColumnWidth: FixedColumnWidth(50),
-              headChildWrapper: (child) => Container(
-                margin: EdgeInsets.all(10.0),
-                child: child,
-                alignment: Alignment.center,
-              ),
-              bodyChildWrapper: (child) => Container(
-                margin: EdgeInsets.all(10.0),
-                child: child,
-                alignment: Alignment.center,
-              ),
-            ),
-            markdownTheme:
-                isDarkNow ? MarkdownTheme.darkTheme : MarkdownTheme.lightTheme),
+        config:
+            isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig,
+        tocController: controller,
       ),
     );
   }

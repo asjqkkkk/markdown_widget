@@ -49,9 +49,9 @@ class MarkdownHelper {
 [I'm link](https://github.com/asjqkkkk/flutter-todos)
 
 
-[ ] I'm *CheckBox*
+- [ ] I'm *CheckBox*
 
-[x] I'm *CheckBox* too
+- [x] I'm *CheckBox* too
 
 Test for divider(hr):
 
