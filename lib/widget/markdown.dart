@@ -1,10 +1,10 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/config/configs.dart';
+import 'package:flutter/rendering.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-
-import '../config/markdown_generator.dart';
 
 class MarkdownWidget extends StatefulWidget {
   ///the markdown data
@@ -48,12 +48,25 @@ class MarkdownWidget extends StatefulWidget {
 }
 
 class _MarkdownWidgetState extends State<MarkdownWidget> {
+  ///use [markdownGenerator] to transform markdown data to [Widget] list
   late MarkdownGenerator markdownGenerator;
-  List<Widget> widgets = [];
+
+  ///The markdown string converted by MarkdownGenerator will be retained in the [_widgets]
+  List<Widget> _widgets = [];
+
+  ///[TocController] combines [TocWidget] and [MarkdownWidget]
   late TocController _tocController;
+
+  ///[AutoScrollController] provides the scroll to index mechanism
   final AutoScrollController controller = AutoScrollController();
+
+  ///every [VisibilityDetector]'s child which is visible will be kept with [indexTreeSet]
   final indexTreeSet = SplayTreeSet<int>((a, b) => a - b);
 
+  ///if the [ScrollDirection] of [ListView] is [ScrollDirection.forward], [isForward] will be true
+  bool isForward = true;
+
+  ///use [MarkdownConfig] to set various configurations for [MarkdownWidget]
   MarkdownConfig get _config => markdownGenerator.config;
 
   @override
@@ -73,8 +86,8 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
         widget.markdownGeneratorConfig ?? MarkdownGeneratorConfig();
     markdownGenerator = MarkdownGenerator(
       config: widget.config,
-      inlineSyntaxes: generatorConfig.inlineSyntaxes,
-      blockSyntaxes: generatorConfig.blockSyntaxes,
+      inlineSyntaxes: generatorConfig.inlineSyntaxList,
+      blockSyntaxes: generatorConfig.blockSyntaxList,
       linesMargin: generatorConfig.linesMargin,
       generators: generatorConfig.generators,
       onNodeAccepted: generatorConfig.onNodeAccepted,
@@ -84,12 +97,14 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
         markdownGenerator.buildWidgets(widget.data, onTocList: (tocList) {
       _tocController.setTocList(tocList);
     });
-    widgets.addAll(result);
+    _widgets.addAll(result);
   }
 
-  ///this method will be called when update
+  ///this method will be called when [updateState] or [dispose]
   void clearState() {
-    widgets.clear();
+    indexTreeSet.clear();
+    _widgets.clear();
+    isForward = true;
   }
 
   @override
@@ -101,20 +116,23 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return buildMarkdownWidget();
-  }
+  Widget build(BuildContext context) => buildMarkdownWidget();
 
+  ///
   Widget buildMarkdownWidget() {
-    final markdownWidget = ShareConfigWidget(
-      config: _config,
+    final markdownWidget = NotificationListener<UserScrollNotification>(
+      onNotification: (notification) {
+        final ScrollDirection direction = notification.direction;
+        isForward = direction == ScrollDirection.forward;
+        return true;
+      },
       child: ListView.builder(
         shrinkWrap: widget.shrinkWrap,
         physics: widget.physics,
         controller: controller,
-        itemBuilder: (ctx, index) => wrapByAutoScroll(
-            index, wrapByVisibilityDetector(index, widgets[index]), controller),
-        itemCount: widgets.length,
+        itemBuilder: (ctx, index) => wrapByAutoScroll(index,
+            wrapByVisibilityDetector(index, _widgets[index]), controller),
+        itemCount: _widgets.length,
         padding: widget.padding,
       ),
     );
@@ -123,15 +141,24 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
         : markdownWidget;
   }
 
+  ///wrap widget by [VisibilityDetector] that can know if [child] is visible
   Widget wrapByVisibilityDetector(int index, Widget child) {
     return VisibilityDetector(
       key: ValueKey(index.toString()),
       onVisibilityChanged: (VisibilityInfo info) {
         final visibleFraction = info.visibleFraction;
-        if (visibleFraction > 0) {
-          indexTreeSet.add(index);
-        } else if (visibleFraction == 0.0) {
-          indexTreeSet.remove(index);
+        if (!isForward) {
+          if (visibleFraction == 1.0) {
+            indexTreeSet.add(index);
+          } else {
+            indexTreeSet.remove(index);
+          }
+        } else {
+          if (visibleFraction > 0) {
+            indexTreeSet.add(index);
+          } else if (visibleFraction == 0.0) {
+            indexTreeSet.remove(index);
+          }
         }
         if (indexTreeSet.isNotEmpty) {
           _tocController.onIndexChanged(indexTreeSet.first);
@@ -146,9 +173,6 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     if (mounted) setState(() {});
   }
 
-  ///the listener of [ScrollablePositionedList]
-  void indexListener() {}
-
   @override
   void didUpdateWidget(MarkdownWidget oldWidget) {
     clearState();
@@ -157,6 +181,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   }
 }
 
+///wrap widget by [AutoScrollTag] that can use [AutoScrollController] to scrollToIndex
 Widget wrapByAutoScroll(
     int index, Widget child, AutoScrollController controller) {
   return AutoScrollTag(

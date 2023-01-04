@@ -7,6 +7,9 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import '../widget/blocks/leaf/heading.dart';
 import '../widget/markdown.dart';
 
+///[TocController] combines [TocWidget] and [MarkdownWidget],
+///you can use it to control the jump between the two,
+/// and each [TocWidget] corresponds to a [MarkdownWidget].
 class TocController {
   ///key is index of widgets, value is [Toc]
   final LinkedHashMap<int, Toc> _index2toc = new LinkedHashMap();
@@ -155,7 +158,7 @@ class _TocWidgetState extends State<TocWidget> {
         final child = ListTile(
           title: Container(
             margin: EdgeInsets.only(
-                left: 20.0 * (_tag2Level[node.headingConfig.tag] ?? 1)),
+                left: 20.0 * (headingTag2Level[node.headingConfig.tag] ?? 1)),
             child: Text.rich(node.build()),
           ),
           onTap: () {
@@ -190,7 +193,7 @@ class TocItemBuilderData {
 }
 
 ///every heading tag has a special level
-final _tag2Level = <String, int>{
+final headingTag2Level = <String, int>{
   'h1': 1,
   'h2': 2,
   'h3': 3,

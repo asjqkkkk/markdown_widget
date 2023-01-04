@@ -101,6 +101,7 @@ enum MarkdownTag {
   other
 }
 
+///use [MarkdownConfig] to set various configurations for [MarkdownWidget]
 class MarkdownConfig {
   HrConfig get hr => _getConfig<HrConfig>(MarkdownTag.hr, const HrConfig());
 

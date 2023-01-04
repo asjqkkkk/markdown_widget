@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
-import 'package:markdown_widget/markdown_widget.dart';
+
+import '../widget/blocks/leaf/heading.dart';
 import '../widget/widget_visitor.dart';
 import 'configs.dart';
+import 'toc.dart';
 
 ///use [MarkdownGenerator] to transform markdown data to [Widget] list, so you can render it by any type of [ListView]
 class MarkdownGenerator {
@@ -24,6 +26,8 @@ class MarkdownGenerator {
     this.textGenerator,
   }) : this.config = config ?? MarkdownConfig.defaultConfig;
 
+  ///convert [data] to widgets
+  ///[onTocList] can provider [Toc] list
   List<Widget> buildWidgets(String data,
       {ValueCallback<List<Toc>>? onTocList}) {
     final m.Document document = m.Document(
@@ -61,16 +65,16 @@ class MarkdownGenerator {
 }
 
 class MarkdownGeneratorConfig {
-  final Iterable<m.InlineSyntax> inlineSyntaxes;
-  final Iterable<m.BlockSyntax> blockSyntaxes;
+  final Iterable<m.InlineSyntax> inlineSyntaxList;
+  final Iterable<m.BlockSyntax> blockSyntaxList;
   final EdgeInsets linesMargin;
   final List<SpanNodeGeneratorWithTag> generators;
   final SpanNodeAcceptCallback? onNodeAccepted;
   final TextNodeGenerator? textGenerator;
 
   MarkdownGeneratorConfig({
-    this.inlineSyntaxes = const [],
-    this.blockSyntaxes = const [],
+    this.inlineSyntaxList = const [],
+    this.blockSyntaxList = const [],
     this.linesMargin = const EdgeInsets.all(4),
     this.generators = const [],
     this.onNodeAccepted,

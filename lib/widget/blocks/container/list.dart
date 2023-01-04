@@ -5,6 +5,7 @@ import '../../../config/configs.dart';
 import '../../inlines/input.dart';
 import '../../span_node.dart';
 import '../leaf/paragraph.dart';
+
 ///Tag [MarkdownTag.ol]、[MarkdownTag.ul]
 ///
 /// ordered list and unordered widget
@@ -36,7 +37,7 @@ class UlOrOLNode extends ElementNode {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(
             children.length,
-                (index) {
+            (index) {
               final childNode = children[index];
               return Text.rich(childNode.build());
             },
@@ -101,8 +102,7 @@ class ListNode extends ElementNode {
               width: space,
               child: marker,
             ),
-            Expanded(
-                child: Text.rich(childrenSpan)),
+            Expanded(child: Text.rich(childrenSpan)),
           ],
         ),
       ),
@@ -116,7 +116,6 @@ class ListNode extends ElementNode {
   @override
   TextStyle? get style => parentStyle;
 }
-
 
 ///config class for list, tag: li
 class ListConfig implements ContainerConfig {
@@ -187,7 +186,12 @@ class _OlMarker extends StatelessWidget {
   final Color? color;
   final PConfig config;
 
-  const _OlMarker({Key? key, this.depth = 0, this.color, this.index = 1, required this.config})
+  const _OlMarker(
+      {Key? key,
+      this.depth = 0,
+      this.color,
+      this.index = 1,
+      required this.config})
       : super(key: key);
 
   @override
@@ -199,14 +203,15 @@ class _OlMarker extends StatelessWidget {
 }
 
 ///get default marker for list
-Widget getDefaultMarker(
-    bool isOrdered, int depth, Color? color, int index, double paddingTop, MarkdownConfig config) {
+Widget getDefaultMarker(bool isOrdered, int depth, Color? color, int index,
+    double paddingTop, MarkdownConfig config) {
   Widget marker;
   if (isOrdered)
     marker = Container(
         alignment: Alignment.topRight,
         padding: EdgeInsets.only(right: 1),
-        child: _OlMarker(depth: depth, index: index, color: color, config: config.p));
+        child: _OlMarker(
+            depth: depth, index: index, color: color, config: config.p));
   else
     marker = Padding(
         padding: EdgeInsets.only(top: paddingTop - 3),

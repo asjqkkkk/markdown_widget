@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import '../../../config/configs.dart';
 import '../../span_node.dart';
 
@@ -62,20 +61,19 @@ class TableNode extends ElementNode {
 
     return WidgetSpan(
         child: Table(
-          columnWidths: tbConfig.columnWidths,
-          defaultColumnWidth:
-              tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
-          textBaseline: tbConfig.textBaseline,
-          textDirection: tbConfig.textDirection,
-          border: tbConfig.border ??
-              TableBorder.all(
-                  color: parentStyle?.color ??
-                      config.p.textStyle.color ??
-                      Colors.grey),
-          defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
-              TableCellVerticalAlignment.middle,
-          children: rows,
-        ));
+      columnWidths: tbConfig.columnWidths,
+      defaultColumnWidth: tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
+      textBaseline: tbConfig.textBaseline,
+      textDirection: tbConfig.textDirection,
+      border: tbConfig.border ??
+          TableBorder.all(
+              color: parentStyle?.color ??
+                  config.p.textStyle.color ??
+                  Colors.grey),
+      defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
+          TableCellVerticalAlignment.middle,
+      children: rows,
+    ));
   }
 }
 
