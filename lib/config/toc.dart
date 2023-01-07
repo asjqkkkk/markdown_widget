@@ -148,8 +148,10 @@ class _TocWidgetState extends State<TocWidget> {
         final currentToc = _tocList[index];
         bool isCurrentToc = index == currentIndex;
         final itemBuilder = widget.itemBuilder;
-        if (itemBuilder != null)
-          return itemBuilder.call(TocItemBuilderData(index, currentToc, currentIndex, refreshIndex));
+        if (itemBuilder != null){
+          final result = itemBuilder.call(TocItemBuilderData(index, currentToc, currentIndex, refreshIndex));
+          if(result != null) return result;
+        }
         final node = currentToc.node.copy(
             headingConfig: _TocHeadingConfig(
                 TextStyle(
@@ -180,7 +182,7 @@ class _TocWidgetState extends State<TocWidget> {
 }
 
 ///use [TocItemBuilder] to return a custom widget
-typedef TocItemBuilder = Widget Function(TocItemBuilderData data);
+typedef TocItemBuilder = Widget? Function(TocItemBuilderData data);
 
 ///pass [TocItemBuilderData] to help build your own [TocItemBuilder]
 class TocItemBuilderData {

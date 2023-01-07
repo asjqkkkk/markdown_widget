@@ -3,7 +3,6 @@ import 'package:markdown/markdown.dart' as m;
 import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/widget/all.dart';
 
-import 'span_node.dart';
 
 ///use [WidgetVisitor] that can transform MarkdownNode to [SpanNode]s
 ///and you can use [SpanNode] with [Text.rich] or [RichText] to get widget
@@ -63,8 +62,6 @@ class WidgetVisitor implements m.NodeVisitor {
   bool visitElementBefore(m.Element element) {
     final node = getNodeByElement(element, config);
     final last = _spansStack.last;
-    debugPrint(
-        'visitElementBefore   --- tag:${element.tag}   attribute:${element.attributes}');
     if (last is ElementNode) {
       last.accept(node);
       onNodeAccepted?.call(node, _currentSpanIndex);
@@ -76,14 +73,11 @@ class WidgetVisitor implements m.NodeVisitor {
 
   @override
   void visitElementAfter(m.Element element) {
-    debugPrint(
-        'visitElementAfter   --- tag:${element.tag}   attribute:${element.attributes}');
     _spansStack.removeLast();
   }
 
   @override
   void visitText(m.Text text) {
-    debugPrint('visitText   --- text:${text.text}');
     final last = _spansStack.last;
     if (last is ElementNode) {
       final textNode = textGenerator?.call(text, config, this) ??
@@ -140,7 +134,7 @@ typedef SpanNodeGenerator = SpanNode Function(
     m.Element e, MarkdownConfig config, WidgetVisitor visitor);
 
 ///use [TextNodeGenerator] to custom your own [TextNode]
-typedef TextNodeGenerator = SpanNode Function(
+typedef TextNodeGenerator = SpanNode? Function(
     m.Node node, MarkdownConfig config, WidgetVisitor visitor);
 
 ///when a [SpanNope] is visited, this callback will be triggered

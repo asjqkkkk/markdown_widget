@@ -99,9 +99,6 @@ class THeadNode extends ElementNode {
   int get cellCount => (children.first as TrNode).children.length;
 
   @override
-  InlineSpan build() => TextSpan();
-
-  @override
   TextStyle? get style =>
       config.table.headerStyle?.merge(parentStyle) ??
       parentStyle ??
@@ -112,9 +109,6 @@ class TBodyNode extends ElementNode {
   final MarkdownConfig config;
 
   TBodyNode(this.config);
-
-  @override
-  InlineSpan build() => TextSpan();
 
   List<TableRow> buildRows(int cellCount) {
     return List.generate(children.length, (index) {

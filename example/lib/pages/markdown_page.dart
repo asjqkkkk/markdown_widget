@@ -1,7 +1,6 @@
 import 'package:example/state/root_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 import '../platform_dector/platform_dector.dart';

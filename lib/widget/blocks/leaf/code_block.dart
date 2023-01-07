@@ -46,21 +46,21 @@ List<InlineSpan> highLightSpans(
   String input, {
   String? language,
   bool autoDetectionLanguage = false,
-  Map<String, TextStyle>? theme = const {},
+  Map<String, TextStyle> theme = const {},
   TextStyle? textStyle,
   int tabSize = 8,
 }) {
-  return _convert(
+  return convertHiNodes(
       hi.highlight
           .parse(input.trimRight(),
               language: autoDetectionLanguage ? null : language,
               autoDetection: autoDetectionLanguage)
           .nodes!,
-      theme ?? {},
+      theme,
       textStyle);
 }
 
-List<TextSpan> _convert(
+List<TextSpan> convertHiNodes(
     List<hi.Node> nodes, Map<String, TextStyle> theme, TextStyle? style) {
   List<TextSpan> spans = [];
   var currentSpans = spans;

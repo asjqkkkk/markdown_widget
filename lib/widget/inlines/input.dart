@@ -29,9 +29,6 @@ class InputNode extends SpanNode{
           ),
     );
   }
-
-  @override
-  TextStyle? get style => null;
 }
 
 

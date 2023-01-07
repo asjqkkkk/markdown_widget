@@ -55,7 +55,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   List<Widget> _widgets = [];
 
   ///[TocController] combines [TocWidget] and [MarkdownWidget]
-  late TocController _tocController;
+  TocController? _tocController;
 
   ///[AutoScrollController] provides the scroll to index mechanism
   final AutoScrollController controller = AutoScrollController();
@@ -66,14 +66,11 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   ///if the [ScrollDirection] of [ListView] is [ScrollDirection.forward], [isForward] will be true
   bool isForward = true;
 
-  ///use [MarkdownConfig] to set various configurations for [MarkdownWidget]
-  MarkdownConfig get _config => markdownGenerator.config;
-
   @override
   void initState() {
     super.initState();
-    _tocController = widget.tocController ?? TocController();
-    _tocController.jumpToIndexCallback = (index) {
+    _tocController = widget.tocController;
+    _tocController?.jumpToIndexCallback = (index) {
       controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
     };
     updateState();
@@ -95,7 +92,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
     );
     final result =
         markdownGenerator.buildWidgets(widget.data, onTocList: (tocList) {
-      _tocController.setTocList(tocList);
+      _tocController?.setTocList(tocList);
     });
     _widgets.addAll(result);
   }
@@ -104,14 +101,13 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   void clearState() {
     indexTreeSet.clear();
     _widgets.clear();
-    isForward = true;
   }
 
   @override
   void dispose() {
     clearState();
     controller.dispose();
-    _tocController.jumpToIndexCallback = null;
+    _tocController?.jumpToIndexCallback = null;
     super.dispose();
   }
 
@@ -147,30 +143,21 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
       key: ValueKey(index.toString()),
       onVisibilityChanged: (VisibilityInfo info) {
         final visibleFraction = info.visibleFraction;
-        if (!isForward) {
-          if (visibleFraction == 1.0) {
-            indexTreeSet.add(index);
-          } else {
-            indexTreeSet.remove(index);
-          }
+        if (isForward) {
+          visibleFraction == 0
+              ? indexTreeSet.remove(index)
+              : indexTreeSet.add(index);
         } else {
-          if (visibleFraction > 0) {
-            indexTreeSet.add(index);
-          } else if (visibleFraction == 0.0) {
-            indexTreeSet.remove(index);
-          }
+          visibleFraction == 1.0
+              ? indexTreeSet.add(index)
+              : indexTreeSet.remove(index);
         }
         if (indexTreeSet.isNotEmpty) {
-          _tocController.onIndexChanged(indexTreeSet.first);
+          _tocController?.onIndexChanged(indexTreeSet.first);
         }
       },
       child: child,
     );
-  }
-
-  ///call [setState] method
-  void refresh() {
-    if (mounted) setState(() {});
   }
 
   @override

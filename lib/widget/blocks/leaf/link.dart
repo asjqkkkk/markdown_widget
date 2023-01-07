@@ -50,17 +50,18 @@ class LinkNode extends ElementNode {
     }));
   }
 
+  void _onLinkTap(LinkConfig linkConfig, String url) {
+    if (linkConfig.onTap != null) {
+      linkConfig.onTap?.call(url);
+    } else {
+      launchUrl(Uri.parse(url));
+    }
+  }
+
   @override
   TextStyle get style => TextStyle(color: linkConfig.color).merge(parentStyle);
 }
 
-void _onLinkTap(LinkConfig linkConfig, String url) {
-  if (linkConfig.onTap != null) {
-    linkConfig.onTap?.call(url);
-  } else {
-    launchUrl(Uri.parse(url));
-  }
-}
 
 ///config class for link, tag: a
 class LinkConfig implements LeafConfig {

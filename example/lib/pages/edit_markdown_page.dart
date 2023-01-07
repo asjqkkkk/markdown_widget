@@ -1,8 +1,6 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/config/configs.dart';
-import 'package:markdown_widget/config/markdown_generator.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
