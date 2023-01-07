@@ -19,12 +19,12 @@ const RESOURCES = {
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/fonts/MaterialIcons-Regular.otf": "95db9098c58fd6db106f1116bae85a0b",
-"assets/assets/demo_en.md": "b6ce69c390d81980488330a27d05e654",
-"assets/assets/demo_zh.md": "21dd095ea649009b47db9cb43ab68a3e",
+"assets/assets/demo_en.md": "8eace9277b353ed0fabb92bbcf2bd990",
+"assets/assets/demo_zh.md": "5842da6fd23bb539cfaec4b85ab446c7",
 "assets/assets/editor.md": "b263c53132d968f60ec3a03698dc1265",
 "assets/NOTICES": "1f4277c7f6ab958ccffbe9c98d813df6",
-"index.html": "425fc2e5a214e37034a1c8d65af44241",
-"/": "425fc2e5a214e37034a1c8d65af44241",
+"index.html": "5d23034cacbf5bc7366f0321d04b29f1",
+"/": "5d23034cacbf5bc7366f0321d04b29f1",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "version.json": "ff966ab969ba381b900e61629bfb9789"
 };

@@ -6,7 +6,7 @@
 
 # 📖markdown_widget
 
-[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.png?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen.png)](http://oldben.gitee.io/markdown_widget)
+[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.png?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen.png)](https://asjqkkkk.github.io/markdown_widget/)
 
 一个简单易用的markdown渲染组件
 
@@ -16,7 +16,7 @@
 
 ## 🚀使用
 
-在开始之前,你可以先体验一下在线 demo [点击体验](http://oldben.gitee.io/markdown_widget)
+在开始之前,你可以先体验一下在线 demo [点击体验](https://asjqkkkk.github.io/markdown_widget/)
 
 ```
 import 'package:flutter/material.dart';

@@ -4,7 +4,7 @@ Language：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/maste
 
 # 📖markdown_widget
 
-[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.svg?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen)](http://oldben.gitee.io/markdown_widget)
+[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.svg?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen)](https://asjqkkkk.github.io/markdown_widget/)
 
 A simple and easy-to-use markdown rendering component.
 
@@ -14,7 +14,7 @@ A simple and easy-to-use markdown rendering component.
 
 ## 🚀Usage
 
-Before starting, you can try out the online demo by clicking [demo](http://oldben.gitee.io/markdown_widget)
+Before starting, you can try out the online demo by clicking [demo](https://asjqkkkk.github.io/markdown_widget/)
 
 ```
 import 'package:flutter/material.dart';
