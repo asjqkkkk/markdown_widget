@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:mockito/mockito.dart';
 
-
 /// Runs [body] in separate [Zone] with [MockHttpClient].
 R mockNetworkImagesFor<R>(R body()) {
   return HttpOverrides.runZoned(
@@ -31,40 +30,40 @@ class MockHttpClientRequest extends Mock implements HttpClientRequest {
   @override
   Future<HttpClientResponse> close() =>
       // ignore: invalid_use_of_visible_for_testing_member
-  super.noSuchMethod(Invocation.method(#close, []),
-      returnValue: Future.value(MockHttpClientResponse()));
+      super.noSuchMethod(Invocation.method(#close, []),
+          returnValue: Future.value(MockHttpClientResponse()));
 }
 
 class MockHttpClientResponse extends Mock implements HttpClientResponse {
   @override
   HttpClientResponseCompressionState get compressionState =>
       // ignore: invalid_use_of_visible_for_testing_member
-  super.noSuchMethod(Invocation.getter(#compressionState),
-      returnValue: HttpClientResponseCompressionState.notCompressed);
+      super.noSuchMethod(Invocation.getter(#compressionState),
+          returnValue: HttpClientResponseCompressionState.notCompressed);
 
   @override
   int get contentLength =>
       // ignore: invalid_use_of_visible_for_testing_member
-  super.noSuchMethod(Invocation.getter(#contentLength), returnValue: 0);
+      super.noSuchMethod(Invocation.getter(#contentLength), returnValue: 0);
 
   @override
   int get statusCode =>
       // ignore: invalid_use_of_visible_for_testing_member
-  super.noSuchMethod(Invocation.getter(#statusCode), returnValue: 0);
+      super.noSuchMethod(Invocation.getter(#statusCode), returnValue: 0);
 
   @override
   StreamSubscription<List<int>> listen(void Function(List<int>)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) =>
+          {Function? onError, void Function()? onDone, bool? cancelOnError}) =>
       // ignore: invalid_use_of_visible_for_testing_member
-  super.noSuchMethod(
-      Invocation.method(#listen, [
-        onData,
-      ], {
-        Symbol("onError"): onError,
-        Symbol("onDone"): onDone,
-        Symbol("cancelOnError"): cancelOnError,
-      }),
-      returnValue: MockStreamSubscription<List<int>>());
+      super.noSuchMethod(
+          Invocation.method(#listen, [
+            onData,
+          ], {
+            Symbol("onError"): onError,
+            Symbol("onDone"): onDone,
+            Symbol("cancelOnError"): cancelOnError,
+          }),
+          returnValue: MockStreamSubscription<List<int>>());
 }
 
 class MockHttpHeaders extends Mock implements HttpHeaders {}

@@ -64,6 +64,7 @@ class MarkdownGenerator {
   }
 }
 
+///use [MarkdownGeneratorConfig] for [MarkdownGenerator]
 class MarkdownGeneratorConfig {
   final Iterable<m.InlineSyntax> inlineSyntaxList;
   final Iterable<m.BlockSyntax> blockSyntaxList;

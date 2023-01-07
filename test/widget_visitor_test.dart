@@ -13,8 +13,8 @@ void main() {
     final config = MarkdownGeneratorConfig();
     for (var i = 0; i < list.length; ++i) {
       _checkWithIndex(i);
-      _checkWithIndex(
-          i, config: MarkdownConfig.darkConfig, generatorConfig: config);
+      _checkWithIndex(i,
+          config: MarkdownConfig.darkConfig, generatorConfig: config);
     }
   });
 
@@ -31,11 +31,13 @@ void main() {
 
   test('getNodeByElement', () {
     final visitor = WidgetVisitor();
-    visitor.getNodeByElement(m.Element("aaa", []), MarkdownConfig.defaultConfig);
+    visitor.getNodeByElement(
+        m.Element("aaa", []), MarkdownConfig.defaultConfig);
   });
 }
 
-List<Widget> testMarkdownGenerator(String markdown, {
+List<Widget> testMarkdownGenerator(
+  String markdown, {
   MarkdownConfig? config,
   MarkdownGeneratorConfig? generatorConfig,
 }) {
@@ -47,9 +49,7 @@ List<Widget> testMarkdownGenerator(String markdown, {
     onNodeAccepted: generatorConfig?.onNodeAccepted,
     textGenerator: generatorConfig?.textGenerator,
   );
-  return markdownGenerator.buildWidgets(markdown, onTocList: (list) {
-    print('toc list:$list');
-  });
+  return markdownGenerator.buildWidgets(markdown, onTocList: (list) {});
 }
 
 List<SpanNode> transformMarkdown(String markdown, {MarkdownConfig? config}) {
@@ -60,11 +60,13 @@ List<SpanNode> transformMarkdown(String markdown, {MarkdownConfig? config}) {
   final lines = markdown.replaceAll('\r\n', '\n').split('\n');
   final nodes = document.parseLines(lines);
   List<HeadingNode> headings = [];
-  final visitor = WidgetVisitor(onNodeAccepted: (node, index) {
-    if (node is HeadingNode) {
-      headings.add(node);
-    }
-  }, config: config);
+  final visitor = WidgetVisitor(
+      onNodeAccepted: (node, index) {
+        if (node is HeadingNode) {
+          headings.add(node);
+        }
+      },
+      config: config);
   return visitor.visit(nodes);
 }
 
@@ -73,15 +75,14 @@ void _checkWithIndex(int index,
   final list = getTestJsonList();
   assert(index >= 0 && index < list.length);
   String current = list[index]['markdown'];
-  testMarkdownGenerator(
-      current, config: config, generatorConfig: generatorConfig);
+  testMarkdownGenerator(current,
+      config: config, generatorConfig: generatorConfig);
 }
 
 List<dynamic> getTestJsonList() {
   if (_mdList != null) return _mdList;
   final current = Directory.current;
-  final jsonPath =
-  p.join(current.path, 'test', 'test_markdowns', 'test.json');
+  final jsonPath = p.join(current.path, 'test', 'test_markdowns', 'test.json');
   File jsonFile = File(jsonPath);
   final content = jsonFile.readAsStringSync();
   final json = jsonDecode(content);

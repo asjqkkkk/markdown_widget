@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../config/configs.dart';
 import '../../span_node.dart';
 
-
 ///Tag: [MarkdownTag.p]
 ///
 ///A sequence of non-blank lines that cannot be interpreted as other kinds of blocks forms a paragraph

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../config/configs.dart';
 import '../../span_node.dart';
+import '../../widget_visitor.dart';
 
 class TableConfig implements ContainerConfig {
   final Map<int, TableColumnWidth>? columnWidths;
@@ -16,6 +17,7 @@ class TableConfig implements ContainerConfig {
   final TextStyle? bodyStyle;
   final EdgeInsets headPadding;
   final EdgeInsets bodyPadding;
+  final WidgetWrapper? wrapper;
 
   const TableConfig({
     this.columnWidths,
@@ -28,6 +30,7 @@ class TableConfig implements ContainerConfig {
     this.bodyRowDecoration,
     this.headerStyle,
     this.bodyStyle,
+    this.wrapper,
     this.headPadding = const EdgeInsets.all(4),
     this.bodyPadding = const EdgeInsets.all(4),
   });
@@ -59,8 +62,7 @@ class TableNode extends ElementNode {
       }
     }
 
-    return WidgetSpan(
-        child: Table(
+    final tableWidget = Table(
       columnWidths: tbConfig.columnWidths,
       defaultColumnWidth: tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
       textBaseline: tbConfig.textBaseline,
@@ -73,7 +75,10 @@ class TableNode extends ElementNode {
       defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
           TableCellVerticalAlignment.middle,
       children: rows,
-    ));
+    );
+
+    return WidgetSpan(
+        child: config.table.wrapper?.call(tableWidget) ?? tableWidget);
   }
 }
 

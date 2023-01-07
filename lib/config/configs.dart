@@ -1,5 +1,4 @@
-import '../widget/blocks/all.dart';
-import '../widget/inlines/all.dart';
+import '../widget/all.dart';
 
 abstract class WidgetConfig {
   ///every config has a tag
@@ -150,8 +149,10 @@ class MarkdownConfig {
     return config as T;
   }
 
+  ///default [MarkdownConfig] for [MarkdownWidget]
   static MarkdownConfig defaultConfig = MarkdownConfig();
 
+  ///[darkConfig] is used for dark mode
   static MarkdownConfig darkConfig = MarkdownConfig(configs: [
     HrConfig.darkConfig,
     H1Config.darkConfig,

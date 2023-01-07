@@ -69,6 +69,9 @@ void main() {
               return MarkdownWidget(
                 data: text,
                 tocController: tocController,
+                config: MarkdownConfig(configs: [
+                  TableConfig(wrapper: (child) => Container(child: child))
+                ]),
               );
             })),
       ),
@@ -181,18 +184,17 @@ void main() {
     });
   });
 
-  testWidgets('MCheckBox test', (tester) async{
+  testWidgets('MCheckBox test', (tester) async {
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
           body: Directionality(
               textDirection: TextDirection.ltr,
               child: ListView(
-                  children: [
-                    MCheckBox(checked: false),
-                    MCheckBox(checked: true),
-                  ],
+                children: [
+                  MCheckBox(checked: false),
+                  MCheckBox(checked: true),
+                ],
               ))),
     ));
   });
-
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
+import '../markdown_custom/video.dart';
 import '../platform_dector/platform_dector.dart';
 
 class MarkdownPage extends StatefulWidget {
@@ -56,9 +57,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
   void refresh() {
     if (mounted) setState(() {});
   }
-
-  bool get isDarkNow =>
-      rootStore.state.themeState.brightness == Brightness.dark;
 
   @override
   Widget build(BuildContext context) {
@@ -137,11 +135,14 @@ class _MarkdownPageState extends State<MarkdownPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: MarkdownWidget(
-        data: data!,
-        config:
-            isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig,
-        tocController: controller,
-      ),
+          data: data!,
+          config:
+              isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig,
+          tocController: controller,
+          markdownGeneratorConfig: MarkdownGeneratorConfig(
+              generators: [videoGeneratorWithTag],
+              textGenerator: (node, config, visitor) =>
+                  CustomTextNode(node.textContent, config, visitor))),
     );
   }
 

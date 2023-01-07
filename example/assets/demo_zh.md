@@ -1,25 +1,22 @@
-Language:[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md)|[English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
+> 🚀 markdown_widget 2.0 现在已发布
+相较于1.x 的版本来说，整个代码参造 [CommonMark Spec 3.0](https://spec.commonmark.org/0.30/) 进行了全部的重构
+这带来了大量破坏性的修改，但同时有了更加符合规范的markdown渲染逻辑、以及更加健壮和可扩展的代码
+
+语言：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
 # 📖markdown_widget
 
-[![support](https://img.shields.io/badge/platform-flutter%7Cdart%20vm-ff69b4.svg?style=flat-square)](https://github.com/asjqkkkk/markdown_widget)
-[![Flutter Web](https://github.com/asjqkkkk/markdown_widget/workflows/Flutter%20Web/badge.svg)](https://github.com/asjqkkkk/markdown_widget/actions)
-[![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget)
-[![demo](https://img.shields.io/badge/demo-online-brightgreen)](http://oldben.gitee.io/markdown_widget)
+[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.png?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen.png)](http://oldben.gitee.io/markdown_widget)
 
-完全由flutter创建,一个简单好用,支持mobile与flutter web的markdown插件
+一个简单易用的markdown渲染组件
 
-- 支持TOC功能
-- 支持html格式的 `img` 和 `video` 标签
+- 支持TOC功能，可以通过Heading快速定位
 - 支持代码高亮
+- 支持全平台
 
-
-## 🚀开始
+## 🚀使用
 
 在开始之前,你可以先体验一下在线 demo [点击体验](http://oldben.gitee.io/markdown_widget)
-
-### 🔑简单使用
-
 
 ```
 import 'package:flutter/material.dart';
@@ -31,14 +28,7 @@ class MarkdownPage extends StatelessWidget {
   MarkdownPage(this.data);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.all(10),
-        child: buildMarkdown(),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(body: buildMarkdown());
 
   Widget buildMarkdown() => MarkdownWidget(data: data);
 }
@@ -46,104 +36,47 @@ class MarkdownPage extends StatelessWidget {
 
 如果你想使用自己的 Column 或者其他列表 Widget, 你可以使用 `MarkdownGenerator`
 
-
 ```
-  Widget buildMarkdown() => Column(children: MarkdownGenerator(data: data).widgets,);
+  Widget buildMarkdown() =>
+      Column(children: MarkdownGenerator().buildWidgets(data));
 ```
 
 ## 🌠夜间模式
 
-`markdown_widget` 默认支持夜间模式，你只需要对 `StyleConfig` 的 `markdownTheme` 属性进行配置即可
-
-
+`markdown_widget` 默认支持夜间模式，只需要使用不同的 `MarkdownConfig` 即可
 ```
-  Widget buildMarkdown() => MarkdownWidget(
+  Widget buildMarkdown(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return MarkdownWidget(
         data: data,
-        controller: controller,
-        styleConfig: StyleConfig(
-          markdownTheme: MarkdownTheme.lightTheme
-        ),
-      );
-```
-<img src="https://user-images.githubusercontent.com/30992818/79996396-02f4cc80-84eb-11ea-9c17-cf14979708a1.png" width=400> <img src="https://user-images.githubusercontent.com/30992818/79996326-ece70c00-84ea-11ea-811c-9ad7d1e81a19.png" width=400>
-
-这里你也可以自定义 `markdownTheme`
-
-
-## 🏞图片和视频
-
-如果你想要自定义 **img** 和 **video** 这两个标签的 Widget
-
-```
-  Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        styleConfig: StyleConfig(
-          imgBuilder: (String url,attributes) {
-            return Image.network(url);
-          },
-          videoBuilder: (String url,attributes) {
-            return YourVideoWidget();
-          }
-        ),
-      );
+        config:
+            isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig);
+  }
 ```
 
-图片与视频标签支持的markdown格式
+默认模式 | 夜间模式
+---|---
+<img src="https://user-images.githubusercontent.com/30992818/211159232-92efbbb0-dd01-4970-8ff1-33a47c133b1f.png" width=400> | <img src="https://user-images.githubusercontent.com/30992818/211159236-570fca93-a5f4-403f-94ba-986272d1207e.png" width=400>
 
-```
-<video src="https://xxx.mp4" controls="controls"/>
-
-<img width="150" alt="018" src="https://xxx.png"/>
-
-![demo](https://xxx)
-
-```
-
-如果你想自定义其他标签的Widget,请使用 `WidgetConfig`
 
 ## 🔗链接
 
-你可以自定义链接样式和点击事件
-
+你可以自定义链接样式和点击事件，比如下面这样
 
 ```
   Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        styleConfig: StyleConfig(
-          pConfig: PConfig(
-            linkStyle: TextStyle(...),
-            onLinkTap: (url){
-              _launchUrl(url);
-            }
-          )
-        ),
-      );
-```
-
-## 🍑自定义标签
-
-你可以使用自定义标签
-
-例如添加以下内容在你的markdown文件中
-
-```markdown
-<avatar size="12" name="tom" />
-```
-
-然后添加配置以下 `custom` 配置
-
-```dart
-      MarkdownWidget(
-        data: data,
-            styleConfig: StyleConfig(
-              pConfig: PConfig(
-                custom: (m.Element node) {
-                  ...
-                  return YourCustomWidget();
-                },
-              ),
-            ),
+      data: data,
+      config: MarkdownConfig(configs: [
+        LinkConfig(
+          style: TextStyle(
+            color: Colors.red,
+            decoration: TextDecoration.underline,
           ),
+          onTap: (url) {
+            ///TODO:on tap
+          },
+        )
+      ]));
 ```
 
 ## 📜TOC功能
@@ -151,46 +84,51 @@ class MarkdownPage extends StatelessWidget {
 使用TOC非常的简单
 
 ```
-  final TocController tocController = TocController();
+  Widget buildTocWidget() => TocWidget(controller: tocController);
 
-  Widget buildTocWidget() => TocListWidget(controller: controller);
-
-  Widget buildMarkdown() => MarkdownWidget(data: data, controller: controller);
+  Widget buildMarkdown() => MarkdownWidget(data: data, tocController: tocController);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Row(
-      children: <Widget>[
-        Expanded(child: buildTocWidget()),
-        Expanded(child: buildMarkdown(), flex: 3)
-      ],
-    ));
+          children: <Widget>[
+            Expanded(child: buildTocWidget()),
+            Expanded(child: buildMarkdown(), flex: 3)
+          ],
+        ));
   }
 ```
 
 ## 🎈代码高亮
 
 代码高亮支持多种主题
-
 ```
-import 'package:markdown_widget/config/highlight_themes.dart' as theme;
+import 'package:flutter_highlight/themes/a11y-light.dart';
 
   Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        styleConfig: StyleConfig(
-          preConfig: PreConfig(
-            language: 'java',
-            theme: theme.a11yLightTheme
-          )
-        ),
-      );
+      data: data,
+      config: MarkdownConfig(configs: [
+        PreConfig(theme: a11yLightTheme, language: 'dart'),
+      ]));
 ```
+
+## 🌐html 标签
+
+由于当前 package 只实现了对于 Makrdown tag 的转换，所以默认不支持转换 html 标签。但可以通过扩展的方式来支持这个功能，具体可以参考这里的使用 [html_support](https://github.com/asjqkkkk/markdown_widget/blob/1d549fd5c2d6b0172281d8bb66e367654b9d60f0/example/lib/markdown_custom/html_support.dart)
+
+## 🍑自定义tag与实现
+
+通过向 `MarkdownGeneratorConfig` 传递 `SpanNodeGeneratorWithTag` ，可以增加新的 tag，以及这个 tag 所对应的 `SpanNode`；也可以使用已有的 tag 来对它所对应的 `SpanNode` 进行覆盖
+
+同时也可以通过 `InlineSyntax` 与 `BlockSyntax` 自定义 markdown 字符串的解析规则，并生成新的 tag
+
+可以参考这里 [video.dart](https://github.com/asjqkkkk/markdown_widget/blob/1d549fd5c2d6b0172281d8bb66e367654b9d60f0/example/lib/markdown_custom/video.dart) 对于 `SpanNodeGeneratorWithTag` 的使用
+
 
 如果你由什么好的想法或者建议,以及使用上的问题, [欢迎来提pr或issue](https://github.com/asjqkkkk/markdown_widget)
 
-
-# 附录
+# 🧾附录
 
 这里是 markdown_widget 中使用到的其他库
 
@@ -198,17 +136,7 @@ import 'package:markdown_widget/config/highlight_themes.dart' as theme;
 ---|---
 [markdown](https://pub.flutter-io.cn/packages/markdown) | 解析markdown数据
 [flutter_highlight](https://pub.flutter-io.cn/packages/flutter_highlight) | 代码高亮
-[html](https://pub.flutter-io.cn/packages/html) | 解析markdown没有解析的html标签
-[video_player_web](https://pub.flutter-io.cn/packages/video_player_web) | 在flutter web上播放视频
-[video_player](https://pub.flutter-io.cn/packages/video_player) | 视频接口
-[scrollable_positioned_list](https://pub.flutter-io.cn/packages/scrollable_positioned_list) | 用于实现TOC功能
-
-## 为什么我要创建这个库
-
-既然已经有了 [flutter_markdown](https://pub.flutter-io.cn/packages/flutter_markdown) ，为什么我还要费时费力去写一个与之类似的新库呢？
-
-这是因为在我用flutter web创建我的[个人博客](http://oldben.gitee.io/flutter-blog/#/)的过程中，发现flutter_markdown有很多功能都不支持，比如TOC功能、HTML tag的图片等
-
-提了3个issue也没有回音，在这个前提下也就没打算去提pr了，并且flutter_markdown的源码并没有那么容易修改，可读性不高
-
-最后索性自己重新创建一个啦！
+[highlight](https://pub.flutter-io.cn/packages/highlight) | 代码高亮
+[url_launcher](https://pub.flutter-io.cn/packages/url_launcher) | 用于打开链接
+[visibility_detector](https://pub.flutter-io.cn/packages/visibility_detector) | 监听Widget是否可见
+[scroll_to_index](https://pub.flutter-io.cn/packages/scroll_to_index) | 让Listview可以根据index来跳转

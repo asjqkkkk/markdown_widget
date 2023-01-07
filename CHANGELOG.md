@@ -1,3 +1,5 @@
+#### [2.0.0] - The entire code has been completely redesigned according to the [CommonMark Spec 3.0](https://spec.commonmark.org/0.30/) compared to the 1.x versions. This brings a lot of breaking changes, but also more standardized markdown rendering logic and more robust and scalable code
+
 #### [1.3.0+2] - fix textStyle not working for `pre` config 
 
 #### [1.3.0+1] - fix static analysis issues

@@ -5,8 +5,7 @@ import '../../config/configs.dart';
 import '../span_node.dart';
 
 ///Tag: [MarkdownTag.input]
-class InputNode extends SpanNode{
-
+class InputNode extends SpanNode {
   final Map<String, String> attr;
   final MarkdownConfig config;
 
@@ -30,7 +29,6 @@ class InputNode extends SpanNode{
     );
   }
 }
-
 
 ///define a function to return a checkbox widget
 typedef Widget CheckBoxBuilder(bool checked);
@@ -60,4 +58,3 @@ class MCheckBox extends StatelessWidget {
     );
   }
 }
-

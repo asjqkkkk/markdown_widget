@@ -3,7 +3,6 @@ import 'package:markdown/markdown.dart' as m;
 import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/widget/all.dart';
 
-
 ///use [WidgetVisitor] that can transform MarkdownNode to [SpanNode]s
 ///and you can use [SpanNode] with [Text.rich] or [RichText] to get widget
 class WidgetVisitor implements m.NodeVisitor {
@@ -112,14 +111,18 @@ class WidgetVisitor implements m.NodeVisitor {
     MarkdownTag.th.name: (e, config, visitor) => ThNode(),
     MarkdownTag.td.name: (e, config, visitor) => TdNode(e.attributes),
     MarkdownTag.p.name: (e, config, visitor) => ParagraphNode(config.p),
-    MarkdownTag.input.name: (e, config, visitor) => InputNode(e.attributes, config),
-    MarkdownTag.a.name: (e, config, visitor) => LinkNode(e.attributes, config.a),
+    MarkdownTag.input.name: (e, config, visitor) =>
+        InputNode(e.attributes, config),
+    MarkdownTag.a.name: (e, config, visitor) =>
+        LinkNode(e.attributes, config.a),
     MarkdownTag.del.name: (e, config, visitor) => DelNode(),
     MarkdownTag.strong.name: (e, config, visitor) => StrongNode(),
     MarkdownTag.em.name: (e, config, visitor) => EmNode(),
     MarkdownTag.br.name: (e, config, visitor) => BrNode(),
-    MarkdownTag.code.name: (e, config, visitor) => CodeNode(e.textContent, config.code),
-    MarkdownTag.img.name: (e, config, visitor) => ImageNode(e.attributes, config.img),
+    MarkdownTag.code.name: (e, config, visitor) =>
+        CodeNode(e.textContent, config.code),
+    MarkdownTag.img.name: (e, config, visitor) =>
+        ImageNode(e.attributes, config),
   };
 
   SpanNode getNodeByElement(m.Element element, MarkdownConfig config) {
@@ -147,3 +150,6 @@ class SpanNodeGeneratorWithTag {
 
   SpanNodeGeneratorWithTag({required this.tag, required this.generator});
 }
+
+///wrap [child] by another widget
+typedef WidgetWrapper = Widget Function(Widget child);

@@ -20,9 +20,11 @@ class LinkNode extends ElementNode {
   @override
   InlineSpan build() {
     final url = attributes['href'] ?? '';
-    return TextSpan(children: List.generate(children.length, (index){
+    return TextSpan(
+        children: List.generate(children.length, (index) {
       final child = children[index];
       InlineSpan span = child.build();
+
       ///FIXME: there must be no children in TextSpan that the [TapGestureRecognizer] will work rightly
       if (span is TextSpan) {
         span = TextSpan(
@@ -36,7 +38,7 @@ class LinkNode extends ElementNode {
         );
       } else if (span is WidgetSpan) {
         span = WidgetSpan(
-            child: GestureDetector(
+            child: InkWell(
               child: span.child,
               onTap: () {
                 _onLinkTap(linkConfig, url);
@@ -59,16 +61,19 @@ class LinkNode extends ElementNode {
   }
 
   @override
-  TextStyle get style => TextStyle(color: linkConfig.color).merge(parentStyle);
+  TextStyle get style =>
+      parentStyle?.merge(linkConfig.style) ?? linkConfig.style;
 }
-
 
 ///config class for link, tag: a
 class LinkConfig implements LeafConfig {
-  final Color color;
+  final TextStyle style;
   final ValueCallback<String>? onTap;
 
-  const LinkConfig({this.color = const Color(0xff0969da), this.onTap});
+  const LinkConfig(
+      {this.style = const TextStyle(
+          color: Color(0xff0969da), decoration: TextDecoration.underline),
+      this.onTap});
 
   @nonVirtual
   @override

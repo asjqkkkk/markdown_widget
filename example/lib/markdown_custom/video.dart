@@ -45,10 +45,9 @@ class CustomTextNode extends SpanNode {
     if (!text.contains(htmlRep)) return TextSpan(text: text, style: textStyle);
     final nodes = parseHtml(m.Text(text));
     final spans = visitor.visit(nodes);
-    final widgets = List.generate(spans.length, (index) => spans[index].build());
-    return TextSpan(
-        style: textStyle,
-        children: widgets);
+    final widgets =
+        List.generate(spans.length, (index) => spans[index].build());
+    return TextSpan(style: textStyle, children: widgets);
   }
 }
 
@@ -136,7 +135,8 @@ class _VideoWidgetState extends State<VideoWidget> {
               ],
             ),
           )
-        : SizedBox(height: 50, child: Center(child: CircularProgressIndicator()));
+        : SizedBox(
+            height: 50, child: Center(child: CircularProgressIndicator()));
   }
 
   Widget buildPlayButton(bool isPlaying) {

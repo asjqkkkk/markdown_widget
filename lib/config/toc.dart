@@ -148,9 +148,10 @@ class _TocWidgetState extends State<TocWidget> {
         final currentToc = _tocList[index];
         bool isCurrentToc = index == currentIndex;
         final itemBuilder = widget.itemBuilder;
-        if (itemBuilder != null){
-          final result = itemBuilder.call(TocItemBuilderData(index, currentToc, currentIndex, refreshIndex));
-          if(result != null) return result;
+        if (itemBuilder != null) {
+          final result = itemBuilder.call(TocItemBuilderData(
+              index, currentToc, currentIndex, refreshIndex));
+          if (result != null) return result;
         }
         final node = currentToc.node.copy(
             headingConfig: _TocHeadingConfig(
@@ -191,7 +192,8 @@ class TocItemBuilderData {
   final int currentIndex;
   final ValueChanged<int> refreshIndexCallback;
 
-  TocItemBuilderData(this.index, this.toc, this.currentIndex, this.refreshIndexCallback);
+  TocItemBuilderData(
+      this.index, this.toc, this.currentIndex, this.refreshIndexCallback);
 }
 
 ///every heading tag has a special level

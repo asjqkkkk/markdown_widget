@@ -22,13 +22,16 @@ class HeadingNode extends ElementNode {
     }));
     if (divider == null) return textSpan;
     return WidgetSpan(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text.rich(textSpan),
-          _Divider(divider: divider.copy(color: parentStyle?.color)),
-        ],
+      child: Padding(
+        padding: headingConfig.padding,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text.rich(textSpan),
+            _Divider(divider: divider.copy(color: parentStyle?.color)),
+          ],
+        ),
       ),
     );
   }
@@ -91,6 +94,8 @@ abstract class HeadingConfig implements LeafConfig {
   TextStyle get style;
 
   HeadingDivider? get divider => null;
+
+  EdgeInsets get padding => EdgeInsets.only(top: 8, bottom: 4);
 }
 
 ///config class for h1
