@@ -1,25 +1,20 @@
-Language:[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md)|[English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
+> 🚀 The markdown_widget 2.0 has now been released. The entire code has been completely redesigned according to the [CommonMark Spec 3.0](https://spec.commonmark.org/0.30/) compared to the 1.x versions. This brings a lot of breaking changes, but also more standardized markdown rendering logic and more robust and scalable code
+
+Language：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
 # 📖markdown_widget
 
-[![support](https://img.shields.io/badge/platform-flutter%7Cdart%20vm-ff69b4.svg?style=flat-square)](https://github.com/asjqkkkk/markdown_widget)
-[![Flutter Web](https://github.com/asjqkkkk/markdown_widget/workflows/Flutter%20Web/badge.svg)](https://github.com/asjqkkkk/markdown_widget/actions)
-[![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget)
-[![demo](https://img.shields.io/badge/demo-online-brightgreen)](http://oldben.gitee.io/markdown_widget)
+[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.png?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen.png)](http://oldben.gitee.io/markdown_widget)
 
-完全由flutter创建,一个简单好用,支持mobile与flutter web的markdown插件
+A simple and easy-to-use markdown rendering component.
 
-- 支持TOC功能
-- 支持html格式的 `img` 和 `video` 标签
-- 支持代码高亮
+- Supports TOC (Table of Contents) function for quick location through Headings
+- Supports code highlighting
+- Supports all platforms
 
+## 🚀Usage
 
-## 🚀开始
-
-在开始之前,你可以先体验一下在线 demo [点击体验](http://oldben.gitee.io/markdown_widget)
-
-### 🔑简单使用
-
+Before starting, you can try out the online demo by clicking [demo](http://oldben.gitee.io/markdown_widget)
 
 ```
 import 'package:flutter/material.dart';
@@ -31,184 +26,115 @@ class MarkdownPage extends StatelessWidget {
   MarkdownPage(this.data);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.all(10),
-        child: buildMarkdown(),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(body: buildMarkdown());
 
   Widget buildMarkdown() => MarkdownWidget(data: data);
 }
 ```
-
-如果你想使用自己的 Column 或者其他列表 Widget, 你可以使用 `MarkdownGenerator`
-
+If you want to use your own Column or other list widget, you can use `MarkdownGenerator`
 
 ```
-  Widget buildMarkdown() => Column(children: MarkdownGenerator(data: data).widgets,);
+  Widget buildMarkdown() =>
+      Column(children: MarkdownGenerator().buildWidgets(data));
 ```
 
-## 🌠夜间模式
+## 🌠Night mode
 
-`markdown_widget` 默认支持夜间模式，你只需要对 `StyleConfig` 的 `markdownTheme` 属性进行配置即可
+`markdown_widget` supports night mode by default. Simply use a different `MarkdownConfig` to enable it.
 
+```
+  Widget buildMarkdown(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return MarkdownWidget(
+        data: data,
+        config:
+            isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig);
+  }
+```
+
+Default mode | Night mode
+---|---
+<img src="https://user-images.githubusercontent.com/30992818/79996396-02f4cc80-84eb-11ea-9c17-cf14979708a1.png" width=400> | <img src="https://user-images.githubusercontent.com/30992818/79996326-ece70c00-84ea-11ea-811c-9ad7d1e81a19.png" width=400>
+
+
+## 🔗Link
+
+You can customize the style and click events of links, like this
 
 ```
   Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        controller: controller,
-        styleConfig: StyleConfig(
-          markdownTheme: MarkdownTheme.lightTheme
-        ),
-      );
-```
-<img src="https://user-images.githubusercontent.com/30992818/79996396-02f4cc80-84eb-11ea-9c17-cf14979708a1.png" width=400> <img src="https://user-images.githubusercontent.com/30992818/79996326-ece70c00-84ea-11ea-811c-9ad7d1e81a19.png" width=400>
-
-这里你也可以自定义 `markdownTheme`
-
-
-## 🏞图片和视频
-
-如果你想要自定义 **img** 和 **video** 这两个标签的 Widget
-
-```
-  Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        styleConfig: StyleConfig(
-          imgBuilder: (String url,attributes) {
-            return Image.network(url);
-          },
-          videoBuilder: (String url,attributes) {
-            return YourVideoWidget();
-          }
-        ),
-      );
-```
-
-图片与视频标签支持的markdown格式
-
-```
-<video src="https://xxx.mp4" controls="controls"/>
-
-<img width="150" alt="018" src="https://xxx.png"/>
-
-![demo](https://xxx)
-
-```
-
-如果你想自定义其他标签的Widget,请使用 `WidgetConfig`
-
-## 🔗链接
-
-你可以自定义链接样式和点击事件
-
-
-```
-  Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        styleConfig: StyleConfig(
-          pConfig: PConfig(
-            linkStyle: TextStyle(...),
-            onLinkTap: (url){
-              _launchUrl(url);
-            }
-          )
-        ),
-      );
-```
-
-## 🍑自定义标签
-
-你可以使用自定义标签
-
-例如添加以下内容在你的markdown文件中
-
-```markdown
-<avatar size="12" name="tom" />
-```
-
-然后添加配置以下 `custom` 配置
-
-```dart
-      MarkdownWidget(
-        data: data,
-            styleConfig: StyleConfig(
-              pConfig: PConfig(
-                custom: (m.Element node) {
-                  ...
-                  return YourCustomWidget();
-                },
-              ),
-            ),
+      data: data,
+      config: MarkdownConfig(configs: [
+        LinkConfig(
+          style: TextStyle(
+            color: Colors.red,
+            decoration: TextDecoration.underline,
           ),
+          onTap: (url) {
+            ///TODO:on tap
+          },
+        )
+      ]));
 ```
 
-## 📜TOC功能
+## 📜TOC (Table of Contents) feature
 
-使用TOC非常的简单
+Using the TOC is very simple
 
 ```
-  final TocController tocController = TocController();
+  Widget buildTocWidget() => TocWidget(controller: tocController);
 
-  Widget buildTocWidget() => TocListWidget(controller: controller);
-
-  Widget buildMarkdown() => MarkdownWidget(data: data, controller: controller);
+  Widget buildMarkdown() => MarkdownWidget(data: data, tocController: tocController);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Row(
-      children: <Widget>[
-        Expanded(child: buildTocWidget()),
-        Expanded(child: buildMarkdown(), flex: 3)
-      ],
-    ));
+          children: <Widget>[
+            Expanded(child: buildTocWidget()),
+            Expanded(child: buildMarkdown(), flex: 3)
+          ],
+        ));
   }
 ```
 
-## 🎈代码高亮
+## 🎈Highlighting  code
 
-代码高亮支持多种主题
+Highlighting code supports multiple themes.
 
 ```
-import 'package:markdown_widget/config/highlight_themes.dart' as theme;
+import 'package:flutter_highlight/themes/a11y-light.dart';
 
   Widget buildMarkdown() => MarkdownWidget(
-        data: data,
-        styleConfig: StyleConfig(
-          preConfig: PreConfig(
-            language: 'java',
-            theme: theme.a11yLightTheme
-          )
-        ),
-      );
+      data: data,
+      config: MarkdownConfig(configs: [
+        PreConfig(theme: a11yLightTheme, language: 'dart'),
+      ]));
 ```
 
-如果你由什么好的想法或者建议,以及使用上的问题, [欢迎来提pr或issue](https://github.com/asjqkkkk/markdown_widget)
+## 🌐HTML tags
 
+The current package only implements the conversion of Markdown tags, so it does not support the conversion of HTML tags by default. However, you can extend the package to support this feature by using the [html_support](https://github.com/asjqkkkk/markdown_widget/blob/1d549fd5c2d6b0172281d8bb66e367654b9d60f0/example/lib/markdown_custom/html_support.dart)
 
-# 附录
+## 🍑Custom tag implementation
 
-这里是 markdown_widget 中使用到的其他库
+By passing a `SpanNodeGeneratorWithTag` to `MarkdownGeneratorConfig`, you can add new tags and the corresponding `SpanNode`s for those tags. You can also use existing tags to override the corresponding `SpanNode`s.
 
-库 | 描述
+You can also customize the parsing rules for Markdown strings using `InlineSyntax` and `BlockSyntax`, and generate new tags.
+
+You can refer to the usage of `SpanNodeGeneratorWithTag` in [video.dart](https://github.com/asjqkkkk/markdown_widget/blob/1d549fd5c2d6b0172281d8bb66e367654b9d60f0/example/lib/markdown_custom/video.dart) for an example.
+
+If you have any good ideas or suggestions, or have any issues using this package, please feel free to [open a pull request or issue](https://github.com/asjqkkkk/markdown_widget).
+
+# 🧾Appendix
+
+Here are the other libraries used in `markdown_widget`
+
+Packages | Descriptions
 ---|---
-[markdown](https://pub.flutter-io.cn/packages/markdown) | 解析markdown数据
-[flutter_highlight](https://pub.flutter-io.cn/packages/flutter_highlight) | 代码高亮
-[html](https://pub.flutter-io.cn/packages/html) | 解析markdown没有解析的html标签
-[video_player_web](https://pub.flutter-io.cn/packages/video_player_web) | 在flutter web上播放视频
-[video_player](https://pub.flutter-io.cn/packages/video_player) | 视频接口
-[scrollable_positioned_list](https://pub.flutter-io.cn/packages/scrollable_positioned_list) | 用于实现TOC功能
-
-## 为什么我要创建这个库
-
-既然已经有了 [flutter_markdown](https://pub.flutter-io.cn/packages/flutter_markdown) ，为什么我还要费时费力去写一个与之类似的新库呢？
-
-这是因为在我用flutter web创建我的[个人博客](http://oldben.gitee.io/flutter-blog/#/)的过程中，发现flutter_markdown有很多功能都不支持，比如TOC功能、HTML tag的图片等
-
-提了3个issue也没有回音，在这个前提下也就没打算去提pr了，并且flutter_markdown的源码并没有那么容易修改，可读性不高
-
-最后索性自己重新创建一个啦！
+[markdown](https://pub.flutter-io.cn/packages/markdown) | Parsing markdown data
+[flutter_highlight](https://pub.flutter-io.cn/packages/flutter_highlight) | Code highlighting
+[highlight](https://pub.flutter-io.cn/packages/highlight) | Code highlighting
+[url_launcher](https://pub.flutter-io.cn/packages/url_launcher) | Opening links
+[visibility_detector](https://pub.flutter-io.cn/packages/visibility_detector) | Listening for visibility of a widget;
+[scroll_to_index](https://pub.flutter-io.cn/packages/scroll_to_index) | Enabling ListView to jump to an index.
