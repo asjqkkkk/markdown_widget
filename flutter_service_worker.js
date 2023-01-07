@@ -23,8 +23,8 @@ const RESOURCES = {
 "assets/assets/demo_zh.md": "6336c7b8b50e027bf2309e3730d14b8c",
 "assets/assets/editor.md": "b263c53132d968f60ec3a03698dc1265",
 "assets/NOTICES": "1f4277c7f6ab958ccffbe9c98d813df6",
-"index.html": "348b592b18eca5a2aeb661ef7e26d0eb",
-"/": "348b592b18eca5a2aeb661ef7e26d0eb",
+"index.html": "6e5a297a853ea5dfbbf3fd962e98f7d7",
+"/": "6e5a297a853ea5dfbbf3fd962e98f7d7",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "version.json": "ff966ab969ba381b900e61629bfb9789"
 };
