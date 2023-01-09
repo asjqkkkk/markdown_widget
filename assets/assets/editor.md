@@ -64,6 +64,15 @@ header 1 | header 2
 row 1 col 1 | row 1 col 2
 row 2 col 1 | row 2 col 2
 
+Hi, I'm a latex <latex content="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}">
+
+> I'm another latex : <latex content="i\hbar\frac{\partial}{\partial t}\Psi(\vec x,t) = -\frac{\hbar}{2m}\nabla^2\Psi(\vec x,t)+ V(\vec x)\Psi(\vec x,t)">
+
+# I'm the third latex: <latex content="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}">
+
+# I'm the forth: [<latex content="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}">](https://xxx) end
+
+I'm the fifth  **<latex content="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}">** , here is the end
 
 Image:
 
