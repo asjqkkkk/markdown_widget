@@ -32,25 +32,6 @@ class VideoNode extends SpanNode {
 SpanNodeGeneratorWithTag videoGeneratorWithTag = SpanNodeGeneratorWithTag(
     tag: _videoTag, generator: (e, config, visitor) => VideoNode(e.attributes));
 
-class CustomTextNode extends SpanNode {
-  final String text;
-  final MarkdownConfig config;
-  final WidgetVisitor visitor;
-
-  CustomTextNode(this.text, this.config, this.visitor);
-
-  @override
-  InlineSpan build() {
-    final textStyle = config.p.textStyle.merge(parentStyle);
-    if (!text.contains(htmlRep)) return TextSpan(text: text, style: textStyle);
-    final nodes = parseHtml(m.Text(text));
-    final spans = visitor.visit(nodes);
-    final widgets =
-        List.generate(spans.length, (index) => spans[index].build());
-    return TextSpan(style: textStyle, children: widgets);
-  }
-}
-
 const _videoTag = 'video';
 
 typedef Widget VideoBuilder(String? url, Map<String, String> attributes);

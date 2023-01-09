@@ -19,6 +19,8 @@ dev_dependencies:
   flutter_redux: ^0.10.0
   #html tag parser
   html: ^0.15.0
+  #math equation rendering
+  flutter_math_fork: ^0.6.3+1
 
   # for 'video' tag
   video_player: ^2.4.10

@@ -37,8 +37,10 @@ abstract class ElementNode extends SpanNode {
 ///the default concrete node for ElementNode
 class ConcreteElementNode extends ElementNode {
   final String tag;
+  final TextStyle style;
 
-  ConcreteElementNode({this.tag = ''});
+  ConcreteElementNode({this.tag = '', TextStyle? style})
+      : this.style = style ?? const TextStyle();
 
   @override
   InlineSpan build() => childrenSpan;

@@ -17,7 +17,7 @@ class WidgetVisitor implements m.NodeVisitor {
   final List<SpanNode> _spansStack = [];
 
   ///[MarkdownConfig] is used to define the UI display
-  final MarkdownConfig config;
+  late MarkdownConfig config;
 
   /// add your custom [SpanNodeGeneratorWithTag] to [generators]
   /// that you can customize the conversion of Nodes
@@ -34,13 +34,15 @@ class WidgetVisitor implements m.NodeVisitor {
     this.generators = const [],
     this.onNodeAccepted,
     this.textGenerator,
-  }) : this.config = config ?? MarkdownConfig.defaultConfig;
-
-  ///[visit] will return a [SpanNode] list
-  List<SpanNode> visit(List<m.Node> nodes) {
+  }) {
+    this.config = config ?? MarkdownConfig.defaultConfig;
     generators.forEach((e) {
       _tag2node[e.tag] = e.generator;
     });
+  }
+
+  ///[visit] will return a [SpanNode] list
+  List<SpanNode> visit(List<m.Node> nodes) {
     _spans.clear();
     _currentSpanIndex = 0;
     for (final node in nodes) {

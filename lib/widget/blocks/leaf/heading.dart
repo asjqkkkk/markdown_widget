@@ -87,6 +87,8 @@ class HeadingDivider {
   static HeadingDivider h1 = HeadingDivider();
 
   static HeadingDivider h2 = HeadingDivider(space: 3.6);
+
+  static HeadingDivider h3 = HeadingDivider(space: 2.4);
 }
 
 ///config class for heading
@@ -109,6 +111,7 @@ class H1Config with HeadingConfig {
         fontWeight: FontWeight.bold,
       )});
 
+  @nonVirtual
   @override
   String get tag => MarkdownTag.h1.name;
 
@@ -120,7 +123,6 @@ class H1Config with HeadingConfig {
         fontWeight: FontWeight.bold,
       ));
 
-  @nonVirtual
   @override
   HeadingDivider? get divider => HeadingDivider.h1;
 }
@@ -136,6 +138,7 @@ class H2Config with HeadingConfig {
         fontWeight: FontWeight.bold,
       )});
 
+  @nonVirtual
   @override
   String get tag => MarkdownTag.h2.name;
 
@@ -147,7 +150,6 @@ class H2Config with HeadingConfig {
         fontWeight: FontWeight.bold,
       ));
 
-  @nonVirtual
   @override
   HeadingDivider? get divider => HeadingDivider.h2;
 }
@@ -174,6 +176,9 @@ class H3Config with HeadingConfig {
         color: Colors.white,
         fontWeight: FontWeight.bold,
       ));
+
+  @override
+  HeadingDivider? get divider => HeadingDivider.h3;
 }
 
 ///config class for h4

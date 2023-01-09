@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
+import '../markdown_custom/custom_node.dart';
+import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
 import '../platform_dector/platform_dector.dart';
 
@@ -140,7 +142,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
               isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig,
           tocController: controller,
           markdownGeneratorConfig: MarkdownGeneratorConfig(
-              generators: [videoGeneratorWithTag],
+              generators: [videoGeneratorWithTag, latexGeneratorWithTag],
               textGenerator: (node, config, visitor) =>
                   CustomTextNode(node.textContent, config, visitor))),
     );
