@@ -19,19 +19,20 @@ class LatexNode extends SpanNode {
   @override
   InlineSpan build() {
     final content = attributes['content'] ?? '';
-    if(content.isEmpty) return TextSpan(style: parentStyle, text: textContent);
+    final style = parentStyle ?? config.p.textStyle;
+    if (content.isEmpty) return TextSpan(style: style, text: textContent);
     return WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
         child: Math.tex(
-      content,
-      mathStyle: MathStyle.display,
-      textStyle: parentStyle,
-      onErrorFallback: (error) {
-        return Text(
-          'parse error:$content',
-          style: parentStyle?.copyWith(color: Colors.red) ??
-              config.p.textStyle.copyWith(color: Colors.redAccent),
-        );
-      },
-    ));
+          content,
+          mathStyle: MathStyle.display,
+          textStyle: style,
+          onErrorFallback: (error) {
+            return Text(
+              'parse error:$content',
+              style: style.copyWith(color: Colors.red),
+            );
+          },
+        ));
   }
 }
