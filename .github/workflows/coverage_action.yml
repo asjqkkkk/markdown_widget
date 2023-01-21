@@ -12,7 +12,7 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter packages pub run build_runner build
-      - run: flutter test --coverage .
+      - run: flutter test --coverage ./test/
       - uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

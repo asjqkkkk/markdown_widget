@@ -20,8 +20,7 @@ class BlockquoteNode extends ElementNode {
           border: Border(
         left: BorderSide(color: config.sideColor, width: config.sideWith),
       )),
-      padding: EdgeInsets.only(left: config.sideSpace),
-      margin: config.margin,
+      padding: config.padding,
       child: Text.rich(childrenSpan),
     ));
   }
@@ -35,15 +34,13 @@ class BlockquoteConfig implements ContainerConfig {
   final Color sideColor;
   final Color textColor;
   final double sideWith;
-  final double sideSpace;
-  final EdgeInsets margin;
+  final EdgeInsets padding;
 
   const BlockquoteConfig(
       {this.sideColor = const Color(0xffd0d7de),
       this.textColor = const Color(0xff57606a),
       this.sideWith = 4.0,
-      this.sideSpace = 16.0,
-      this.margin = const EdgeInsets.symmetric(vertical: 16.0)});
+      this.padding = const EdgeInsets.fromLTRB(16, 2, 0, 2)});
 
   @nonVirtual
   @override

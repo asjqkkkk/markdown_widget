@@ -12,8 +12,15 @@ abstract class SpanNode {
 
   SpanNode? get parent => _parent;
 
+  ///use [_acceptParent] to accept a parent
   void _acceptParent(SpanNode node) {
     _parent = node;
+    onAccepted(node);
+  }
+
+  ///when this node was accepted by it's parent, [onAccepted] will be triggered
+  void onAccepted(SpanNode parent){
+
   }
 }
 
@@ -21,6 +28,7 @@ abstract class SpanNode {
 abstract class ElementNode extends SpanNode {
   final List<SpanNode> children = [];
 
+  ///use [accept] to add a child
   void accept(SpanNode? node) {
     if (node != null) children.add(node);
     node?._acceptParent(this);

@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown/markdown.dart' as m;
 
 import 'html_support.dart';
 
-class CustomTextNode extends SpanNode {
+class CustomTextNode extends ElementNode {
   final String text;
   final MarkdownConfig config;
   final WidgetVisitor visitor;
@@ -12,30 +11,21 @@ class CustomTextNode extends SpanNode {
   CustomTextNode(this.text, this.config, this.visitor);
 
   @override
-  InlineSpan build() {
+  void onAccepted(SpanNode parent) {
     final textStyle = config.p.textStyle.merge(parentStyle);
-    if (!text.contains(htmlRep)) return TextSpan(text: text, style: textStyle);
-
-    ///Do not pass [TextNodeGenerator] again!!!
+    if (!text.contains(htmlRep)) {
+      accept(TextNode(text: text, style: textStyle));
+      return;
+    }
     final spans = parseHtml(
       m.Text(text),
       visitor:
-          WidgetVisitor(config: visitor.config, generators: visitor.generators),
+      WidgetVisitor(config: visitor.config, generators: visitor.generators),
       parentStyle: textStyle,
     );
-    final tempNode = _TempNode(textStyle);
-    spans.forEach((e) {
-      tempNode.accept(e);
+    spans.forEach((element) {
+      accept(element);
     });
-    return tempNode.build();
   }
-}
 
-class _TempNode extends ElementNode {
-  final TextStyle? style;
-
-  _TempNode(this.style);
-
-  @override
-  InlineSpan build() => childrenSpan;
 }
