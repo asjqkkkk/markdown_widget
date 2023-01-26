@@ -24,32 +24,58 @@ class LinkNode extends ElementNode {
         children: List.generate(children.length, (index) {
       final child = children[index];
       InlineSpan span = child.build();
+      final recognizer = TapGestureRecognizer()
+        ..onTap = () {
+          _onLinkTap(linkConfig, url);
+        };
+      return _visitInlineSpan(span, url, recognizer);
+    }));
+  }
 
-      ///FIXME: there must be no children in TextSpan that the [TapGestureRecognizer] will work rightly
-      if (span is TextSpan) {
-        span = TextSpan(
-          text: span.text,
-          children: span.children,
-          style: span.style,
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
+  ///to visit TextSpan's children, and set [TapGestureRecognizer] for them
+  InlineSpan _visitInlineSpan(
+      InlineSpan span, String url, TapGestureRecognizer recognizer) {
+    if (span is TextSpan) {
+      final children = span.children ?? [];
+      if (children.isEmpty)
+        return _copyTextSpan(span: span, recognizer: recognizer);
+      final gestureChildren =
+          children.map((e) => _visitInlineSpan(e, url, recognizer)).toList();
+      return _copyTextSpan(
+          span: span, recognizer: recognizer, children: gestureChildren);
+    } else if (span is WidgetSpan) {
+      return WidgetSpan(
+          child: InkWell(
+            child: span.child,
+            onTap: () {
               _onLinkTap(linkConfig, url);
             },
-        );
-      } else if (span is WidgetSpan) {
-        span = WidgetSpan(
-            child: InkWell(
-              child: span.child,
-              onTap: () {
-                _onLinkTap(linkConfig, url);
-              },
-            ),
-            alignment: span.alignment,
-            baseline: span.baseline,
-            style: span.style);
-      }
+          ),
+          alignment: span.alignment,
+          baseline: span.baseline,
+          style: span.style);
+    } else
       return span;
-    }));
+  }
+
+  ///copy TextSpan with [recognizer] and [children]
+  TextSpan _copyTextSpan({
+    TextSpan? span,
+    GestureRecognizer? recognizer,
+    List<InlineSpan>? children,
+  }) {
+    return TextSpan(
+      text: span?.text,
+      style: span?.style,
+      children: children ?? span?.children,
+      recognizer: recognizer ?? span?.recognizer,
+      mouseCursor: span?.mouseCursor,
+      onEnter: span?.onEnter,
+      onExit: span?.onExit,
+      semanticsLabel: span?.semanticsLabel,
+      locale: span?.locale,
+      spellOut: span?.spellOut,
+    );
   }
 
   void _onLinkTap(LinkConfig linkConfig, String url) {
