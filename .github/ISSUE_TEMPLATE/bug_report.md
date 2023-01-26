@@ -24,13 +24,10 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Environment(please complete the following information):**
-Please use `flutter doctor -v` to show your flutter enviroment
+Please use `flutter doctor -v` to show your flutter environment, and add your `markdown_widget` version too
 
 **Platform**
 Does the problem appear on the **Web** or on the **Mobile**？
 
-**Environment**
-Use `flutter doctor` to provider your environment infomation
-
-**Additional context**
-Add any other context about the problem here.
+**Source data**
+Please provide a minimal source data that can help locating the problem
