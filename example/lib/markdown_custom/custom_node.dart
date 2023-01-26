@@ -13,6 +13,7 @@ class CustomTextNode extends ElementNode {
   @override
   void onAccepted(SpanNode parent) {
     final textStyle = config.p.textStyle.merge(parentStyle);
+    children.clear();
     if (!text.contains(htmlRep)) {
       accept(TextNode(text: text, style: textStyle));
       return;

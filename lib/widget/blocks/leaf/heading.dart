@@ -15,12 +15,7 @@ class HeadingNode extends ElementNode {
   @override
   InlineSpan build() {
     final divider = headingConfig.divider;
-    final textSpan = TextSpan(
-        children: List.generate(children.length, (index) {
-      final child = children[index];
-      return child.build();
-    }));
-    if (divider == null) return textSpan;
+    if (divider == null) return childrenSpan;
     return WidgetSpan(
       child: Padding(
         padding: headingConfig.padding,
@@ -28,7 +23,7 @@ class HeadingNode extends ElementNode {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text.rich(textSpan),
+            Text.rich(childrenSpan),
             _Divider(divider: divider.copy(color: parentStyle?.color)),
           ],
         ),
