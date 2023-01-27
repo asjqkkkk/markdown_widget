@@ -5,6 +5,7 @@ import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../markdown_custom/custom_node.dart';
+import '../markdown_custom/db.dart';
 import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
 import '../platform_dector/platform_dector.dart';
@@ -81,7 +82,12 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                 ? MarkdownConfig.darkConfig
                 : MarkdownConfig.defaultConfig,
             markdownGeneratorConfig: MarkdownGeneratorConfig(
-                generators: [videoGeneratorWithTag, latexGeneratorWithTag],
+                generators: [
+                  videoGeneratorWithTag,
+                  latexGeneratorWithTag,
+                  dbGeneratorWithTag,
+                ],
+                inlineSyntaxList: [DBSyntax()],
                 textGenerator: (node, config, visitor) =>
                     CustomTextNode(node.textContent, config, visitor)),
           ),
