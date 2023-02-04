@@ -21,26 +21,18 @@ class ImageNode extends SpanNode {
       height = double.parse(attributes['height']!);
     final imageUrl = attributes['src'] ?? '';
     final alt = attributes['alt'] ?? '';
-    final imgWidget = Image.network(
-      imageUrl,
-      width: width,
-      height: height,
-      fit: BoxFit.cover,
-      errorBuilder: (ctx, error, stacktrace) {
-        return Text.rich(TextSpan(children: [
-          WidgetSpan(
-              child: Icon(Icons.broken_image,
-                  color: Colors.redAccent,
-                  size: (parentStyle?.fontSize ??
-                          config.p.textStyle.fontSize ??
-                          16) *
-                      (parentStyle?.height ??
-                          config.p.textStyle.height ??
-                          1.2))),
-          TextSpan(text: alt, style: parentStyle ?? config.p.textStyle),
-        ]));
-      },
-    );
+    final isNetImage = imageUrl.startsWith('http');
+    final imgWidget = isNetImage
+        ? Image.network(imageUrl,
+            width: width,
+            height: height,
+            fit: BoxFit.cover, errorBuilder: (ctx, error, stacktrace) {
+            return buildErrorImage(imageUrl, alt, error);
+          })
+        : Image.asset(imageUrl, width: width, height: height, fit: BoxFit.cover,
+            errorBuilder: (ctx, error, stacktrace) {
+            return buildErrorImage(imageUrl, alt, error);
+          });
     final result = (parent != null && parent is LinkNode)
         ? imgWidget
         : InkWell(
@@ -50,13 +42,30 @@ class ImageNode extends SpanNode {
     return WidgetSpan(
         child: imgConfig.builder?.call(imageUrl, attributes) ?? result);
   }
+
+  Widget buildErrorImage(String url, String alt, Object? error) {
+    return Text.rich(TextSpan(children: [
+      WidgetSpan(
+          child: Icon(Icons.broken_image,
+              color: Colors.redAccent,
+              size: (parentStyle?.fontSize ??
+                      config.p.textStyle.fontSize ??
+                      16) *
+                  (parentStyle?.height ?? config.p.textStyle.height ?? 1.2))),
+      TextSpan(text: alt, style: parentStyle ?? config.p.textStyle),
+    ]));
+  }
 }
 
 ///config class for image, tag: img
 class ImgConfig implements InlineConfig {
+  ///use [builder] to return a custom image
   final ImgBuilder? builder;
 
-  const ImgConfig({this.builder});
+  ///use [errorBuilder] to return a custom error image
+  final ErrorImgBuilder? errorBuilder;
+
+  const ImgConfig({this.builder, this.errorBuilder});
 
   @nonVirtual
   @override
@@ -64,3 +73,4 @@ class ImgConfig implements InlineConfig {
 }
 
 typedef Widget ImgBuilder(String url, Map<String, String> attributes);
+typedef Widget ErrorImgBuilder(String url, String alt, Object error);

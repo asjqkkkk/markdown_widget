@@ -37,6 +37,8 @@ jobs:
       - name: Show dir
         run: ls && cd example && ls
 
+      - name: Download medias
+        run: dart run example/build_script/script_convert_asset.dart
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v2

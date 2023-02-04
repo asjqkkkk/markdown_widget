@@ -6,7 +6,7 @@
 
 # 📖markdown_widget
 
-[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.png?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen.png)](https://asjqkkkk.github.io/markdown_widget/)
+[![Coverage Status](assets/script_medias/1675527925332.png)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](assets/script_medias/1675527928071.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](assets/script_medias/1675527929980.png)](https://asjqkkkk.github.io/markdown_widget/)
 
 一个简单易用的markdown渲染组件
 
@@ -56,7 +56,7 @@ class MarkdownPage extends StatelessWidget {
 
 默认模式 | 夜间模式
 ---|---
-<img src="https://user-images.githubusercontent.com/30992818/211159232-92efbbb0-dd01-4970-8ff1-33a47c133b1f.png" width=400> | <img src="https://user-images.githubusercontent.com/30992818/211159236-570fca93-a5f4-403f-94ba-986272d1207e.png" width=400>
+<img src="assets/script_medias/1675527930854.png" width=400> | <img src="assets/script_medias/1675527932169.png" width=400>
 
 
 ## 🔗链接

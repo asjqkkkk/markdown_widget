@@ -76,15 +76,15 @@ I'm the fifth  **<latex content="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}">** , he
 
 Image:
 
-![support](https://img.shields.io/badge/platform-flutter%7Cdart%20vm-ff69b4.svg?style=flat-square)
+![support](assets/script_medias/1675527935336.png)
 
 Image with link:
 
-[![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget)
+[![pub package](assets/script_medias/1675527938945.png)](https://pub.dartlang.org/packages/markdown_widget)
 
 Html Image:
 
-<img width="250" height="250" src="https://user-images.githubusercontent.com/30992818/65225126-225fed00-daf7-11e9-9eb7-cd21e6b1cc95.png"/>
+<img width="250" height="250" src="assets/script_medias/1675527939855.png"/>
 
 Video:
 
