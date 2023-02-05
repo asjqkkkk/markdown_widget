@@ -4,7 +4,7 @@ Language：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/maste
 
 # 📖markdown_widget
 
-[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.svg?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen)](https://asjqkkkk.github.io/markdown_widget/)
+[![Coverage Status](assets/script_medias/1675527914508.png)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](assets/script_medias/1675527915217.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](assets/script_medias/1675527916292.png)](https://asjqkkkk.github.io/markdown_widget/)
 
 A simple and easy-to-use markdown rendering component.
 
@@ -54,7 +54,7 @@ If you want to use your own Column or other list widget, you can use `MarkdownGe
 
 Default mode | Night mode
 ---|---
-<img src="https://user-images.githubusercontent.com/30992818/211159089-ec4acd11-ee02-46f2-af4f-f8c47eb28410.png" width=400> | <img src="https://user-images.githubusercontent.com/30992818/211159108-4c20de2d-fb1d-4bcb-b23f-3ceb91291661.png" width=400>
+<img src="assets/script_medias/1675527917554.png" width=400> | <img src="assets/script_medias/1675527923101.png" width=400>
 
 
 ## 🔗Link
