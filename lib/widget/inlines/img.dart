@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 ///Tag: [MarkdownTag.img]
 class ImageNode extends SpanNode {
@@ -37,7 +36,7 @@ class ImageNode extends SpanNode {
         ? imgWidget
         : Builder(builder: (context) {
             return InkWell(
-              child: imgWidget,
+              child: Hero(child: imgWidget, tag: imgWidget.hashCode),
               onTap: () => _showImage(context, imgWidget),
             );
           });
@@ -58,30 +57,10 @@ class ImageNode extends SpanNode {
     ]));
   }
 
+  ///show image in a new window
   void _showImage(BuildContext context, Widget child) {
-    Navigator.of(context).push(PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (ctx, anm1, anm2) {
-          return Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.1),
-            body: Stack(
-              fit: StackFit.expand,
-              children: [
-                InteractiveViewer(child: Center(child: child)),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    child: IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: Icon(Icons.cancel_outlined),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        }));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => ImageViewer(child: child)));
   }
 }
 
@@ -98,6 +77,47 @@ class ImgConfig implements InlineConfig {
   @nonVirtual
   @override
   String get tag => MarkdownTag.img.name;
+}
+
+///show image with [InteractiveViewer]
+class ImageViewer extends StatelessWidget {
+  final Widget child;
+
+  const ImageViewer({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.1),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          InteractiveViewer(
+              child: Center(child: Hero(child: child, tag: child.hashCode))),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: Container(
+                  child: Icon(
+                    Icons.clear,
+                    color: Colors.grey,
+                  ),
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      shape: BoxShape.circle),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
 
 typedef Widget ImgBuilder(String url, Map<String, String> attributes);

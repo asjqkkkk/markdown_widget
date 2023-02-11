@@ -62,22 +62,19 @@ class TableNode extends ElementNode {
       }
     }
 
-    final tableWidget = SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Table(
-        columnWidths: tbConfig.columnWidths,
-        defaultColumnWidth: tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
-        textBaseline: tbConfig.textBaseline,
-        textDirection: tbConfig.textDirection,
-        border: tbConfig.border ??
-            TableBorder.all(
-                color: parentStyle?.color ??
-                    config.p.textStyle.color ??
-                    Colors.grey),
-        defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
-            TableCellVerticalAlignment.middle,
-        children: rows,
-      ),
+    final tableWidget = Table(
+      columnWidths: tbConfig.columnWidths,
+      defaultColumnWidth: tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
+      textBaseline: tbConfig.textBaseline,
+      textDirection: tbConfig.textDirection,
+      border: tbConfig.border ??
+          TableBorder.all(
+              color: parentStyle?.color ??
+                  config.p.textStyle.color ??
+                  Colors.grey),
+      defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
+          TableCellVerticalAlignment.middle,
+      children: rows,
     );
 
     return WidgetSpan(

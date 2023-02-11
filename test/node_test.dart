@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:markdown_widget/markdown_widget.dart';
@@ -8,7 +7,7 @@ import 'package:highlight/highlight.dart' as hi;
 void main() {
   testWidgets('test asset img node', (tester) async {
     final imgNode = ImageNode({'width': '100', 'height': '200', 'src': ''},
-        MarkdownConfig.defaultConfig);
+        MarkdownConfig.defaultConfig.copy(configs: [PreConfig().copy()]));
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -29,17 +28,37 @@ void main() {
         MarkdownConfig.defaultConfig);
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
+        navigatorObservers: [_CustomObserver()],
         home: Scaffold(
             body: Directionality(
                 textDirection: TextDirection.ltr,
                 child: Text.rich(imgNode.build()))),
       ));
     });
-    await (await tester.startGesture(Offset(0, 0))).up();
+    await (await tester.startGesture(Offset(0, 50))).up();
     final imgWidget =
         tester.firstWidget(find.byWidgetPredicate((widget) => widget is Image))
             as Image;
     imgWidget.errorBuilder?.call(tester.allElements.first, '', null);
+  });
+
+  testWidgets('test img builder', (tester) async {
+    final imgNode = ImageNode(
+        {'width': '100', 'height': '200', 'src': 'http'},
+        MarkdownConfig.defaultConfig.copy(configs: [
+          ImgConfig(builder: (url, attribute) {
+            return Container(width: 100, height: 100);
+          }),
+        ]));
+    await mockNetworkImagesFor(() async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+            body: Directionality(
+                textDirection: TextDirection.ltr,
+                child: Text.rich(imgNode.build()))),
+      ));
+    });
+    await (await tester.startGesture(Offset(0, 50))).up();
   });
 
   testWidgets('test for link node', (tester) async {
@@ -85,4 +104,13 @@ void main() {
     final nodes = [hi.Node(className: 'aaa', value: 'I\'m value')];
     convertHiNodes(nodes, {}, null);
   });
+}
+
+class _CustomObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    if (route is! MaterialPageRoute) return;
+    final page = route.builder.call(route.navigator!.context);
+    print('page:$page');
+  }
 }

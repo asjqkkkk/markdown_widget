@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:html/dom.dart' as h;
 import 'package:markdown/markdown.dart' as m;
 import 'package:flutter/material.dart';

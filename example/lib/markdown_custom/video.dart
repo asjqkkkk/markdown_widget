@@ -1,11 +1,9 @@
-import 'package:example/markdown_custom/html_support.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/widget/span_node.dart';
 import 'package:markdown_widget/widget/widget_visitor.dart';
 import 'package:video_player/video_player.dart';
-import 'package:markdown/markdown.dart' as m;
 
 class VideoNode extends SpanNode {
   final Map<String, String> attribute;

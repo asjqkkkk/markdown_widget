@@ -164,7 +164,7 @@ void main() {
                 textDirection: TextDirection.ltr,
                 child: MarkdownWidget(
                   data: content,
-                  config: MarkdownConfig(configs: [
+                  config: MarkdownConfig.defaultConfig.copy(configs: [
                     BlockquoteConfig(),
                     ListConfig(),
                     TableConfig(),
@@ -196,5 +196,17 @@ void main() {
                 ],
               ))),
     ));
+  });
+
+  testWidgets('test ImageViewer', (tester) async {
+    await mockNetworkImagesFor(() async {
+      await tester.pumpWidget(MaterialApp(
+          home: ImageViewer(child: Container(width: 100, height: 100))));
+    });
+    final buttons = tester
+        .widgetList(find.byWidgetPredicate((widget) => widget is IconButton));
+    for (var button in buttons) {
+      (button as IconButton).onPressed?.call();
+    }
   });
 }

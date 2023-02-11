@@ -174,4 +174,11 @@ class MarkdownConfig {
       _tag2Config[config.tag] = config;
     }
   }
+
+  MarkdownConfig copy({List<WidgetConfig> configs = const []}) {
+    for (final config in configs) {
+      _tag2Config[config.tag] = config;
+    }
+    return MarkdownConfig(configs: _tag2Config.values.toList());
+  }
 }

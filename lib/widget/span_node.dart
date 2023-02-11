@@ -19,9 +19,7 @@ abstract class SpanNode {
   }
 
   ///when this node was accepted by it's parent, [onAccepted] will be triggered
-  void onAccepted(SpanNode parent){
-
-  }
+  void onAccepted(SpanNode parent) {}
 }
 
 ///this node will accept other SpanNode as children

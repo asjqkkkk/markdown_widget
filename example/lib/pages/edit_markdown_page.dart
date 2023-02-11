@@ -9,6 +9,7 @@ import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
 import '../platform_dector/platform_dector.dart';
 
+import '../widget/code_wrapper.dart';
 import 'markdown_page.dart';
 
 class EditMarkdownPage extends StatefulWidget {
@@ -70,16 +71,22 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
   }
 
   Widget buildWebBody() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final config =
+        isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
+    final codeWrapper =
+        (child, text) => CodeWrapperWidget(child: child, text: text);
     return Row(
       children: <Widget>[
         Expanded(child: buildEditText()),
         Expanded(
           child: MarkdownWidget(
             data: initialText + text,
-            config: isDark
-                ? MarkdownConfig.darkConfig
-                : MarkdownConfig.defaultConfig,
+            config: config.copy(configs: [
+              isDark
+                  ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
+                  : PreConfig().copy(wrapper: codeWrapper)
+            ]),
             markdownGeneratorConfig: MarkdownGeneratorConfig(
                 generators: [videoGeneratorWithTag, latexGeneratorWithTag],
                 textGenerator: (node, config, visitor) =>

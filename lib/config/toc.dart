@@ -112,8 +112,7 @@ class _TocWidgetState extends State<TocWidget> {
       if (list.length < _tocList.length && currentIndex >= list.length) {
         currentIndex = list.length - 1;
       }
-      _tocList.clear();
-      _tocList.addAll(List.unmodifiable(list));
+      _refreshList(list);
 
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         refresh();
@@ -127,6 +126,12 @@ class _TocWidgetState extends State<TocWidget> {
             preferPosition: AutoScrollPosition.begin);
       }
     };
+    _refreshList(tocController.tocList);
+  }
+
+  void _refreshList(List<Toc> list) {
+     _tocList.clear();
+    _tocList.addAll(List.unmodifiable(list));
   }
 
   @override

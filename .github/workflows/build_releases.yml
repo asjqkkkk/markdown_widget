@@ -1,0 +1,105 @@
+name: Flutter CI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release-linux:
+    runs-on: ubuntu-22.04
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+          flutter-version: '3.3.1'
+      - name: Install dependencies
+        run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-0 libgtk-3-dev libblkid1 liblzma5
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Enable linux build
+        run: flutter config --enable-linux-desktop
+      - name: Build artifacts
+        run: cd example && flutter build linux --release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: markdown-${{github.ref_name}}-linux.zip
+          directory: example/build/linux/x64/release/bundle
+      - name: Linux Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        with:
+          files: example/build/linux/x64/release/bundle/markdown-${{github.ref_name}}-linux.zip
+
+  build-and-release-windows:
+    runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+          flutter-version: '3.3.9'
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Enable windows build
+        run: flutter config --enable-windows-desktop
+      - name: Build artifacts
+        run: cd example && flutter build windows --release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: markdown-${{github.ref_name}}-windows.zip
+          directory: example/build/windows/runner/Release
+      - name: Windows Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        with:
+          files: example/build/windows/runner/Release/markdown-${{github.ref_name}}-windows.zip
+
+  build-and-release-macos:
+    runs-on: macos-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+          flutter-version: '3.3.9'
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Enable macOS build
+        run: flutter config --enable-macos-desktop
+      - name: Build artifacts
+        run: cd example && flutter build macos --release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: markdown-${{github.ref_name}}-macos.zip
+          directory: example/build/macos/Build/Products/Release
+      - name: macOS Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        with:
+          files: example/build/macos/Build/Products/Release/markdown-${{github.ref_name}}-macos.zip

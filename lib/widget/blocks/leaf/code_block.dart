@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_highlight/themes/a11y-dark.dart';
 import 'package:flutter_highlight/themes/a11y-light.dart';
 import 'package:highlight/highlight.dart' as hi;
+import 'package:markdown_widget/markdown_widget.dart';
 
-import '../../../config/configs.dart';
-import '../../span_node.dart';
 
 ///Tag: [MarkdownTag.pre]
 ///
@@ -19,22 +18,20 @@ class CodeBlockNode extends ElementNode {
 
   @override
   InlineSpan build() {
-    return WidgetSpan(
-      child: Builder(builder: (context) {
-        return Container(
-          decoration: preConfig.decoration,
-          margin: preConfig.margin,
-          padding: preConfig.padding,
-          width: double.infinity,
-          child: Text.rich(TextSpan(
-            children: highLightSpans(content,
-                language: preConfig.language,
-                theme: preConfig.theme,
-                textStyle: style),
-          )),
-        );
-      }),
+    final widget = Container(
+      decoration: preConfig.decoration,
+      margin: preConfig.margin,
+      padding: preConfig.padding,
+      width: double.infinity,
+      child: Text.rich(TextSpan(
+        children: highLightSpans(content,
+            language: preConfig.language,
+            theme: preConfig.theme,
+            textStyle: style),
+      )),
     );
+    return WidgetSpan(
+        child: preConfig.wrapper?.call(widget, content) ?? widget);
   }
 
   @override
@@ -100,6 +97,7 @@ class PreConfig implements LeafConfig {
   final Decoration decoration;
   final EdgeInsetsGeometry margin;
   final TextStyle textStyle;
+  final CodeWrapper? wrapper;
 
   ///see package:flutter_highlight/themes/
   final Map<String, TextStyle> theme;
@@ -115,6 +113,7 @@ class PreConfig implements LeafConfig {
     this.textStyle = const TextStyle(fontSize: 16),
     this.theme = a11yLightTheme,
     this.language = 'dart',
+    this.wrapper,
   });
 
   static PreConfig get darkConfig => PreConfig(
@@ -124,7 +123,30 @@ class PreConfig implements LeafConfig {
       ),
       theme: a11yDarkTheme);
 
+  ///copy by other params
+  PreConfig copy({
+    EdgeInsetsGeometry? padding,
+    Decoration? decoration,
+    EdgeInsetsGeometry? margin,
+    TextStyle? textStyle,
+    CodeWrapper? wrapper,
+    Map<String, TextStyle>? theme,
+    String? language,
+  }) {
+    return PreConfig(
+      padding: padding ?? this.padding,
+      decoration: decoration ?? this.decoration,
+      margin: margin ?? this.margin,
+      textStyle: textStyle ?? this.textStyle,
+      wrapper: wrapper ?? this.wrapper,
+      theme: theme ?? this.theme,
+      language: language ?? this.language,
+    );
+  }
+
   @nonVirtual
   @override
   String get tag => MarkdownTag.pre.name;
 }
+
+typedef CodeWrapper = Widget Function(Widget child, String code);

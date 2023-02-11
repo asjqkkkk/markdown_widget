@@ -39,7 +39,7 @@ Future _convertMedia(File file) async {
       }
     }
   }
-  if(newContent != content) file.writeAsStringSync(newContent);
+  if (newContent != content) file.writeAsStringSync(newContent);
 }
 
 Future<String> _downloadFile(String url) async {

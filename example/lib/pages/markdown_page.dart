@@ -1,4 +1,3 @@
-import 'package:example/state/root_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
@@ -7,6 +6,8 @@ import '../markdown_custom/custom_node.dart';
 import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
 import '../platform_dector/platform_dector.dart';
+import '../state/root_state.dart';
+import '../widget/code_wrapper.dart';
 
 class MarkdownPage extends StatefulWidget {
   final String? assetsPath;
@@ -134,12 +135,19 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   Widget buildMarkdown() {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final config =
+        isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
+    final codeWrapper =
+        (child, text) => CodeWrapperWidget(child: child, text: text);
     return Container(
       margin: EdgeInsets.all(10.0),
       child: MarkdownWidget(
           data: data!,
-          config:
-              isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig,
+          config: config.copy(configs: [
+            isDark
+                ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
+                : PreConfig().copy(wrapper: codeWrapper)
+          ]),
           tocController: controller,
           markdownGeneratorConfig: MarkdownGeneratorConfig(
               generators: [videoGeneratorWithTag, latexGeneratorWithTag],
