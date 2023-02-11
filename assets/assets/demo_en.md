@@ -4,6 +4,9 @@ Language：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/maste
 
 # 📖markdown_widget
 
+![screenshot](assets/script_medias/1676100926803.jpg)
+
+
 [![Coverage Status](assets/script_medias/1675527914508.png)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](assets/script_medias/1675527915217.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](assets/script_medias/1675527916292.png)](https://asjqkkkk.github.io/markdown_widget/)
 
 A simple and easy-to-use markdown rendering component.
