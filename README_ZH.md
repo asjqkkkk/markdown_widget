@@ -4,6 +4,8 @@
 
 语言：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
+![screenshot](https://user-images.githubusercontent.com/30992818/218246325-603fa97f-a5ed-4ba6-a503-6c7233cfad47.jpg)
+
 # 📖markdown_widget
 
 [![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.svg?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen)](https://asjqkkkk.github.io/markdown_widget/)
@@ -115,7 +117,7 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
 
 ## 🌐html 标签
 
-由于当前 package 只实现了对于 Makrdown tag 的转换，所以默认不支持转换 html 标签。但可以通过扩展的方式来支持这个功能，具体可以参考这里的使用 [html_support](https://github.com/asjqkkkk/markdown_widget/blob/1d549fd5c2d6b0172281d8bb66e367654b9d60f0/example/lib/markdown_custom/html_support.dart)
+由于当前 package 只实现了对于 Makrdown tag 的转换，所以默认不支持转换 html 标签。但可以通过扩展的方式来支持这个功能，具体可以参考这里的使用 [html_support](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/html_support.dart)
 
 ## 🍑自定义tag与实现
 

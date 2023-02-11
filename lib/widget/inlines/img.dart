@@ -35,10 +35,12 @@ class ImageNode extends SpanNode {
           });
     final result = (parent != null && parent is LinkNode)
         ? imgWidget
-        : InkWell(
-            child: imgWidget,
-            onTap: () => launchUrl(Uri.parse(imageUrl)),
-          );
+        : Builder(builder: (context) {
+            return InkWell(
+              child: imgWidget,
+              onTap: () => _showImage(context, imgWidget),
+            );
+          });
     return WidgetSpan(
         child: imgConfig.builder?.call(imageUrl, attributes) ?? result);
   }
@@ -54,6 +56,32 @@ class ImageNode extends SpanNode {
                   (parentStyle?.height ?? config.p.textStyle.height ?? 1.2))),
       TextSpan(text: alt, style: parentStyle ?? config.p.textStyle),
     ]));
+  }
+
+  void _showImage(BuildContext context, Widget child) {
+    Navigator.of(context).push(PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (ctx, anm1, anm2) {
+          return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.1),
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                InteractiveViewer(child: Center(child: child)),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: Icon(Icons.cancel_outlined),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        }));
   }
 }
 

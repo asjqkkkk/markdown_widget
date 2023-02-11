@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+.metadata
 
 # IntelliJ related
 *.iml
@@ -79,3 +80,6 @@ example/pubspec.lock
 pubspec.lock
 .fvm/
 coverage/
+.flutter
+.flutter_tool_state
+example/.metadata

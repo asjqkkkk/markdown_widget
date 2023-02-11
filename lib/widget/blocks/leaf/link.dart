@@ -68,13 +68,13 @@ class LinkNode extends ElementNode {
       text: span?.text,
       style: span?.style,
       children: children ?? span?.children,
-      recognizer: recognizer ?? span?.recognizer,
       mouseCursor: span?.mouseCursor,
       onEnter: span?.onEnter,
       onExit: span?.onExit,
       semanticsLabel: span?.semanticsLabel,
       locale: span?.locale,
       spellOut: span?.spellOut,
+      recognizer: recognizer,
     );
   }
 

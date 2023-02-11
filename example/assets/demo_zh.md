@@ -6,6 +6,9 @@
 
 # 📖markdown_widget
 
+![screenshot](assets/script_medias/1676100926803.jpg)
+
+
 [![Coverage Status](assets/script_medias/1675527925332.png)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](assets/script_medias/1675527928071.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](assets/script_medias/1675527929980.png)](https://asjqkkkk.github.io/markdown_widget/)
 
 一个简单易用的markdown渲染组件

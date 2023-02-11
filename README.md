@@ -2,6 +2,8 @@
 
 Language：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
+![screenshot](https://user-images.githubusercontent.com/30992818/218246325-603fa97f-a5ed-4ba6-a503-6c7233cfad47.jpg)
+
 # 📖markdown_widget
 
 [![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.svg?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen)](https://asjqkkkk.github.io/markdown_widget/)
@@ -114,7 +116,7 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
 
 ## 🌐HTML tags
 
-The current package only implements the conversion of Markdown tags, so it does not support the conversion of HTML tags by default. However, you can extend the package to support this feature by using the [html_support](https://github.com/asjqkkkk/markdown_widget/blob/1d549fd5c2d6b0172281d8bb66e367654b9d60f0/example/lib/markdown_custom/html_support.dart)
+The current package only implements the conversion of Markdown tags, so it does not support the conversion of HTML tags by default. However, you can extend the package to support this feature by using the [html_support](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/html_support.dart)
 
 ## 🍑Custom tag implementation
 

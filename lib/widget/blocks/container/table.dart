@@ -31,8 +31,8 @@ class TableConfig implements ContainerConfig {
     this.headerStyle,
     this.bodyStyle,
     this.wrapper,
-    this.headPadding = const EdgeInsets.all(4),
-    this.bodyPadding = const EdgeInsets.all(4),
+    this.headPadding = const EdgeInsets.fromLTRB(8, 4, 8, 4),
+    this.bodyPadding = const EdgeInsets.fromLTRB(8, 4, 8, 4),
   });
 
   @nonVirtual
@@ -62,19 +62,22 @@ class TableNode extends ElementNode {
       }
     }
 
-    final tableWidget = Table(
-      columnWidths: tbConfig.columnWidths,
-      defaultColumnWidth: tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
-      textBaseline: tbConfig.textBaseline,
-      textDirection: tbConfig.textDirection,
-      border: tbConfig.border ??
-          TableBorder.all(
-              color: parentStyle?.color ??
-                  config.p.textStyle.color ??
-                  Colors.grey),
-      defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
-          TableCellVerticalAlignment.middle,
-      children: rows,
+    final tableWidget = SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Table(
+        columnWidths: tbConfig.columnWidths,
+        defaultColumnWidth: tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
+        textBaseline: tbConfig.textBaseline,
+        textDirection: tbConfig.textDirection,
+        border: tbConfig.border ??
+            TableBorder.all(
+                color: parentStyle?.color ??
+                    config.p.textStyle.color ??
+                    Colors.grey),
+        defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
+            TableCellVerticalAlignment.middle,
+        children: rows,
+      ),
     );
 
     return WidgetSpan(
