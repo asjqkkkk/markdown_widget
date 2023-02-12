@@ -130,7 +130,7 @@ class _TocWidgetState extends State<TocWidget> {
   }
 
   void _refreshList(List<Toc> list) {
-     _tocList.clear();
+    _tocList.clear();
     _tocList.addAll(List.unmodifiable(list));
   }
 

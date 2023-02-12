@@ -19,10 +19,10 @@ void htmlToMarkdown(h.Node? node, int deep, List<m.Node> mNodes) {
     });
     m.Element element;
     if (tag == MarkdownTag.img.name || tag == 'video') {
-      element = m.Element(tag!, children);
+      element = HtmlElement(tag!, children, node.text);
       element.attributes.addAll(node.attributes.cast());
     } else {
-      element = m.Element(tag!, children);
+      element = HtmlElement(tag!, children, node.text);
       element.attributes.addAll(node.attributes.cast());
     }
     mNodes.add(element);
@@ -39,7 +39,8 @@ List<SpanNode> parseHtml(
   TextStyle? parentStyle,
 }) {
   try {
-    final text = node.textContent;
+    final text =
+        node.textContent.replaceAll(RegExp(r'(\r?\n)|(\r?\t)|(\r)'), '');
     if (!text.contains(htmlRep)) return [TextNode(text: node.text)];
     h.DocumentFragment document = parseFragment(text);
     return HtmlToSpanVisitor(visitor: visitor, parentStyle: parentStyle)
@@ -48,6 +49,13 @@ List<SpanNode> parseHtml(
     onError?.call(e);
     return [TextNode(text: node.text)];
   }
+}
+
+class HtmlElement extends m.Element {
+  final String textContent;
+
+  HtmlElement(String tag, List<m.Node>? children, this.textContent)
+      : super(tag, children);
 }
 
 class HtmlToSpanVisitor extends TreeVisitor {

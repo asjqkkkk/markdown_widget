@@ -16,10 +16,20 @@ class DivNode extends ElementNode {
 SpanNodeGeneratorWithTag divGeneratorWithTag = SpanNodeGeneratorWithTag(
     tag: 'div', generator: (e, config, visitor) => DivNode(e.attributes));
 
-final source = '''# Topic: User Data Not Found 
-<div style="display:inline-block;background-color:red;border-radius: 50%; color:white; padding:5px;float:right;">
-  Error code: e209
-</div>''';
+final source = '''<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>I'm a title</title>
+</head>
+<body>
+
+<h1>I'm a head</h1>
+<p>I'm a paragraph</p>
+
+</body>
+</html>
+''';
 
 void main() {
   test("test for html with generator", () {
@@ -41,6 +51,7 @@ void main() {
             CustomTextNode(node.textContent, config, visitor),
         generators: [divGeneratorWithTag]);
     final spans = visitor.visit(nodes);
-    print(spans);
+    final buildSpans = spans.map((e) => e.build()).toList();
+    print(buildSpans);
   });
 }

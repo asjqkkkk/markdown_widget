@@ -20,62 +20,64 @@ class LinkNode extends ElementNode {
   @override
   InlineSpan build() {
     final url = attributes['href'] ?? '';
-    return TextSpan(
-        children: List.generate(children.length, (index) {
-      final child = children[index];
-      InlineSpan span = child.build();
-      final recognizer = TapGestureRecognizer()
-        ..onTap = () {
-          _onLinkTap(linkConfig, url);
-        };
-      return _visitInlineSpan(span, url, recognizer);
-    }));
+    final recognizer = TapGestureRecognizer()
+      ..onTap = () {
+        _onLinkTap(linkConfig, url);
+      };
+    final spans =
+        List.generate(children.length, (index) => children[index].build());
+    final List<InlineSpan> formatSpans = [];
+    _formatChildren(spans, formatSpans);
+    final List<InlineSpan> result = [];
+    String text = '';
+    for (final span in formatSpans) {
+      if (span is WidgetSpan) {
+        _addTextSpan(text, result, recognizer);
+        _addWidgetSpan(result, span, url);
+        text = '';
+      } else if (span is TextSpan) {
+        text += span.text ?? '';
+      }
+    }
+    if (text.isNotEmpty) _addTextSpan(text, result, recognizer);
+    return TextSpan(children: result);
   }
 
-  ///to visit TextSpan's children, and set [TapGestureRecognizer] for them
-  InlineSpan _visitInlineSpan(
-      InlineSpan span, String url, TapGestureRecognizer recognizer) {
-    if (span is TextSpan) {
-      final children = span.children ?? [];
-      if (children.isEmpty)
-        return _copyTextSpan(span: span, recognizer: recognizer);
-      final gestureChildren =
-          children.map((e) => _visitInlineSpan(e, url, recognizer)).toList();
-      return _copyTextSpan(
-          span: span, recognizer: recognizer, children: gestureChildren);
-    } else if (span is WidgetSpan) {
-      return WidgetSpan(
-          child: InkWell(
-            child: span.child,
-            onTap: () {
-              _onLinkTap(linkConfig, url);
-            },
-          ),
-          alignment: span.alignment,
-          baseline: span.baseline,
-          style: span.style);
-    } else
-      return span;
+  ///if text is not empty, add textSpan to [result]
+  void _addTextSpan(
+      String text, List<InlineSpan> result, TapGestureRecognizer recognizer) {
+    if (text.isNotEmpty)
+      result.add(TextSpan(
+          text: text,
+          style: parentStyle?.merge(linkConfig.style) ?? linkConfig.style,
+          recognizer: recognizer));
   }
 
-  ///copy TextSpan with [recognizer] and [children]
-  TextSpan _copyTextSpan({
-    TextSpan? span,
-    GestureRecognizer? recognizer,
-    List<InlineSpan>? children,
-  }) {
-    return TextSpan(
-      text: span?.text,
-      style: span?.style,
-      children: children ?? span?.children,
-      mouseCursor: span?.mouseCursor,
-      onEnter: span?.onEnter,
-      onExit: span?.onExit,
-      semanticsLabel: span?.semanticsLabel,
-      locale: span?.locale,
-      spellOut: span?.spellOut,
-      recognizer: recognizer,
-    );
+  ///add widgetSpan to [result]
+  void _addWidgetSpan(List<InlineSpan> result, WidgetSpan span, String url) {
+    result.add(WidgetSpan(
+        child: InkWell(
+          child: span.child,
+          onTap: () => _onLinkTap(linkConfig, url),
+        ),
+        alignment: span.alignment,
+        baseline: span.baseline,
+        style: span.style));
+  }
+
+  ///visit children, and put them in the [result]
+  void _formatChildren(List<InlineSpan> spans, List<InlineSpan> result) {
+    for (final span in spans) {
+      if (span is! TextSpan) {
+        result.add(span);
+        return;
+      }
+      if (span.children == null || (span.children?.isEmpty ?? true)) {
+        result.add(span);
+        return;
+      }
+      _formatChildren(span.children!, result);
+    }
   }
 
   void _onLinkTap(LinkConfig linkConfig, String url) {

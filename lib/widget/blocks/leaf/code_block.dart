@@ -5,7 +5,6 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
 import 'package:highlight/highlight.dart' as hi;
 import 'package:markdown_widget/markdown_widget.dart';
 
-
 ///Tag: [MarkdownTag.pre]
 ///
 ///An indented code block is composed of one or more indented chunks separated by blank lines
@@ -107,9 +106,9 @@ class PreConfig implements LeafConfig {
     this.padding = const EdgeInsets.all(16.0),
     this.decoration = const BoxDecoration(
       color: Color(0xffeff1f3),
-      borderRadius: BorderRadius.all(Radius.circular(8)),
+      borderRadius: BorderRadius.all(Radius.circular(8.0)),
     ),
-    this.margin = const EdgeInsets.all(8.0),
+    this.margin = const EdgeInsets.symmetric(vertical: 8.0),
     this.textStyle = const TextStyle(fontSize: 16),
     this.theme = a11yLightTheme,
     this.language = 'dart',

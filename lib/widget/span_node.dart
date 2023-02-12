@@ -60,7 +60,5 @@ class TextNode extends SpanNode {
   TextNode({this.text = '', this.style = const TextStyle()});
 
   @override
-  InlineSpan build() {
-    return TextSpan(text: text, style: style.merge(parentStyle));
-  }
+  InlineSpan build() => TextSpan(text: text, style: style.merge(parentStyle));
 }
