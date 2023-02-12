@@ -109,8 +109,9 @@ void main() {
 class _CustomObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (route is! MaterialPageRoute) return;
-    final page = route.builder.call(route.navigator!.context);
+    if (route is! PageRouteBuilder) return;
+    final page = route.buildPage(route.navigator!.context,
+        AlwaysStoppedAnimation(0), AlwaysStoppedAnimation(0));
     print('page:$page');
   }
 }

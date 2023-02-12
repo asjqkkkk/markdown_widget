@@ -198,7 +198,7 @@ void main() {
     ));
   });
 
-  testWidgets('test ImageViewer', (tester) async {
+  testWidgets('test ImageViewer iconButton pressed', (tester) async {
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
           home: ImageViewer(child: Container(width: 100, height: 100))));
@@ -208,5 +208,15 @@ void main() {
     for (var button in buttons) {
       (button as IconButton).onPressed?.call();
     }
+  });
+
+  testWidgets('test ImageViewer gesture taped', (tester) async {
+    await mockNetworkImagesFor(() async {
+      await tester.pumpWidget(MaterialApp(
+          home: ImageViewer(child: Container(width: 100, height: 100))));
+    });
+    final buttons = tester
+        .widgetList(find.byWidgetPredicate((widget) => widget is IconButton));
+    await (await tester.startGesture(Offset(50, 50))).up();
   });
 }

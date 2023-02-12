@@ -18,9 +18,12 @@ class CustomTextNode extends ElementNode {
       accept(TextNode(text: text, style: textStyle));
       return;
     }
-    final spans = parseHtml(m.Text(text),
-        visitor: WidgetVisitor(
-            config: visitor.config, generators: visitor.generators));
+    final spans = parseHtml(
+      m.Text(text),
+      visitor:
+          WidgetVisitor(config: visitor.config, generators: visitor.generators),
+      parentStyle: parentStyle,
+    );
     spans.forEach((element) {
       accept(element);
     });

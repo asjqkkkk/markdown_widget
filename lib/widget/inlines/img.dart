@@ -59,8 +59,8 @@ class ImageNode extends SpanNode {
 
   ///show image in a new window
   void _showImage(BuildContext context, Widget child) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (ctx) => ImageViewer(child: child)));
+    Navigator.of(context).push(PageRouteBuilder(
+        opaque: false, pageBuilder: (_, __, ___) => ImageViewer(child: child)));
   }
 }
 
@@ -87,34 +87,37 @@ class ImageViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.1),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          InteractiveViewer(
-              child: Center(child: Hero(child: child, tag: child.hashCode))),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 24),
-              child: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: Container(
-                  child: Icon(
-                    Icons.clear,
-                    color: Colors.grey,
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: Scaffold(
+        backgroundColor: Colors.black.withOpacity(0.3),
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            InteractiveViewer(
+                child: Center(child: Hero(child: child, tag: child.hashCode))),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: Container(
+                    child: Icon(
+                      Icons.clear,
+                      color: Colors.grey,
+                    ),
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        shape: BoxShape.circle),
                   ),
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      shape: BoxShape.circle),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -47,10 +47,7 @@ class LinkNode extends ElementNode {
   void _addTextSpan(
       String text, List<InlineSpan> result, TapGestureRecognizer recognizer) {
     if (text.isNotEmpty)
-      result.add(TextSpan(
-          text: text,
-          style: parentStyle?.merge(linkConfig.style) ?? linkConfig.style,
-          recognizer: recognizer));
+      result.add(TextSpan(text: text, style: style, recognizer: recognizer));
   }
 
   ///add widgetSpan to [result]
@@ -62,7 +59,7 @@ class LinkNode extends ElementNode {
         ),
         alignment: span.alignment,
         baseline: span.baseline,
-        style: span.style));
+        style: span.style?.merge(style) ?? style));
   }
 
   ///visit children, and put them in the [result]
