@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   #markdown data parser
-  markdown: ^6.0.1
+  markdown: ^7.0.0
   #highlight code
   highlight: ^0.7.0
   flutter_highlight: ^0.7.0

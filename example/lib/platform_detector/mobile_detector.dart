@@ -1,4 +1,4 @@
-import 'platform_dector.dart';
+import 'platform_detector.dart';
 import 'dart:io';
 
 PlatformType get currentType {

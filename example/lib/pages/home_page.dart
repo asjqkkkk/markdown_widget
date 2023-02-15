@@ -1,14 +1,27 @@
-import 'dart:math';
-
+import 'package:example/widget/menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../platform_dector/platform_dector.dart';
-import 'markdown_page.dart';
-import 'edit_markdown_page.dart';
+import 'package:go_router/go_router.dart';
+import '../platform_detector/platform_detector.dart';
+import '../state/root_state.dart';
 
-class HomePage extends StatelessWidget {
-  final bool isMobile =
+class HomePage extends StatefulWidget {
+  final Widget child;
+  final GoRouterState state;
+
+  const HomePage({Key? key, required this.child, required this.state})
+      : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool get isMobile =>
       PlatformDetector.isMobile || PlatformDetector.isWebMobile;
+
+  int selectIndex = 0;
+  double leftLayoutWidth = 220;
+  bool isCollapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -16,91 +29,85 @@ class HomePage extends StatelessWidget {
       appBar: isMobile
           ? AppBar(
               title: Text(
-                'markdown',
+                '${widget.state.location}',
               ),
               backgroundColor: Colors.black,
+              actions: [
+                buildThemeButton(),
+              ],
             )
           : null,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            CustomButton(
-              color:
-                  Colors.primaries[Random().nextInt(Colors.primaries.length)],
-              padding: EdgeInsets.all(20),
-              child: Text('README',
-                  style: TextStyle(color: Colors.white, fontSize: 30)),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                  return MarkdownPage(
-                    assetsPath: 'assets/demo_en.md',
-                  );
-                }));
-              },
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            CustomButton(
-              color:
-                  Colors.primaries[Random().nextInt(Colors.primaries.length)],
-              padding: EdgeInsets.all(20),
-              child: Text('Markdown Editor',
-                  style: TextStyle(color: Colors.white, fontSize: 30)),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              onPressed: () {
-                rootBundle.loadString('assets/editor.md').then((data) {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                    return EditMarkdownPage(
-                      initialData: data,
-                    );
-                  }));
-                });
-              },
-            ),
-          ],
-        ),
+      body: Row(
+        children: [
+          if (!isMobile) leftLayout(),
+          buildDragLine(),
+          Expanded(child: rightLayout()),
+        ],
       ),
+      drawer: isMobile
+          ? Drawer(
+              child: leftLayout(),
+            )
+          : null,
     );
   }
-}
 
-class CustomButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final Widget child;
-  final Color? color;
-  final EdgeInsetsGeometry? padding;
-  final OutlinedBorder? shape;
-
-  const CustomButton({
-    Key? key,
-    this.onPressed,
-    this.color,
-    this.padding,
-    this.shape,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      child: child,
-      style: ButtonStyle(
-        backgroundColor: getProperty(color),
-        padding: getProperty(padding),
-        shape: getProperty(shape),
+  Widget leftLayout() {
+    return SizedBox(
+      width: isCollapsed ? 45 : leftLayoutWidth,
+      child: Menu(
+        router: widget.state.location,
+        isCollapsed: isCollapsed,
+        onUnCollapsed: () {
+          isCollapsed = false;
+          refresh();
+        },
+        onCollapsed: () {
+          if (isMobile) {
+            Navigator.of(context).pop();
+            return;
+          }
+          isCollapsed = true;
+          refresh();
+        },
       ),
     );
   }
 
-  MaterialStateProperty<T?>? getProperty<T>(T? property) {
-    if (property == null) return null;
-    return MaterialStateProperty.all<T?>(property);
+  Widget buildDragLine() {
+    Widget line = VerticalDivider(width: 4);
+    if (isCollapsed) return line;
+    return GestureDetector(
+      onHorizontalDragStart: (e) {},
+      onHorizontalDragEnd: (e) {},
+      onHorizontalDragUpdate: (e) {
+        final delta = e.delta;
+        final width = delta.dx + leftLayoutWidth;
+        if (width >= 220 && width <= 400) {
+          leftLayoutWidth = width;
+          refresh();
+        }
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.move,
+        child: line,
+      ),
+    );
   }
+
+  IconButton buildThemeButton() {
+    Brightness brightness = rootStore.state.themeState.brightness;
+    bool isDarkNow = brightness == Brightness.dark;
+    return IconButton(
+        icon: Icon(isDarkNow ? Icons.brightness_7 : Icons.brightness_2),
+        onPressed: () {
+          rootStore.dispatch(new ChangeThemeEvent());
+        });
+  }
+
+  void refresh() {
+    if (mounted) setState(() {});
+  }
+
+  Widget rightLayout() => widget.child;
 }

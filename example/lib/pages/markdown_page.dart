@@ -5,7 +5,7 @@ import 'package:markdown_widget/markdown_widget.dart';
 import '../markdown_custom/custom_node.dart';
 import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
-import '../platform_dector/platform_dector.dart';
+import '../platform_detector/platform_detector.dart';
 import '../state/root_state.dart';
 import '../widget/code_wrapper.dart';
 
@@ -27,6 +27,9 @@ class _MarkdownPageState extends State<MarkdownPage> {
   String? data;
   bool isEnglish = true;
   final TocController controller = TocController();
+
+  bool get isMobile =>
+      PlatformDetector.isMobile || PlatformDetector.isWebMobile;
 
   @override
   void initState() {
@@ -63,19 +66,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = PlatformDetector.isMobile || PlatformDetector.isWebMobile;
-
     return Scaffold(
-      appBar: isMobile
-          ? AppBar(
-              title: Text('Markdown Page'),
-              elevation: 0.0,
-              backgroundColor: Colors.black,
-              actions: <Widget>[
-                buildThemeButton(),
-              ],
-            )
-          : null,
       body: data == null
           ? Center(child: CircularProgressIndicator())
           : (isMobile ? buildMobileBody() : buildWebBody()),
@@ -99,7 +90,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
                         heroTag: 'list',
                       )
                     : SizedBox(),
-                isMobile ? SizedBox() : buildBackButton(),
                 isMobile ? SizedBox() : buildThemeButton(),
                 FloatingActionButton(
                   onPressed: () {
@@ -126,11 +116,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
         });
   }
 
-  IconButton buildBackButton() {
-    return IconButton(
-        icon: Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context));
-  }
-
   Widget buildTocList() => TocWidget(controller: controller);
 
   Widget buildMarkdown() {
@@ -150,7 +135,8 @@ class _MarkdownPageState extends State<MarkdownPage> {
           ]),
           tocController: controller,
           markdownGeneratorConfig: MarkdownGeneratorConfig(
-              generators: [videoGeneratorWithTag, latexGeneratorWithTag],
+              generators: [videoGeneratorWithTag, latexGenerator],
+              inlineSyntaxList: [LatexSyntax()],
               textGenerator: (node, config, visitor) =>
                   CustomTextNode(node.textContent, config, visitor))),
     );

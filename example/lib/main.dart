@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'pages/home_page.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'pages/router.dart';
 import 'state/root_state.dart';
 
 void main() => runApp(MyApp());
@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
         converter: ThemeState.storeConverter,
         builder: (ctx, state) {
           final brightness = state.brightness;
-          return MaterialApp(
+          return MaterialApp.router(
             title: 'Markdown Demo',
             theme:
                 ThemeData(primarySwatch: Colors.blue, brightness: brightness),
-            home: HomePage(),
+            routerConfig: router,
           );
         },
       ),

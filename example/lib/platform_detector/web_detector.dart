@@ -1,6 +1,6 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
-import 'platform_dector.dart';
+import 'platform_detector.dart';
 
 PlatformType get currentType {
   if (isWebIOS()) return PlatformType.WebIos;

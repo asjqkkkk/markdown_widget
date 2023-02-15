@@ -48,6 +48,7 @@ class TocController {
   }
 }
 
+///config for toc
 class Toc {
   ///the HeadingNode
   final HeadingNode node;
@@ -192,9 +193,16 @@ typedef TocItemBuilder = Widget? Function(TocItemBuilderData data);
 
 ///pass [TocItemBuilderData] to help build your own [TocItemBuilder]
 class TocItemBuilderData {
+  ///the index of item
   final int index;
+
+  ///the toc data
   final Toc toc;
+
+  ///current selected index of item
   final int currentIndex;
+
+  ///use [refreshIndexCallback] to change [currentIndex]
   final ValueChanged<int> refreshIndexCallback;
 
   TocItemBuilderData(

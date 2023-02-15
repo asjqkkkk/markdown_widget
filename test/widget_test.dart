@@ -215,8 +215,6 @@ void main() {
       await tester.pumpWidget(MaterialApp(
           home: ImageViewer(child: Container(width: 100, height: 100))));
     });
-    final buttons = tester
-        .widgetList(find.byWidgetPredicate((widget) => widget is IconButton));
     await (await tester.startGesture(Offset(50, 50))).up();
   });
 }

@@ -1,14 +1,15 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../markdown_custom/custom_node.dart';
 import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
-import '../platform_dector/platform_dector.dart';
 
+import '../platform_detector/platform_detector.dart';
 import '../widget/code_wrapper.dart';
 import 'markdown_page.dart';
 
@@ -25,24 +26,25 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
   final String initialText =
       '[Welcome for pull request](https://github.com/asjqkkkk/markdown_widget)😄\n\n';
   String text = '';
-  final bool isMobile =
+
+  bool get isMobile =>
       PlatformDetector.isMobile || PlatformDetector.isWebMobile;
 
   @override
   void initState() {
     text = widget.initialData;
+    if (text.isEmpty) {
+      rootBundle.loadString('assets/editor.md').then((value) {
+        text = value;
+        refresh();
+      });
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: isMobile
-          ? AppBar(
-              title: Text('Edit Markdown'),
-              backgroundColor: Colors.black,
-            )
-          : null,
       body: isMobile ? buildMobileBody() : buildWebBody(),
       floatingActionButton: isMobile
           ? FloatingActionButton(
@@ -57,12 +59,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                 Icons.remove_red_eye,
               ),
             )
-          : FloatingActionButton(
-              onPressed: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back,
-              ),
-            ),
+          : null,
     );
   }
 
@@ -88,7 +85,8 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                   : PreConfig().copy(wrapper: codeWrapper)
             ]),
             markdownGeneratorConfig: MarkdownGeneratorConfig(
-                generators: [videoGeneratorWithTag, latexGeneratorWithTag],
+                generators: [videoGeneratorWithTag, latexGenerator],
+                inlineSyntaxList: [LatexSyntax()],
                 textGenerator: (node, config, visitor) =>
                     CustomTextNode(node.textContent, config, visitor)),
           ),

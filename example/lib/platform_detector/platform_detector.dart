@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'web_dector.dart' if (dart.library.io) 'mobile_dector.dart';
+import 'web_detector.dart' if (dart.library.io) 'mobile_detector.dart';
 
 class PlatformDetector {
   static bool get isMobile =>

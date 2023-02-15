@@ -20,7 +20,7 @@ class MarkdownGenerator {
     MarkdownConfig? config,
     this.inlineSyntaxes = const [],
     this.blockSyntaxes = const [],
-    this.linesMargin = const EdgeInsets.all(4),
+    this.linesMargin = const EdgeInsets.symmetric(vertical: 8),
     this.generators = const [],
     this.onNodeAccepted,
     this.textGenerator,
