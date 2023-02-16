@@ -15,6 +15,8 @@ class PlatformDetector {
       currentType == PlatformType.WebAndroid ||
       currentType == PlatformType.WebIos;
 
+  static bool get isAllMobile => isMobile || isWebMobile;
+
   @override
   String toString() {
     return "Platform:  isMobile-$isMobile   isIOS-$isIOS   isAndroid-$isAndroid   isWebMobile-$isWebMobile";

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'home_page.dart';
+import 'sample_html_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -26,7 +27,7 @@ final GoRouter router = GoRouter(
             RouterEnum.readme, MarkdownPage(assetsPath: 'assets/demo_en.md')),
         _buildRoute(RouterEnum.editor, EditMarkdownPage()),
         _buildRoute(RouterEnum.sample_latex, LatexPage()),
-        _buildRoute(RouterEnum.sample_html, LatexPage()),
+        _buildRoute(RouterEnum.sample_html, HtmlPage()),
       ],
     ),
   ],

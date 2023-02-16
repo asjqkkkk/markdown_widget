@@ -28,8 +28,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   bool isEnglish = true;
   final TocController controller = TocController();
 
-  bool get isMobile =>
-      PlatformDetector.isMobile || PlatformDetector.isWebMobile;
+  bool get isMobile => PlatformDetector.isAllMobile;
 
   @override
   void initState() {

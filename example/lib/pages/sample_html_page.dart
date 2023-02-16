@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LatexPage extends StatelessWidget {
-  const LatexPage({Key? key}) : super(key: key);
+class HtmlPage extends StatelessWidget {
+  const HtmlPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

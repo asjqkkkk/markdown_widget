@@ -47,7 +47,13 @@ class NavItem extends StatelessWidget {
     );
   }
 
-  Widget collapsedWidget() => Tooltip(child: Text(trailing, style: _buildTextStyle()), message: title);
+  Widget collapsedWidget() => SizedBox(
+    height: 24,
+    child: Tooltip(
+      message: title,
+      child: Text(trailing, style: _buildTextStyle()),
+    ),
+  );
 
   TextStyle _buildTextStyle() {
     return TextStyle(
@@ -56,6 +62,4 @@ class NavItem extends StatelessWidget {
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
     );
   }
-
-
 }

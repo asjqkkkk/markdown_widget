@@ -25,17 +25,18 @@ class EditMarkdownPage extends StatefulWidget {
 class _EditMarkdownPageState extends State<EditMarkdownPage> {
   final String initialText =
       '[Welcome for pull request](https://github.com/asjqkkkk/markdown_widget)😄\n\n';
-  String text = '';
+  late TextEditingController controller;
+  bool isMobileDisplaying = false;
 
-  bool get isMobile =>
-      PlatformDetector.isMobile || PlatformDetector.isWebMobile;
+  bool get isMobile => PlatformDetector.isAllMobile;
 
   @override
   void initState() {
-    text = widget.initialData;
+    final text = widget.initialData;
+    controller = TextEditingController(text: text);
     if (text.isEmpty) {
       rootBundle.loadString('assets/editor.md').then((value) {
-        text = value;
+        controller.text = value;
         refresh();
       });
     }
@@ -45,23 +46,27 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isMobile ? buildMobileBody() : buildWebBody(),
+      body: buildDisplay(),
       floatingActionButton: isMobile
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                  return MarkdownPage(
-                    markdownData: text,
-                  );
-                }));
+                isMobileDisplaying = !isMobileDisplaying;
+                refresh();
               },
               child: Icon(
-                Icons.remove_red_eye,
+                isMobileDisplaying ? Icons.remove_red_eye_outlined : Icons.remove_red_eye,
               ),
             )
           : null,
     );
   }
+
+  Widget buildDisplay() {
+    if (isMobileDisplaying) return MarkdownPage(markdownData: controller.text);
+    return buildEditor();
+  }
+
+  Widget buildEditor() => isMobile ? buildMobileBody() : buildWebBody();
 
   Widget buildMobileBody() {
     return buildEditText();
@@ -78,7 +83,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
         Expanded(child: buildEditText()),
         Expanded(
           child: MarkdownWidget(
-            data: initialText + text,
+            data: initialText + controller.text,
             config: config.copy(configs: [
               isDark
                   ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
@@ -110,9 +115,8 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
         expands: true,
         maxLines: null,
         textInputAction: TextInputAction.newline,
-        initialValue: text,
-        onChanged: (text) {
-          this.text = text;
+        controller: controller,
+        onChanged: (text){
           refresh();
         },
         style: TextStyle(textBaseline: TextBaseline.alphabetic),
@@ -126,7 +130,13 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
   }
 
   void refresh() {
-    if (mounted && !isMobile) setState(() {});
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 }
 

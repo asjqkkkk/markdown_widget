@@ -21,7 +21,7 @@ class Menu extends StatelessWidget {
   }) : super(key: key);
 
   bool get isMobile =>
-      PlatformDetector.isMobile || PlatformDetector.isWebMobile;
+      PlatformDetector.isAllMobile;
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +75,12 @@ class Menu extends StatelessWidget {
 
   Widget buildMenuButton() {
     if (isCollapsed) {
-      return InkWell(
-          onTap: onUnCollapsed,
-          child: Icon(Icons.keyboard_double_arrow_right));
+      return SizedBox(
+        height: 48,
+        child: InkWell(
+            onTap: onUnCollapsed,
+            child: Icon(Icons.keyboard_double_arrow_right)),
+      );
     }
     return ListTile(
       leading: FlutterLogo(),

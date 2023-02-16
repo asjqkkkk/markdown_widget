@@ -17,11 +17,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool get isMobile =>
-      PlatformDetector.isMobile || PlatformDetector.isWebMobile;
+      PlatformDetector.isAllMobile;
 
   int selectIndex = 0;
   double leftLayoutWidth = 220;
-  bool isCollapsed = false;
+  bool isCollapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
       width: isCollapsed ? 45 : leftLayoutWidth,
       child: Menu(
         router: widget.state.location,
-        isCollapsed: isCollapsed,
+        isCollapsed: isCollapsed && !isMobile,
         onUnCollapsed: () {
           isCollapsed = false;
           refresh();
