@@ -20,8 +20,7 @@ class Menu extends StatelessWidget {
     this.router = '',
   }) : super(key: key);
 
-  bool get isMobile =>
-      PlatformDetector.isAllMobile;
+  bool get isMobile => PlatformDetector.isAllMobile;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +52,7 @@ class Menu extends StatelessWidget {
           NavItem(
             title: 'Sample: Latex',
             trailing: '🧮',
+            isSelected: isSelected(RouterEnum.sample_latex),
             isCollapsed: isCollapsed,
             onTap: () {
               GoRouter.of(context).go(RouterEnum.sample_latex.path);
@@ -62,6 +62,7 @@ class Menu extends StatelessWidget {
           NavItem(
             title: 'Sample: Html',
             trailing: '🌐',
+            isSelected: isSelected(RouterEnum.sample_html),
             isCollapsed: isCollapsed,
             onTap: () {
               GoRouter.of(context).go(RouterEnum.sample_html.path);

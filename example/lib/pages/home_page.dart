@@ -16,8 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool get isMobile =>
-      PlatformDetector.isAllMobile;
+  bool get isMobile => PlatformDetector.isAllMobile;
 
   int selectIndex = 0;
   double leftLayoutWidth = 220;

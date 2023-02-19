@@ -39,15 +39,17 @@ class LinkNode extends ElementNode {
         text += span.text ?? '';
       }
     }
-    if (text.isNotEmpty) _addTextSpan(text, result, recognizer);
+    if (text.isNotEmpty) _addTextSpan(text, result, recognizer, isLast: true);
     return TextSpan(children: result);
   }
 
   ///if text is not empty, add textSpan to [result]
   void _addTextSpan(
-      String text, List<InlineSpan> result, TapGestureRecognizer recognizer) {
+      String text, List<InlineSpan> result, TapGestureRecognizer recognizer,
+      {bool isLast = false}) {
     if (text.isNotEmpty)
       result.add(TextSpan(text: text, style: style, recognizer: recognizer));
+    if (isLast) result.add(TextSpan(text: ' '));
   }
 
   ///add widgetSpan to [result]

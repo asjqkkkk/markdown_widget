@@ -77,12 +77,14 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   }
 
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
-  void updateState() {
+  void updateState({ThemeData? theme}) {
     indexTreeSet.clear();
     final generatorConfig =
         widget.markdownGeneratorConfig ?? MarkdownGeneratorConfig();
+    final bool isDark = theme?.brightness == Brightness.dark;
     markdownGenerator = MarkdownGenerator(
-      config: widget.config,
+      config: widget.config ??
+          (isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig),
       inlineSyntaxes: generatorConfig.inlineSyntaxList,
       blockSyntaxes: generatorConfig.blockSyntaxList,
       linesMargin: generatorConfig.linesMargin,
@@ -163,7 +165,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void didUpdateWidget(MarkdownWidget oldWidget) {
     clearState();
-    updateState();
+    updateState(theme: Theme.of(context));
     super.didUpdateWidget(widget);
   }
 }

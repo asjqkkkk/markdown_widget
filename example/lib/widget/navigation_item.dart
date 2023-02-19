@@ -48,12 +48,12 @@ class NavItem extends StatelessWidget {
   }
 
   Widget collapsedWidget() => SizedBox(
-    height: 24,
-    child: Tooltip(
-      message: title,
-      child: Text(trailing, style: _buildTextStyle()),
-    ),
-  );
+        height: 24,
+        child: Tooltip(
+          message: title,
+          child: Text(trailing, style: _buildTextStyle()),
+        ),
+      );
 
   TextStyle _buildTextStyle() {
     return TextStyle(

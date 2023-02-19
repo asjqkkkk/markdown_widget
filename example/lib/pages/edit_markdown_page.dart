@@ -54,7 +54,9 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                 refresh();
               },
               child: Icon(
-                isMobileDisplaying ? Icons.remove_red_eye_outlined : Icons.remove_red_eye,
+                isMobileDisplaying
+                    ? Icons.remove_red_eye_outlined
+                    : Icons.remove_red_eye,
               ),
             )
           : null,
@@ -116,7 +118,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
         maxLines: null,
         textInputAction: TextInputAction.newline,
         controller: controller,
-        onChanged: (text){
+        onChanged: (text) {
           refresh();
         },
         style: TextStyle(textBaseline: TextBaseline.alphabetic),
