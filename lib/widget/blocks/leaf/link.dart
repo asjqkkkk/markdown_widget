@@ -23,32 +23,10 @@ class LinkNode extends ElementNode {
     return TextSpan(
         children: List.generate(children.length, (index) {
       final child = children[index];
-      InlineSpan span = child.build();
-
-      ///FIXME: there must be no children in TextSpan that the [TapGestureRecognizer] will work rightly
-      if (span is TextSpan) {
-        span = TextSpan(
-          text: span.text,
-          children: span.children,
-          style: span.style,
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              _onLinkTap(linkConfig, url);
-            },
-        );
-      } else if (span is WidgetSpan) {
-        span = WidgetSpan(
-            child: InkWell(
-              child: span.child,
-              onTap: () {
-                _onLinkTap(linkConfig, url);
-              },
-            ),
-            alignment: span.alignment,
-            baseline: span.baseline,
-            style: span.style);
-      }
-      return span;
+      return _toLinkInlineSpan(
+        child.build(),
+        () => _onLinkTap(linkConfig, url),
+      );
     }));
   }
 
@@ -78,4 +56,27 @@ class LinkConfig implements LeafConfig {
   @nonVirtual
   @override
   String get tag => MarkdownTag.a.name;
+}
+
+// add a tap gesture recognizer to the span.
+InlineSpan _toLinkInlineSpan(InlineSpan span, VoidCallback onTap) {
+  if (span is TextSpan) {
+    span = TextSpan(
+      text: span.text,
+      children: span.children?.map((e) => _toLinkInlineSpan(e, onTap)).toList(),
+      style: span.style,
+      recognizer: TapGestureRecognizer()..onTap = onTap,
+    );
+  } else if (span is WidgetSpan) {
+    span = WidgetSpan(
+      child: InkWell(
+        child: span.child,
+        onTap: onTap,
+      ),
+      alignment: span.alignment,
+      baseline: span.baseline,
+      style: span.style,
+    );
+  }
+  return span;
 }
