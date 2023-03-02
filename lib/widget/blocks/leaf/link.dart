@@ -20,63 +20,17 @@ class LinkNode extends ElementNode {
   @override
   InlineSpan build() {
     final url = attributes['href'] ?? '';
-    final recognizer = TapGestureRecognizer()
-      ..onTap = () {
-        _onLinkTap(linkConfig, url);
-      };
-    final spans =
-        List.generate(children.length, (index) => children[index].build());
-    final List<InlineSpan> formatSpans = [];
-    _formatChildren(spans, formatSpans);
-    final List<InlineSpan> result = [];
-    String text = '';
-    for (final span in formatSpans) {
-      if (span is WidgetSpan) {
-        _addTextSpan(text, result, recognizer);
-        _addWidgetSpan(result, span, url);
-        text = '';
-      } else if (span is TextSpan) {
-        text += span.text ?? '';
-      }
-    }
-    if (text.isNotEmpty) _addTextSpan(text, result, recognizer, isLast: true);
-    return TextSpan(children: result);
-  }
-
-  ///if text is not empty, add textSpan to [result]
-  void _addTextSpan(
-      String text, List<InlineSpan> result, TapGestureRecognizer recognizer,
-      {bool isLast = false}) {
-    if (text.isNotEmpty)
-      result.add(TextSpan(text: text, style: style, recognizer: recognizer));
-    if (isLast) result.add(TextSpan(text: ' '));
-  }
-
-  ///add widgetSpan to [result]
-  void _addWidgetSpan(List<InlineSpan> result, WidgetSpan span, String url) {
-    result.add(WidgetSpan(
-        child: InkWell(
-          child: span.child,
-          onTap: () => _onLinkTap(linkConfig, url),
+    return TextSpan(children: [
+      for (final child in children)
+        _toLinkInlineSpan(
+          child.build(),
+          () => _onLinkTap(linkConfig, url),
         ),
-        alignment: span.alignment,
-        baseline: span.baseline,
-        style: span.style?.merge(style) ?? style));
-  }
-
-  ///visit children, and put them in the [result]
-  void _formatChildren(List<InlineSpan> spans, List<InlineSpan> result) {
-    for (final span in spans) {
-      if (span is! TextSpan) {
-        result.add(span);
-        return;
-      }
-      if (span.children == null || (span.children?.isEmpty ?? true)) {
-        result.add(span);
-        return;
-      }
-      _formatChildren(span.children!, result);
-    }
+      if (children.isNotEmpty)
+        // FIXME: this is a workaround, maybe need fixed by flutter framework.
+        // add a space to avoid the space area of line end can be tapped.
+        TextSpan(text: ' '),
+    ]);
   }
 
   void _onLinkTap(LinkConfig linkConfig, String url) {
@@ -105,4 +59,32 @@ class LinkConfig implements LeafConfig {
   @nonVirtual
   @override
   String get tag => MarkdownTag.a.name;
+}
+
+// add a tap gesture recognizer to the span.
+InlineSpan _toLinkInlineSpan(InlineSpan span, VoidCallback onTap) {
+  if (span is TextSpan) {
+    span = TextSpan(
+      text: span.text,
+      children: span.children?.map((e) => _toLinkInlineSpan(e, onTap)).toList(),
+      style: span.style,
+      recognizer: TapGestureRecognizer()..onTap = onTap,
+      onEnter: span.onEnter,
+      onExit: span.onExit,
+      semanticsLabel: span.semanticsLabel,
+      locale: span.locale,
+      spellOut: span.spellOut,
+    );
+  } else if (span is WidgetSpan) {
+    span = WidgetSpan(
+      child: InkWell(
+        child: span.child,
+        onTap: onTap,
+      ),
+      alignment: span.alignment,
+      baseline: span.baseline,
+      style: span.style,
+    );
+  }
+  return span;
 }
