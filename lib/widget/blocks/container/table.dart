@@ -154,17 +154,17 @@ class TdNode extends ElementNode {
 
   @override
   InlineSpan build() {
-    final attributeStyle = attribute['style'] ?? '';
+    final align = attribute['align'] ?? '';
     InlineSpan result = childrenSpan;
-    if (attributeStyle.contains('text-align: left')) {
+    if (align.contains('left')) {
       result = WidgetSpan(
           child: Align(
               alignment: Alignment.centerLeft, child: Text.rich(childrenSpan)));
-    } else if (attributeStyle.contains('text-align: center')) {
+    } else if (align.contains('center')) {
       result = WidgetSpan(
           child: Align(
               alignment: Alignment.center, child: Text.rich(childrenSpan)));
-    } else if (attributeStyle.contains('text-align: right')) {
+    } else if (align.contains('right')) {
       result = WidgetSpan(
           child: Align(
               alignment: Alignment.centerRight,

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 import '../markdown_custom/latex.dart';
+import '../widget/code_wrapper.dart';
 
 class LatexPage extends StatefulWidget {
   const LatexPage({Key? key}) : super(key: key);
@@ -73,8 +74,18 @@ class _LatexPageState extends State<LatexPage> {
   }
 
   Widget displayMarkdown() {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final config =
+        isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
+    final codeWrapper =
+        (child, text) => CodeWrapperWidget(child: child, text: text);
     return MarkdownWidget(
       data: _text,
+      config: config.copy(configs: [
+        isDark
+            ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
+            : PreConfig().copy(wrapper: codeWrapper)
+      ]),
       markdownGeneratorConfig: MarkdownGeneratorConfig(
           generators: [latexGenerator], inlineSyntaxList: [LatexSyntax()]),
     );
