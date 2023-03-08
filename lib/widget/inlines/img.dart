@@ -45,7 +45,7 @@ class ImageNode extends SpanNode {
   }
 
   Widget buildErrorImage(String url, String alt, Object? error) {
-    return Text.rich(TextSpan(children: [
+    return ProxyRichText(TextSpan(children: [
       WidgetSpan(
           child: Icon(Icons.broken_image,
               color: Colors.redAccent,

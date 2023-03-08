@@ -41,7 +41,7 @@ class TocItemWidget extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.fromLTRB(10.0 * level, 4, 4, 4),
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text.rich(node.build()),
+        child: ProxyRichText(node.build()),
       ),
       onTap: () {
         if (!isCurrent) {

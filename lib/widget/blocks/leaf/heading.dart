@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../config/configs.dart';
+import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
 
 ///Tag: [MarkdownTag.h1] ~ [MarkdownTag.h6]
@@ -23,7 +24,7 @@ class HeadingNode extends ElementNode {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text.rich(childrenSpan),
+            ProxyRichText(childrenSpan),
             _Divider(divider: divider.copy(color: parentStyle?.color)),
           ],
         ),

@@ -23,7 +23,7 @@ class InputNode extends SpanNode {
     return WidgetSpan(
       child: config.input.builder?.call(checked) ??
           Padding(
-            padding: EdgeInsets.fromLTRB(2, (parentStyleHeight / 2) - 10, 2, 0),
+            padding: EdgeInsets.fromLTRB(2, (parentStyleHeight / 2) - 12, 2, 0),
             child: MCheckBox(checked: checked),
           ),
     );

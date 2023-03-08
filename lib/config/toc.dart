@@ -6,6 +6,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../widget/blocks/leaf/heading.dart';
 import '../widget/markdown.dart';
+import '../widget/proxy_rich_text.dart';
 
 ///[TocController] combines [TocWidget] and [MarkdownWidget],
 ///you can use it to control the jump between the two,
@@ -168,7 +169,7 @@ class _TocWidgetState extends State<TocWidget> {
           title: Container(
             margin: EdgeInsets.only(
                 left: 20.0 * (headingTag2Level[node.headingConfig.tag] ?? 1)),
-            child: Text.rich(node.build()),
+            child: ProxyRichText(node.build()),
           ),
           onTap: () {
             tocController.jumpToIndex(currentToc.widgetIndex);

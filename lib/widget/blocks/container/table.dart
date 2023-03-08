@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../config/configs.dart';
+import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
 import '../../widget_visitor.dart';
 
@@ -96,7 +97,7 @@ class THeadNode extends ElementNode {
               return Center(
                 child: Padding(
                     padding: config.table.headPadding,
-                    child: Text.rich(currentTh.build())),
+                    child: ProxyRichText(currentTh.build())),
               );
             }));
       });
@@ -123,7 +124,7 @@ class TBodyNode extends ElementNode {
       for (var i = 0; i < child.children.length; ++i) {
         var c = child.children[i];
         widgets[i] = Padding(
-            padding: config.table.bodyPadding, child: Text.rich(c.build()));
+            padding: config.table.bodyPadding, child: ProxyRichText(c.build()));
       }
       return TableRow(
           decoration: config.table.bodyRowDecoration, children: widgets);
@@ -159,16 +160,17 @@ class TdNode extends ElementNode {
     if (align.contains('left')) {
       result = WidgetSpan(
           child: Align(
-              alignment: Alignment.centerLeft, child: Text.rich(childrenSpan)));
+              alignment: Alignment.centerLeft,
+              child: ProxyRichText(childrenSpan)));
     } else if (align.contains('center')) {
       result = WidgetSpan(
           child: Align(
-              alignment: Alignment.center, child: Text.rich(childrenSpan)));
+              alignment: Alignment.center, child: ProxyRichText(childrenSpan)));
     } else if (align.contains('right')) {
       result = WidgetSpan(
           child: Align(
               alignment: Alignment.centerRight,
-              child: Text.rich(childrenSpan)));
+              child: ProxyRichText(childrenSpan)));
     }
     return result;
   }

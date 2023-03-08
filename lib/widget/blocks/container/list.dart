@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/configs.dart';
 import '../../inlines/input.dart';
+import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
 import '../leaf/paragraph.dart';
 
@@ -39,7 +40,7 @@ class UlOrOLNode extends ElementNode {
             children.length,
             (index) {
               final childNode = children[index];
-              return Text.rich(childNode.build());
+              return ProxyRichText(childNode.build());
             },
           ),
         ),
@@ -83,10 +84,10 @@ class ListNode extends ElementNode {
     final marginBottom = config.li.marginBottom;
     final parentStyleHeight =
         (parentStyle?.fontSize ?? config.p.textStyle.fontSize ?? 16.0) *
-            (parentStyle?.height ?? config.p.textStyle.height ?? 1.5);
+            (parentStyle?.height ?? config.p.textStyle.height ?? 1.2);
     Widget marker;
     if (isCheckbox) {
-      marker = Text.rich(children.removeAt(0).build());
+      marker = ProxyRichText(children.removeAt(0).build());
     } else {
       marker = config.li.marker?.call(isOrdered, depth, _index) ??
           getDefaultMarker(isOrdered, depth, parentStyle?.color, _index,
@@ -102,7 +103,7 @@ class ListNode extends ElementNode {
               width: space,
               child: marker,
             ),
-            Expanded(child: Text.rich(childrenSpan)),
+            Expanded(child: ProxyRichText(childrenSpan)),
           ],
         ),
       ),
@@ -198,7 +199,8 @@ class _OlMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectionContainer.disabled(
         child: Text('${index + 1}.',
-            style: config.textStyle.copyWith(color: color)));
+            style: config.textStyle.copyWith(color: color),
+            textScaleFactor: 1.0));
   }
 }
 

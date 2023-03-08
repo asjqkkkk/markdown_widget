@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/configs.dart';
+import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
 
 ///Tag: [MarkdownTag.blockquote]
@@ -21,7 +22,7 @@ class BlockquoteNode extends ElementNode {
         left: BorderSide(color: config.sideColor, width: config.sideWith),
       )),
       padding: config.padding,
-      child: Text.rich(childrenSpan),
+      child: ProxyRichText(childrenSpan),
     ));
   }
 

@@ -22,7 +22,7 @@ class CodeBlockNode extends ElementNode {
       margin: preConfig.margin,
       padding: preConfig.padding,
       width: double.infinity,
-      child: Text.rich(TextSpan(
+      child: ProxyRichText(TextSpan(
         children: highLightSpans(content,
             language: preConfig.language,
             theme: preConfig.theme,
