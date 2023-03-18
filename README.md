@@ -114,9 +114,23 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
       ]));
 ```
 
-## 🌐HTML tags
+## 🧬Select All and Copy
 
-The current package only implements the conversion of Markdown tags, so it does not support the conversion of HTML tags by default. However, you can extend the package to support this feature by using the [html_support](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/html_support.dart)
+Cross-platform support for Select All and Copy function.
+
+![image](https://user-images.githubusercontent.com/30992818/226107076-f32a919e-9a0c-4138-8a0b-266c6337e0af.png)
+
+## 🌐Html tag
+
+As the current package only implements the conversion of Markdown tags, it does not support the conversion of HTML tags by default. However, this functionality can be supported through extension. You can refer to the usage in [html_support.dart](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/html_support.dart) for more details.
+
+Here is the [online HTML demo showcase](https://asjqkkkk.github.io/markdown_widget/#/sample_html)
+
+## 🧮Latex support
+
+The example also includes simple support for LaTeX, which can be implemented by referring to the implementation in [latex.dart](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/latex.dart)
+
+Here is the [online latex demo showcase](https://asjqkkkk.github.io/markdown_widget/#/sample_latex)
 
 ## 🍑Custom tag implementation
 
@@ -124,7 +138,7 @@ By passing a `SpanNodeGeneratorWithTag` to `MarkdownGeneratorConfig`, you can ad
 
 You can also customize the parsing rules for Markdown strings using `InlineSyntax` and `BlockSyntax`, and generate new tags.
 
-You can refer to the usage of `SpanNodeGeneratorWithTag` in [video.dart](https://github.com/asjqkkkk/markdown_widget/blob/1d549fd5c2d6b0172281d8bb66e367654b9d60f0/example/lib/markdown_custom/video.dart) for an example.
+You can refer to [this issue](https://github.com/asjqkkkk/markdown_widget/issues/79) to learn how to implement a custom tag.
 
 If you have any good ideas or suggestions, or have any issues using this package, please feel free to [open a pull request or issue](https://github.com/asjqkkkk/markdown_widget).
 
@@ -134,9 +148,9 @@ Here are the other libraries used in `markdown_widget`
 
 Packages | Descriptions
 ---|---
-[markdown](https://pub.flutter-io.cn/packages/markdown) | Parsing markdown data
-[flutter_highlight](https://pub.flutter-io.cn/packages/flutter_highlight) | Code highlighting
-[highlight](https://pub.flutter-io.cn/packages/highlight) | Code highlighting
-[url_launcher](https://pub.flutter-io.cn/packages/url_launcher) | Opening links
-[visibility_detector](https://pub.flutter-io.cn/packages/visibility_detector) | Listening for visibility of a widget;
-[scroll_to_index](https://pub.flutter-io.cn/packages/scroll_to_index) | Enabling ListView to jump to an index.
+[markdown](https://pub.dev/packages/markdown) | Parsing markdown data
+[flutter_highlight](https://pub.dev/packages/flutter_highlight) | Code highlighting
+[highlight](https://pub.dev/packages/highlight) | Code highlighting
+[url_launcher](https://pub.dev/packages/url_launcher) | Opening links
+[visibility_detector](https://pub.dev/packages/visibility_detector) | Listening for visibility of a widget;
+[scroll_to_index](https://pub.dev/packages/scroll_to_index) | Enabling ListView to jump to an index.

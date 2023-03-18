@@ -1,5 +1,7 @@
+import 'package:example/pages/router.dart';
 import 'package:example/widget/menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:go_router/go_router.dart';
 import '../platform_detector/platform_detector.dart';
 import '../state/root_state.dart';
@@ -32,7 +34,17 @@ class _HomePageState extends State<HomePage> {
               ),
               backgroundColor: Colors.black,
               actions: [
-                buildThemeButton(),
+                IconButton(
+                    onPressed: () => rootStore.dispatch(new ChangeLanguage()),
+                    icon: Text(rootStore.state.language == 'en' ? '中' : 'En')),
+                IconButton(
+                    onPressed: () => rootStore.dispatch(new ChangeThemeEvent()),
+                    icon: Icon(
+                      isDark
+                          ? Icons.brightness_5_outlined
+                          : Icons.brightness_2_outlined,
+                      size: 15,
+                    )),
               ],
             )
           : null,
@@ -92,16 +104,6 @@ class _HomePageState extends State<HomePage> {
         child: line,
       ),
     );
-  }
-
-  IconButton buildThemeButton() {
-    Brightness brightness = rootStore.state.themeState.brightness;
-    bool isDarkNow = brightness == Brightness.dark;
-    return IconButton(
-        icon: Icon(isDarkNow ? Icons.brightness_7 : Icons.brightness_2),
-        onPressed: () {
-          rootStore.dispatch(new ChangeThemeEvent());
-        });
   }
 
   void refresh() {

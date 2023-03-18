@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 import '../markdown_custom/custom_node.dart';
@@ -69,75 +70,48 @@ class _MarkdownPageState extends State<MarkdownPage> {
       body: data == null
           ? Center(child: CircularProgressIndicator())
           : (isMobile ? buildMobileBody() : buildWebBody()),
-      floatingActionButtonLocation: isMobile
-          ? FloatingActionButtonLocation.centerFloat
-          : FloatingActionButtonLocation.endFloat,
       floatingActionButton: widget.assetsPath != null
-          ? Row(
-              mainAxisAlignment: isMobile
-                  ? MainAxisAlignment.spaceEvenly
-                  : MainAxisAlignment.end,
-              children: <Widget>[
-                isMobile
-                    ? FloatingActionButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (ctx) => buildTocList());
-                        },
-                        child: Icon(Icons.format_list_bulleted),
-                        heroTag: 'list',
-                      )
-                    : SizedBox(),
-                isMobile ? SizedBox() : buildThemeButton(),
-                FloatingActionButton(
+          ? isMobile
+              ? FloatingActionButton(
                   onPressed: () {
-                    isEnglish = !isEnglish;
-                    loadData(
-                        isEnglish ? 'assets/demo_en.md' : 'assets/demo_zh.md');
+                    showModalBottomSheet(
+                        context: context, builder: (ctx) => buildTocList());
                   },
-                  child: Text(isEnglish ? '简中' : 'EN'),
-                  heroTag: 'language',
-                ),
-              ],
-            )
+                  child: Icon(Icons.format_list_bulleted),
+                  heroTag: 'list',
+                )
+              : SizedBox()
           : null,
     );
-  }
-
-  IconButton buildThemeButton() {
-    Brightness brightness = rootStore.state.themeState.brightness;
-    bool isDarkNow = brightness == Brightness.dark;
-    return IconButton(
-        icon: Icon(isDarkNow ? Icons.brightness_7 : Icons.brightness_2),
-        onPressed: () {
-          rootStore.dispatch(new ChangeThemeEvent());
-        });
   }
 
   Widget buildTocList() => TocWidget(controller: controller);
 
   Widget buildMarkdown() {
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final config =
-        isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
-    final codeWrapper =
-        (child, text) => CodeWrapperWidget(child: child, text: text);
     return Container(
       margin: EdgeInsets.all(10.0),
-      child: MarkdownWidget(
-          data: data!,
-          config: config.copy(configs: [
-            isDark
-                ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
-                : PreConfig().copy(wrapper: codeWrapper)
-          ]),
-          tocController: controller,
-          markdownGeneratorConfig: MarkdownGeneratorConfig(
-              generators: [videoGeneratorWithTag, latexGenerator],
-              inlineSyntaxList: [LatexSyntax()],
-              textGenerator: (node, config, visitor) =>
-                  CustomTextNode(node.textContent, config, visitor))),
+      child: StoreConnector<RootState, ThemeState>(
+          converter: ThemeState.storeConverter,
+          builder: (context, snapshot) {
+            final config = isDark
+                ? MarkdownConfig.darkConfig
+                : MarkdownConfig.defaultConfig;
+            final codeWrapper =
+                (child, text) => CodeWrapperWidget(child: child, text: text);
+            return MarkdownWidget(
+                data: data!,
+                config: config.copy(configs: [
+                  isDark
+                      ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
+                      : PreConfig().copy(wrapper: codeWrapper)
+                ]),
+                tocController: controller,
+                markdownGeneratorConfig: MarkdownGeneratorConfig(
+                    generators: [videoGeneratorWithTag, latexGenerator],
+                    inlineSyntaxList: [LatexSyntax()],
+                    textGenerator: (node, config, visitor) =>
+                        CustomTextNode(node.textContent, config, visitor)));
+          }),
     );
   }
 

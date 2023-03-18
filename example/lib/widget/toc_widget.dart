@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
+import '../state/root_state.dart';
+
 class TocItemWidget extends StatelessWidget {
   const TocItemWidget(
       {Key? key,
@@ -21,7 +23,6 @@ class TocItemWidget extends StatelessWidget {
   }
 
   Widget getNodeWidget(Toc toc, BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final color = Theme.of(context).primaryColor;
     final tag = toc.node.headingConfig.tag;
     final level = _tag2Level[tag] ?? 1;

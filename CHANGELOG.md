@@ -1,8 +1,14 @@
-### [2.0.1]
-- fix some errors in README
-- add `copy` button for `code block` in example
-- add `scrollview` for `table`
-- add a new page to scale `image`
+### [2.1.0]
+- Added several examples to illustrate how to use custom tags and nodes, such as LaTeX and certain custom HTML tags.
+- Added showcases for desktop, mobile, and web platforms in the README.
+- Added a showcase for the Select All and Copy function in the README.
+- Fixed incorrect address references in the README.
+- Replaced some images in the examples with local images to resolve cross-domain issues in the web demo.
+- Added release files to GitHub action.
+- Added a screenshot description to the YAML file, following the example in https://github.com/fluttercandies/flutter_wechat_assets_picker/blob/main/pubspec.yaml.
+- Added a copy button to the code block and removed its default padding.
+- Added left and right scrolling and increased padding to the table.
+- Fixed the TOC function in mobile mode.
 
 
 ### [2.0.0+1] 

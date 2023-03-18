@@ -1,3 +1,4 @@
+import 'package:example/state/root_state.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
@@ -19,15 +20,17 @@ class LatexSyntax extends m.InlineSyntax {
     final matchValue = input.substring(match.start, match.end);
     String content = '';
     bool isInline = true;
-    if (matchValue.startsWith('\$\$') && matchValue.endsWith('\$\$')) {
+    const blockSyntax = '\$\$';
+    const inlineSyntax = '\$';
+    if (matchValue.startsWith(blockSyntax) &&
+        matchValue.endsWith(blockSyntax) &&
+        (matchValue != blockSyntax)) {
       content = matchValue.substring(2, matchValue.length - 2);
       isInline = false;
-    } else if (matchValue.startsWith('\$') && matchValue.endsWith('\$')) {
+    } else if (matchValue.startsWith(inlineSyntax) &&
+        matchValue.endsWith(inlineSyntax) &&
+        matchValue != inlineSyntax) {
       content = matchValue.substring(1, matchValue.length - 1);
-    }
-    if (content.isEmpty) {
-      parser.addNode(m.Text(matchValue));
-      return true;
     }
     m.Element el = m.Element.text(_latexTag, matchValue);
     el.attributes['content'] = content;
@@ -53,7 +56,7 @@ class LatexNode extends SpanNode {
     final latex = Math.tex(
       content,
       mathStyle: MathStyle.text,
-      textStyle: style,
+      textStyle: style.copyWith(color: isDark ? Colors.white : Colors.black),
       textScaleFactor: 1,
       onErrorFallback: (error) {
         return Text(

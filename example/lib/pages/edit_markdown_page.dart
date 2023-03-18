@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,6 +11,7 @@ import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
 
 import '../platform_detector/platform_detector.dart';
+import '../state/root_state.dart';
 import '../widget/code_wrapper.dart';
 import 'markdown_page.dart';
 
@@ -75,28 +77,32 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
   }
 
   Widget buildWebBody() {
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final config =
-        isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
-    final codeWrapper =
-        (child, text) => CodeWrapperWidget(child: child, text: text);
     return Row(
       children: <Widget>[
         Expanded(child: buildEditText()),
         Expanded(
-          child: MarkdownWidget(
-            data: initialText + controller.text,
-            config: config.copy(configs: [
-              isDark
-                  ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
-                  : PreConfig().copy(wrapper: codeWrapper)
-            ]),
-            markdownGeneratorConfig: MarkdownGeneratorConfig(
-                generators: [videoGeneratorWithTag, latexGenerator],
-                inlineSyntaxList: [LatexSyntax()],
-                textGenerator: (node, config, visitor) =>
-                    CustomTextNode(node.textContent, config, visitor)),
-          ),
+          child: StoreConnector<RootState, ThemeState>(
+              converter: ThemeState.storeConverter,
+              builder: (context, snapshot) {
+                final config = isDark
+                    ? MarkdownConfig.darkConfig
+                    : MarkdownConfig.defaultConfig;
+                final codeWrapper = (child, text) =>
+                    CodeWrapperWidget(child: child, text: text);
+                return MarkdownWidget(
+                  data: initialText + controller.text,
+                  config: config.copy(configs: [
+                    isDark
+                        ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
+                        : PreConfig().copy(wrapper: codeWrapper)
+                  ]),
+                  markdownGeneratorConfig: MarkdownGeneratorConfig(
+                      generators: [videoGeneratorWithTag, latexGenerator],
+                      inlineSyntaxList: [LatexSyntax()],
+                      textGenerator: (node, config, visitor) =>
+                          CustomTextNode(node.textContent, config, visitor)),
+                );
+              }),
         ),
       ],
     );

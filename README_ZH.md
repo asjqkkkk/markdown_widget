@@ -79,6 +79,7 @@ class MarkdownPage extends StatelessWidget {
           },
         )
       ]));
+      
 ```
 
 ## 📜TOC功能
@@ -115,9 +116,24 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
       ]));
 ```
 
+## 🧬全选与复制
+
+支持全平台的全选和复制功能
+
+![image](https://user-images.githubusercontent.com/30992818/226107076-f32a919e-9a0c-4138-8a0b-266c6337e0af.png)
+
 ## 🌐html 标签
 
-由于当前 package 只实现了对于 Makrdown tag 的转换，所以默认不支持转换 html 标签。但可以通过扩展的方式来支持这个功能，具体可以参考这里的使用 [html_support](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/html_support.dart)
+由于当前 package 只实现了对于 Markdown tag 的转换，所以默认不支持转换 html 标签。但可以通过扩展的方式来支持这个功能，具体可以参考这里的使用 [html_support.dart](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/html_support.dart)
+
+以及 [在线html demo展示](https://asjqkkkk.github.io/markdown_widget/#/sample_html)
+
+## 🧮Latex 支持
+
+在例子中实现了对于Latex的简单支持，具体可以参考这里的实现 [latex.dart](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/latex.dart) 
+
+以及 [在线latex demo展示](https://asjqkkkk.github.io/markdown_widget/#/sample_latex)
+
 
 ## 🍑自定义tag与实现
 
@@ -125,8 +141,7 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
 
 同时也可以通过 `InlineSyntax` 与 `BlockSyntax` 自定义 markdown 字符串的解析规则，并生成新的 tag
 
-可以参考这里 [video.dart](https://github.com/asjqkkkk/markdown_widget/blob/1d549fd5c2d6b0172281d8bb66e367654b9d60f0/example/lib/markdown_custom/video.dart) 对于 `SpanNodeGeneratorWithTag` 的使用
-
+可以参考 [这个issue](https://github.com/asjqkkkk/markdown_widget/issues/79) 是如何去实现一个自定义tag的
 
 如果你由什么好的想法或者建议,以及使用上的问题, [欢迎来提pr或issue](https://github.com/asjqkkkk/markdown_widget)
 
@@ -136,9 +151,9 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
 
 库 | 描述
 ---|---
-[markdown](https://pub.flutter-io.cn/packages/markdown) | 解析markdown数据
-[flutter_highlight](https://pub.flutter-io.cn/packages/flutter_highlight) | 代码高亮
-[highlight](https://pub.flutter-io.cn/packages/highlight) | 代码高亮
-[url_launcher](https://pub.flutter-io.cn/packages/url_launcher) | 用于打开链接
-[visibility_detector](https://pub.flutter-io.cn/packages/visibility_detector) | 监听Widget是否可见
-[scroll_to_index](https://pub.flutter-io.cn/packages/scroll_to_index) | 让Listview可以根据index来跳转
+[markdown](https://pub.dev/packages/markdown) | 解析markdown数据
+[flutter_highlight](https://pub.dev/packages/flutter_highlight) | 代码高亮
+[highlight](https://pub.dev/packages/highlight) | 代码高亮
+[url_launcher](https://pub.dev/packages/url_launcher) | 用于打开链接
+[visibility_detector](https://pub.dev/packages/visibility_detector) | 监听Widget是否可见
+[scroll_to_index](https://pub.dev/packages/scroll_to_index) | 让Listview可以根据index来跳转
