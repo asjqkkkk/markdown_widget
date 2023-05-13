@@ -23,10 +23,13 @@ class CodeBlockNode extends ElementNode {
       padding: preConfig.padding,
       width: double.infinity,
       child: ProxyRichText(TextSpan(
-        children: highLightSpans(content,
-            language: preConfig.language,
-            theme: preConfig.theme,
-            textStyle: style),
+        children: highLightSpans(
+          content,
+          language: preConfig.language,
+          theme: preConfig.theme,
+          textStyle: style,
+          styleNotMatched: preConfig.styleNotMatched,
+        ),
       )),
     );
     return WidgetSpan(
@@ -44,6 +47,7 @@ List<InlineSpan> highLightSpans(
   bool autoDetectionLanguage = false,
   Map<String, TextStyle> theme = const {},
   TextStyle? textStyle,
+  TextStyle? styleNotMatched,
   int tabSize = 8,
 }) {
   return convertHiNodes(
@@ -53,30 +57,35 @@ List<InlineSpan> highLightSpans(
               autoDetection: autoDetectionLanguage)
           .nodes!,
       theme,
-      textStyle);
+      textStyle,
+      styleNotMatched);
 }
 
 List<TextSpan> convertHiNodes(
-    List<hi.Node> nodes, Map<String, TextStyle> theme, TextStyle? style) {
+  List<hi.Node> nodes,
+  Map<String, TextStyle> theme,
+  TextStyle? style,
+  TextStyle? styleNotMatched,
+) {
   List<TextSpan> spans = [];
   var currentSpans = spans;
   List<List<TextSpan>> stack = [];
 
-  _traverse(hi.Node node) {
+  _traverse(hi.Node node, TextStyle? parentStyle) {
+    final nodeStyle = parentStyle ?? theme[node.className ?? ''];
+    final finallyStyle = (nodeStyle ?? styleNotMatched)?.merge(style);
     if (node.value != null) {
       currentSpans.add(node.className == null
-          ? TextSpan(text: node.value, style: style)
-          : TextSpan(
-              text: node.value, style: theme[node.className!]?.merge(style)));
+          ? TextSpan(text: node.value, style: finallyStyle)
+          : TextSpan(text: node.value, style: finallyStyle));
     } else if (node.children != null) {
       List<TextSpan> tmp = [];
-      currentSpans.add(
-          TextSpan(children: tmp, style: theme[node.className!]?.merge(style)));
+      currentSpans.add(TextSpan(children: tmp, style: finallyStyle));
       stack.add(currentSpans);
       currentSpans = tmp;
 
       node.children!.forEach((n) {
-        _traverse(n);
+        _traverse(n, nodeStyle);
         if (n == node.children!.last) {
           currentSpans = stack.isEmpty ? spans : stack.removeLast();
         }
@@ -85,7 +94,7 @@ List<TextSpan> convertHiNodes(
   }
 
   for (var node in nodes) {
-    _traverse(node);
+    _traverse(node, null);
   }
   return spans;
 }
@@ -96,6 +105,9 @@ class PreConfig implements LeafConfig {
   final Decoration decoration;
   final EdgeInsetsGeometry margin;
   final TextStyle textStyle;
+
+  /// the [styleNotMatched] is used to set a default TextStyle for code that does not match any theme.
+  final TextStyle? styleNotMatched;
   final CodeWrapper? wrapper;
 
   ///see package:flutter_highlight/themes/
@@ -110,17 +122,19 @@ class PreConfig implements LeafConfig {
     ),
     this.margin = const EdgeInsets.symmetric(vertical: 8.0),
     this.textStyle = const TextStyle(fontSize: 16),
+    this.styleNotMatched,
     this.theme = a11yLightTheme,
     this.language = 'dart',
     this.wrapper,
   });
 
   static PreConfig get darkConfig => PreConfig(
-      decoration: const BoxDecoration(
-        color: Color(0xff555555),
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      theme: a11yDarkTheme);
+        decoration: const BoxDecoration(
+          color: Color(0xff555555),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        theme: a11yDarkTheme,
+      );
 
   ///copy by other params
   PreConfig copy({
@@ -128,6 +142,7 @@ class PreConfig implements LeafConfig {
     Decoration? decoration,
     EdgeInsetsGeometry? margin,
     TextStyle? textStyle,
+    TextStyle? styleNotMatched,
     CodeWrapper? wrapper,
     Map<String, TextStyle>? theme,
     String? language,
@@ -137,6 +152,7 @@ class PreConfig implements LeafConfig {
       decoration: decoration ?? this.decoration,
       margin: margin ?? this.margin,
       textStyle: textStyle ?? this.textStyle,
+      styleNotMatched: styleNotMatched ?? this.styleNotMatched,
       wrapper: wrapper ?? this.wrapper,
       theme: theme ?? this.theme,
       language: language ?? this.language,

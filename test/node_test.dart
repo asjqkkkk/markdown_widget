@@ -102,7 +102,7 @@ void main() {
 
   test('convertHiNodes test', () {
     final nodes = [hi.Node(className: 'aaa', value: 'I\'m value')];
-    convertHiNodes(nodes, {}, null);
+    convertHiNodes(nodes, {}, null, null);
   });
 }
 
