@@ -55,9 +55,16 @@ class MarkdownGenerator {
     onTocList?.call(tocList);
     final List<Widget> widgets = [];
     spans.forEach((span) {
+      InlineSpan inlineSpan = span.build();
+      if(inlineSpan is TextSpan){
+        ///fix: line breaks are not effective when copying.
+        ///see [https://github.com/asjqkkkk/markdown_widget/issues/105]
+        ///see [https://github.com/asjqkkkk/markdown_widget/issues/95]
+        inlineSpan.children?.add(TextSpan(text: '\r'));
+      }
       widgets.add(Padding(
         padding: linesMargin,
-        child: Text.rich(span.build()),
+        child: Text.rich(inlineSpan),
       ));
     });
     return widgets;

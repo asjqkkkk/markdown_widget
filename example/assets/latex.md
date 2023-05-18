@@ -1,14 +1,18 @@
 # LaTeX equations
 
-Inline equation: $equation$
 ```
+Inline equation: $equation$
+
+```
+
 Inline equation: $equation$
 
 ```
 Display equation: $$equation$$
 ```
+
 Display equation: $$equation$$
-```
+
 
 # Operators
 ```
