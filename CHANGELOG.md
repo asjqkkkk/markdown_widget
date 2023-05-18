@@ -1,3 +1,13 @@
+### [2.2.0]
+- Fixed some issue
+  - [#91](https://github.com/asjqkkkk/markdown_widget/issues/91)
+  - [#95](https://github.com/asjqkkkk/markdown_widget/issues/95)
+  - [#98](https://github.com/asjqkkkk/markdown_widget/issues/98)
+  - [#104](https://github.com/asjqkkkk/markdown_widget/issues/104)
+  - [#105](https://github.com/asjqkkkk/markdown_widget/issues/105)
+- Added `MarkdownBlock` that will adapt to the width automatically
+- Added `styleNotMatched` within `PreConfig` 
+
 ### [2.1.0]
 - Added several examples to illustrate how to use custom tags and nodes, such as LaTeX and certain custom HTML tags.
 - Added showcases for desktop, mobile, and web platforms in the README.
@@ -5,7 +15,7 @@
 - Fixed incorrect address references in the README.
 - Replaced some images in the examples with local images to resolve cross-domain issues in the web demo.
 - Added release files to GitHub action.
-- Added a screenshot description to the YAML file, following the example in https://github.com/fluttercandies/flutter_wechat_assets_picker/blob/main/pubspec.yaml.
+- Added a screenshot description to the YAML file
 - Added a copy button to the code block and removed its default padding.
 - Added left and right scrolling and increased padding to the table.
 - Fixed the TOC function in mobile mode.

@@ -1,6 +1,6 @@
 name: markdown_widget
 description: A new markdown package. It supports TOC function, code highlighting, and it supports all platforms
-version: 2.1.0
+version: 2.2.0
 homepage: https://github.com/asjqkkkk/markdown_widget
 
 environment:
