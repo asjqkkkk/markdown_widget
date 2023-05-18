@@ -30,7 +30,7 @@ const RESOURCES = {
 "assets/assets/script_medias/1675527916292.png": "1f787b4a85bd405156c3f73564973cb2",
 "assets/assets/script_medias/1675527915217.png": "d848222b6cf4eac24d234858208f9d05",
 "assets/assets/demo_en.md": "d7cf95f01485bad376dc83a6752c828b",
-"assets/assets/latex.md": "30efa3b9bd7eb5f91aaa4704186f4842",
+"assets/assets/latex.md": "6646a021ae7a2e3d8d8f0ab7e4fe2378",
 "assets/assets/demo_zh.md": "faab1e0141823fc88522879597b44a60",
 "assets/shaders/ink_sparkle.frag": "1b0090f7ba7a21ca058df39458216a4e",
 "assets/fonts/MaterialIcons-Regular.otf": "95db9098c58fd6db106f1116bae85a0b",
@@ -58,15 +58,15 @@ const RESOURCES = {
 "assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Script-Regular.ttf": "55d2dcd4778875a53ff09320a85a5296",
 "assets/FontManifest.json": "71a4a82de411f155107da3f8dac64ebd",
 "assets/AssetManifest.json": "10aec0a55e4d49fbaeab48995588e2f9",
-"index.html": "0852bd79517a9cdc3c5a669a2895e100",
-"/": "0852bd79517a9cdc3c5a669a2895e100",
+"index.html": "4bd5b6a9e94e508f80da6e6af95580d8",
+"/": "4bd5b6a9e94e508f80da6e6af95580d8",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "version.json": "ff966ab969ba381b900e61629bfb9789",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"main.dart.js": "87acdb4219ff681bce4373aa59baec83",
+"main.dart.js": "c9f61199a438f255525f0625845bc370",
 "manifest.json": "00e0b69b49487ce4f9ff0c5fac8fda49"
 };
 
