@@ -17,20 +17,31 @@ class CodeBlockNode extends ElementNode {
 
   @override
   InlineSpan build() {
+    final splitContents = content.trim().split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
+    if (splitContents.last.isEmpty) splitContents.removeLast();
     final widget = Container(
       decoration: preConfig.decoration,
       margin: preConfig.margin,
       padding: preConfig.padding,
       width: double.infinity,
-      child: ProxyRichText(TextSpan(
-        children: highLightSpans(
-          content,
-          language: preConfig.language,
-          theme: preConfig.theme,
-          textStyle: style,
-          styleNotMatched: preConfig.styleNotMatched,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(splitContents.length, (index) {
+            final currentContent = splitContents[index];
+            return ProxyRichText(TextSpan(
+              children: highLightSpans(
+                currentContent,
+                language: preConfig.language,
+                theme: preConfig.theme,
+                textStyle: style,
+                styleNotMatched: preConfig.styleNotMatched,
+              ),
+            ));
+          }),
         ),
-      )),
+      ),
     );
     return WidgetSpan(
         child: preConfig.wrapper?.call(widget, content) ?? widget);
