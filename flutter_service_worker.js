@@ -58,15 +58,15 @@ const RESOURCES = {
 "assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Script-Regular.ttf": "55d2dcd4778875a53ff09320a85a5296",
 "assets/FontManifest.json": "71a4a82de411f155107da3f8dac64ebd",
 "assets/AssetManifest.json": "10aec0a55e4d49fbaeab48995588e2f9",
-"index.html": "f542acc6a38ac80eae5a0b4dad385879",
-"/": "f542acc6a38ac80eae5a0b4dad385879",
+"index.html": "0852bd79517a9cdc3c5a669a2895e100",
+"/": "0852bd79517a9cdc3c5a669a2895e100",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "version.json": "ff966ab969ba381b900e61629bfb9789",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"main.dart.js": "836814dee0531e682a508dd6fcedc90a",
+"main.dart.js": "87acdb4219ff681bce4373aa59baec83",
 "manifest.json": "00e0b69b49487ce4f9ff0c5fac8fda49"
 };
 
