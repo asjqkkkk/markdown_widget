@@ -4,12 +4,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:markdown_widget/widget/markdown_block.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'test_markdowns/network_image_mock.dart';
 import 'widget_visitor_test.dart';
 import 'package:path/path.dart' as p;
 
 void main() {
+  const testMarkdown = '''
+| align left | centered | align right |
+| :-- | :-: | --: |
+| a | b | c | 
+# a
+## askdljakl
+### akslfjkl
+### akslfjkl
+### akslfjkl
+## askdljakl
+### akslfjkl
+### akslfjkl
+### akslfjkl
+## askdljakl
+### akslfjkl
+### akslfjkl
+### akslfjkl
+## askdljakl
+### akslfjkl
+### akslfjkl
+### akslfjkl
+## askdljakl
+### akslfjkl
+### akslfjkl
+### akslfjkl
+### akslfjklasjf22
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf
+### akslfjklasjf33''';
+
   testWidgets('test toc widget', (tester) async {
     final tocController = TocController();
     await tester.pumpWidget(MaterialApp(
@@ -78,44 +118,7 @@ void main() {
     ));
     tocController.jumpToIndex(0);
     setter(() {
-      text = '''
-| align left | centered | align right |
-| :-- | :-: | --: |
-| a | b | c | 
-# a
-## askdljakl
-### akslfjkl
-### akslfjkl
-### akslfjkl
-## askdljakl
-### akslfjkl
-### akslfjkl
-### akslfjkl
-## askdljakl
-### akslfjkl
-### akslfjkl
-### akslfjkl
-## askdljakl
-### akslfjkl
-### akslfjkl
-### akslfjkl
-## askdljakl
-### akslfjkl
-### akslfjkl
-### akslfjkl
-### akslfjklasjf22
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf
-### akslfjklasjf33''';
+      text = testMarkdown;
     });
     await tester.scrollUntilVisible(find.text('akslfjklasjf22'), 50);
     tocController.jumpToIndex(0);
@@ -132,6 +135,19 @@ void main() {
             axisDirection: AxisDirection.down),
         context: ctx,
         direction: ScrollDirection.forward));
+  });
+
+  testWidgets('test markdown block', (tester) async {
+    VisibilityDetectorController.instance.updateInterval = Duration.zero;
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: StatefulBuilder(builder: (context, callback) {
+          return SingleChildScrollView(
+            child: MarkdownBlock(data: testMarkdown),
+          );
+        }),
+      ),
+    ));
   });
 
   testWidgets('test other widgets', (tester) async {

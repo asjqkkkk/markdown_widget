@@ -1,4 +1,5 @@
 export 'markdown.dart';
+export 'markdown_block.dart';
 export 'blocks/leaf/horizontal_rules.dart';
 export 'blocks/all.dart';
 export 'inlines/all.dart';

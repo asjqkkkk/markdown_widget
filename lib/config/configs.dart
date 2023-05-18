@@ -150,21 +150,21 @@ class MarkdownConfig {
   }
 
   ///default [MarkdownConfig] for [MarkdownWidget]
-  static MarkdownConfig defaultConfig = MarkdownConfig();
+  static MarkdownConfig get defaultConfig => MarkdownConfig();
 
   ///[darkConfig] is used for dark mode
-  static MarkdownConfig darkConfig = MarkdownConfig(configs: [
-    HrConfig.darkConfig,
-    H1Config.darkConfig,
-    H2Config.darkConfig,
-    H3Config.darkConfig,
-    H4Config.darkConfig,
-    H5Config.darkConfig,
-    H6Config.darkConfig,
-    PreConfig.darkConfig,
-    PConfig.darkConfig,
-    CodeConfig.darkConfig,
-  ]);
+  static MarkdownConfig get darkConfig => MarkdownConfig(configs: [
+        HrConfig.darkConfig,
+        H1Config.darkConfig,
+        H2Config.darkConfig,
+        H3Config.darkConfig,
+        H4Config.darkConfig,
+        H5Config.darkConfig,
+        H6Config.darkConfig,
+        PreConfig.darkConfig,
+        PConfig.darkConfig,
+        CodeConfig.darkConfig,
+      ]);
 
   ///the key of [_tag2Config] is tag, the value is [WidgetConfig]
   final Map<String, WidgetConfig> _tag2Config = {};
