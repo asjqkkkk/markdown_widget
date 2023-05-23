@@ -18,7 +18,7 @@ dependencies:
   #html tag parser
   html: ^0.15.0
   #math equation rendering
-  flutter_math_fork: ^0.6.3+1
+  flutter_math_fork: ^0.7.0
 
   # for 'video' tag
   video_player: ^2.4.10
