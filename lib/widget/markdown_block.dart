@@ -18,11 +18,15 @@ class MarkdownBlock extends StatelessWidget {
   ///config for [MarkdownGenerator]
   final MarkdownGeneratorConfig? markdownGeneratorConfig;
 
+  ///callback when element is pressed
+  final void Function()? onPressed;
+
   const MarkdownBlock({
     Key? key,
     required this.data,
     this.selectable = true,
     this.config,
+    this.onPressed,
     this.markdownGeneratorConfig,
   }) : super(key: key);
 
@@ -40,10 +44,13 @@ class MarkdownBlock extends StatelessWidget {
       textGenerator: generatorConfig.textGenerator,
     );
     final widgets = markdownGenerator.buildWidgets(data);
-    final column = Column(
-      children: widgets,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    final column = GestureDetector(
+      onTap: onPressed,
+      child: Column(
+        children: widgets,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+      ),
     );
     return selectable ? SelectionArea(child: column) : column;
   }
