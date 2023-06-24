@@ -17,11 +17,13 @@ class BlockquoteNode extends ElementNode {
   InlineSpan build() {
     return WidgetSpan(
         child: Container(
+      width: double.infinity,
       decoration: BoxDecoration(
           border: Border(
         left: BorderSide(color: config.sideColor, width: config.sideWith),
       )),
       padding: config.padding,
+      margin: config.margin,
       child: ProxyRichText(childrenSpan),
     ));
   }
@@ -36,12 +38,15 @@ class BlockquoteConfig implements ContainerConfig {
   final Color textColor;
   final double sideWith;
   final EdgeInsets padding;
+  final EdgeInsets margin;
 
-  const BlockquoteConfig(
-      {this.sideColor = const Color(0xffd0d7de),
-      this.textColor = const Color(0xff57606a),
-      this.sideWith = 4.0,
-      this.padding = const EdgeInsets.fromLTRB(16, 2, 0, 2)});
+  const BlockquoteConfig({
+    this.sideColor = const Color(0xffd0d7de),
+    this.textColor = const Color(0xff57606a),
+    this.sideWith = 4.0,
+    this.padding = const EdgeInsets.fromLTRB(16, 2, 0, 2),
+    this.margin = const EdgeInsets.fromLTRB(0, 8, 0, 8),
+  });
 
   @nonVirtual
   @override
