@@ -14,6 +14,7 @@ class MarkdownGenerator {
   final EdgeInsets linesMargin;
   final List<SpanNodeGeneratorWithTag> generators;
   final SpanNodeAcceptCallback? onNodeAccepted;
+  final m.ExtensionSet? extensionSet;
   final TextNodeGenerator? textGenerator;
 
   MarkdownGenerator({
@@ -23,6 +24,7 @@ class MarkdownGenerator {
     this.linesMargin = const EdgeInsets.symmetric(vertical: 8),
     this.generators = const [],
     this.onNodeAccepted,
+    this.extensionSet,
     this.textGenerator,
   }) : this.config = config ?? MarkdownConfig.defaultConfig;
 
@@ -31,7 +33,7 @@ class MarkdownGenerator {
   List<Widget> buildWidgets(String data,
       {ValueCallback<List<Toc>>? onTocList}) {
     final m.Document document = m.Document(
-      extensionSet: m.ExtensionSet.gitHubFlavored,
+      extensionSet: extensionSet ?? m.ExtensionSet.gitHubFlavored,
       encodeHtml: false,
       inlineSyntaxes: inlineSyntaxes,
       blockSyntaxes: blockSyntaxes,
@@ -56,7 +58,7 @@ class MarkdownGenerator {
     final List<Widget> widgets = [];
     spans.forEach((span) {
       InlineSpan inlineSpan = span.build();
-      if(inlineSpan is TextSpan){
+      if (inlineSpan is TextSpan) {
         ///fix: line breaks are not effective when copying.
         ///see [https://github.com/asjqkkkk/markdown_widget/issues/105]
         ///see [https://github.com/asjqkkkk/markdown_widget/issues/95]
