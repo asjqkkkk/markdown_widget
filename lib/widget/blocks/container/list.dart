@@ -97,6 +97,7 @@ class ListNode extends ElementNode {
       child: Padding(
         padding: EdgeInsets.only(bottom: marginBottom),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
