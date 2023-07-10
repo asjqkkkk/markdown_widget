@@ -75,8 +75,7 @@ build/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 Podfile
 update.sh
-example/pubspec.lock
-pubspec.lock
+/pubspec.lock
 .fvm/
 coverage/
 .flutter
