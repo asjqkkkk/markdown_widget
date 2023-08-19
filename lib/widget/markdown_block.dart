@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:markdown_widget/widget/selection_transformer.dart';
 
 import '../config/configs.dart';
 import '../config/markdown_generator.dart';
@@ -45,6 +46,6 @@ class MarkdownBlock extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
     );
-    return selectable ? SelectionArea(child: column) : column;
+    return selectable ? SelectionArea(child: SelectionTransformer.separated(child: column)) : column;
   }
 }

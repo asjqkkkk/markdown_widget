@@ -4,6 +4,7 @@ import 'package:flutter_highlight/themes/a11y-dark.dart';
 import 'package:flutter_highlight/themes/a11y-light.dart';
 import 'package:highlight/highlight.dart' as hi;
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:markdown_widget/widget/selection_transformer.dart';
 
 ///Tag: [MarkdownTag.pre]
 ///
@@ -26,20 +27,22 @@ class CodeBlockNode extends ElementNode {
       width: double.infinity,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(splitContents.length, (index) {
-            final currentContent = splitContents[index];
-            return ProxyRichText(TextSpan(
-              children: highLightSpans(
-                currentContent,
-                language: preConfig.language,
-                theme: preConfig.theme,
-                textStyle: style,
-                styleNotMatched: preConfig.styleNotMatched,
-              ),
-            ));
-          }),
+        child: SelectionTransformer.separated(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(splitContents.length, (index) {
+              final currentContent = splitContents[index];
+              return ProxyRichText(TextSpan(
+                children: highLightSpans(
+                  currentContent,
+                  language: preConfig.language,
+                  theme: preConfig.theme,
+                  textStyle: style,
+                  styleNotMatched: preConfig.styleNotMatched,
+                ),
+              ));
+            }),
+          ),
         ),
       ),
     );
