@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:markdown_widget/widget/selection_transformer.dart';
 import '../../../config/configs.dart';
 import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
@@ -63,19 +64,22 @@ class TableNode extends ElementNode {
       }
     }
 
-    final tableWidget = Table(
-      columnWidths: tbConfig.columnWidths,
-      defaultColumnWidth: tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
-      textBaseline: tbConfig.textBaseline,
-      textDirection: tbConfig.textDirection,
-      border: tbConfig.border ??
-          TableBorder.all(
-              color: parentStyle?.color ??
-                  config.p.textStyle.color ??
-                  Colors.grey),
-      defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
-          TableCellVerticalAlignment.middle,
-      children: rows,
+    final tableWidget = SelectionTransformer.tabular(
+      columns: cellCount,
+      child: Table(
+        columnWidths: tbConfig.columnWidths,
+        defaultColumnWidth: tbConfig.defaultColumnWidth ?? IntrinsicColumnWidth(),
+        textBaseline: tbConfig.textBaseline,
+        textDirection: tbConfig.textDirection,
+        border: tbConfig.border ??
+            TableBorder.all(
+                color: parentStyle?.color ??
+                    config.p.textStyle.color ??
+                    Colors.grey),
+        defaultVerticalAlignment: tbConfig.defaultVerticalAlignment ??
+            TableCellVerticalAlignment.middle,
+        children: rows,
+      ),
     );
 
     return WidgetSpan(
