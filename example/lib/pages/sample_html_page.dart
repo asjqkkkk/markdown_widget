@@ -91,7 +91,7 @@ class _HtmlPageState extends State<HtmlPage> {
                   ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
                   : PreConfig().copy(wrapper: codeWrapper)
             ]),
-            markdownGeneratorConfig: MarkdownGeneratorConfig(
+            markdownGenerator: MarkdownGenerator(
                 generators: [videoGeneratorWithTag],
                 textGenerator: (node, config, visitor) =>
                     CustomTextNode(node.textContent, config, visitor)),

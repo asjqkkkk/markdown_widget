@@ -1,12 +1,8 @@
-> 🚀 markdown_widget 2.0 现在已发布
-相较于1.x 的版本来说，整个代码参造 [CommonMark Spec 3.0](https://spec.commonmark.org/0.30/) 进行了全部的重构
-这带来了大量破坏性的修改，但同时有了更加符合规范的markdown渲染逻辑、以及更加健壮和可扩展的代码
-
 语言：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
 # 📖markdown_widget
 
-![screenshot](assets/script_medias/1676100926803.jpg)
+![screenshot](assets/script_medias/1676100926803.png)
 
 
 [![Coverage Status](assets/script_medias/1675527925332.png)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](assets/script_medias/1675527928071.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](assets/script_medias/1675527929980.png)](https://asjqkkkk.github.io/markdown_widget/)

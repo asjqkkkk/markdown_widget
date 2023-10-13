@@ -10,11 +10,11 @@ import 'package:path/path.dart' as p;
 void main() {
   test('test widget_visitor', () {
     final list = getTestJsonList();
-    final config = MarkdownGeneratorConfig();
+    final generator = MarkdownGenerator();
     for (var i = 0; i < list.length; ++i) {
       _checkWithIndex(i);
       _checkWithIndex(i,
-          config: MarkdownConfig.darkConfig, generatorConfig: config);
+          config: MarkdownConfig.darkConfig, generator: generator);
     }
   });
 
@@ -39,17 +39,11 @@ void main() {
 List<Widget> testMarkdownGenerator(
   String markdown, {
   MarkdownConfig? config,
-  MarkdownGeneratorConfig? generatorConfig,
+  MarkdownGenerator? generator,
 }) {
-  final markdownGenerator = MarkdownGenerator(
-    config: config,
-    inlineSyntaxes: generatorConfig?.inlineSyntaxList ?? [],
-    blockSyntaxes: generatorConfig?.blockSyntaxList ?? [],
-    generators: generatorConfig?.generators ?? [],
-    onNodeAccepted: generatorConfig?.onNodeAccepted,
-    textGenerator: generatorConfig?.textGenerator,
-  );
-  return markdownGenerator.buildWidgets(markdown, onTocList: (list) {});
+  return generator?.buildWidgets(markdown,
+          onTocList: (list) {}, config: config) ??
+      [];
 }
 
 List<SpanNode> transformMarkdown(String markdown, {MarkdownConfig? config}) {
@@ -71,12 +65,11 @@ List<SpanNode> transformMarkdown(String markdown, {MarkdownConfig? config}) {
 }
 
 void _checkWithIndex(int index,
-    {MarkdownConfig? config, MarkdownGeneratorConfig? generatorConfig}) {
+    {MarkdownConfig? config, MarkdownGenerator? generator}) {
   final list = getTestJsonList();
   assert(index >= 0 && index < list.length);
   String current = list[index]['markdown'];
-  testMarkdownGenerator(current,
-      config: config, generatorConfig: generatorConfig);
+  testMarkdownGenerator(current, config: config, generator: generator);
 }
 
 List<dynamic> getTestJsonList() {

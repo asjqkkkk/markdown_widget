@@ -89,6 +89,8 @@ class HeadingDivider {
 
 ///config class for heading
 abstract class HeadingConfig implements LeafConfig {
+  const HeadingConfig();
+
   TextStyle get style;
 
   HeadingDivider? get divider => null;
@@ -97,7 +99,7 @@ abstract class HeadingConfig implements LeafConfig {
 }
 
 ///config class for h1
-class H1Config with HeadingConfig {
+class H1Config extends HeadingConfig {
   final TextStyle style;
 
   const H1Config(
@@ -124,7 +126,7 @@ class H1Config with HeadingConfig {
 }
 
 ///config class for h2
-class H2Config with HeadingConfig {
+class H2Config extends HeadingConfig {
   final TextStyle style;
 
   const H2Config(
@@ -151,7 +153,7 @@ class H2Config with HeadingConfig {
 }
 
 ///config class for h3
-class H3Config with HeadingConfig {
+class H3Config extends HeadingConfig {
   final TextStyle style;
 
   const H3Config(
@@ -178,7 +180,7 @@ class H3Config with HeadingConfig {
 }
 
 ///config class for h4
-class H4Config with HeadingConfig {
+class H4Config extends HeadingConfig {
   final TextStyle style;
 
   const H4Config(
@@ -202,7 +204,7 @@ class H4Config with HeadingConfig {
 }
 
 ///config class for h5
-class H5Config with HeadingConfig {
+class H5Config extends HeadingConfig {
   final TextStyle style;
 
   const H5Config(
@@ -226,7 +228,7 @@ class H5Config with HeadingConfig {
 }
 
 ///config class for h6
-class H6Config with HeadingConfig {
+class H6Config extends HeadingConfig {
   final TextStyle style;
 
   const H6Config(

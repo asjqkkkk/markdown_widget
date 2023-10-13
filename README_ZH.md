@@ -1,10 +1,6 @@
-> 🚀 markdown_widget 2.0 现在已发布
-相较于1.x 的版本来说，整个代码参造 [CommonMark Spec 3.0](https://spec.commonmark.org/0.30/) 进行了全部的重构
-这带来了大量破坏性的修改，但同时有了更加符合规范的markdown渲染逻辑、以及更加健壮和可扩展的代码
-
 语言：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
-![screenshot](https://user-images.githubusercontent.com/30992818/218246325-603fa97f-a5ed-4ba6-a503-6c7233cfad47.jpg)
+![screen](https://github.com/asjqkkkk/asjqkkkk.github.io/assets/30992818/4185bf1a-0be3-460d-ba12-9e4764f5c035)
 
 # 📖markdown_widget
 

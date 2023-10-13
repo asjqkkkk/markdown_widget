@@ -2,47 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as m;
 
 import '../widget/blocks/leaf/heading.dart';
+import '../widget/span_node.dart';
 import '../widget/widget_visitor.dart';
 import 'configs.dart';
 import 'toc.dart';
 
 ///use [MarkdownGenerator] to transform markdown data to [Widget] list, so you can render it by any type of [ListView]
 class MarkdownGenerator {
-  final MarkdownConfig config;
-  final Iterable<m.InlineSyntax> inlineSyntaxes;
-  final Iterable<m.BlockSyntax> blockSyntaxes;
+  final Iterable<m.InlineSyntax> inlineSyntaxList;
+  final Iterable<m.BlockSyntax> blockSyntaxList;
   final EdgeInsets linesMargin;
   final List<SpanNodeGeneratorWithTag> generators;
   final SpanNodeAcceptCallback? onNodeAccepted;
   final m.ExtensionSet? extensionSet;
   final TextNodeGenerator? textGenerator;
+  final SpanNodeBuilder? onSpanNodeBuild;
 
   MarkdownGenerator({
-    MarkdownConfig? config,
-    this.inlineSyntaxes = const [],
-    this.blockSyntaxes = const [],
+    this.inlineSyntaxList = const [],
+    this.blockSyntaxList = const [],
     this.linesMargin = const EdgeInsets.symmetric(vertical: 8),
     this.generators = const [],
     this.onNodeAccepted,
     this.extensionSet,
     this.textGenerator,
-  }) : this.config = config ?? MarkdownConfig.defaultConfig;
+    this.onSpanNodeBuild,
+  });
 
   ///convert [data] to widgets
   ///[onTocList] can provider [Toc] list
   List<Widget> buildWidgets(String data,
-      {ValueCallback<List<Toc>>? onTocList}) {
+      {ValueCallback<List<Toc>>? onTocList, MarkdownConfig? config}) {
+    final mdConfig = config ?? MarkdownConfig.defaultConfig;
     final m.Document document = m.Document(
       extensionSet: extensionSet ?? m.ExtensionSet.gitHubFlavored,
       encodeHtml: false,
-      inlineSyntaxes: inlineSyntaxes,
-      blockSyntaxes: blockSyntaxes,
+      inlineSyntaxes: inlineSyntaxList,
+      blockSyntaxes: blockSyntaxList,
     );
     final List<String> lines = data.split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
     final List<m.Node> nodes = document.parseLines(lines);
     final List<Toc> tocList = [];
     final visitor = WidgetVisitor(
-        config: config,
+        config: mdConfig,
         generators: generators,
         textGenerator: textGenerator,
         onNodeAccepted: (node, index) {
@@ -57,37 +59,13 @@ class MarkdownGenerator {
     onTocList?.call(tocList);
     final List<Widget> widgets = [];
     spans.forEach((span) {
-      InlineSpan inlineSpan = span.build();
-      if (inlineSpan is TextSpan) {
-        ///fix: line breaks are not effective when copying.
-        ///see [https://github.com/asjqkkkk/markdown_widget/issues/105]
-        ///see [https://github.com/asjqkkkk/markdown_widget/issues/95]
-        inlineSpan.children?.add(TextSpan(text: '\r'));
-      }
       widgets.add(Padding(
         padding: linesMargin,
-        child: Text.rich(inlineSpan),
+        child: Text.rich(onSpanNodeBuild?.call(span) ?? span.build()),
       ));
     });
     return widgets;
   }
 }
 
-///use [MarkdownGeneratorConfig] for [MarkdownGenerator]
-class MarkdownGeneratorConfig {
-  final Iterable<m.InlineSyntax> inlineSyntaxList;
-  final Iterable<m.BlockSyntax> blockSyntaxList;
-  final EdgeInsets linesMargin;
-  final List<SpanNodeGeneratorWithTag> generators;
-  final SpanNodeAcceptCallback? onNodeAccepted;
-  final TextNodeGenerator? textGenerator;
-
-  MarkdownGeneratorConfig({
-    this.inlineSyntaxList = const [],
-    this.blockSyntaxList = const [],
-    this.linesMargin = const EdgeInsets.all(4),
-    this.generators = const [],
-    this.onNodeAccepted,
-    this.textGenerator,
-  });
-}
+typedef SpanNodeBuilder = TextSpan Function(SpanNode spanNode);

@@ -75,7 +75,8 @@ class _VideoWidgetState extends State<VideoWidget> {
   @override
   void initState() {
     final config = widget.config;
-    _videoPlayerController = VideoPlayerController.network(widget.url!);
+    _videoPlayerController =
+        VideoPlayerController.networkUrl(Uri.parse(widget.url!));
     if (config?.autoInitialize ?? true) {
       _videoPlayerController.initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.

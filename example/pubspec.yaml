@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -16,12 +16,12 @@ dependencies:
     sdk: flutter
   flutter_redux: ^0.10.0
   #html tag parser
-  html: ^0.15.0
+  html: ^0.15.4
   #math equation rendering
-  flutter_math_fork: ^0.6.3+1
+  flutter_math_fork: ^0.7.1
 
   # for 'video' tag
-  video_player: ^2.4.10
+  video_player: ^2.7.2
   # for router
   go_router: ^6.2.0
 
