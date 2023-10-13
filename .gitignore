@@ -81,3 +81,4 @@ pubspec.lock
 coverage/
 .flutter
 .flutter_tool_state
+.metadata
