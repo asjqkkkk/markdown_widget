@@ -1,3 +1,6 @@
+### [2.3.1]
+- Fix: config not used in markdown widget
+
 ### [2.3.0]
 - Fixed some issue
   - [#116](https://github.com/asjqkkkk/markdown_widget/issues/116)

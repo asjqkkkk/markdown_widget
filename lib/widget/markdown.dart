@@ -80,10 +80,13 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   void updateState() {
     indexTreeSet.clear();
     markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
-    final result =
-        markdownGenerator.buildWidgets(widget.data, onTocList: (tocList) {
-      _tocController?.setTocList(tocList);
-    });
+    final result = markdownGenerator.buildWidgets(
+      widget.data,
+      onTocList: (tocList) {
+        _tocController?.setTocList(tocList);
+      },
+      config: widget.config,
+    );
     _widgets.addAll(result);
   }
 

@@ -29,7 +29,7 @@ class MarkdownBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final markdownGenerator = generator ?? MarkdownGenerator();
-    final widgets = markdownGenerator.buildWidgets(data);
+    final widgets = markdownGenerator.buildWidgets(data, config: config);
     final column = Column(
       children: widgets,
       mainAxisSize: MainAxisSize.min,
