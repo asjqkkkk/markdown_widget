@@ -24,7 +24,7 @@ class UlOrOLNode extends ElementNode {
   void accept(SpanNode? node) {
     super.accept(node);
     if (node != null && node is ListNode) {
-      node._index = start;
+      node.index = start;
       start++;
     }
   }
@@ -61,7 +61,7 @@ class ListNode extends ElementNode {
 
   ListNode(this.config);
 
-  int _index = 0;
+  int index = 0;
 
   bool get isOrdered {
     final p = parent;
@@ -89,8 +89,8 @@ class ListNode extends ElementNode {
     if (isCheckbox) {
       marker = ProxyRichText(children.removeAt(0).build());
     } else {
-      marker = config.li.marker?.call(isOrdered, depth, _index) ??
-          getDefaultMarker(isOrdered, depth, parentStyle?.color, _index,
+      marker = config.li.marker?.call(isOrdered, depth, index) ??
+          getDefaultMarker(isOrdered, depth, parentStyle?.color, index,
               parentStyleHeight / 2, config);
     }
     return WidgetSpan(
@@ -104,7 +104,7 @@ class ListNode extends ElementNode {
               width: space,
               child: marker,
             ),
-            Expanded(child: ProxyRichText(childrenSpan)),
+            Flexible(child: ProxyRichText(childrenSpan)),
           ],
         ),
       ),
