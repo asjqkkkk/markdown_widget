@@ -24,7 +24,7 @@ class UlOrOLNode extends ElementNode {
   void accept(SpanNode? node) {
     super.accept(node);
     if (node != null && node is ListNode) {
-      node.index = start;
+      node._index = start;
       start++;
     }
   }
@@ -61,7 +61,8 @@ class ListNode extends ElementNode {
 
   ListNode(this.config);
 
-  int index = 0;
+  int _index = 0;
+  int get index => _index;
 
   bool get isOrdered {
     final p = parent;
