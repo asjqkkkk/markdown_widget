@@ -105,7 +105,21 @@ class ListNode extends ElementNode {
               width: space,
               child: marker,
             ),
-            Flexible(child: ProxyRichText(childrenSpan)),
+            Flexible(
+              child: ProxyRichText(
+                TextSpan(
+                  children: [
+                    if (children.isNotEmpty) children.first.build(),
+                    for (final child in children.skip(1)) ...[
+                      // Introducing a new line before the next list item.
+                      // Otherwise, it might be rendered on the same line, disrupting the layout.
+                      if (child is UlOrOLNode) const TextSpan(text: '\n'),
+                      child.build(),
+                    ],
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
