@@ -17,6 +17,7 @@ class MarkdownGenerator {
   final m.ExtensionSet? extensionSet;
   final TextNodeGenerator? textGenerator;
   final SpanNodeBuilder? onSpanNodeBuild;
+  final List<m.Node>? cachedNodes;
 
   MarkdownGenerator({
     this.inlineSyntaxList = const [],
@@ -27,22 +28,26 @@ class MarkdownGenerator {
     this.extensionSet,
     this.textGenerator,
     this.onSpanNodeBuild,
+    this.cachedNodes,
   });
 
   ///convert [data] to widgets
   ///[onTocList] can provider [Toc] list
   List<Widget> buildWidgets(String data,
       {ValueCallback<List<Toc>>? onTocList, MarkdownConfig? config}) {
-    final mdConfig = config ?? MarkdownConfig.defaultConfig;
-    final m.Document document = m.Document(
-      extensionSet: extensionSet ?? m.ExtensionSet.gitHubFlavored,
-      encodeHtml: false,
-      inlineSyntaxes: inlineSyntaxList,
-      blockSyntaxes: blockSyntaxList,
-    );
-    final List<String> lines = data.split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
-    final List<m.Node> nodes = document.parseLines(lines);
+    final List<m.Node> nodes;
+    if (cachedNodes != null) {
+      nodes = cachedNodes!;
+    } else {
+      nodes = m.Document(
+        extensionSet: extensionSet ?? m.ExtensionSet.gitHubFlavored,
+        encodeHtml: false,
+        inlineSyntaxes: inlineSyntaxList,
+        blockSyntaxes: blockSyntaxList,
+      ).parseLines(data.split(RegExp(r'(\r?\n)|(\r?\t)|(\r)')));
+    }
     final List<Toc> tocList = [];
+    final mdConfig = config ?? MarkdownConfig.defaultConfig;
     final visitor = WidgetVisitor(
         config: mdConfig,
         generators: generators,
