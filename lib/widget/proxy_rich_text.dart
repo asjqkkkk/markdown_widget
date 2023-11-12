@@ -14,7 +14,8 @@ class ProxyRichText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text.rich(
-      textSpan,
+      // Include newlines when copying code.
+      TextSpan(children: [textSpan, TextSpan(text: '\r')]),
       textScaleFactor: 1.0,
       style: style,
     );
