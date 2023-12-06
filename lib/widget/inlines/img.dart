@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+
+Uint8List _dataUrlToBytes(String url) => base64.decode(url.split(',').last);
 
 ///Tag: [MarkdownTag.img]
 class ImageNode extends SpanNode {
@@ -21,17 +25,32 @@ class ImageNode extends SpanNode {
     final imageUrl = attributes['src'] ?? '';
     final alt = attributes['alt'] ?? '';
     final isNetImage = imageUrl.startsWith('http');
-    final imgWidget = isNetImage
-        ? Image.network(imageUrl,
-            width: width,
-            height: height,
-            fit: BoxFit.cover, errorBuilder: (ctx, error, stacktrace) {
-            return buildErrorImage(imageUrl, alt, error);
-          })
-        : Image.asset(imageUrl, width: width, height: height, fit: BoxFit.cover,
-            errorBuilder: (ctx, error, stacktrace) {
-            return buildErrorImage(imageUrl, alt, error);
-          });
+    final isDataUrl = imageUrl.startsWith("data:");
+
+    final Image imgWidget;
+    if (isNetImage) {
+      imgWidget = Image.network(imageUrl,
+          width: width,
+          height: height,
+          fit: BoxFit.cover, errorBuilder: (ctx, error, stacktrace) {
+        return buildErrorImage(imageUrl, alt, error);
+      });
+    } else if (isDataUrl) {
+      imgWidget = Image.memory(_dataUrlToBytes(imageUrl),
+          width: width,
+          height: height,
+          fit: BoxFit.cover, errorBuilder: (ctx, error, stacktrace) {
+        return buildErrorImage(imageUrl, alt, error);
+      });
+    } else {
+      imgWidget = Image.asset(imageUrl,
+          width: width,
+          height: height,
+          fit: BoxFit.cover, errorBuilder: (ctx, error, stacktrace) {
+        return buildErrorImage(imageUrl, alt, error);
+      });
+    }
+
     final result = (parent != null && parent is LinkNode)
         ? imgWidget
         : Builder(builder: (context) {
