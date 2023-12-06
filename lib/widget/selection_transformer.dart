@@ -123,7 +123,7 @@ class SeparatedSelectionContainerDelegate extends MultiSelectableSelectionContai
       return null;
     }
     return SelectedContent(
-      plainText: transform(selections.map((s) => s.plainText)),
+      plainText: transform(selections.map((s) => s.plainText)).trim(),
     );
   }
 
