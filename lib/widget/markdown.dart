@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:markdown_widget/widget/selection_transformer.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -126,7 +127,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
       ),
     );
     return widget.selectable
-        ? SelectionArea(child: markdownWidget)
+        ? SelectionArea(child: SelectionTransformer.separated(child: markdownWidget))
         : markdownWidget;
   }
 
