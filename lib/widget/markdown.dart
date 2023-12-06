@@ -30,7 +30,7 @@ class MarkdownWidget extends StatefulWidget {
   final MarkdownConfig? config;
 
   ///config for [MarkdownGenerator]
-  final MarkdownGeneratorConfig? markdownGeneratorConfig;
+  final MarkdownGenerator? markdownGenerator;
 
   const MarkdownWidget({
     Key? key,
@@ -41,7 +41,7 @@ class MarkdownWidget extends StatefulWidget {
     this.selectable = true,
     this.padding,
     this.config,
-    this.markdownGeneratorConfig,
+    this.markdownGenerator,
   }) : super(key: key);
 
   @override
@@ -80,21 +80,14 @@ class _MarkdownWidgetState extends State<MarkdownWidget> {
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
   void updateState() {
     indexTreeSet.clear();
-    final generatorConfig =
-        widget.markdownGeneratorConfig ?? MarkdownGeneratorConfig();
-    markdownGenerator = MarkdownGenerator(
+    markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
+    final result = markdownGenerator.buildWidgets(
+      widget.data,
+      onTocList: (tocList) {
+        _tocController?.setTocList(tocList);
+      },
       config: widget.config,
-      inlineSyntaxes: generatorConfig.inlineSyntaxList,
-      blockSyntaxes: generatorConfig.blockSyntaxList,
-      linesMargin: generatorConfig.linesMargin,
-      generators: generatorConfig.generators,
-      onNodeAccepted: generatorConfig.onNodeAccepted,
-      textGenerator: generatorConfig.textGenerator,
     );
-    final result =
-        markdownGenerator.buildWidgets(widget.data, onTocList: (tocList) {
-      _tocController?.setTocList(tocList);
-    });
     _widgets.addAll(result);
   }
 

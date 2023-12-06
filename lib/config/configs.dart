@@ -104,17 +104,23 @@ enum MarkdownTag {
 class MarkdownConfig {
   HrConfig get hr => _getConfig<HrConfig>(MarkdownTag.hr, const HrConfig());
 
-  HeadingConfig get h1 => _getConfig<HeadingConfig>(MarkdownTag.h1, const H1Config());
+  HeadingConfig get h1 =>
+      _getConfig<HeadingConfig>(MarkdownTag.h1, const H1Config());
 
-  HeadingConfig get h2 => _getConfig<HeadingConfig>(MarkdownTag.h2, const H2Config());
+  HeadingConfig get h2 =>
+      _getConfig<HeadingConfig>(MarkdownTag.h2, const H2Config());
 
-  HeadingConfig get h3 => _getConfig<HeadingConfig>(MarkdownTag.h3, const H3Config());
+  HeadingConfig get h3 =>
+      _getConfig<HeadingConfig>(MarkdownTag.h3, const H3Config());
 
-  HeadingConfig get h4 => _getConfig<HeadingConfig>(MarkdownTag.h4, const H4Config());
+  HeadingConfig get h4 =>
+      _getConfig<HeadingConfig>(MarkdownTag.h4, const H4Config());
 
-  HeadingConfig get h5 => _getConfig<HeadingConfig>(MarkdownTag.h5, const H5Config());
+  HeadingConfig get h5 =>
+      _getConfig<HeadingConfig>(MarkdownTag.h5, const H5Config());
 
-  HeadingConfig get h6 => _getConfig<HeadingConfig>(MarkdownTag.h6, const H6Config());
+  HeadingConfig get h6 =>
+      _getConfig<HeadingConfig>(MarkdownTag.h6, const H6Config());
 
   PreConfig get pre =>
       _getConfig<PreConfig>(MarkdownTag.pre, const PreConfig());

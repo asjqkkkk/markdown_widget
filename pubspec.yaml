@@ -1,24 +1,24 @@
 name: markdown_widget
 description: A new markdown package. It supports TOC function, code highlighting, and it supports all platforms
-version: 2.2.0
+version: 2.3.1
 homepage: https://github.com/asjqkkkk/markdown_widget
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
   #markdown data parser
-  markdown: ^7.0.1
+  markdown: ^7.1.1
   #highlight code
   highlight: ^0.7.0
   flutter_highlight: ^0.7.0
 
 
   # to click link
-  url_launcher: ^6.1.11
+  url_launcher: ^6.1.14
   # to get the index number on scroll for listview
   visibility_detector: ^0.4.0+2
   # make listview available to jump to index
@@ -37,4 +37,4 @@ flutter:
 
 screenshots:
   - description: 'Screenshot 1'
-    path: screenshots/screenshot.jpg
+    path: screenshots/screenshot.png

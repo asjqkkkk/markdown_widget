@@ -62,6 +62,7 @@ class ListNode extends ElementNode {
   ListNode(this.config);
 
   int _index = 0;
+  int get index => _index;
 
   bool get isOrdered {
     final p = parent;
@@ -89,8 +90,8 @@ class ListNode extends ElementNode {
     if (isCheckbox) {
       marker = ProxyRichText(children.removeAt(0).build());
     } else {
-      marker = config.li.marker?.call(isOrdered, depth, _index) ??
-          getDefaultMarker(isOrdered, depth, parentStyle?.color, _index,
+      marker = config.li.marker?.call(isOrdered, depth, index) ??
+          getDefaultMarker(isOrdered, depth, parentStyle?.color, index,
               parentStyleHeight / 2, config);
     }
     return WidgetSpan(
@@ -104,7 +105,21 @@ class ListNode extends ElementNode {
               width: space,
               child: marker,
             ),
-            Expanded(child: ProxyRichText(childrenSpan)),
+            Flexible(
+              child: ProxyRichText(
+                TextSpan(
+                  children: [
+                    if (children.isNotEmpty) children.first.build(),
+                    for (final child in children.skip(1)) ...[
+                      // Introducing a new line before the next list item.
+                      // Otherwise, it might be rendered on the same line, disrupting the layout.
+                      if (child is UlOrOLNode) const TextSpan(text: '\n'),
+                      child.build(),
+                    ],
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

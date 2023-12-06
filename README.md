@@ -1,8 +1,6 @@
-> 🚀 The markdown_widget 2.0 has now been released. The entire code has been completely redesigned according to the [CommonMark Spec 3.0](https://spec.commonmark.org/0.30/) compared to the 1.x versions. This brings a lot of breaking changes, but also more standardized markdown rendering logic and more robust and scalable code
-
 Language：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
 
-![screenshot](https://user-images.githubusercontent.com/30992818/218246325-603fa97f-a5ed-4ba6-a503-6c7233cfad47.jpg)
+![screen](https://github.com/asjqkkkk/asjqkkkk.github.io/assets/30992818/4185bf1a-0be3-460d-ba12-9e4764f5c035)
 
 # 📖markdown_widget
 

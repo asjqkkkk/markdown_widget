@@ -90,7 +90,7 @@ class _LatexPageState extends State<LatexPage> {
                   ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
                   : PreConfig().copy(wrapper: codeWrapper)
             ]),
-            markdownGeneratorConfig: MarkdownGeneratorConfig(
+            markdownGenerator: MarkdownGenerator(
                 generators: [latexGenerator],
                 inlineSyntaxList: [LatexSyntax()]),
           );

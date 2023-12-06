@@ -96,7 +96,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                         ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
                         : PreConfig().copy(wrapper: codeWrapper)
                   ]),
-                  markdownGeneratorConfig: MarkdownGeneratorConfig(
+                  markdownGenerator: MarkdownGenerator(
                       generators: [videoGeneratorWithTag, latexGenerator],
                       inlineSyntaxList: [LatexSyntax()],
                       textGenerator: (node, config, visitor) =>

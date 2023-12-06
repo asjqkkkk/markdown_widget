@@ -16,31 +16,21 @@ class MarkdownBlock extends StatelessWidget {
   ///the configs of markdown
   final MarkdownConfig? config;
 
-  ///config for [MarkdownGenerator]
-  final MarkdownGeneratorConfig? markdownGeneratorConfig;
+  ///to generator markdown data
+  final MarkdownGenerator? generator;
 
   const MarkdownBlock({
     Key? key,
     required this.data,
     this.selectable = true,
     this.config,
-    this.markdownGeneratorConfig,
+    this.generator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final generatorConfig =
-        markdownGeneratorConfig ?? MarkdownGeneratorConfig();
-    final markdownGenerator = MarkdownGenerator(
-      config: config,
-      inlineSyntaxes: generatorConfig.inlineSyntaxList,
-      blockSyntaxes: generatorConfig.blockSyntaxList,
-      linesMargin: generatorConfig.linesMargin,
-      generators: generatorConfig.generators,
-      onNodeAccepted: generatorConfig.onNodeAccepted,
-      textGenerator: generatorConfig.textGenerator,
-    );
-    final widgets = markdownGenerator.buildWidgets(data);
+    final markdownGenerator = generator ?? MarkdownGenerator();
+    final widgets = markdownGenerator.buildWidgets(data, config: config);
     final column = Column(
       children: widgets,
       mainAxisSize: MainAxisSize.min,

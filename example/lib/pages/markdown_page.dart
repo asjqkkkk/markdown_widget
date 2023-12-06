@@ -106,7 +106,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
                       : PreConfig().copy(wrapper: codeWrapper)
                 ]),
                 tocController: controller,
-                markdownGeneratorConfig: MarkdownGeneratorConfig(
+                markdownGenerator: MarkdownGenerator(
                     generators: [videoGeneratorWithTag, latexGenerator],
                     inlineSyntaxList: [LatexSyntax()],
                     textGenerator: (node, config, visitor) =>

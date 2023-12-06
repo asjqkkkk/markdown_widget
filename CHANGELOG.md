@@ -1,3 +1,17 @@
+### [2.3.1]
+- Fix: config not used in markdown widget
+
+### [2.3.0]
+- Fixed some issue
+  - [#116](https://github.com/asjqkkkk/markdown_widget/issues/116)
+  - [#117](https://github.com/asjqkkkk/markdown_widget/issues/117)
+- Reopen some issue
+  - [#95](https://github.com/asjqkkkk/markdown_widget/issues/95)
+  - [#105](https://github.com/asjqkkkk/markdown_widget/issues/105)
+- Updates minimum supported SDK version to Flutter 3.10/Dart 3.0 
+- Remove `MarkdownGeneratorConfig`
+- Update README
+
 ### [2.2.0]
 - Fixed some issue
   - [#91](https://github.com/asjqkkkk/markdown_widget/issues/91)

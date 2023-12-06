@@ -47,7 +47,13 @@ void main() {
 ### akslfjklasjf
 ### akslfjklasjf
 ### akslfjklasjf
-### akslfjklasjf33''';
+### akslfjklasjf33
+- asdasd
+- asdasda
+- asdasdas
+1. asdasdasd
+2. asdasdasd
+3. asdasdasd''';
 
   testWidgets('test toc widget', (tester) async {
     final tocController = TocController();
@@ -131,7 +137,8 @@ void main() {
             maxScrollExtent: 1,
             pixels: 1,
             viewportDimension: 1,
-            axisDirection: AxisDirection.down),
+            axisDirection: AxisDirection.down,
+            devicePixelRatio: 1),
         context: ctx,
         direction: ScrollDirection.forward));
   });
@@ -187,7 +194,7 @@ void main() {
                     ImgConfig(),
                     CheckBoxConfig(),
                   ]),
-                  markdownGeneratorConfig: MarkdownGeneratorConfig(generators: [
+                  markdownGenerator: MarkdownGenerator(generators: [
                     SpanNodeGeneratorWithTag(
                         tag: 'test',
                         generator: (e, config, visitor) {
