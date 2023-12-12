@@ -29,6 +29,16 @@ void main() {
 | a | b | c | ''');
   });
 
+  test('code block builder', () {
+    final spans = transformMarkdown('''```html
+    asdasdasdasd
+    ```''',
+        config: MarkdownConfig(
+            configs: [PreConfig(builder: (code, language) => Text(code))]));
+    final textSpans = spans.map((e) => e.build()).toList();
+    assert(textSpans.length == 1);
+  });
+
   test('getNodeByElement', () {
     final visitor = WidgetVisitor();
     visitor.getNodeByElement(
