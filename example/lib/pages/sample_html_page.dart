@@ -82,8 +82,8 @@ class _HtmlPageState extends State<HtmlPage> {
         builder: (context, state) {
           final config =
               isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
-          final codeWrapper =
-              (child, text) => CodeWrapperWidget(child: child, text: text);
+          final codeWrapper = (child, text, language) =>
+              CodeWrapperWidget(child, text, language);
           return MarkdownWidget(
             data: _text,
             config: config.copy(configs: [
