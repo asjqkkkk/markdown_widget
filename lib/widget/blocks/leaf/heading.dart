@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../config/configs.dart';
 import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
+import '../../widget_visitor.dart';
 
 ///Tag: [MarkdownTag.h1] ~ [MarkdownTag.h6]
 ///
@@ -10,8 +11,9 @@ import '../../span_node.dart';
 ///A setext heading consists of one or more lines of text
 class HeadingNode extends ElementNode {
   final HeadingConfig headingConfig;
+  final WidgetVisitor visitor;
 
-  HeadingNode(this.headingConfig);
+  HeadingNode(this.headingConfig, this.visitor);
 
   @override
   InlineSpan build() {
@@ -24,7 +26,10 @@ class HeadingNode extends ElementNode {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ProxyRichText(childrenSpan),
+            ProxyRichText(
+              childrenSpan,
+              richTextBuilder: visitor.richTextBuilder,
+            ),
             _Divider(divider: divider.copy(color: parentStyle?.color)),
           ],
         ),
@@ -33,7 +38,7 @@ class HeadingNode extends ElementNode {
   }
 
   HeadingNode copy({HeadingConfig? headingConfig}) {
-    final node = HeadingNode(headingConfig ?? this.headingConfig);
+    final node = HeadingNode(headingConfig ?? this.headingConfig, this.visitor);
     children.forEach((e) {
       node.accept(e);
     });

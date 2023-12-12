@@ -6,10 +6,11 @@ import 'package:markdown_widget/markdown_widget.dart';
 class ImageNode extends SpanNode {
   final Map<String, String> attributes;
   final MarkdownConfig config;
+  final WidgetVisitor visitor;
 
   ImgConfig get imgConfig => config.img;
 
-  ImageNode(this.attributes, this.config);
+  ImageNode(this.attributes, this.config, this.visitor);
 
   @override
   InlineSpan build() {
@@ -45,16 +46,19 @@ class ImageNode extends SpanNode {
   }
 
   Widget buildErrorImage(String url, String alt, Object? error) {
-    return ProxyRichText(TextSpan(children: [
-      WidgetSpan(
-          child: Icon(Icons.broken_image,
-              color: Colors.redAccent,
-              size: (parentStyle?.fontSize ??
-                      config.p.textStyle.fontSize ??
-                      16) *
-                  (parentStyle?.height ?? config.p.textStyle.height ?? 1.2))),
-      TextSpan(text: alt, style: parentStyle ?? config.p.textStyle),
-    ]));
+    return ProxyRichText(
+      TextSpan(children: [
+        WidgetSpan(
+            child: Icon(Icons.broken_image,
+                color: Colors.redAccent,
+                size: (parentStyle?.fontSize ??
+                        config.p.textStyle.fontSize ??
+                        16) *
+                    (parentStyle?.height ?? config.p.textStyle.height ?? 1.2))),
+        TextSpan(text: alt, style: parentStyle ?? config.p.textStyle),
+      ]),
+      richTextBuilder: visitor.richTextBuilder,
+    );
   }
 
   ///show image in a new window

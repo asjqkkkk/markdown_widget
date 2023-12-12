@@ -11,11 +11,12 @@ import 'package:markdown/markdown.dart' as m;
 ///An indented code block is composed of one or more indented chunks separated by blank lines
 ///A code fence is a sequence of at least three consecutive backtick characters (`) or tildes (~)
 class CodeBlockNode extends ElementNode {
-  CodeBlockNode(this.element, this.preConfig);
+  CodeBlockNode(this.element, this.preConfig, this.visitor);
 
   String get content => element.textContent;
   final PreConfig preConfig;
   final m.Element element;
+  final WidgetVisitor visitor;
 
   @override
   InlineSpan build() {
@@ -43,15 +44,18 @@ class CodeBlockNode extends ElementNode {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(splitContents.length, (index) {
             final currentContent = splitContents[index];
-            return ProxyRichText(TextSpan(
-              children: highLightSpans(
-                currentContent,
-                language: language,
-                theme: preConfig.theme,
-                textStyle: style,
-                styleNotMatched: preConfig.styleNotMatched,
+            return ProxyRichText(
+              TextSpan(
+                children: highLightSpans(
+                  currentContent,
+                  language: language,
+                  theme: preConfig.theme,
+                  textStyle: style,
+                  styleNotMatched: preConfig.styleNotMatched,
+                ),
               ),
-            ));
+              richTextBuilder: visitor.richTextBuilder,
+            );
           }),
         ),
       ),

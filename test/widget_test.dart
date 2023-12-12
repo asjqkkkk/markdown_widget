@@ -71,7 +71,7 @@ void main() {
       ),
     ));
     final list = List.generate(10, (index) {
-      final heading = HeadingNode(H1Config());
+      final heading = HeadingNode(H1Config(), WidgetVisitor());
       heading.accept(TextNode(text: "$index"));
       return Toc(
         node: heading,

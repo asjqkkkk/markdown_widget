@@ -5,6 +5,7 @@ import '../../../config/configs.dart';
 import '../../inlines/input.dart';
 import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
+import '../../widget_visitor.dart';
 import '../leaf/paragraph.dart';
 
 ///Tag [MarkdownTag.ol]、[MarkdownTag.ul]
@@ -15,8 +16,9 @@ class UlOrOLNode extends ElementNode {
   final ListConfig config;
   final Map<String, String> attribute;
   late int start;
+  final WidgetVisitor visitor;
 
-  UlOrOLNode(this.tag, this.attribute, this.config) {
+  UlOrOLNode(this.tag, this.attribute, this.config, this.visitor) {
     start = (int.tryParse(attribute['start'] ?? '') ?? 1) - 1;
   }
 
@@ -40,7 +42,8 @@ class UlOrOLNode extends ElementNode {
             children.length,
             (index) {
               final childNode = children[index];
-              return ProxyRichText(childNode.build());
+              return ProxyRichText(childNode.build(),
+                  richTextBuilder: visitor.richTextBuilder);
             },
           ),
         ),
@@ -58,10 +61,12 @@ class UlOrOLNode extends ElementNode {
 /// The list items may be separated by any number of blank lines.
 class ListNode extends ElementNode {
   final MarkdownConfig config;
+  final WidgetVisitor visitor;
 
-  ListNode(this.config);
+  ListNode(this.config, this.visitor);
 
   int _index = 0;
+
   int get index => _index;
 
   bool get isOrdered {
@@ -88,7 +93,10 @@ class ListNode extends ElementNode {
             (parentStyle?.height ?? config.p.textStyle.height ?? 1.2);
     Widget marker;
     if (isCheckbox) {
-      marker = ProxyRichText(children.removeAt(0).build());
+      marker = ProxyRichText(
+        children.removeAt(0).build(),
+        richTextBuilder: visitor.richTextBuilder,
+      );
     } else {
       marker = config.li.marker?.call(isOrdered, depth, index) ??
           getDefaultMarker(isOrdered, depth, parentStyle?.color, index,
@@ -118,6 +126,7 @@ class ListNode extends ElementNode {
                     ],
                   ],
                 ),
+                richTextBuilder: visitor.richTextBuilder,
               ),
             ),
           ],
