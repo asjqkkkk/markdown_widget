@@ -6,8 +6,10 @@ import 'package:highlight/highlight.dart' as hi;
 
 void main() {
   testWidgets('test asset img node', (tester) async {
-    final imgNode = ImageNode({'width': '100', 'height': '200', 'src': ''},
-        MarkdownConfig.defaultConfig.copy(configs: [PreConfig().copy()]));
+    final imgNode = ImageNode(
+        {'width': '100', 'height': '200', 'src': ''},
+        MarkdownConfig.defaultConfig.copy(configs: [PreConfig().copy()]),
+        WidgetVisitor());
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -25,7 +27,7 @@ void main() {
 
   testWidgets('test online img node', (tester) async {
     final imgNode = ImageNode({'width': '100', 'height': '200', 'src': 'http'},
-        MarkdownConfig.defaultConfig);
+        MarkdownConfig.defaultConfig, WidgetVisitor());
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
         navigatorObservers: [_CustomObserver()],
@@ -49,7 +51,8 @@ void main() {
           ImgConfig(builder: (url, attribute) {
             return Container(width: 100, height: 100);
           }),
-        ]));
+        ]),
+        WidgetVisitor());
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -69,7 +72,8 @@ void main() {
           ImgConfig(builder: (url, attribute) {
             return Container(width: 100, height: 100);
           })
-        ])));
+        ]),
+        WidgetVisitor()));
     linkNode.children.add(TextNode(text: 'test'));
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(

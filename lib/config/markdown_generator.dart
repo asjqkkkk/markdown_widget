@@ -16,7 +16,8 @@ class MarkdownGenerator {
   final SpanNodeAcceptCallback? onNodeAccepted;
   final m.ExtensionSet? extensionSet;
   final TextNodeGenerator? textGenerator;
-  final SpanNodeBuilder? onSpanNodeBuild;
+  final SpanNodeBuilder? spanNodeBuilder;
+  final RichTextBuilder? richTextBuilder;
 
   MarkdownGenerator({
     this.inlineSyntaxList = const [],
@@ -26,7 +27,8 @@ class MarkdownGenerator {
     this.onNodeAccepted,
     this.extensionSet,
     this.textGenerator,
-    this.onSpanNodeBuild,
+    this.spanNodeBuilder,
+    this.richTextBuilder,
   });
 
   ///convert [data] to widgets
@@ -59,13 +61,14 @@ class MarkdownGenerator {
     onTocList?.call(tocList);
     final List<Widget> widgets = [];
     spans.forEach((span) {
-      widgets.add(Padding(
-        padding: linesMargin,
-        child: Text.rich(onSpanNodeBuild?.call(span) ?? span.build()),
-      ));
+      final textSpan = spanNodeBuilder?.call(span) ?? span.build();
+      final richText = richTextBuilder?.call(textSpan) ?? Text.rich(textSpan);
+      widgets.add(Padding(padding: linesMargin, child: richText));
     });
     return widgets;
   }
 }
 
 typedef SpanNodeBuilder = TextSpan Function(SpanNode spanNode);
+
+typedef RichTextBuilder = Widget Function(InlineSpan span);

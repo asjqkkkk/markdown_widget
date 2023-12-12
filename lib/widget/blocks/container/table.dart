@@ -85,8 +85,9 @@ class TableNode extends ElementNode {
 
 class THeadNode extends ElementNode {
   final MarkdownConfig config;
+  final WidgetVisitor visitor;
 
-  THeadNode(this.config);
+  THeadNode(this.config, this.visitor);
 
   List<TableRow> get rows => List.generate(children.length, (index) {
         final trChild = children[index] as TrNode;
@@ -97,7 +98,10 @@ class THeadNode extends ElementNode {
               return Center(
                 child: Padding(
                     padding: config.table.headPadding,
-                    child: ProxyRichText(currentTh.build())),
+                    child: ProxyRichText(
+                      currentTh.build(),
+                      richTextBuilder: visitor.richTextBuilder,
+                    )),
               );
             }));
       });
@@ -113,8 +117,9 @@ class THeadNode extends ElementNode {
 
 class TBodyNode extends ElementNode {
   final MarkdownConfig config;
+  final WidgetVisitor visitor;
 
-  TBodyNode(this.config);
+  TBodyNode(this.config, this.visitor);
 
   List<TableRow> buildRows(int cellCount) {
     return List.generate(children.length, (index) {
@@ -124,7 +129,11 @@ class TBodyNode extends ElementNode {
       for (var i = 0; i < child.children.length; ++i) {
         var c = child.children[i];
         widgets[i] = Padding(
-            padding: config.table.bodyPadding, child: ProxyRichText(c.build()));
+            padding: config.table.bodyPadding,
+            child: ProxyRichText(
+              c.build(),
+              richTextBuilder: visitor.richTextBuilder,
+            ));
       }
       return TableRow(
           decoration: config.table.bodyRowDecoration, children: widgets);
@@ -150,8 +159,9 @@ class ThNode extends ElementNode {
 
 class TdNode extends ElementNode {
   final Map<String, String> attribute;
+  final WidgetVisitor visitor;
 
-  TdNode(this.attribute);
+  TdNode(this.attribute, this.visitor);
 
   @override
   InlineSpan build() {
@@ -161,16 +171,26 @@ class TdNode extends ElementNode {
       result = WidgetSpan(
           child: Align(
               alignment: Alignment.centerLeft,
-              child: ProxyRichText(childrenSpan)));
+              child: ProxyRichText(
+                childrenSpan,
+                richTextBuilder: visitor.richTextBuilder,
+              )));
     } else if (align.contains('center')) {
       result = WidgetSpan(
           child: Align(
-              alignment: Alignment.center, child: ProxyRichText(childrenSpan)));
+              alignment: Alignment.center,
+              child: ProxyRichText(
+                childrenSpan,
+                richTextBuilder: visitor.richTextBuilder,
+              )));
     } else if (align.contains('right')) {
       result = WidgetSpan(
           child: Align(
               alignment: Alignment.centerRight,
-              child: ProxyRichText(childrenSpan)));
+              child: ProxyRichText(
+                childrenSpan,
+                richTextBuilder: visitor.richTextBuilder,
+              )));
     }
     return result;
   }

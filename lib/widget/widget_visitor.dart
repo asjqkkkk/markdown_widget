@@ -3,6 +3,8 @@ import 'package:markdown/markdown.dart' as m;
 import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/widget/all.dart';
 
+import '../config/markdown_generator.dart';
+
 ///use [WidgetVisitor] that can transform MarkdownNode to [SpanNode]s
 ///and you can use [SpanNode] with [Text.rich] or [RichText] to get widget
 class WidgetVisitor implements m.NodeVisitor {
@@ -29,11 +31,15 @@ class WidgetVisitor implements m.NodeVisitor {
   ///use [textGenerator] to custom your own [TextNode]
   final TextNodeGenerator? textGenerator;
 
+  ///use [richTextBuilder] to custom your own [Text.rich]
+  final RichTextBuilder? richTextBuilder;
+
   WidgetVisitor({
     MarkdownConfig? config,
     this.generators = const [],
     this.onNodeAccepted,
     this.textGenerator,
+    this.richTextBuilder,
   }) {
     this.config = config ?? MarkdownConfig.defaultConfig;
     generators.forEach((e) {
@@ -90,27 +96,34 @@ class WidgetVisitor implements m.NodeVisitor {
 
   ///every tag has it's own [SpanNodeGenerator]
   final _tag2node = <String, SpanNodeGenerator>{
-    MarkdownTag.h1.name: (e, config, visitor) => HeadingNode(config.h1),
-    MarkdownTag.h2.name: (e, config, visitor) => HeadingNode(config.h2),
-    MarkdownTag.h3.name: (e, config, visitor) => HeadingNode(config.h3),
-    MarkdownTag.h4.name: (e, config, visitor) => HeadingNode(config.h4),
-    MarkdownTag.h5.name: (e, config, visitor) => HeadingNode(config.h5),
-    MarkdownTag.h6.name: (e, config, visitor) => HeadingNode(config.h6),
-    MarkdownTag.li.name: (e, config, visitor) => ListNode(config),
+    MarkdownTag.h1.name: (e, config, visitor) =>
+        HeadingNode(config.h1, visitor),
+    MarkdownTag.h2.name: (e, config, visitor) =>
+        HeadingNode(config.h2, visitor),
+    MarkdownTag.h3.name: (e, config, visitor) =>
+        HeadingNode(config.h3, visitor),
+    MarkdownTag.h4.name: (e, config, visitor) =>
+        HeadingNode(config.h4, visitor),
+    MarkdownTag.h5.name: (e, config, visitor) =>
+        HeadingNode(config.h5, visitor),
+    MarkdownTag.h6.name: (e, config, visitor) =>
+        HeadingNode(config.h6, visitor),
+    MarkdownTag.li.name: (e, config, visitor) => ListNode(config, visitor),
     MarkdownTag.ol.name: (e, config, visitor) =>
-        UlOrOLNode(e.tag, e.attributes, config.li),
+        UlOrOLNode(e.tag, e.attributes, config.li, visitor),
     MarkdownTag.ul.name: (e, config, visitor) =>
-        UlOrOLNode(e.tag, e.attributes, config.li),
+        UlOrOLNode(e.tag, e.attributes, config.li, visitor),
     MarkdownTag.blockquote.name: (e, config, visitor) =>
-        BlockquoteNode(config.blockquote),
-    MarkdownTag.pre.name: (e, config, visitor) => CodeBlockNode(e, config.pre),
+        BlockquoteNode(config.blockquote, visitor),
+    MarkdownTag.pre.name: (e, config, visitor) =>
+        CodeBlockNode(e, config.pre, visitor),
     MarkdownTag.hr.name: (e, config, visitor) => HrNode(config.hr),
     MarkdownTag.table.name: (e, config, visitor) => TableNode(config),
-    MarkdownTag.thead.name: (e, config, visitor) => THeadNode(config),
-    MarkdownTag.tbody.name: (e, config, visitor) => TBodyNode(config),
+    MarkdownTag.thead.name: (e, config, visitor) => THeadNode(config, visitor),
+    MarkdownTag.tbody.name: (e, config, visitor) => TBodyNode(config, visitor),
     MarkdownTag.tr.name: (e, config, visitor) => TrNode(),
     MarkdownTag.th.name: (e, config, visitor) => ThNode(),
-    MarkdownTag.td.name: (e, config, visitor) => TdNode(e.attributes),
+    MarkdownTag.td.name: (e, config, visitor) => TdNode(e.attributes, visitor),
     MarkdownTag.p.name: (e, config, visitor) => ParagraphNode(config.p),
     MarkdownTag.input.name: (e, config, visitor) =>
         InputNode(e.attributes, config),
@@ -123,7 +136,7 @@ class WidgetVisitor implements m.NodeVisitor {
     MarkdownTag.code.name: (e, config, visitor) =>
         CodeNode(e.textContent, config.code),
     MarkdownTag.img.name: (e, config, visitor) =>
-        ImageNode(e.attributes, config),
+        ImageNode(e.attributes, config, visitor),
   };
 
   SpanNode getNodeByElement(m.Element element, MarkdownConfig config) {

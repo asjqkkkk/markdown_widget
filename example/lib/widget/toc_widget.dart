@@ -4,13 +4,13 @@ import 'package:markdown_widget/markdown_widget.dart';
 import '../state/root_state.dart';
 
 class TocItemWidget extends StatelessWidget {
-  const TocItemWidget(
-      {Key? key,
-      this.isCurrent = false,
-      required this.toc,
-      this.onTap,
-      this.fontSize = 14.0})
-      : super(key: key);
+  const TocItemWidget({
+    Key? key,
+    this.isCurrent = false,
+    required this.toc,
+    this.onTap,
+    this.fontSize = 14.0,
+  }) : super(key: key);
 
   final bool isCurrent;
   final Toc toc;

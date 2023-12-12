@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../config/markdown_generator.dart';
+
 ///use [ProxyRichText] to give `textScaleFactor` a default value
 class ProxyRichText extends StatelessWidget {
   final InlineSpan textSpan;
-  final TextStyle? style;
+  final RichTextBuilder? richTextBuilder;
 
   const ProxyRichText(
     this.textSpan, {
     Key? key,
-    this.style,
+    this.richTextBuilder,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      textSpan,
-      textScaleFactor: 1.0,
-      style: style,
-    );
+    return richTextBuilder?.call(textSpan) ?? Text.rich(textSpan);
   }
 }
