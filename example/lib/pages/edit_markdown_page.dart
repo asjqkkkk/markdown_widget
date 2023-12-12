@@ -87,8 +87,8 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                 final config = isDark
                     ? MarkdownConfig.darkConfig
                     : MarkdownConfig.defaultConfig;
-                final codeWrapper = (child, text) =>
-                    CodeWrapperWidget(child: child, text: text);
+                final codeWrapper = (child, text, language) =>
+                    CodeWrapperWidget(child, text, language);
                 return MarkdownWidget(
                   data: initialText + controller.text,
                   config: config.copy(configs: [

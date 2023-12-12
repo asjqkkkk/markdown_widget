@@ -4,8 +4,9 @@ import 'package:flutter/services.dart';
 class CodeWrapperWidget extends StatefulWidget {
   final Widget child;
   final String text;
+  final String language;
 
-  const CodeWrapperWidget({Key? key, required this.child, required this.text})
+  const CodeWrapperWidget(this.child, this.text, this.language, {Key? key})
       : super(key: key);
 
   @override
@@ -30,22 +31,37 @@ class _PreWrapperState extends State<CodeWrapperWidget> {
         Align(
           child: Container(
             padding: const EdgeInsets.all(16.0),
-            child: InkWell(
-              child: AnimatedSwitcher(
-                child: _switchWidget,
-                duration: Duration(milliseconds: 200),
-              ),
-              onTap: () async {
-                if (hasCopied) return;
-                await Clipboard.setData(ClipboardData(text: widget.text));
-                _switchWidget = Icon(Icons.check, key: UniqueKey());
-                refresh();
-                Future.delayed(Duration(seconds: 2), () {
-                  hasCopied = false;
-                  _switchWidget = Icon(Icons.copy_rounded, key: UniqueKey());
-                  refresh();
-                });
-              },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SelectionContainer.disabled(
+                    child: Container(
+                  child: Text(widget.language),
+                  margin: EdgeInsets.only(right: 2),
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: Colors.black, width: 0.5)),
+                )),
+                InkWell(
+                  child: AnimatedSwitcher(
+                    child: _switchWidget,
+                    duration: Duration(milliseconds: 200),
+                  ),
+                  onTap: () async {
+                    if (hasCopied) return;
+                    await Clipboard.setData(ClipboardData(text: widget.text));
+                    _switchWidget = Icon(Icons.check, key: UniqueKey());
+                    refresh();
+                    Future.delayed(Duration(seconds: 2), () {
+                      hasCopied = false;
+                      _switchWidget =
+                          Icon(Icons.copy_rounded, key: UniqueKey());
+                      refresh();
+                    });
+                  },
+                ),
+              ],
             ),
           ),
           alignment: Alignment.topRight,

@@ -18,7 +18,7 @@ dependencies:
 
 
   # to click link
-  url_launcher: ^6.1.14
+  url_launcher: ^6.2.2
   # to get the index number on scroll for listview
   visibility_detector: ^0.4.0+2
   # make listview available to jump to index

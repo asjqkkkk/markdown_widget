@@ -4,21 +4,34 @@ import 'package:flutter_highlight/themes/a11y-dark.dart';
 import 'package:flutter_highlight/themes/a11y-light.dart';
 import 'package:highlight/highlight.dart' as hi;
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:markdown/markdown.dart' as m;
 
 ///Tag: [MarkdownTag.pre]
 ///
 ///An indented code block is composed of one or more indented chunks separated by blank lines
 ///A code fence is a sequence of at least three consecutive backtick characters (`) or tildes (~)
 class CodeBlockNode extends ElementNode {
-  CodeBlockNode(this.content, this.preConfig);
+  CodeBlockNode(this.element, this.preConfig);
 
-  final String content;
+  String get content => element.textContent;
   final PreConfig preConfig;
+  final m.Element element;
 
   @override
   InlineSpan build() {
+    String language = preConfig.language;
+    try {
+      final languageValue =
+          (element.children?.first as m.Element).attributes['class']!;
+      language = languageValue.split('-').last;
+    } catch (e) {
+      debugPrint('get language error:$e');
+    }
     final splitContents = content.trim().split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
     if (splitContents.last.isEmpty) splitContents.removeLast();
+    final codeBuilder = preConfig.builder;
+    if (codeBuilder != null)
+      return WidgetSpan(child: codeBuilder.call(content, language));
     final widget = Container(
       decoration: preConfig.decoration,
       margin: preConfig.margin,
@@ -33,7 +46,7 @@ class CodeBlockNode extends ElementNode {
             return ProxyRichText(TextSpan(
               children: highLightSpans(
                 currentContent,
-                language: preConfig.language,
+                language: language,
                 theme: preConfig.theme,
                 textStyle: style,
                 styleNotMatched: preConfig.styleNotMatched,
@@ -44,7 +57,7 @@ class CodeBlockNode extends ElementNode {
       ),
     );
     return WidgetSpan(
-        child: preConfig.wrapper?.call(widget, content) ?? widget);
+        child: preConfig.wrapper?.call(widget, content, language) ?? widget);
   }
 
   @override
@@ -120,6 +133,7 @@ class PreConfig implements LeafConfig {
   /// the [styleNotMatched] is used to set a default TextStyle for code that does not match any theme.
   final TextStyle? styleNotMatched;
   final CodeWrapper? wrapper;
+  final CodeBuilder? builder;
 
   ///see package:flutter_highlight/themes/
   final Map<String, TextStyle> theme;
@@ -137,7 +151,8 @@ class PreConfig implements LeafConfig {
     this.theme = a11yLightTheme,
     this.language = 'dart',
     this.wrapper,
-  });
+    this.builder,
+  }) : assert(builder == null || wrapper == null);
 
   static PreConfig get darkConfig => PreConfig(
         decoration: const BoxDecoration(
@@ -175,4 +190,10 @@ class PreConfig implements LeafConfig {
   String get tag => MarkdownTag.pre.name;
 }
 
-typedef CodeWrapper = Widget Function(Widget child, String code);
+typedef CodeWrapper = Widget Function(
+  Widget child,
+  String code,
+  String language,
+);
+
+typedef CodeBuilder = Widget Function(String code, String language);
