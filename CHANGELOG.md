@@ -1,3 +1,6 @@
+### [2.3.2+1]
+- Remove the use of `textScaleFactor`
+
 ### [2.3.2]
 - Feat: auto check code language and show it
 - Feat: add `RichTextBuilder`

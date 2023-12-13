@@ -224,8 +224,7 @@ class _OlMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectionContainer.disabled(
         child: Text('${index + 1}.',
-            style: config.textStyle.copyWith(color: color),
-            textScaleFactor: 1.0));
+            style: config.textStyle.copyWith(color: color)));
   }
 }
 
