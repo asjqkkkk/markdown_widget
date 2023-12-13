@@ -39,6 +39,13 @@ If you want to use your own Column or other list widget, you can use `MarkdownGe
       Column(children: MarkdownGenerator().buildWidgets(data));
 ```
 
+Or use `MarkdownBlock`
+
+```
+  Widget buildMarkdown() =>
+      SingleChildScrollView(child: MarkdownBlock(data: data));
+```
+
 ## 🌠Night mode
 
 `markdown_widget` supports night mode by default. Simply use a different `MarkdownConfig` to enable it.
@@ -46,10 +53,18 @@ If you want to use your own Column or other list widget, you can use `MarkdownGe
 ```
   Widget buildMarkdown(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final config = isDark
+        ? MarkdownConfig.darkConfig
+        : MarkdownConfig.defaultConfig;
+    final codeWrapper = (child, text, language) =>
+        CodeWrapperWidget(child, text, language);
     return MarkdownWidget(
         data: data,
-        config:
-            isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig);
+        config: config.copy(configs: [
+        isDark
+        ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
+        : PreConfig().copy(wrapper: codeWrapper)
+    ]));
   }
 ```
 
@@ -83,6 +98,8 @@ You can customize the style and click events of links, like this
 Using the TOC is very simple
 
 ```
+  final tocController = TocController();
+
   Widget buildTocWidget() => TocWidget(controller: tocController);
 
   Widget buildMarkdown() => MarkdownWidget(data: data, tocController: tocController);
@@ -109,7 +126,7 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
   Widget buildMarkdown() => MarkdownWidget(
       data: data,
       config: MarkdownConfig(configs: [
-        PreConfig(theme: a11yLightTheme, language: 'dart'),
+        PreConfig(theme: a11yLightTheme),
       ]));
 ```
 
