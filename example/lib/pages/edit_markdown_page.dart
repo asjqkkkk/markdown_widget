@@ -97,10 +97,13 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                         : PreConfig().copy(wrapper: codeWrapper)
                   ]),
                   markdownGenerator: MarkdownGenerator(
-                      generators: [videoGeneratorWithTag, latexGenerator],
-                      inlineSyntaxList: [LatexSyntax()],
-                      textGenerator: (node, config, visitor) =>
-                          CustomTextNode(node.textContent, config, visitor)),
+                    generators: [videoGeneratorWithTag, latexGenerator],
+                    inlineSyntaxList: [LatexSyntax()],
+                    textGenerator: (node, config, visitor) =>
+                        CustomTextNode(node.textContent, config, visitor),
+                    richTextBuilder: (span) =>
+                        Text.rich(span, textScaleFactor: 1),
+                  ),
                 );
               }),
         ),

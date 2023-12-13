@@ -92,9 +92,11 @@ class _HtmlPageState extends State<HtmlPage> {
                   : PreConfig().copy(wrapper: codeWrapper)
             ]),
             markdownGenerator: MarkdownGenerator(
-                generators: [videoGeneratorWithTag],
-                textGenerator: (node, config, visitor) =>
-                    CustomTextNode(node.textContent, config, visitor)),
+              generators: [videoGeneratorWithTag],
+              textGenerator: (node, config, visitor) =>
+                  CustomTextNode(node.textContent, config, visitor),
+              richTextBuilder: (span) => Text.rich(span, textScaleFactor: 1),
+            ),
           );
         });
   }
