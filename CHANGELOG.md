@@ -1,3 +1,9 @@
+### [2.3.2]
+- Feat: auto check code language and show it
+- Feat: add `RichTextBuilder`
+- Update README
+- Fix: sub lists flexible layout
+
 ### [2.3.1]
 - Fix: config not used in markdown widget
 
