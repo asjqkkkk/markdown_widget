@@ -91,8 +91,10 @@ class _LatexPageState extends State<LatexPage> {
                   : PreConfig().copy(wrapper: codeWrapper)
             ]),
             markdownGenerator: MarkdownGenerator(
-                generators: [latexGenerator],
-                inlineSyntaxList: [LatexSyntax()]),
+              generators: [latexGenerator],
+              inlineSyntaxList: [LatexSyntax()],
+              richTextBuilder: (span) => Text.rich(span, textScaleFactor: 1),
+            ),
           );
         });
   }

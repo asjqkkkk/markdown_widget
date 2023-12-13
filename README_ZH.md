@@ -39,16 +39,31 @@ class MarkdownPage extends StatelessWidget {
       Column(children: MarkdownGenerator().buildWidgets(data));
 ```
 
+或者直接使用 `MarkdownBlock`
+
+```
+  Widget buildMarkdown() =>
+      SingleChildScrollView(child: MarkdownBlock(data: data));
+```
+
 ## 🌠夜间模式
 
 `markdown_widget` 默认支持夜间模式，只需要使用不同的 `MarkdownConfig` 即可
 ```
   Widget buildMarkdown(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final config = isDark
+        ? MarkdownConfig.darkConfig
+        : MarkdownConfig.defaultConfig;
+    final codeWrapper = (child, text, language) =>
+        CodeWrapperWidget(child, text, language);
     return MarkdownWidget(
         data: data,
-        config:
-            isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig);
+        config: config.copy(configs: [
+        isDark
+        ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
+        : PreConfig().copy(wrapper: codeWrapper)
+    ]));
   }
 ```
 
@@ -83,6 +98,8 @@ class MarkdownPage extends StatelessWidget {
 使用TOC非常的简单
 
 ```
+  final tocController = TocController();
+
   Widget buildTocWidget() => TocWidget(controller: tocController);
 
   Widget buildMarkdown() => MarkdownWidget(data: data, tocController: tocController);
@@ -108,7 +125,7 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
   Widget buildMarkdown() => MarkdownWidget(
       data: data,
       config: MarkdownConfig(configs: [
-        PreConfig(theme: a11yLightTheme, language: 'dart'),
+        PreConfig(theme: a11yLightTheme),
       ]));
 ```
 
