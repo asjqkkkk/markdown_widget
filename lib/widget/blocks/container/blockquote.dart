@@ -51,6 +51,9 @@ class BlockquoteConfig implements ContainerConfig {
     this.margin = const EdgeInsets.fromLTRB(0, 8, 0, 8),
   });
 
+  static BlockquoteConfig get darkConfig =>
+      BlockquoteConfig(textColor: const Color(0xffd0d7de));
+
   @nonVirtual
   @override
   String get tag => MarkdownTag.blockquote.name;

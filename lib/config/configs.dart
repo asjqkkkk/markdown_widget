@@ -170,6 +170,7 @@ class MarkdownConfig {
         PreConfig.darkConfig,
         PConfig.darkConfig,
         CodeConfig.darkConfig,
+        BlockquoteConfig.darkConfig,
       ]);
 
   ///the key of [_tag2Config] is tag, the value is [WidgetConfig]
