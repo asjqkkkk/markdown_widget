@@ -20,19 +20,20 @@ class CodeBlockNode extends ElementNode {
 
   @override
   InlineSpan build() {
-    String language = preConfig.language;
+    String? language = preConfig.language;
     try {
       final languageValue =
           (element.children?.first as m.Element).attributes['class']!;
       language = languageValue.split('-').last;
     } catch (e) {
+      language = null;
       debugPrint('get language error:$e');
     }
     final splitContents = content.trim().split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
     if (splitContents.last.isEmpty) splitContents.removeLast();
     final codeBuilder = preConfig.builder;
     if (codeBuilder != null)
-      return WidgetSpan(child: codeBuilder.call(content, language));
+      return WidgetSpan(child: codeBuilder.call(content, language ?? ''));
     final widget = Container(
       decoration: preConfig.decoration,
       margin: preConfig.margin,
@@ -48,7 +49,7 @@ class CodeBlockNode extends ElementNode {
               TextSpan(
                 children: highLightSpans(
                   currentContent,
-                  language: language,
+                  language: language ?? preConfig.language,
                   theme: preConfig.theme,
                   textStyle: style,
                   styleNotMatched: preConfig.styleNotMatched,
@@ -61,7 +62,8 @@ class CodeBlockNode extends ElementNode {
       ),
     );
     return WidgetSpan(
-        child: preConfig.wrapper?.call(widget, content, language) ?? widget);
+        child:
+            preConfig.wrapper?.call(widget, content, language ?? '') ?? widget);
   }
 
   @override
