@@ -3,6 +3,11 @@ description: A new markdown package. It supports TOC function, code highlighting
 version: 2.3.2+2
 homepage: https://github.com/asjqkkkk/markdown_widget
 
+topics:
+  - markdown
+  - flutter
+  - widgets
+
 environment:
   sdk: '>=3.0.0 <4.0.0'
 
