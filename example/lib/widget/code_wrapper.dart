@@ -25,6 +25,7 @@ class _PreWrapperState extends State<CodeWrapperWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       children: [
         widget.child,
@@ -34,15 +35,18 @@ class _PreWrapperState extends State<CodeWrapperWidget> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SelectionContainer.disabled(
-                    child: Container(
-                  child: Text(widget.language),
-                  margin: EdgeInsets.only(right: 2),
-                  padding: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: Colors.black, width: 0.5)),
-                )),
+                if (widget.language.isNotEmpty)
+                  SelectionContainer.disabled(
+                      child: Container(
+                    child: Text(widget.language),
+                    margin: EdgeInsets.only(right: 2),
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                            width: 0.5,
+                            color: isDark ? Colors.white : Colors.black)),
+                  )),
                 InkWell(
                   child: AnimatedSwitcher(
                     child: _switchWidget,

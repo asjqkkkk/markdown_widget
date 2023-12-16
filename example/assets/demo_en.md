@@ -17,7 +17,7 @@ A simple and easy-to-use markdown rendering component.
 
 Before starting, you can try out the online demo by clicking [demo](https://asjqkkkk.github.io/markdown_widget/)
 
-```
+```dart
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
@@ -34,14 +34,14 @@ class MarkdownPage extends StatelessWidget {
 ```
 If you want to use your own Column or other list widget, you can use `MarkdownGenerator`
 
-```
+```dart
   Widget buildMarkdown() =>
       Column(children: MarkdownGenerator().buildWidgets(data));
 ```
 
 Or use `MarkdownBlock`
 
-```
+```dart
   Widget buildMarkdown() =>
       SingleChildScrollView(child: MarkdownBlock(data: data));
 ```
@@ -50,7 +50,7 @@ Or use `MarkdownBlock`
 
 `markdown_widget` supports night mode by default. Simply use a different `MarkdownConfig` to enable it.
 
-```
+```dart
   Widget buildMarkdown(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final config = isDark
@@ -77,7 +77,7 @@ Default mode | Night mode
 
 You can customize the style and click events of links, like this
 
-```
+```dart
   Widget buildMarkdown() => MarkdownWidget(
       data: data,
       config: MarkdownConfig(configs: [
@@ -97,7 +97,7 @@ You can customize the style and click events of links, like this
 
 Using the TOC is very simple
 
-```
+```dart
   final tocController = TocController();
 
   Widget buildTocWidget() => TocWidget(controller: tocController);
@@ -120,7 +120,7 @@ Using the TOC is very simple
 
 Highlighting code supports multiple themes.
 
-```
+```dart
 import 'package:flutter_highlight/themes/a11y-light.dart';
 
   Widget buildMarkdown() => MarkdownWidget(
