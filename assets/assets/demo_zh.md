@@ -17,7 +17,7 @@
 
 在开始之前,你可以先体验一下在线 demo [点击体验](https://asjqkkkk.github.io/markdown_widget/)
 
-```
+```dart
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
@@ -35,14 +35,14 @@ class MarkdownPage extends StatelessWidget {
 
 如果你想使用自己的 Column 或者其他列表 Widget, 你可以使用 `MarkdownGenerator`
 
-```
+```dart
   Widget buildMarkdown() =>
       Column(children: MarkdownGenerator().buildWidgets(data));
 ```
 
 或者直接使用 `MarkdownBlock`
 
-```
+```dart
   Widget buildMarkdown() =>
       SingleChildScrollView(child: MarkdownBlock(data: data));
 ```
@@ -50,7 +50,7 @@ class MarkdownPage extends StatelessWidget {
 ## 🌠夜间模式
 
 `markdown_widget` 默认支持夜间模式，只需要使用不同的 `MarkdownConfig` 即可
-```
+```dart
   Widget buildMarkdown(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final config = isDark
@@ -77,7 +77,7 @@ class MarkdownPage extends StatelessWidget {
 
 你可以自定义链接样式和点击事件，比如下面这样
 
-```
+```dart
   Widget buildMarkdown() => MarkdownWidget(
       data: data,
       config: MarkdownConfig(configs: [
@@ -97,7 +97,7 @@ class MarkdownPage extends StatelessWidget {
 
 使用TOC非常的简单
 
-```
+```dart
   final tocController = TocController();
 
   Widget buildTocWidget() => TocWidget(controller: tocController);
@@ -119,7 +119,7 @@ class MarkdownPage extends StatelessWidget {
 ## 🎈代码高亮
 
 代码高亮支持多种主题
-```
+```dart
 import 'package:flutter_highlight/themes/a11y-light.dart';
 
   Widget buildMarkdown() => MarkdownWidget(
