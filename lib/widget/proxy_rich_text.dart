@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../config/markdown_generator.dart';
@@ -16,9 +15,6 @@ class ProxyRichText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final span = !kIsWeb
-        ? textSpan
-        : TextSpan(children: [textSpan, TextSpan(text: '\r')]);
-    return richTextBuilder?.call(span) ?? Text.rich(span);
+    return richTextBuilder?.call(textSpan) ?? Text.rich(textSpan);
   }
 }
