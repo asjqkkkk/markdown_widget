@@ -20,8 +20,11 @@ class CustomTextNode extends ElementNode {
     }
     final spans = parseHtml(
       m.Text(text),
-      visitor:
-          WidgetVisitor(config: visitor.config, generators: visitor.generators),
+      visitor: WidgetVisitor(
+        config: visitor.config,
+        generators: visitor.generators,
+        richTextBuilder: visitor.richTextBuilder,
+      ),
       parentStyle: parentStyle,
     );
     spans.forEach((element) {

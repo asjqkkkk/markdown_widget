@@ -49,6 +49,7 @@ class MarkdownGenerator {
         config: mdConfig,
         generators: generators,
         textGenerator: textGenerator,
+        richTextBuilder: richTextBuilder,
         onNodeAccepted: (node, index) {
           onNodeAccepted?.call(node, index);
           if (node is HeadingNode) {
