@@ -24,48 +24,67 @@ class Base64DataUrlImage extends StatefulWidget {
   final int? cacheHeight;
 
   const Base64DataUrlImage(
-    this.imageUrl, {
-    Key? key,
-    this.width,
-    this.height,
-    this.fit,
-    this.errorBuilder,
-    this.semanticLabel,
-    this.excludeFromSemantics = false,
-    this.color,
-    this.opacity,
-    this.colorBlendMode,
-    this.alignment = Alignment.center,
-    this.repeat = ImageRepeat.noRepeat,
-    this.centerSlice,
-    this.matchTextDirection = false,
-    this.gaplessPlayback = false,
-    this.isAntiAlias = false,
-    this.filterQuality = FilterQuality.low,
-    this.cacheWidth,
-    this.cacheHeight,
-  }) : super(key: key);
-
+      this.imageUrl, {
+        Key? key,
+        this.width,
+        this.height,
+        this.fit,
+        this.errorBuilder,
+        this.semanticLabel,
+        this.excludeFromSemantics = false,
+        this.color,
+        this.opacity,
+        this.colorBlendMode,
+        this.alignment = Alignment.center,
+        this.repeat = ImageRepeat.noRepeat,
+        this.centerSlice,
+        this.matchTextDirection = false,
+        this.gaplessPlayback = false,
+        this.isAntiAlias = false,
+        this.filterQuality = FilterQuality.low,
+        this.cacheWidth,
+        this.cacheHeight,
+      }) : super(key: key);
   @override
   _Base64DataUrlImageState createState() => _Base64DataUrlImageState();
 
-  static Uint8List _dataUrlToBytes(String dataUrl) =>
-      base64.decode(dataUrl.split(',').last);
+  static Uint8List? _dataUrlToBytes(String dataUrl) {
+    try {
+      return base64.decode(dataUrl.split(',').last);
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 class _Base64DataUrlImageState extends State<Base64DataUrlImage> {
-  late Uint8List imageBytes;
+  Uint8List? imageBytes;
+  Object? error;
+  StackTrace? stackTrace;
 
   @override
   void initState() {
     super.initState();
-    imageBytes = Base64DataUrlImage._dataUrlToBytes(widget.imageUrl);
+    try {
+      imageBytes = Base64DataUrlImage._dataUrlToBytes(widget.imageUrl);
+      if (imageBytes == null) {
+        throw Exception('Failed to decode image data.');
+      }
+    } catch (e, st) {
+      error = e;
+      stackTrace = st;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (error != null) {
+      return widget.errorBuilder?.call(context, error!, stackTrace) ??
+          Center(child: Text('<image>'));
+    }
+
     return Image.memory(
-      imageBytes,
+      imageBytes!,
       key: widget.key,
       scale: 1.0,
       frameBuilder: null,
@@ -90,3 +109,4 @@ class _Base64DataUrlImageState extends State<Base64DataUrlImage> {
     );
   }
 }
+
