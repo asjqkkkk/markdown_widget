@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-
-Uint8List _dataUrlToBytes(String url) => base64.decode(url.split(',').last);
+import 'package:markdown_widget/widget/inlines/data_url_image.dart';
 
 ///Tag: [MarkdownTag.img]
 class ImageNode extends SpanNode {
@@ -27,7 +26,7 @@ class ImageNode extends SpanNode {
     final isNetImage = imageUrl.startsWith('http');
     final isDataUrl = imageUrl.startsWith("data:");
 
-    final Image imgWidget;
+    final Widget imgWidget;
     if (isNetImage) {
       imgWidget = Image.network(imageUrl,
           width: width,
@@ -36,7 +35,7 @@ class ImageNode extends SpanNode {
         return buildErrorImage(imageUrl, alt, error);
       });
     } else if (isDataUrl) {
-      imgWidget = Image.memory(_dataUrlToBytes(imageUrl),
+      imgWidget = Base64DataUrlImage(imageUrl,
           width: width,
           height: height,
           fit: BoxFit.cover, errorBuilder: (ctx, error, stacktrace) {
