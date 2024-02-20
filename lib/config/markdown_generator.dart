@@ -42,7 +42,7 @@ class MarkdownGenerator {
       inlineSyntaxes: inlineSyntaxList,
       blockSyntaxes: blockSyntaxList,
     );
-    final List<String> lines = data.split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
+    final List<String> lines = data.split(RegExp(r'(\r?\n)|(\r)'));
     final List<m.Node> nodes = document.parseLines(lines);
     final List<Toc> tocList = [];
     final visitor = WidgetVisitor(
