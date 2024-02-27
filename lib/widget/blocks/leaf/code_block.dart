@@ -29,7 +29,9 @@ class CodeBlockNode extends ElementNode {
       language = null;
       debugPrint('get language error:$e');
     }
-    final splitContents = content.trim().split(RegExp(r'(\r?\n)|(\r)'));
+    final splitContents = content
+        .trim()
+        .split(visitor.splitRegExp ?? WidgetVisitor.defaultSplitRegExp);
     if (splitContents.last.isEmpty) splitContents.removeLast();
     final codeBuilder = preConfig.builder;
     if (codeBuilder != null)

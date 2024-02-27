@@ -39,7 +39,8 @@ List<SpanNode> parseHtml(
   TextStyle? parentStyle,
 }) {
   try {
-    final text = node.textContent.replaceAll(RegExp(r'(\r?\n)|(\r)'), '');
+    final text = node.textContent.replaceAll(
+        visitor?.splitRegExp ?? WidgetVisitor.defaultSplitRegExp, '');
     if (!text.contains(htmlRep)) return [TextNode(text: node.text)];
     h.DocumentFragment document = parseFragment(text);
     return HtmlToSpanVisitor(visitor: visitor, parentStyle: parentStyle)

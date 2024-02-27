@@ -18,6 +18,7 @@ class MarkdownGenerator {
   final TextNodeGenerator? textGenerator;
   final SpanNodeBuilder? spanNodeBuilder;
   final RichTextBuilder? richTextBuilder;
+  final RegExp? splitRegExp;
 
   MarkdownGenerator({
     this.inlineSyntaxList = const [],
@@ -29,6 +30,7 @@ class MarkdownGenerator {
     this.textGenerator,
     this.spanNodeBuilder,
     this.richTextBuilder,
+    this.splitRegExp,
   });
 
   ///convert [data] to widgets
@@ -42,7 +44,8 @@ class MarkdownGenerator {
       inlineSyntaxes: inlineSyntaxList,
       blockSyntaxes: blockSyntaxList,
     );
-    final List<String> lines = data.split(RegExp(r'(\r?\n)|(\r)'));
+    final regExp = splitRegExp ?? WidgetVisitor.defaultSplitRegExp;
+    final List<String> lines = data.split(regExp);
     final List<m.Node> nodes = document.parseLines(lines);
     final List<Toc> tocList = [];
     final visitor = WidgetVisitor(
@@ -50,6 +53,7 @@ class MarkdownGenerator {
         generators: generators,
         textGenerator: textGenerator,
         richTextBuilder: richTextBuilder,
+        splitRegExp: regExp,
         onNodeAccepted: (node, index) {
           onNodeAccepted?.call(node, index);
           if (node is HeadingNode) {
