@@ -1,6 +1,6 @@
 name: markdown_widget
 description: A new markdown package. It supports TOC function, code highlighting, and it supports all platforms
-version: 2.3.2+3
+version: 2.3.2+4
 homepage: https://github.com/asjqkkkk/markdown_widget
 
 topics:
@@ -16,7 +16,7 @@ dependencies:
     sdk: flutter
 
   #markdown data parser
-  markdown: ^7.1.1
+  markdown: ^7.2.1
   #highlight code
   highlight: ^0.7.0
   flutter_highlight: ^0.7.0

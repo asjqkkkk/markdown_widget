@@ -5,6 +5,9 @@
   - Fix: [#143](https://github.com/asjqkkkk/markdown_widget/issues/143)
 - 2.3.2+3
   - Fix: richTextBuilder not working
+- 2.3.2+4
+  - Upgrade dependencies version
+  - Fix [#159](https://github.com/asjqkkkk/markdown_widget/issues/159)
 
 ### [2.3.2]
 - Feat: auto check code language and show it
