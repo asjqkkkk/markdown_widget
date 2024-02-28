@@ -43,10 +43,10 @@ abstract class ElementNode extends SpanNode {
 ///the default concrete node for ElementNode
 class ConcreteElementNode extends ElementNode {
   final String tag;
-  final TextStyle style;
 
-  ConcreteElementNode({this.tag = '', TextStyle? style})
-      : this.style = style ?? const TextStyle();
+  ConcreteElementNode({this.tag = '', TextStyle? style}) {
+    this.style = style ?? const TextStyle();
+  }
 
   @override
   InlineSpan build() => childrenSpan;
@@ -55,10 +55,11 @@ class ConcreteElementNode extends ElementNode {
 ///text node only displays text
 class TextNode extends SpanNode {
   final String text;
-  final TextStyle style;
 
-  TextNode({this.text = '', this.style = const TextStyle()});
+  TextNode({this.text = '', TextStyle? style}) {
+    this.style = style ?? const TextStyle();
+  }
 
   @override
-  InlineSpan build() => TextSpan(text: text, style: style.merge(parentStyle));
+  InlineSpan build() => TextSpan(text: text, style: style?.merge(parentStyle));
 }

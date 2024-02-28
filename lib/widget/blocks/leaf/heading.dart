@@ -38,10 +38,10 @@ class HeadingNode extends ElementNode {
   }
 
   HeadingNode copy({HeadingConfig? headingConfig}) {
-    final node = HeadingNode(headingConfig ?? this.headingConfig, this.visitor);
-    children.forEach((e) {
+    final node = HeadingNode(headingConfig ?? this.headingConfig, visitor);
+    for (var e in children) {
       node.accept(e);
-    });
+    }
     return node;
   }
 
@@ -105,6 +105,7 @@ abstract class HeadingConfig implements LeafConfig {
 
 ///config class for h1
 class H1Config extends HeadingConfig {
+  @override
   final TextStyle style;
 
   const H1Config(
@@ -119,7 +120,7 @@ class H1Config extends HeadingConfig {
   String get tag => MarkdownTag.h1.name;
 
   static H1Config get darkConfig => const H1Config(
-          style: const TextStyle(
+          style: TextStyle(
         fontSize: 32,
         height: 40 / 32,
         color: Colors.white,
@@ -132,6 +133,7 @@ class H1Config extends HeadingConfig {
 
 ///config class for h2
 class H2Config extends HeadingConfig {
+  @override
   final TextStyle style;
 
   const H2Config(
@@ -146,7 +148,7 @@ class H2Config extends HeadingConfig {
   String get tag => MarkdownTag.h2.name;
 
   static H2Config get darkConfig => const H2Config(
-          style: const TextStyle(
+          style: TextStyle(
         fontSize: 24,
         height: 30 / 24,
         color: Colors.white,
@@ -159,6 +161,7 @@ class H2Config extends HeadingConfig {
 
 ///config class for h3
 class H3Config extends HeadingConfig {
+  @override
   final TextStyle style;
 
   const H3Config(
@@ -173,7 +176,7 @@ class H3Config extends HeadingConfig {
   String get tag => MarkdownTag.h3.name;
 
   static H3Config get darkConfig => const H3Config(
-          style: const TextStyle(
+          style: TextStyle(
         fontSize: 20,
         height: 25 / 20,
         color: Colors.white,
@@ -186,6 +189,7 @@ class H3Config extends HeadingConfig {
 
 ///config class for h4
 class H4Config extends HeadingConfig {
+  @override
   final TextStyle style;
 
   const H4Config(
@@ -200,7 +204,7 @@ class H4Config extends HeadingConfig {
   String get tag => MarkdownTag.h4.name;
 
   static H4Config get darkConfig => const H4Config(
-          style: const TextStyle(
+          style: TextStyle(
         fontSize: 16,
         height: 20 / 16,
         color: Colors.white,
@@ -210,6 +214,7 @@ class H4Config extends HeadingConfig {
 
 ///config class for h5
 class H5Config extends HeadingConfig {
+  @override
   final TextStyle style;
 
   const H5Config(
@@ -224,7 +229,7 @@ class H5Config extends HeadingConfig {
   String get tag => MarkdownTag.h5.name;
 
   static H5Config get darkConfig => const H5Config(
-          style: const TextStyle(
+          style: TextStyle(
         fontSize: 16,
         height: 20 / 16,
         color: Colors.white,
@@ -234,6 +239,7 @@ class H5Config extends HeadingConfig {
 
 ///config class for h6
 class H6Config extends HeadingConfig {
+  @override
   final TextStyle style;
 
   const H6Config(
@@ -248,7 +254,7 @@ class H6Config extends HeadingConfig {
   String get tag => MarkdownTag.h6.name;
 
   static H6Config get darkConfig => const H6Config(
-          style: const TextStyle(
+          style: TextStyle(
         fontSize: 16,
         height: 20 / 16,
         color: Colors.white,

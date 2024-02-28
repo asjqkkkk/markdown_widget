@@ -65,11 +65,11 @@ class MarkdownGenerator {
     final spans = visitor.visit(nodes);
     onTocList?.call(tocList);
     final List<Widget> widgets = [];
-    spans.forEach((span) {
+    for (var span in spans) {
       final textSpan = spanNodeBuilder?.call(span) ?? span.build();
       final richText = richTextBuilder?.call(textSpan) ?? Text.rich(textSpan);
       widgets.add(Padding(padding: linesMargin, child: richText));
-    });
+    }
     return widgets;
   }
 }

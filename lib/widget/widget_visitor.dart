@@ -48,9 +48,9 @@ class WidgetVisitor implements m.NodeVisitor {
     this.splitRegExp,
   }) {
     this.config = config ?? MarkdownConfig.defaultConfig;
-    generators.forEach((e) {
+    for (var e in generators) {
       _tag2node[e.tag] = e.generator;
-    });
+    }
   }
 
   ///[visit] will return a [SpanNode] list

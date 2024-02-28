@@ -9,6 +9,7 @@
   - Upgrade dependencies version
   - Fix [#159](https://github.com/asjqkkkk/markdown_widget/issues/159)
 - 2.3.2+5
+- 2.3.2+6
   - Fix static analysis issues
 
 ### [2.3.2]
