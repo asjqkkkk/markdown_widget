@@ -240,7 +240,7 @@ Widget getDefaultMarker(bool isOrdered, int depth, Color? color, int index,
             depth: depth, index: index, color: color, config: config.p));
   } else {
     marker = Padding(
-        padding: EdgeInsets.only(top: paddingTop - 3),
+        padding: EdgeInsets.only(top: paddingTop - 1.5),
         child: _UlMarker(depth: depth, color: color));
   }
   return marker;
