@@ -22,20 +22,29 @@ class CodeBlockNode extends ElementNode {
   InlineSpan build() {
     String? language = preConfig.language;
     try {
-      final languageValue =
-          (element.children?.first as m.Element).attributes['class']!;
+      final languageValue = (element.children?.first as m.Element).attributes['class']!;
       language = languageValue.split('-').last;
     } catch (e) {
       language = null;
       debugPrint('get language error:$e');
     }
-    final splitContents = content
-        .trim()
-        .split(visitor.splitRegExp ?? WidgetVisitor.defaultSplitRegExp);
+
+    /// We're going to attempt to parse out an ID in the inbound code block to see if there's an Asset ID
+    /// contained within.
+    RegExp regex = RegExp(r'[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}');
+    RegExpMatch? idMatch = regex.firstMatch(content);
+    String? assetId = idMatch?.group(0);
+
+    String text = content;
+    if (assetId != null) {
+      text = content.replaceAll(assetId, '');
+    }
+
+    final splitContents = text.trim().split(visitor.splitRegExp ?? WidgetVisitor.defaultSplitRegExp);
     if (splitContents.last.isEmpty) splitContents.removeLast();
     final codeBuilder = preConfig.builder;
     if (codeBuilder != null) {
-      return WidgetSpan(child: codeBuilder.call(content, language ?? ''));
+      return WidgetSpan(child: codeBuilder.call(text, language ?? '', assetId));
     }
     final widget = Container(
       decoration: preConfig.decoration,
@@ -44,29 +53,47 @@ class CodeBlockNode extends ElementNode {
       width: double.infinity,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
+        physics: ClampingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(splitContents.length, (index) {
             final currentContent = splitContents[index];
-            return ProxyRichText(
-              TextSpan(
-                children: highLightSpans(
-                  currentContent,
-                  language: language ?? preConfig.language,
-                  theme: preConfig.theme,
-                  textStyle: style,
-                  styleNotMatched: preConfig.styleNotMatched,
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SelectionContainer.disabled(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5.0),
+                    child: Opacity(
+                      opacity: 0.6,
+                      child: Text(
+                        '${index + 1}',
+                        style: style,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              richTextBuilder: visitor.richTextBuilder,
+                SizedBox(width: 16),
+                ProxyRichText(
+                  TextSpan(
+                    children: highLightSpans(
+                      currentContent,
+                      language: language ?? preConfig.language,
+                      theme: preConfig.theme,
+                      textStyle: style,
+                      styleNotMatched: preConfig.styleNotMatched,
+                    ),
+                  ),
+                  richTextBuilder: visitor.richTextBuilder,
+                ),
+              ],
             );
           }),
         ),
       ),
     );
-    return WidgetSpan(
-        child:
-            preConfig.wrapper?.call(widget, content, language ?? '') ?? widget);
+
+    return WidgetSpan(child: preConfig.wrapper?.call(widget, text, language ?? '', assetId) ?? widget);
   }
 
   @override
@@ -86,8 +113,7 @@ List<InlineSpan> highLightSpans(
   return convertHiNodes(
       hi.highlight
           .parse(input.trimRight(),
-              language: autoDetectionLanguage ? null : language,
-              autoDetection: autoDetectionLanguage)
+              language: autoDetectionLanguage ? null : language, autoDetection: autoDetectionLanguage)
           .nodes!,
       theme,
       textStyle,
@@ -199,10 +225,6 @@ class PreConfig implements LeafConfig {
   String get tag => MarkdownTag.pre.name;
 }
 
-typedef CodeWrapper = Widget Function(
-  Widget child,
-  String code,
-  String language,
-);
+typedef CodeWrapper = Widget Function(Widget child, String code, String language, [String? asset]);
 
-typedef CodeBuilder = Widget Function(String code, String language);
+typedef CodeBuilder = Widget Function(String code, String language, [String? asset]);

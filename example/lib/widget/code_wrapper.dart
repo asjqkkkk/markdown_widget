@@ -5,9 +5,9 @@ class CodeWrapperWidget extends StatefulWidget {
   final Widget child;
   final String text;
   final String language;
+  final String? asset;
 
-  const CodeWrapperWidget(this.child, this.text, this.language, {Key? key})
-      : super(key: key);
+  const CodeWrapperWidget(this.child, this.text, this.language, this.asset, {Key? key}) : super(key: key);
 
   @override
   State<CodeWrapperWidget> createState() => _PreWrapperState();
@@ -37,16 +37,15 @@ class _PreWrapperState extends State<CodeWrapperWidget> {
               children: [
                 if (widget.language.isNotEmpty)
                   SelectionContainer.disabled(
-                      child: Container(
-                    child: Text(widget.language),
-                    margin: EdgeInsets.only(right: 2),
-                    padding: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                            width: 0.5,
-                            color: isDark ? Colors.white : Colors.black)),
-                  )),
+                    child: Container(
+                      child: Text(widget.language),
+                      margin: EdgeInsets.only(right: 2),
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(width: 0.5, color: isDark ? Colors.white : Colors.black)),
+                    ),
+                  ),
                 InkWell(
                   child: AnimatedSwitcher(
                     child: _switchWidget,
@@ -59,8 +58,7 @@ class _PreWrapperState extends State<CodeWrapperWidget> {
                     refresh();
                     Future.delayed(Duration(seconds: 2), () {
                       hasCopied = false;
-                      _switchWidget =
-                          Icon(Icons.copy_rounded, key: UniqueKey());
+                      _switchWidget = Icon(Icons.copy_rounded, key: UniqueKey());
                       refresh();
                     });
                   },

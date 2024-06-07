@@ -96,8 +96,8 @@ class _MarkdownPageState extends State<MarkdownPage> {
             final config = isDark
                 ? MarkdownConfig.darkConfig
                 : MarkdownConfig.defaultConfig;
-            final codeWrapper = (child, text, language) =>
-                CodeWrapperWidget(child, text, language);
+            final codeWrapper = (child, text, language, [asset]) =>
+                CodeWrapperWidget(child, text, language, asset);
             return MarkdownWidget(
                 data: data!,
                 config: config.copy(configs: [

@@ -35,8 +35,11 @@ class MarkdownGenerator {
 
   ///convert [data] to widgets
   ///[onTocList] can provider [Toc] list
-  List<Widget> buildWidgets(String data,
-      {ValueCallback<List<Toc>>? onTocList, MarkdownConfig? config}) {
+  List<Widget> buildWidgets(
+    String data, {
+    ValueCallback<List<Toc>>? onTocList,
+    MarkdownConfig? config,
+  }) {
     final mdConfig = config ?? MarkdownConfig.defaultConfig;
     final m.Document document = m.Document(
       extensionSet: extensionSet ?? m.ExtensionSet.gitHubFlavored,
@@ -49,19 +52,19 @@ class MarkdownGenerator {
     final List<m.Node> nodes = document.parseLines(lines);
     final List<Toc> tocList = [];
     final visitor = WidgetVisitor(
-        config: mdConfig,
-        generators: generators,
-        textGenerator: textGenerator,
-        richTextBuilder: richTextBuilder,
-        splitRegExp: regExp,
-        onNodeAccepted: (node, index) {
-          onNodeAccepted?.call(node, index);
-          if (node is HeadingNode) {
-            final listLength = tocList.length;
-            tocList.add(
-                Toc(node: node, widgetIndex: index, selfIndex: listLength));
-          }
-        });
+      config: mdConfig,
+      generators: generators,
+      textGenerator: textGenerator,
+      richTextBuilder: richTextBuilder,
+      splitRegExp: regExp,
+      onNodeAccepted: (node, index) {
+        onNodeAccepted?.call(node, index);
+        if (node is HeadingNode) {
+          final listLength = tocList.length;
+          tocList.add(Toc(node: node, widgetIndex: index, selfIndex: listLength));
+        }
+      },
+    );
     final spans = visitor.visit(nodes);
     onTocList?.call(tocList);
     final List<Widget> widgets = [];

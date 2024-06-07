@@ -87,6 +87,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       },
       config: widget.config,
     );
+
     _widgets.addAll(result);
   }
 
@@ -107,7 +108,6 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   Widget build(BuildContext context) => buildMarkdownWidget();
 
-  ///
   Widget buildMarkdownWidget() {
     final markdownWidget = NotificationListener<UserScrollNotification>(
       onNotification: (notification) {
@@ -115,18 +115,28 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
         isForward = direction == ScrollDirection.forward;
         return true;
       },
-      child: ListView.builder(
-        shrinkWrap: widget.shrinkWrap,
+      child: SingleChildScrollView(
         physics: widget.physics,
         controller: controller,
-        itemBuilder: (ctx, index) => wrapByAutoScroll(index,
-            wrapByVisibilityDetector(index, _widgets[index]), controller),
-        itemCount: _widgets.length,
         padding: widget.padding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+            _widgets.length,
+            (index) => wrapByAutoScroll(
+              index,
+              wrapByVisibilityDetector(index, _widgets[index]),
+              controller,
+            ),
+          ),
+        ),
       ),
     );
+
     return widget.selectable
-        ? SelectionArea(child: markdownWidget)
+        ? SelectionArea(
+            child: markdownWidget,
+          )
         : markdownWidget;
   }
 
@@ -137,13 +147,9 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       onVisibilityChanged: (VisibilityInfo info) {
         final visibleFraction = info.visibleFraction;
         if (isForward) {
-          visibleFraction == 0
-              ? indexTreeSet.remove(index)
-              : indexTreeSet.add(index);
+          visibleFraction == 0 ? indexTreeSet.remove(index) : indexTreeSet.add(index);
         } else {
-          visibleFraction == 1.0
-              ? indexTreeSet.add(index)
-              : indexTreeSet.remove(index);
+          visibleFraction == 1.0 ? indexTreeSet.add(index) : indexTreeSet.remove(index);
         }
         if (indexTreeSet.isNotEmpty) {
           _tocController?.onIndexChanged(indexTreeSet.first);
@@ -162,8 +168,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 }
 
 ///wrap widget by [AutoScrollTag] that can use [AutoScrollController] to scrollToIndex
-Widget wrapByAutoScroll(
-    int index, Widget child, AutoScrollController controller) {
+Widget wrapByAutoScroll(int index, Widget child, AutoScrollController controller) {
   return AutoScrollTag(
     key: Key(index.toString()),
     controller: controller,

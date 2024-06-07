@@ -13,8 +13,7 @@ void main() {
     final generator = MarkdownGenerator();
     for (var i = 0; i < list.length; ++i) {
       _checkWithIndex(i);
-      _checkWithIndex(i,
-          config: MarkdownConfig.darkConfig, generator: generator);
+      _checkWithIndex(i, config: MarkdownConfig.darkConfig, generator: generator);
     }
   });
 
@@ -32,17 +31,14 @@ void main() {
   test('code block builder', () {
     final spans = transformMarkdown('''```html
     asdasdasdasd
-    ```''',
-        config: MarkdownConfig(
-            configs: [PreConfig(builder: (code, language) => Text(code))]));
+    ```''', config: MarkdownConfig(configs: [PreConfig(builder: (code, language, [asset]) => Text(code))]));
     final textSpans = spans.map((e) => e.build()).toList();
     assert(textSpans.length == 1);
   });
 
   test('getNodeByElement', () {
     final visitor = WidgetVisitor();
-    visitor.getNodeByElement(
-        m.Element("aaa", []), MarkdownConfig.defaultConfig);
+    visitor.getNodeByElement(m.Element("aaa", []), MarkdownConfig.defaultConfig);
   });
 }
 
@@ -51,16 +47,12 @@ List<Widget> testMarkdownGenerator(
   MarkdownConfig? config,
   MarkdownGenerator? generator,
 }) {
-  return generator?.buildWidgets(markdown,
-          onTocList: (list) {}, config: config) ??
-      [];
+  return generator?.buildWidgets(markdown, onTocList: (list) {}, config: config) ?? [];
 }
 
 List<SpanNode> transformMarkdown(String markdown, {MarkdownConfig? config}) {
-  final m.Document document = m.Document(
-      extensionSet: m.ExtensionSet.gitHubFlavored,
-      encodeHtml: false,
-      inlineSyntaxes: []);
+  final m.Document document =
+      m.Document(extensionSet: m.ExtensionSet.gitHubFlavored, encodeHtml: false, inlineSyntaxes: []);
   final lines = markdown.replaceAll('\r\n', '\n').split('\n');
   final nodes = document.parseLines(lines);
   List<HeadingNode> headings = [];
@@ -74,8 +66,7 @@ List<SpanNode> transformMarkdown(String markdown, {MarkdownConfig? config}) {
   return visitor.visit(nodes);
 }
 
-void _checkWithIndex(int index,
-    {MarkdownConfig? config, MarkdownGenerator? generator}) {
+void _checkWithIndex(int index, {MarkdownConfig? config, MarkdownGenerator? generator}) {
   final list = getTestJsonList();
   assert(index >= 0 && index < list.length);
   String current = list[index]['markdown'];

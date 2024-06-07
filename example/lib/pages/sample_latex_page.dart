@@ -41,12 +41,8 @@ class _LatexPageState extends State<LatexPage> {
                 isMobileDisplaying = !isMobileDisplaying;
                 refresh();
               },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      Colors.lightBlue.withOpacity(0.2))),
-              icon: Icon(isMobileDisplaying
-                  ? Icons.arrow_back_ios
-                  : Icons.document_scanner),
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.lightBlue.withOpacity(0.2))),
+              icon: Icon(isMobileDisplaying ? Icons.arrow_back_ios : Icons.document_scanner),
               label: Text(isMobileDisplaying ? 'source' : 'explain'),
             )
           : null,
@@ -79,16 +75,12 @@ class _LatexPageState extends State<LatexPage> {
     return StoreConnector<RootState, ThemeState>(
         converter: ThemeState.storeConverter,
         builder: (context, state) {
-          final config =
-              isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
-          final codeWrapper = (child, text, language) =>
-              CodeWrapperWidget(child, text, language);
+          final config = isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
+          final codeWrapper = (child, text, language, [asset]) => CodeWrapperWidget(child, text, language, asset);
           return MarkdownWidget(
             data: _text,
             config: config.copy(configs: [
-              isDark
-                  ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
-                  : PreConfig().copy(wrapper: codeWrapper)
+              isDark ? PreConfig.darkConfig.copy(wrapper: codeWrapper) : PreConfig().copy(wrapper: codeWrapper)
             ]),
             markdownGenerator: MarkdownGenerator(
               generators: [latexGenerator],
@@ -102,17 +94,13 @@ class _LatexPageState extends State<LatexPage> {
   Widget descriptionWidget() {
     return StoreConnector<RootState, String>(
       builder: (ctx, state) {
-        final asset = state == 'zh'
-            ? 'assets/latex_description_zh.md'
-            : 'assets/latex_description_en.md';
+        final asset = state == 'zh' ? 'assets/latex_description_zh.md' : 'assets/latex_description_en.md';
         return FutureBuilder<String>(
             future: rootBundle.loadString(asset),
             builder: (context, snapshot) {
               return MarkdownWidget(
                 data: snapshot.data ?? '',
-                config: isDark
-                    ? MarkdownConfig.darkConfig
-                    : MarkdownConfig.defaultConfig,
+                config: isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig,
               );
             });
       },
