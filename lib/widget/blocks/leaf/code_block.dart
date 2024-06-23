@@ -46,6 +46,7 @@ class CodeBlockNode extends ElementNode {
     if (codeBuilder != null) {
       return WidgetSpan(child: codeBuilder.call(text, language ?? '', assetId));
     }
+
     final widget = Container(
       decoration: preConfig.decoration,
       margin: preConfig.margin,
@@ -54,41 +55,16 @@ class CodeBlockNode extends ElementNode {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         physics: ClampingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(splitContents.length, (index) {
-            final currentContent = splitContents[index];
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SelectionContainer.disabled(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: Opacity(
-                      opacity: 0.6,
-                      child: Text(
-                        '${index + 1}',
-                        style: style,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                ProxyRichText(
-                  TextSpan(
-                    children: highLightSpans(
-                      currentContent,
-                      language: language ?? preConfig.language,
-                      theme: preConfig.theme,
-                      textStyle: style,
-                      styleNotMatched: preConfig.styleNotMatched,
-                    ),
-                  ),
-                  richTextBuilder: visitor.richTextBuilder,
-                ),
-              ],
-            );
-          }),
+        child: SelectableText.rich(
+          TextSpan(
+            children: highLightSpans(
+              text,
+              language: language ?? 'txt',
+              theme: preConfig.theme,
+              textStyle: style,
+              styleNotMatched: preConfig.styleNotMatched,
+            ),
+          ),
         ),
       ),
     );
