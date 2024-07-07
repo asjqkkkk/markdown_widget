@@ -5,6 +5,8 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
 import 'package:highlight/highlight.dart' as hi;
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown/markdown.dart' as m;
+import 'package:runtime_client/particle.dart';
+import 'package:runtime_flutter_code_highlighter/runtime_flutter_code_highlighter.dart';
 
 ///Tag: [MarkdownTag.pre]
 ///
@@ -56,14 +58,11 @@ class CodeBlockNode extends ElementNode {
         scrollDirection: Axis.horizontal,
         physics: ClampingScrollPhysics(),
         child: SelectableText.rich(
-          TextSpan(
-            children: highLightSpans(
-              text,
-              language: language ?? 'txt',
-              theme: preConfig.theme,
-              textStyle: style,
-              styleNotMatched: preConfig.styleNotMatched,
-            ),
+          RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
+            text,
+            language ?? 'txt',
+            preConfig.theme,
+            preConfig.textStyle,
           ),
         ),
       ),
@@ -77,62 +76,62 @@ class CodeBlockNode extends ElementNode {
 }
 
 ///transform code to highlight code
-List<InlineSpan> highLightSpans(
-  String input, {
-  String? language,
-  bool autoDetectionLanguage = false,
-  Map<String, TextStyle> theme = const {},
-  TextStyle? textStyle,
-  TextStyle? styleNotMatched,
-  int tabSize = 8,
-}) {
-  return convertHiNodes(
-      hi.highlight
-          .parse(input.trimRight(),
-              language: autoDetectionLanguage ? null : language, autoDetection: autoDetectionLanguage)
-          .nodes!,
-      theme,
-      textStyle,
-      styleNotMatched);
-}
-
-List<TextSpan> convertHiNodes(
-  List<hi.Node> nodes,
-  Map<String, TextStyle> theme,
-  TextStyle? style,
-  TextStyle? styleNotMatched,
-) {
-  List<TextSpan> spans = [];
-  var currentSpans = spans;
-  List<List<TextSpan>> stack = [];
-
-  void traverse(hi.Node node, TextStyle? parentStyle) {
-    final nodeStyle = parentStyle ?? theme[node.className ?? ''];
-    final finallyStyle = (nodeStyle ?? styleNotMatched)?.merge(style);
-    if (node.value != null) {
-      currentSpans.add(node.className == null
-          ? TextSpan(text: node.value, style: finallyStyle)
-          : TextSpan(text: node.value, style: finallyStyle));
-    } else if (node.children != null) {
-      List<TextSpan> tmp = [];
-      currentSpans.add(TextSpan(children: tmp, style: finallyStyle));
-      stack.add(currentSpans);
-      currentSpans = tmp;
-
-      for (var n in node.children!) {
-        traverse(n, nodeStyle);
-        if (n == node.children!.last) {
-          currentSpans = stack.isEmpty ? spans : stack.removeLast();
-        }
-      }
-    }
-  }
-
-  for (var node in nodes) {
-    traverse(node, null);
-  }
-  return spans;
-}
+// List<InlineSpan> highLightSpans(
+//   String input, {
+//   String? language,
+//   bool autoDetectionLanguage = false,
+//   Map<String, TextStyle> theme = const {},
+//   TextStyle? textStyle,
+//   TextStyle? styleNotMatched,
+//   int tabSize = 8,
+// }) {
+//   return convertHiNodes(
+//       hi.highlight
+//           .parse(input.trimRight(),
+//               language: autoDetectionLanguage ? null : language, autoDetection: autoDetectionLanguage)
+//           .nodes!,
+//       theme,
+//       textStyle,
+//       styleNotMatched);
+// }
+//
+// List<TextSpan> convertHiNodes(
+//   List<hi.Node> nodes,
+//   Map<String, TextStyle> theme,
+//   TextStyle? style,
+//   TextStyle? styleNotMatched,
+// ) {
+//   List<TextSpan> spans = [];
+//   var currentSpans = spans;
+//   List<List<TextSpan>> stack = [];
+//
+//   void traverse(hi.Node node, TextStyle? parentStyle) {
+//     final nodeStyle = parentStyle ?? theme[node.className ?? ''];
+//     final finallyStyle = (nodeStyle ?? styleNotMatched)?.merge(style);
+//     if (node.value != null) {
+//       currentSpans.add(node.className == null
+//           ? TextSpan(text: node.value, style: finallyStyle)
+//           : TextSpan(text: node.value, style: finallyStyle));
+//     } else if (node.children != null) {
+//       List<TextSpan> tmp = [];
+//       currentSpans.add(TextSpan(children: tmp, style: finallyStyle));
+//       stack.add(currentSpans);
+//       currentSpans = tmp;
+//
+//       for (var n in node.children!) {
+//         traverse(n, nodeStyle);
+//         if (n == node.children!.last) {
+//           currentSpans = stack.isEmpty ? spans : stack.removeLast();
+//         }
+//       }
+//     }
+//   }
+//
+//   for (var node in nodes) {
+//     traverse(node, null);
+//   }
+//   return spans;
+// }
 
 ///config class for pre
 class PreConfig implements LeafConfig {
@@ -147,7 +146,7 @@ class PreConfig implements LeafConfig {
   final CodeBuilder? builder;
 
   ///see package:flutter_highlight/themes/
-  final Map<String, TextStyle> theme;
+  final String theme;
   final String language;
 
   const PreConfig({
@@ -159,7 +158,7 @@ class PreConfig implements LeafConfig {
     this.margin = const EdgeInsets.symmetric(vertical: 8.0),
     this.textStyle = const TextStyle(fontSize: 16),
     this.styleNotMatched,
-    this.theme = a11yLightTheme,
+    this.theme = 'OneHalfDark',
     this.language = 'dart',
     this.wrapper,
     this.builder,
@@ -170,7 +169,7 @@ class PreConfig implements LeafConfig {
           color: Color(0xff555555),
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
-        theme: a11yDarkTheme,
+        theme: 'OneHalfDark',
       );
 
   ///copy by other params
@@ -181,7 +180,7 @@ class PreConfig implements LeafConfig {
     TextStyle? textStyle,
     TextStyle? styleNotMatched,
     CodeWrapper? wrapper,
-    Map<String, TextStyle>? theme,
+    String? theme,
     String? language,
   }) {
     return PreConfig(

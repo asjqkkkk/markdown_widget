@@ -16,10 +16,20 @@ dependencies:
     sdk: flutter
 
   #markdown data parser
-  markdown: ^7.2.1
+  markdown:
+    path: '../markdown_2'
+#  markdown: ^7.2.1
   #highlight code
   highlight: ^0.7.0
   flutter_highlight: ^0.7.0
+  runtime_client:
+    path: '../runtime_client'
+  runtime_flutter_code_highlighter:
+    path: '../syntect_dart/flutter'
+  #    git:
+  #      url: https://github.com/open-runtime/syntect_dart.git
+  #      ref: feat/gh-actions
+  #      path: flutter
 
 
   # to click link
