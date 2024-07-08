@@ -24,7 +24,7 @@ dependencies:
   flutter_highlight: ^0.7.0
   runtime_client:
     git:
-      url: https://github.com/open-runtime/runtime_client.git
+      url: git@github.com:open-runtime/runtime_client.git
   runtime_flutter_code_highlighter:
     git:
       url: https://github.com/open-runtime/syntect_dart.git
