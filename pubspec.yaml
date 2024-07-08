@@ -16,20 +16,20 @@ dependencies:
     sdk: flutter
 
   #markdown data parser
-  markdown:
-    path: '../markdown_2'
-#  markdown: ^7.2.1
+  #  markdown:
+  #    path: '../markdown_2'
+  markdown: ^7.2.1
   #highlight code
   highlight: ^0.7.0
   flutter_highlight: ^0.7.0
   runtime_client:
-    path: '../runtime_client'
+    git:
+      url: https://github.com/open-runtime/runtime_client.git
   runtime_flutter_code_highlighter:
-    path: '../syntect_dart/flutter'
-  #    git:
-  #      url: https://github.com/open-runtime/syntect_dart.git
-  #      ref: feat/gh-actions
-  #      path: flutter
+    git:
+      url: https://github.com/open-runtime/syntect_dart.git
+      ref: feat/gh-actions
+      path: flutter
 
 
   # to click link
@@ -39,7 +39,7 @@ dependencies:
   # make listview available to jump to index
   scroll_to_index: ^3.0.1
 
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
