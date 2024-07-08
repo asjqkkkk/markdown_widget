@@ -27,8 +27,8 @@ dependencies:
       url: git@github.com:open-runtime/runtime_client.git
   runtime_flutter_code_highlighter:
     git:
-      url: https://github.com/open-runtime/syntect_dart.git
-      ref: feat/gh-actions
+      url: git@github.com:open-runtime/code_highlighter.git
+      ref: init
       path: flutter
 
 
