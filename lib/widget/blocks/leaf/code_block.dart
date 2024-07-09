@@ -1,11 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_highlight/themes/a11y-dark.dart';
-import 'package:flutter_highlight/themes/a11y-light.dart';
-import 'package:highlight/highlight.dart' as hi;
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown/markdown.dart' as m;
-import 'package:runtime_client/particle.dart';
 import 'package:runtime_flutter_code_highlighter/runtime_flutter_code_highlighter.dart';
 
 ///Tag: [MarkdownTag.pre]
@@ -60,8 +56,8 @@ class CodeBlockNode extends ElementNode {
         child: SelectableText.rich(
           RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
             text,
-            language ?? 'txt',
-            preConfig.theme,
+            RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
+            preConfig.theme.name,
             preConfig.textStyle,
           ),
         ),
@@ -146,7 +142,7 @@ class PreConfig implements LeafConfig {
   final CodeBuilder? builder;
 
   ///see package:flutter_highlight/themes/
-  final String theme;
+  final RuntimeCodeHighlighterThemes theme;
   final String language;
 
   const PreConfig({
@@ -158,7 +154,7 @@ class PreConfig implements LeafConfig {
     this.margin = const EdgeInsets.symmetric(vertical: 8.0),
     this.textStyle = const TextStyle(fontSize: 16),
     this.styleNotMatched,
-    this.theme = 'OneHalfDark',
+    this.theme = RuntimeCodeHighlighterThemes.ONE_HALF_DARK,
     this.language = 'dart',
     this.wrapper,
     this.builder,
@@ -169,7 +165,7 @@ class PreConfig implements LeafConfig {
           color: Color(0xff555555),
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
-        theme: 'OneHalfDark',
+        theme: RuntimeCodeHighlighterThemes.ONE_HALF_DARK,
       );
 
   ///copy by other params
@@ -180,7 +176,7 @@ class PreConfig implements LeafConfig {
     TextStyle? textStyle,
     TextStyle? styleNotMatched,
     CodeWrapper? wrapper,
-    String? theme,
+    RuntimeCodeHighlighterThemes? theme,
     String? language,
   }) {
     return PreConfig(
