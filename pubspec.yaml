@@ -28,7 +28,6 @@ dependencies:
   runtime_flutter_code_highlighter:
     git:
       url: git@github.com:open-runtime/code_highlighter.git
-      ref: init
       path: flutter
 
 
