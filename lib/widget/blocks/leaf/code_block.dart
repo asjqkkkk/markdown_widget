@@ -2,7 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown/markdown.dart' as m;
+import 'package:runtime_client/particle.dart';
 import 'package:runtime_flutter_code_highlighter/runtime_flutter_code_highlighter.dart';
+
+import '../../../state/state.dart';
 
 ///Tag: [MarkdownTag.pre]
 ///
@@ -45,6 +48,37 @@ class CodeBlockNode extends ElementNode {
       return WidgetSpan(child: codeBuilder.call(text, language ?? '', assetId));
     }
 
+    TextSpan highlighted;
+
+    /// Light & Dark Mode Caches for highlighting
+    if (ParticleAesthetics().darkMode) {
+      TextSpan? cached = MarkdownRenderingState().darkThemeCache[text];
+      if (cached != null) {
+        highlighted = cached;
+      } else {
+        highlighted = RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
+          text,
+          RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
+          preConfig.theme.name,
+          preConfig.textStyle,
+        );
+        MarkdownRenderingState().darkThemeCache[text] = highlighted;
+      }
+    } else {
+      TextSpan? cached = MarkdownRenderingState().lightThemeCache[text];
+      if (cached != null) {
+        highlighted = cached;
+      } else {
+        highlighted = RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
+          text,
+          RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
+          preConfig.theme.name,
+          preConfig.textStyle,
+        );
+        MarkdownRenderingState().lightThemeCache[text] = highlighted;
+      }
+    }
+
     final widget = Container(
       decoration: preConfig.decoration,
       margin: preConfig.margin,
@@ -53,14 +87,7 @@ class CodeBlockNode extends ElementNode {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         physics: ClampingScrollPhysics(),
-        child: SelectableText.rich(
-          RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
-            text,
-            RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
-            preConfig.theme.name,
-            preConfig.textStyle,
-          ),
-        ),
+        child: SelectableText.rich(highlighted),
       ),
     );
 

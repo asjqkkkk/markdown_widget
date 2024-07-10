@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class MarkdownWidget extends StatefulWidget {
@@ -31,6 +32,9 @@ class MarkdownWidget extends StatefulWidget {
   ///config for [MarkdownGenerator]
   final MarkdownGenerator? markdownGenerator;
 
+  /// Whether or not to render the markdown as a Sliver
+  final bool sliver;
+
   const MarkdownWidget({
     Key? key,
     required this.data,
@@ -40,6 +44,7 @@ class MarkdownWidget extends StatefulWidget {
     this.selectable = true,
     this.padding,
     this.config,
+    this.sliver = false,
     this.markdownGenerator,
   }) : super(key: key);
 
@@ -109,29 +114,37 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   Widget build(BuildContext context) => buildMarkdownWidget();
 
   Widget buildMarkdownWidget() {
-    final markdownWidget = NotificationListener<UserScrollNotification>(
-      onNotification: (notification) {
-        final ScrollDirection direction = notification.direction;
-        isForward = direction == ScrollDirection.forward;
-        return true;
-      },
-      child: SingleChildScrollView(
-        physics: widget.physics,
-        controller: controller,
-        padding: widget.padding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(
-            _widgets.length,
-            (index) => wrapByAutoScroll(
-              index,
-              wrapByVisibilityDetector(index, _widgets[index]),
-              controller,
+    Widget markdownWidget;
+    if (widget.sliver) {
+      markdownWidget = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _widgets,
+      );
+    } else {
+      markdownWidget = NotificationListener<UserScrollNotification>(
+        onNotification: (notification) {
+          final ScrollDirection direction = notification.direction;
+          isForward = direction == ScrollDirection.forward;
+          return true;
+        },
+        child: SingleChildScrollView(
+          physics: widget.physics,
+          controller: controller,
+          padding: widget.padding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(
+              _widgets.length,
+              (index) => wrapByAutoScroll(
+                index,
+                wrapByVisibilityDetector(index, _widgets[index]),
+                controller,
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
 
     return widget.selectable
         ? SelectionArea(
