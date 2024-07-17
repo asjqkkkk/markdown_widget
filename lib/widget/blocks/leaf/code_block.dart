@@ -79,15 +79,27 @@ class CodeBlockNode extends ElementNode {
       }
     }
 
+    ScrollController controller = ScrollController();
+
     final widget = Container(
       decoration: preConfig.decoration,
       margin: preConfig.margin,
       padding: preConfig.padding,
       width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: ClampingScrollPhysics(),
-        child: SelectableText.rich(highlighted),
+      child: ScrollbarTheme(
+        data: ScrollbarThemeData(
+          thickness: WidgetStatePropertyAll(8),
+          interactive: true,
+        ),
+        child: Scrollbar(
+          controller: controller,
+          child: SingleChildScrollView(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            physics: ClampingScrollPhysics(),
+            child: Text.rich(highlighted),
+          ),
+        ),
       ),
     );
 
