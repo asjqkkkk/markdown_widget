@@ -23,8 +23,7 @@ dependencies:
   highlight: ^0.7.0
   flutter_highlight: ^0.7.0
   runtime_client:
-    git:
-      url: git@github.com:open-runtime/runtime_client.git
+    path: '../runtime_client'
   runtime_flutter_code_highlighter:
     git:
       url: git@github.com:open-runtime/code_highlighter.git

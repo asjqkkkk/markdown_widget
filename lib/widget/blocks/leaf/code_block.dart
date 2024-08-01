@@ -60,7 +60,7 @@ class CodeBlockNode extends ElementNode {
           text,
           RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
           preConfig.theme.name,
-          preConfig.textStyle,
+          style,
         );
         MarkdownRenderingState().darkThemeCache[text] = highlighted;
       }
@@ -73,7 +73,7 @@ class CodeBlockNode extends ElementNode {
           text,
           RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
           preConfig.theme.name,
-          preConfig.textStyle,
+          style,
         );
         MarkdownRenderingState().lightThemeCache[text] = highlighted;
       }
@@ -97,7 +97,7 @@ class CodeBlockNode extends ElementNode {
             controller: controller,
             scrollDirection: Axis.horizontal,
             physics: ClampingScrollPhysics(),
-            child: Text.rich(highlighted),
+            child: Text.rich(highlighted, style: style),
           ),
         ),
       ),
