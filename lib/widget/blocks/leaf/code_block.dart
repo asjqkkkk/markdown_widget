@@ -5,8 +5,6 @@ import 'package:markdown/markdown.dart' as m;
 import 'package:runtime_client/particle.dart';
 import 'package:runtime_flutter_code_highlighter/runtime_flutter_code_highlighter.dart';
 
-import '../../../state/state.dart';
-
 ///Tag: [MarkdownTag.pre]
 ///
 ///An indented code block is composed of one or more indented chunks separated by blank lines
@@ -53,27 +51,29 @@ class CodeBlockNode extends ElementNode {
     /// Light & Dark Mode Caches for highlighting
     if (ParticleAesthetics().darkMode) {
       TextSpan? cached = MarkdownRenderingState().darkThemeCache[text];
-      if (cached != null) {
+      double? size = cached?.style?.fontSize;
+      if (cached != null && size == style.fontSize) {
         highlighted = cached;
       } else {
         highlighted = RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
           text,
           RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
           preConfig.theme.name,
-          preConfig.textStyle,
+          style,
         );
         MarkdownRenderingState().darkThemeCache[text] = highlighted;
       }
     } else {
       TextSpan? cached = MarkdownRenderingState().lightThemeCache[text];
-      if (cached != null) {
+      double? size = cached?.style?.fontSize;
+      if (cached != null && size == style.fontSize) {
         highlighted = cached;
       } else {
         highlighted = RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
           text,
           RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
           preConfig.theme.name,
-          preConfig.textStyle,
+          style,
         );
         MarkdownRenderingState().lightThemeCache[text] = highlighted;
       }
@@ -97,7 +97,7 @@ class CodeBlockNode extends ElementNode {
             controller: controller,
             scrollDirection: Axis.horizontal,
             physics: ClampingScrollPhysics(),
-            child: Text.rich(highlighted),
+            child: Text.rich(highlighted, style: style),
           ),
         ),
       ),
