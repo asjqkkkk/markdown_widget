@@ -34,13 +34,16 @@ class MarkdownWidget extends StatefulWidget {
   /// Whether or not to render the markdown as a Sliver
   final bool sliver;
 
+  final void Function(SelectedContent? content)? onSelectionChanged;
+
   const MarkdownWidget({
     Key? key,
     required this.data,
     this.tocController,
     this.physics,
     this.shrinkWrap = false,
-    this.selectable = true,
+    this.selectable = false,
+    this.onSelectionChanged,
     this.padding,
     this.config,
     this.sliver = false,
@@ -114,6 +117,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 
   Widget buildMarkdownWidget() {
     Widget markdownWidget;
+
     if (widget.sliver) {
       markdownWidget = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,6 +152,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     return widget.selectable
         ? SelectionArea(
             child: markdownWidget,
+            onSelectionChanged: widget.onSelectionChanged,
           )
         : markdownWidget;
   }

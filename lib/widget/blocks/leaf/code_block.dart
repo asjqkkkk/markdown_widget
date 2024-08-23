@@ -81,23 +81,28 @@ class CodeBlockNode extends ElementNode {
 
     ScrollController controller = ScrollController();
 
-    final widget = Container(
-      decoration: preConfig.decoration,
-      margin: preConfig.margin,
-      padding: preConfig.padding,
-      width: double.infinity,
-      child: ScrollbarTheme(
-        data: ScrollbarThemeData(
-          thickness: WidgetStatePropertyAll(8),
-          interactive: true,
-        ),
-        child: Scrollbar(
-          controller: controller,
-          child: SingleChildScrollView(
+    /// **IMPORTANT**
+    /// This is wrapped in its own `SelectionArea` so it doesn't hijack taps & selections
+    /// from the surrounding widgets, which it was previously doing.
+    final widget = SelectionArea(
+      child: Container(
+        decoration: preConfig.decoration,
+        margin: preConfig.margin,
+        padding: preConfig.padding,
+        width: double.infinity,
+        child: ScrollbarTheme(
+          data: ScrollbarThemeData(
+            thickness: WidgetStatePropertyAll(8),
+            interactive: true,
+          ),
+          child: Scrollbar(
             controller: controller,
-            scrollDirection: Axis.horizontal,
-            physics: ClampingScrollPhysics(),
-            child: Text.rich(highlighted, style: style),
+            child: SingleChildScrollView(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              physics: ClampingScrollPhysics(),
+              child: Text.rich(highlighted, style: style),
+            ),
           ),
         ),
       ),
