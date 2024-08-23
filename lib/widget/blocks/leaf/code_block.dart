@@ -85,6 +85,7 @@ class CodeBlockNode extends ElementNode {
     /// This is wrapped in its own `SelectionArea` so it doesn't hijack taps & selections
     /// from the surrounding widgets, which it was previously doing.
     final widget = SelectionArea(
+      onSelectionChanged: MarkdownRenderingState().onSelectionChanged,
       child: Container(
         decoration: preConfig.decoration,
         margin: preConfig.margin,

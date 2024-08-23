@@ -80,6 +80,9 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     _tocController?.jumpToIndexCallback = (index) {
       controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
     };
+
+    /// Store the onSelectionChanged callback into a globally available variable for nested SelectionAreas
+    MarkdownRenderingState().onSelectionChanged = widget.onSelectionChanged;
     updateState();
   }
 

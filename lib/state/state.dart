@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' show TextSpan;
 
 class MarkdownRenderingState {
@@ -11,4 +12,6 @@ class MarkdownRenderingState {
 
   Map<String, TextSpan> lightThemeCache = {};
   Map<String, TextSpan> darkThemeCache = {};
+
+  void Function(SelectedContent? content)? onSelectionChanged;
 }
