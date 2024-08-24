@@ -29,6 +29,9 @@ void htmlToMarkdown(h.Node? node, int deep, List<m.Node> mNodes) {
   }
 }
 
+final RegExp tableRep =
+    RegExp(r'<table[^>]*>', multiLine: true, caseSensitive: true);
+
 final RegExp htmlRep = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
 
 ///parse [m.Node] to [h.Node]
