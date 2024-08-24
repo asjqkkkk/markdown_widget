@@ -24,6 +24,8 @@ dependencies:
   video_player: ^2.7.2
   # for router
   go_router: ^6.2.0
+  # for complex table
+  flutter_widget_from_html_core: ^0.15.2
 
 dev_dependencies:
   http: ^0.13.5
