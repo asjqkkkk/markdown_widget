@@ -47,10 +47,12 @@ class CodeBlockNode extends ElementNode {
     }
 
     TextSpan highlighted;
+    String? query = MarkdownRenderingState().query;
+    String key = '$text-${query ?? ''}';
 
     /// Light & Dark Mode Caches for highlighting
     if (ParticleAesthetics().darkMode) {
-      TextSpan? cached = MarkdownRenderingState().darkThemeCache[text];
+      TextSpan? cached = MarkdownRenderingState().darkThemeCache[key];
       double? size = cached?.style?.fontSize;
       if (cached != null && size == style.fontSize) {
         highlighted = cached;
@@ -60,11 +62,12 @@ class CodeBlockNode extends ElementNode {
           RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
           preConfig.theme.name,
           style,
+          query != null ? MapEntry(query, TextStyle(color: Colors.black, backgroundColor: Colors.yellow)) : null,
         );
-        MarkdownRenderingState().darkThemeCache[text] = highlighted;
+        MarkdownRenderingState().darkThemeCache[key] = highlighted;
       }
     } else {
-      TextSpan? cached = MarkdownRenderingState().lightThemeCache[text];
+      TextSpan? cached = MarkdownRenderingState().lightThemeCache[key];
       double? size = cached?.style?.fontSize;
       if (cached != null && size == style.fontSize) {
         highlighted = cached;
@@ -74,8 +77,9 @@ class CodeBlockNode extends ElementNode {
           RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
           preConfig.theme.name,
           style,
+          query != null ? MapEntry(query, TextStyle(color: Colors.black, backgroundColor: Colors.yellow)) : null,
         );
-        MarkdownRenderingState().lightThemeCache[text] = highlighted;
+        MarkdownRenderingState().lightThemeCache[key] = highlighted;
       }
     }
 

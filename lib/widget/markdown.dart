@@ -36,6 +36,9 @@ class MarkdownWidget extends StatefulWidget {
 
   final void Function(SelectedContent? content)? onSelectionChanged;
 
+  /// A search query that will be used to paint a yellow highlight on matches within the markdown content.
+  final String? query;
+
   const MarkdownWidget({
     Key? key,
     required this.data,
@@ -48,6 +51,7 @@ class MarkdownWidget extends StatefulWidget {
     this.config,
     this.sliver = false,
     this.markdownGenerator,
+    this.query,
   }) : super(key: key);
 
   @override
@@ -88,8 +92,11 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
   void updateState() {
+    MarkdownRenderingState().query = widget.query;
+
     indexTreeSet.clear();
     markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
+
     final result = markdownGenerator.buildWidgets(
       widget.data,
       onTocList: (tocList) {
@@ -112,6 +119,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     clearState();
     controller.dispose();
     _tocController?.jumpToIndexCallback = null;
+    MarkdownRenderingState().query = null;
     super.dispose();
   }
 

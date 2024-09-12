@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 
 ///the basic node
 abstract class SpanNode {
@@ -35,9 +36,7 @@ abstract class ElementNode extends SpanNode {
   @override
   InlineSpan build() => childrenSpan;
 
-  TextSpan get childrenSpan => TextSpan(
-      children:
-          List.generate(children.length, (index) => children[index].build()));
+  TextSpan get childrenSpan => TextSpan(children: List.generate(children.length, (index) => children[index].build()));
 }
 
 ///the default concrete node for ElementNode
@@ -61,5 +60,35 @@ class TextNode extends SpanNode {
   }
 
   @override
-  InlineSpan build() => TextSpan(text: text, style: style?.merge(parentStyle));
+  InlineSpan build() {
+    List<InlineSpan> children = [];
+    String? query = MarkdownRenderingState().query;
+
+    if (query == null) {
+      return TextSpan(
+        text: text,
+        style: style?.merge(parentStyle),
+      );
+    }
+
+    text.splitMapJoin(query, onMatch: (Match match) {
+      children.add(TextSpan(
+        text: match.group(0),
+        style: style?.merge(parentStyle).copyWith(color: Colors.black, backgroundColor: Colors.yellow),
+      ));
+
+      return '';
+    }, onNonMatch: (value) {
+      children.add(TextSpan(
+        text: value,
+        style: style?.merge(parentStyle),
+      ));
+
+      return '';
+    });
+
+    return TextSpan(
+      children: children,
+    );
+  }
 }
