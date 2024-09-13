@@ -12,6 +12,4 @@ class MarkdownRenderingState {
 
   Map<String, TextSpan> lightThemeCache = {};
   Map<String, TextSpan> darkThemeCache = {};
-
-  void Function(SelectedContent? content)? onSelectionChanged;
 }
