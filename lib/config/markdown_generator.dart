@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:markdown/markdown.dart' as m;
 
 import '../widget/blocks/leaf/heading.dart';
@@ -37,6 +38,7 @@ class MarkdownGenerator {
   ///[onTocList] can provider [Toc] list
   List<Widget> buildWidgets(
     String data, {
+    void Function(SelectedContent? content)? onSelectionChanged,
     ValueCallback<List<Toc>>? onTocList,
     MarkdownConfig? config,
   }) {
@@ -57,6 +59,7 @@ class MarkdownGenerator {
       textGenerator: textGenerator,
       richTextBuilder: richTextBuilder,
       splitRegExp: regExp,
+      onSelectionChanged: onSelectionChanged,
       onNodeAccepted: (node, index) {
         onNodeAccepted?.call(node, index);
         if (node is HeadingNode) {
