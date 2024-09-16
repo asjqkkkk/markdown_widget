@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown/markdown.dart' as m;
 import 'package:runtime_client/particle.dart';
@@ -10,12 +11,18 @@ import 'package:runtime_flutter_code_highlighter/runtime_flutter_code_highlighte
 ///An indented code block is composed of one or more indented chunks separated by blank lines
 ///A code fence is a sequence of at least three consecutive backtick characters (`) or tildes (~)
 class CodeBlockNode extends ElementNode {
-  CodeBlockNode(this.element, this.preConfig, this.visitor);
+  CodeBlockNode(
+    this.element,
+    this.preConfig,
+    this.visitor, {
+    this.onSelectionChanged,
+  });
 
   String get content => element.textContent;
   final PreConfig preConfig;
   final m.Element element;
   final WidgetVisitor visitor;
+  final void Function(SelectedContent? content)? onSelectionChanged;
 
   @override
   InlineSpan build() {
@@ -89,7 +96,7 @@ class CodeBlockNode extends ElementNode {
     /// This is wrapped in its own `SelectionArea` so it doesn't hijack taps & selections
     /// from the surrounding widgets, which it was previously doing.
     final widget = SelectionArea(
-      onSelectionChanged: MarkdownRenderingState().onSelectionChanged,
+      onSelectionChanged: onSelectionChanged,
       child: Container(
         decoration: preConfig.decoration,
         margin: preConfig.margin,

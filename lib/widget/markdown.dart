@@ -85,8 +85,6 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
     };
 
-    /// Store the onSelectionChanged callback into a globally available variable for nested SelectionAreas
-    MarkdownRenderingState().onSelectionChanged = widget.onSelectionChanged;
     updateState();
   }
 
@@ -99,6 +97,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 
     final result = markdownGenerator.buildWidgets(
       widget.data,
+      onSelectionChanged: widget.onSelectionChanged,
       onTocList: (tocList) {
         _tocController?.setTocList(tocList);
       },
