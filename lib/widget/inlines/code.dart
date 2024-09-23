@@ -26,21 +26,25 @@ class CodeNode extends ElementNode {
 
     List<InlineSpan> children = [];
 
-    text.splitMapJoin(query, onMatch: (Match match) {
-      children.add(TextSpan(
-        text: match.group(0),
-        style: style.merge(parentStyle).copyWith(color: Colors.black, backgroundColor: Colors.yellow),
-      ));
+    text.splitMapJoin(
+      RegExp(RegExp.escape(query), caseSensitive: false),
+      onMatch: (Match match) {
+        children.add(TextSpan(
+          text: match.group(0),
+          style: style.merge(parentStyle).copyWith(color: Colors.black, backgroundColor: Colors.yellow),
+        ));
 
-      return '';
-    }, onNonMatch: (value) {
-      children.add(TextSpan(
-        text: value,
-        style: style.merge(parentStyle),
-      ));
+        return '';
+      },
+      onNonMatch: (value) {
+        children.add(TextSpan(
+          text: value,
+          style: style.merge(parentStyle),
+        ));
 
-      return '';
-    });
+        return '';
+      },
+    );
 
     return TextSpan(
       children: children,
