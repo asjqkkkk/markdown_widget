@@ -24,11 +24,9 @@ class CodeBlockNode extends ElementNode {
     final children = element.children ?? [];
     if (children.isNotEmpty && children.first is m.Element) {
       final firstChild = children.first as m.Element;
-      if (firstChild.localName == 'code') {
-        final components = firstChild.attributes['class']?.split('-');
-        if (components != null && components.isNotEmpty) {
-          language = components.last;
-        }
+      final components = firstChild.attributes['class']?.split('-');
+      if (components != null && components.isNotEmpty) {
+        language = components.last;
       }
     }
     final splitContents = content
