@@ -54,7 +54,6 @@ class MarkdownGenerator {
       ).parseLines(data.split(RegExp(r'(\r?\n)|(\r?\t)|(\r)')));
     }
     final List<Toc> tocList = [];
-    final mdConfig = config ?? MarkdownConfig.defaultConfig;
     final visitor = WidgetVisitor(
         config: mdConfig,
         generators: generators,
