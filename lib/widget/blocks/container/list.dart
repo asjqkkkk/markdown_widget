@@ -232,16 +232,17 @@ class _OlMarker extends StatelessWidget {
 Widget getDefaultMarker(bool isOrdered, int depth, Color? color, int index,
     double paddingTop, MarkdownConfig config) {
   Widget marker;
-  if (isOrdered)
+  if (isOrdered) {
     marker = Container(
         alignment: Alignment.topRight,
         padding: EdgeInsets.only(right: 1),
         child: _OlMarker(
             depth: depth, index: index, color: color, config: config.p));
-  else
+  } else {
     marker = Padding(
-        padding: EdgeInsets.only(top: paddingTop - 3),
+        padding: EdgeInsets.only(top: paddingTop - 1.5),
         child: _UlMarker(depth: depth, color: color));
+  }
   return marker;
 }
 

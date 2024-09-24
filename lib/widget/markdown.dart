@@ -44,15 +44,15 @@ class MarkdownWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MarkdownWidgetState createState() => _MarkdownWidgetState();
+  MarkdownWidgetState createState() => MarkdownWidgetState();
 }
 
-class _MarkdownWidgetState extends State<MarkdownWidget> {
+class MarkdownWidgetState extends State<MarkdownWidget> {
   ///use [markdownGenerator] to transform markdown data to [Widget] list
   late MarkdownGenerator markdownGenerator;
 
   ///The markdown string converted by MarkdownGenerator will be retained in the [_widgets]
-  List<Widget> _widgets = [];
+  final List<Widget> _widgets = [];
 
   ///[TocController] combines [TocWidget] and [MarkdownWidget]
   TocController? _tocController;

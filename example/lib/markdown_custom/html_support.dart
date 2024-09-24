@@ -29,6 +29,9 @@ void htmlToMarkdown(h.Node? node, int deep, List<m.Node> mNodes) {
   }
 }
 
+final RegExp tableRep =
+    RegExp(r'<table[^>]*>', multiLine: true, caseSensitive: true);
+
 final RegExp htmlRep = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
 
 ///parse [m.Node] to [h.Node]
@@ -39,8 +42,8 @@ List<SpanNode> parseHtml(
   TextStyle? parentStyle,
 }) {
   try {
-    final text =
-        node.textContent.replaceAll(RegExp(r'(\r?\n)|(\r?\t)|(\r)'), '');
+    final text = node.textContent.replaceAll(
+        visitor?.splitRegExp ?? WidgetVisitor.defaultSplitRegExp, '');
     if (!text.contains(htmlRep)) return [TextNode(text: node.text)];
     h.DocumentFragment document = parseFragment(text);
     return HtmlToSpanVisitor(visitor: visitor, parentStyle: parentStyle)

@@ -29,11 +29,14 @@ class CodeBlockNode extends ElementNode {
       language = null;
       debugPrint('get language error:$e');
     }
-    final splitContents = content.trim().split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
+    final splitContents = content
+        .trim()
+        .split(visitor.splitRegExp ?? WidgetVisitor.defaultSplitRegExp);
     if (splitContents.last.isEmpty) splitContents.removeLast();
     final codeBuilder = preConfig.builder;
-    if (codeBuilder != null)
+    if (codeBuilder != null) {
       return WidgetSpan(child: codeBuilder.call(content, language ?? ''));
+    }
     final widget = Container(
       decoration: preConfig.decoration,
       margin: preConfig.margin,
@@ -101,7 +104,7 @@ List<TextSpan> convertHiNodes(
   var currentSpans = spans;
   List<List<TextSpan>> stack = [];
 
-  _traverse(hi.Node node, TextStyle? parentStyle) {
+  void traverse(hi.Node node, TextStyle? parentStyle) {
     final nodeStyle = parentStyle ?? theme[node.className ?? ''];
     final finallyStyle = (nodeStyle ?? styleNotMatched)?.merge(style);
     if (node.value != null) {
@@ -114,17 +117,17 @@ List<TextSpan> convertHiNodes(
       stack.add(currentSpans);
       currentSpans = tmp;
 
-      node.children!.forEach((n) {
-        _traverse(n, nodeStyle);
+      for (var n in node.children!) {
+        traverse(n, nodeStyle);
         if (n == node.children!.last) {
           currentSpans = stack.isEmpty ? spans : stack.removeLast();
         }
-      });
+      }
     }
   }
 
   for (var node in nodes) {
-    _traverse(node, null);
+    traverse(node, null);
   }
   return spans;
 }
@@ -160,8 +163,8 @@ class PreConfig implements LeafConfig {
     this.builder,
   }) : assert(builder == null || wrapper == null);
 
-  static PreConfig get darkConfig => PreConfig(
-        decoration: const BoxDecoration(
+  static PreConfig get darkConfig => const PreConfig(
+        decoration: BoxDecoration(
           color: Color(0xff555555),
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),

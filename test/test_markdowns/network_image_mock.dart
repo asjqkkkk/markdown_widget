@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:mockito/mockito.dart';
 
 /// Runs [body] in separate [Zone] with [MockHttpClient].
-R mockNetworkImagesFor<R>(R body()) {
+R mockNetworkImagesFor<R>(R Function() body) {
   return HttpOverrides.runZoned(
     body,
     createHttpClient: (_) => createMockImageHttpClient(),

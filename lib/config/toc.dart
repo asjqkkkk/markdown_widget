@@ -13,7 +13,7 @@ import '../widget/proxy_rich_text.dart';
 /// and each [TocWidget] corresponds to a [MarkdownWidget].
 class TocController {
   ///key is index of widgets, value is [Toc]
-  final LinkedHashMap<int, Toc> _index2toc = new LinkedHashMap();
+  final LinkedHashMap<int, Toc> _index2toc = LinkedHashMap();
 
   ValueCallback<int>? _jumpToIndexCallback;
   ValueCallback<int>? _onIndexChangedCallback;
@@ -221,7 +221,9 @@ final headingTag2Level = <String, int>{
 };
 
 class _TocHeadingConfig extends HeadingConfig {
+  @override
   final TextStyle style;
+  @override
   final String tag;
 
   _TocHeadingConfig(this.style, this.tag);

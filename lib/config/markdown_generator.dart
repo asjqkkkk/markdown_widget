@@ -19,6 +19,7 @@ class MarkdownGenerator {
   final RichTextBuilder? richTextBuilder;
   final SpanNodeBuilder? spanNodeBuilder;
   final List<m.Node>? cachedNodes;
+  final RegExp? splitRegExp;
 
   MarkdownGenerator({
     this.inlineSyntaxList = const [],
@@ -31,12 +32,16 @@ class MarkdownGenerator {
     this.cachedNodes,
     this.spanNodeBuilder,
     this.richTextBuilder,
+    this.splitRegExp,
   });
 
   ///convert [data] to widgets
   ///[onTocList] can provider [Toc] list
   List<Widget> buildWidgets(String data,
       {ValueCallback<List<Toc>>? onTocList, MarkdownConfig? config}) {
+    final mdConfig = config ?? MarkdownConfig.defaultConfig;
+    final regExp = splitRegExp ?? WidgetVisitor.defaultSplitRegExp;
+    final List<String> lines = data.split(regExp);
     final List<m.Node> nodes;
     if (cachedNodes != null) {
       nodes = cachedNodes!;
@@ -55,6 +60,7 @@ class MarkdownGenerator {
         generators: generators,
         textGenerator: textGenerator,
         richTextBuilder: richTextBuilder,
+        splitRegExp: regExp,
         onNodeAccepted: (node, index) {
           onNodeAccepted?.call(node, index);
           if (node is HeadingNode) {
@@ -66,11 +72,11 @@ class MarkdownGenerator {
     final spans = visitor.visit(nodes);
     onTocList?.call(tocList);
     final List<Widget> widgets = [];
-    spans.forEach((span) {
+    for (var span in spans) {
       final textSpan = spanNodeBuilder?.call(span) ?? span.build();
       final richText = richTextBuilder?.call(textSpan) ?? Text.rich(textSpan);
       widgets.add(Padding(padding: linesMargin, child: richText));
-    });
+    }
     return widgets;
   }
 }

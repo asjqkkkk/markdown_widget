@@ -34,17 +34,23 @@ class WidgetVisitor implements m.NodeVisitor {
   ///use [richTextBuilder] to custom your own [Text.rich]
   final RichTextBuilder? richTextBuilder;
 
+  ///use [splitRegExp] to split markdown data
+  final RegExp? splitRegExp;
+
+  static RegExp defaultSplitRegExp = RegExp(r'(\r?\n)|(\r)');
+
   WidgetVisitor({
     MarkdownConfig? config,
     this.generators = const [],
     this.onNodeAccepted,
     this.textGenerator,
     this.richTextBuilder,
+    this.splitRegExp,
   }) {
     this.config = config ?? MarkdownConfig.defaultConfig;
-    generators.forEach((e) {
+    for (var e in generators) {
       _tag2node[e.tag] = e.generator;
-    });
+    }
   }
 
   ///[visit] will return a [SpanNode] list

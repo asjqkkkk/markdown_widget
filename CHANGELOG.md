@@ -5,6 +5,12 @@
   - Fix: [#143](https://github.com/asjqkkkk/markdown_widget/issues/143)
 - 2.3.2+3
   - Fix: richTextBuilder not working
+- 2.3.2+4
+  - Upgrade dependencies version
+  - Fix [#159](https://github.com/asjqkkkk/markdown_widget/issues/159)
+- 2.3.2+5
+- 2.3.2+6
+  - Fix static analysis issues
 
 ### [2.3.2]
 - Feat: auto check code language and show it
@@ -96,11 +102,9 @@ nullsafety] - migrating to null safety
 ### [1.2.2] 
 - fix issue [#36](https://github.com/asjqkkkk/markdown_widget/issues/36), expose some properties in `TocController` by [#40](https://github.com/asjqkkkk/markdown_widget/pull/40)
 
-#### [1.2.1+
-2] - add `padding` property to `MarkdownWidget` (thanks to @[jarekb123](https://github.com/jarekb123)). It adds ability to set custom padding of under-the-hood scrollable view.
+#### [1.2.1+2] - add `padding` property to `MarkdownWidget` (thanks to @[jarekb123](https://github.com/jarekb123)). It adds ability to set custom padding of under-the-hood scrollable view.
 
-#### [1.2.1+
-1] - expose `tocList` and `currentToc` properties in `TocController` (thanks to @[jarekb123](https://github.com/jarekb123)). It adds ability to create custom Table of Content widgets
+#### [1.2.1+1] - expose `tocList` and `currentToc` properties in `TocController` (thanks to @[jarekb123](https://github.com/jarekb123)). It adds ability to create custom Table of Content widgets
 
 ### [1.2.1] 
 -  fix issue [#25](https://github.com/asjqkkkk/markdown_widget/issues/25) [#28](https://github.com/asjqkkkk/markdown_widget/issues/28) [#29](https://github.com/asjqkkkk/markdown_widget/issues/29) [#32](https://github.com/asjqkkkk/markdown_widget/issues/32)
@@ -133,7 +137,7 @@ nullsafety] - migrating to null safety
 - support dark mode now! see issue [#12](https://github.com/asjqkkkk/markdown_widget/issues/12)
 
 ### [1.1.1] 
-- offer custon html tag to user, fix issue [#8](https://github.com/asjqkkkk/markdown_widget/issues/8)
+- offer custom html tag to user, fix issue [#8](https://github.com/asjqkkkk/markdown_widget/issues/8)
 
 ### [1.1.0] 
 - fix issue [#6](https://github.com/asjqkkkk/markdown_widget/issues/6)
@@ -163,7 +167,7 @@ nullsafety] - migrating to null safety
 - Reduce the difficulty of TOC function, improve the basic functions of the package
 
 ### [1.0.1] 
-- Add `ImgConfig`, clear data when markdown_widget rebuilded
+- Add `ImgConfig`, clear data when markdown_widget rebuild
 
 ### [1.0.0] 
 - Complete base functions

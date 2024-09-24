@@ -44,7 +44,7 @@ void main() {
   test('test for html with visitor', () {
     final m.Document document = m.Document(
         extensionSet: m.ExtensionSet.gitHubFlavored, encodeHtml: false);
-    final List<String> lines = source.split(RegExp(r'(\r?\n)|(\r?\t)|(\r)'));
+    final List<String> lines = source.split(WidgetVisitor.defaultSplitRegExp);
     final List<m.Node> nodes = document.parseLines(lines);
     final visitor = WidgetVisitor(
         textGenerator: (node, config, visitor) =>

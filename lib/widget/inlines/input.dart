@@ -31,7 +31,7 @@ class InputNode extends SpanNode {
 }
 
 ///define a function to return a checkbox widget
-typedef Widget CheckBoxBuilder(bool checked);
+typedef CheckBoxBuilder = Widget Function(bool checked);
 
 ///config class for checkbox, tag: input
 class CheckBoxConfig implements InlineConfig {

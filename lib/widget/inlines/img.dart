@@ -17,8 +17,9 @@ class ImageNode extends SpanNode {
     double? width;
     double? height;
     if (attributes['width'] != null) width = double.parse(attributes['width']!);
-    if (attributes['height'] != null)
+    if (attributes['height'] != null) {
       height = double.parse(attributes['height']!);
+    }
     final imageUrl = attributes['src'] ?? '';
     final alt = attributes['alt'] ?? '';
     final isNetImage = imageUrl.startsWith('http');
@@ -127,5 +128,6 @@ class ImageViewer extends StatelessWidget {
   }
 }
 
-typedef Widget ImgBuilder(String url, Map<String, String> attributes);
-typedef Widget ErrorImgBuilder(String url, String alt, Object error);
+typedef ImgBuilder = Widget Function(
+    String url, Map<String, String> attributes);
+typedef ErrorImgBuilder = Widget Function(String url, String alt, Object error);
