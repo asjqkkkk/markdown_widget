@@ -21,13 +21,15 @@ class CodeBlockNode extends ElementNode {
   @override
   InlineSpan build() {
     String? language = preConfig.language;
-    try {
-      final languageValue =
-          (element.children?.first as m.Element).attributes['class']!;
-      language = languageValue.split('-').last;
-    } catch (e) {
-      language = null;
-      debugPrint('get language error:$e');
+    final children = element.children ?? [];
+    if (children.isNotEmpty && children.first is m.Element) {
+      final firstChild = children.first as m.Element;
+      if (firstChild.localName == 'code') {
+        final components = firstChild.attributes['class']?.split('-');
+        if (components != null && components.isNotEmpty) {
+          language = components.last;
+        }
+      }
     }
     final splitContents = content
         .trim()
