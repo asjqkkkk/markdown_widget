@@ -47,7 +47,26 @@ class MarkdownGenerator {
       extensionSet: extensionSet ?? m.ExtensionSet.gitHubFlavored,
       encodeHtml: false,
       inlineSyntaxes: inlineSyntaxList,
-      blockSyntaxes: blockSyntaxList,
+
+      /// Overrides the standard used within the markdown package
+      /// so that we can not use `CodeBlockSyntax` and instead just use `FencedCodeBlockSyntax` directly.
+      ///
+      /// Why: `CodeBlockSyntax` oddly detects lines with a 4-space indent and processes them as code blocks,
+      /// which can have unintended & undesirable side-effects.
+      blockSyntaxes: [
+        const m.EmptyBlockSyntax(),
+        const m.HtmlBlockSyntax(),
+        const m.SetextHeaderSyntax(),
+        const m.HeaderSyntax(),
+        const m.FencedCodeBlockSyntax(),
+        const m.BlockquoteSyntax(),
+        const m.HorizontalRuleSyntax(),
+        const m.UnorderedListSyntax(),
+        const m.OrderedListSyntax(),
+        const m.LinkReferenceDefinitionSyntax(),
+        const m.ParagraphSyntax()
+      ],
+      withDefaultBlockSyntaxes: false,
     );
     final regExp = splitRegExp ?? WidgetVisitor.defaultSplitRegExp;
     final List<String> lines = data.split(regExp);

@@ -18,7 +18,12 @@ dependencies:
   #markdown data parser
   #  markdown:
   #    path: '../markdown_2'
-  markdown: ^7.2.1
+  # TODO: Change back to original package once Dart merges the patch in
+  # https://github.com/dart-lang/markdown/pull/626
+  markdown:
+    git:
+      url: git@github.com:mack-at-pieces/markdown.git
+      ref: patch-1
   #highlight code
   highlight: ^0.7.0
   flutter_highlight: ^0.7.0
