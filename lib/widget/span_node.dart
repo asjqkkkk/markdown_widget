@@ -72,7 +72,7 @@ class TextNode extends SpanNode {
     }
 
     text.splitMapJoin(
-      RegExp(RegExp.escape(query), caseSensitive: false),
+      RegExp(RegExp.escape(query), caseSensitive: false, unicode: true),
       onMatch: (Match match) {
         children.add(TextSpan(
           text: match.group(0),
