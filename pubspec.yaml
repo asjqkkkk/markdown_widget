@@ -22,7 +22,7 @@ dependencies:
   # https://github.com/dart-lang/markdown/pull/626
   markdown:
     git:
-      url: git@github.com:mack-at-pieces/markdown.git
+      url: git@github.com:pieces-app/markdown.git
       ref: patch-1
   #highlight code
   highlight: ^0.7.0
