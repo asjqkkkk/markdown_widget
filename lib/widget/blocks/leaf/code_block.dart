@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown/markdown.dart' as m;
-import 'package:runtime_client/particle.dart';
+import 'package:markdown_widget/markdown_widget.dart';
+import 'package:runtime_client/foundation.dart';
 import 'package:runtime_flutter_code_highlighter/runtime_flutter_code_highlighter.dart';
 
 ///Tag: [MarkdownTag.pre]
