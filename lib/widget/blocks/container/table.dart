@@ -5,6 +5,15 @@ import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
 import '../../widget_visitor.dart';
 
+class TableData {
+  final List<String> headers;
+  final List<List<String>> rows;
+
+  const TableData({
+    required this.headers,
+    required this.rows,
+  });
+}
 class TableConfig implements ContainerConfig {
   final Map<int, TableColumnWidth>? columnWidths;
   final TableColumnWidth? defaultColumnWidth;
@@ -18,7 +27,8 @@ class TableConfig implements ContainerConfig {
   final TextStyle? bodyStyle;
   final EdgeInsets headPadding;
   final EdgeInsets bodyPadding;
-  final WidgetWrapper? wrapper;
+  // Modified wrapper type to include TableData
+  final Widget Function(Widget table, TableData tableData)? wrapper;
 
   const TableConfig({
     this.columnWidths,
@@ -47,6 +57,35 @@ class TableNode extends ElementNode {
   TableNode(this.config);
 
   TableConfig get tbConfig => config.table;
+
+  // Extract structured table data using toPlainText directly
+  TableData extractTableData() {
+    List<String> headers = [];
+    List<List<String>> rows = [];
+    
+    for (var child in children) {
+      if (child is THeadNode) {
+        // Extract headers
+        if (child.children.isNotEmpty) {
+          var headerRow = child.children.first as TrNode;
+          headers = headerRow.children
+              .map((cell) => cell.build().toPlainText().trim())
+              .toList();
+        }
+      } else if (child is TBodyNode) {
+        // Extract body rows
+        for (var row in child.children) {
+          if (row is TrNode) {
+            rows.add(row.children
+                .map((cell) => cell.build().toPlainText().trim())
+                .toList());
+          }
+        }
+      }
+    }
+    
+    return TableData(headers: headers, rows: rows);
+  }
 
   @override
   InlineSpan build() {
@@ -78,8 +117,11 @@ class TableNode extends ElementNode {
       children: rows,
     );
 
+    // Extract table data before wrapping
+    final tableData = extractTableData();
+
     return WidgetSpan(
-        child: config.table.wrapper?.call(tableWidget) ?? tableWidget);
+        child: config.table.wrapper?.call(tableWidget, tableData) ?? tableWidget);
   }
 }
 
