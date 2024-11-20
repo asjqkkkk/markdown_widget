@@ -50,7 +50,7 @@ void main() {
   });
 
   testWidgets('test for link node', (tester) async {
-    final linkNode = LinkNode({'href': ''}, LinkConfig(), null);
+    final linkNode = LinkNode({'href': ''}, LinkConfig());
     linkNode.children.add(ImageNode(
         {'width': '100', 'height': '100', 'src': ''},
         MarkdownConfig(configs: [
@@ -75,7 +75,6 @@ void main() {
       LinkConfig(onTap: (url) {
         print('on url taped:$url');
       }),
-      null,
     );
     linkNode.children.add(TextNode(text: 'test'));
     await mockNetworkImagesFor(() async {

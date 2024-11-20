@@ -15,9 +15,8 @@ import '../../span_node.dart';
 class LinkNode extends ElementNode {
   final Map<String, String> attributes;
   final LinkConfig linkConfig;
-  final Future<void> Function(String)? onCopy;
 
-  LinkNode(this.attributes, this.linkConfig, this.onCopy);
+  LinkNode(this.attributes, this.linkConfig);
 
   @override
   InlineSpan build() {
@@ -29,7 +28,7 @@ class LinkNode extends ElementNode {
             child.build(),
             () => _onLinkTap(linkConfig, url),
             url,
-            onCopy,
+            linkConfig.onCopy,
           ),
         if (children.isNotEmpty)
           // FIXME: this is a workaround, maybe need fixed by flutter framework.
@@ -55,10 +54,12 @@ class LinkNode extends ElementNode {
 class LinkConfig implements LeafConfig {
   final TextStyle style;
   final ValueCallback<String>? onTap;
+  final Future<void> Function(String)? onCopy;
 
   const LinkConfig({
     this.style = const TextStyle(color: Color(0xff0969da), decoration: TextDecoration.underline),
     this.onTap,
+    this.onCopy,
   });
 
   @nonVirtual

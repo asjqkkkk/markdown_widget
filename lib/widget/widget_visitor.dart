@@ -40,8 +40,6 @@ class WidgetVisitor implements m.NodeVisitor {
 
   final void Function(SelectedContent? content)? onSelectionChanged;
 
-  final Future<void> Function(String)? onCopy;
-
   static RegExp defaultSplitRegExp = RegExp(r'(\r?\n)|(\r)');
 
   WidgetVisitor({
@@ -52,7 +50,6 @@ class WidgetVisitor implements m.NodeVisitor {
     this.richTextBuilder,
     this.splitRegExp,
     this.onSelectionChanged,
-    this.onCopy,
   }) {
     this.config = config ?? MarkdownConfig.defaultConfig;
     for (var e in generators) {
@@ -133,7 +130,7 @@ class WidgetVisitor implements m.NodeVisitor {
     MarkdownTag.td.name: (e, config, visitor) => TdNode(e.attributes, visitor),
     MarkdownTag.p.name: (e, config, visitor) => ParagraphNode(config.p),
     MarkdownTag.input.name: (e, config, visitor) => InputNode(e.attributes, config),
-    MarkdownTag.a.name: (e, config, visitor) => LinkNode(e.attributes, config.a, visitor.onCopy),
+    MarkdownTag.a.name: (e, config, visitor) => LinkNode(e.attributes, config.a),
     MarkdownTag.del.name: (e, config, visitor) => DelNode(),
     MarkdownTag.strong.name: (e, config, visitor) => StrongNode(),
     MarkdownTag.em.name: (e, config, visitor) => EmNode(),

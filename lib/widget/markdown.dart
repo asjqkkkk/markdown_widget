@@ -36,8 +36,6 @@ class MarkdownWidget extends StatefulWidget {
 
   final void Function(SelectedContent? content)? onSelectionChanged;
 
-  final Future<void> Function(String)? onCopy;
-
   /// A search query that will be used to paint a yellow highlight on matches within the markdown content.
   final String? query;
 
@@ -49,7 +47,6 @@ class MarkdownWidget extends StatefulWidget {
     this.shrinkWrap = false,
     this.selectable = false,
     this.onSelectionChanged,
-    this.onCopy,
     this.padding,
     this.config,
     this.sliver = false,
@@ -101,7 +98,6 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     final result = markdownGenerator.buildWidgets(
       widget.data,
       onSelectionChanged: widget.onSelectionChanged,
-      onCopy: widget.onCopy,
       onTocList: (tocList) {
         _tocController?.setTocList(tocList);
       },

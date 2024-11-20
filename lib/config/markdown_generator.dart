@@ -39,7 +39,6 @@ class MarkdownGenerator {
   List<Widget> buildWidgets(
     String data, {
     void Function(SelectedContent? content)? onSelectionChanged,
-    Future<void> Function(String)? onCopy,
     ValueCallback<List<Toc>>? onTocList,
     MarkdownConfig? config,
   }) {
@@ -80,7 +79,6 @@ class MarkdownGenerator {
       richTextBuilder: richTextBuilder,
       splitRegExp: regExp,
       onSelectionChanged: onSelectionChanged,
-      onCopy: onCopy,
       onNodeAccepted: (node, index) {
         onNodeAccepted?.call(node, index);
         if (node is HeadingNode) {
