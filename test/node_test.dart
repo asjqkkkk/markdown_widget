@@ -6,41 +6,29 @@ import 'package:highlight/highlight.dart' as hi;
 
 void main() {
   testWidgets('test asset img node', (tester) async {
-    final imgNode = ImageNode(
-        {'width': '100', 'height': '200', 'src': ''},
-        MarkdownConfig.defaultConfig.copy(configs: [PreConfig().copy()]),
-        WidgetVisitor());
+    final imgNode = ImageNode({'width': '100', 'height': '200', 'src': ''},
+        MarkdownConfig.defaultConfig.copy(configs: [PreConfig().copy()]), WidgetVisitor());
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(imgNode.build()))),
+        home: Scaffold(body: Directionality(textDirection: TextDirection.ltr, child: Text.rich(imgNode.build()))),
       ));
     });
     await (await tester.startGesture(Offset(0, 0))).up();
-    final imgWidget =
-        tester.firstWidget(find.byWidgetPredicate((widget) => widget is Image))
-            as Image;
+    final imgWidget = tester.firstWidget(find.byWidgetPredicate((widget) => widget is Image)) as Image;
     imgWidget.errorBuilder?.call(tester.allElements.first, '', null);
   });
 
   testWidgets('test online img node', (tester) async {
-    final imgNode = ImageNode({'width': '100', 'height': '200', 'src': 'http'},
-        MarkdownConfig.defaultConfig, WidgetVisitor());
+    final imgNode =
+        ImageNode({'width': '100', 'height': '200', 'src': 'http'}, MarkdownConfig.defaultConfig, WidgetVisitor());
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
         navigatorObservers: [_CustomObserver()],
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(imgNode.build()))),
+        home: Scaffold(body: Directionality(textDirection: TextDirection.ltr, child: Text.rich(imgNode.build()))),
       ));
     });
     await (await tester.startGesture(Offset(0, 50))).up();
-    final imgWidget =
-        tester.firstWidget(find.byWidgetPredicate((widget) => widget is Image))
-            as Image;
+    final imgWidget = tester.firstWidget(find.byWidgetPredicate((widget) => widget is Image)) as Image;
     imgWidget.errorBuilder?.call(tester.allElements.first, '', null);
   });
 
@@ -55,17 +43,14 @@ void main() {
         WidgetVisitor());
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(imgNode.build()))),
+        home: Scaffold(body: Directionality(textDirection: TextDirection.ltr, child: Text.rich(imgNode.build()))),
       ));
     });
     await (await tester.startGesture(Offset(0, 50))).up();
   });
 
   testWidgets('test for link node', (tester) async {
-    final linkNode = LinkNode({'href': ''}, LinkConfig());
+    final linkNode = LinkNode({'href': ''}, LinkConfig(), null);
     linkNode.children.add(ImageNode(
         {'width': '100', 'height': '100', 'src': ''},
         MarkdownConfig(configs: [
@@ -77,10 +62,7 @@ void main() {
     linkNode.children.add(TextNode(text: 'test'));
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(linkNode.build()))),
+        home: Scaffold(body: Directionality(textDirection: TextDirection.ltr, child: Text.rich(linkNode.build()))),
       ));
     });
     await (await tester.startGesture(Offset(0, 50))).up();
@@ -88,16 +70,17 @@ void main() {
   });
 
   testWidgets('test for link with custom taps', (tester) async {
-    final linkNode = LinkNode({'href': ''}, LinkConfig(onTap: (url) {
-      print('on url taped:$url');
-    }));
+    final linkNode = LinkNode(
+      {'href': ''},
+      LinkConfig(onTap: (url) {
+        print('on url taped:$url');
+      }),
+      null,
+    );
     linkNode.children.add(TextNode(text: 'test'));
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(linkNode.build()))),
+        home: Scaffold(body: Directionality(textDirection: TextDirection.ltr, child: Text.rich(linkNode.build()))),
       ));
     });
     await (await tester.startGesture(Offset(0, 0))).up();
@@ -114,8 +97,7 @@ class _CustomObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (route is! PageRouteBuilder) return;
-    final page = route.buildPage(route.navigator!.context,
-        AlwaysStoppedAnimation(0), AlwaysStoppedAnimation(0));
+    final page = route.buildPage(route.navigator!.context, AlwaysStoppedAnimation(0), AlwaysStoppedAnimation(0));
     print('page:$page');
   }
 }

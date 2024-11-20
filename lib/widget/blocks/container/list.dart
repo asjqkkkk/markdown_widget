@@ -34,6 +34,7 @@ class UlOrOLNode extends ElementNode {
   @override
   InlineSpan build() {
     return WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
       child: Padding(
         padding: EdgeInsets.only(top: parent == null ? 0 : config.marginBottom),
         child: Column(
@@ -42,8 +43,7 @@ class UlOrOLNode extends ElementNode {
             children.length,
             (index) {
               final childNode = children[index];
-              return ProxyRichText(childNode.build(),
-                  richTextBuilder: visitor.richTextBuilder);
+              return ProxyRichText(childNode.build(), richTextBuilder: visitor.richTextBuilder);
             },
           ),
         ),
@@ -88,9 +88,8 @@ class ListNode extends ElementNode {
   InlineSpan build() {
     final space = config.li.marginLeft;
     final marginBottom = config.li.marginBottom;
-    final parentStyleHeight =
-        (parentStyle?.fontSize ?? config.p.textStyle.fontSize ?? 16.0) *
-            (parentStyle?.height ?? config.p.textStyle.height ?? 1.2);
+    final parentStyleHeight = (parentStyle?.fontSize ?? config.p.textStyle.fontSize ?? 16.0) *
+        (parentStyle?.height ?? config.p.textStyle.height ?? 1.2);
     Widget marker;
     if (isCheckbox) {
       marker = ProxyRichText(
@@ -99,10 +98,10 @@ class ListNode extends ElementNode {
       );
     } else {
       marker = config.li.marker?.call(isOrdered, depth, index) ??
-          getDefaultMarker(isOrdered, depth, parentStyle?.color, index,
-              parentStyleHeight / 2, config);
+          getDefaultMarker(isOrdered, depth, parentStyle?.color, index, parentStyleHeight / 2, config);
     }
     return WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
       child: Padding(
         padding: EdgeInsets.only(bottom: marginBottom),
         child: Row(
@@ -212,38 +211,25 @@ class _OlMarker extends StatelessWidget {
   final Color? color;
   final PConfig config;
 
-  const _OlMarker(
-      {Key? key,
-      this.depth = 0,
-      this.color,
-      this.index = 1,
-      required this.config})
-      : super(key: key);
+  const _OlMarker({Key? key, this.depth = 0, this.color, this.index = 1, required this.config}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SelectionContainer.disabled(
-        child: Text('${index + 1}.',
-            style: config.textStyle.copyWith(color: color)));
+    return SelectionContainer.disabled(child: Text('${index + 1}.', style: config.textStyle.copyWith(color: color)));
   }
 }
 
 ///get default marker for list
-Widget getDefaultMarker(bool isOrdered, int depth, Color? color, int index,
-    double paddingTop, MarkdownConfig config) {
+Widget getDefaultMarker(bool isOrdered, int depth, Color? color, int index, double paddingTop, MarkdownConfig config) {
   Widget marker;
   if (isOrdered) {
-    marker = Container(
-        alignment: Alignment.topRight,
-        padding: EdgeInsets.only(right: 1),
-        child: _OlMarker(
-            depth: depth, index: index, color: color, config: config.p));
+    return _OlMarker(depth: depth, index: index, color: color, config: config.p);
   } else {
-    marker = Padding(
-        padding: EdgeInsets.only(top: paddingTop - 1.5),
-        child: _UlMarker(depth: depth, color: color));
+    return Padding(
+      padding: EdgeInsets.only(top: paddingTop),
+      child: _UlMarker(depth: depth, color: color),
+    );
   }
-  return marker;
 }
 
 const _listTag = {'ul', 'ol'};
