@@ -21,20 +21,36 @@ class LinkNode extends ElementNode {
   @override
   InlineSpan build() {
     final url = attributes['href'] ?? '';
-    return TextSpan(
-      children: [
-        for (final child in children)
-          _toLinkInlineSpan(
-            child.build(),
-            () => _onLinkTap(linkConfig, url),
-            url,
-            linkConfig.onCopy,
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RichText(
+            text: TextSpan(
+              children: [
+                for (final child in children)
+                  _toLinkInlineSpan(
+                    child.build(),
+                    () => _onLinkTap(linkConfig, url),
+                  ),
+                if (children.isNotEmpty)
+                  // FIXME: this is a workaround, maybe need fixed by flutter framework.
+                  // add a space to avoid the space area of line end can be tapped.
+                  TextSpan(text: ' '),
+              ],
+            ),
           ),
-        if (children.isNotEmpty)
-          // FIXME: this is a workaround, maybe need fixed by flutter framework.
-          // add a space to avoid the space area of line end can be tapped.
-          TextSpan(text: ' '),
-      ],
+          if (linkConfig.onCopy != null) ...[
+            CopyActionButton(
+              content: url,
+              micro: true,
+              tooltip: 'Copy URL: $url',
+              copyCallback: linkConfig.onCopy,
+            ),
+          ],
+        ],
+      ),
     );
   }
 
@@ -67,11 +83,12 @@ class LinkConfig implements LeafConfig {
   String get tag => MarkdownTag.a.name;
 }
 
-InlineSpan _toRawSpan(InlineSpan span, VoidCallback onTap) {
+// add a tap gesture recognizer to the span.
+InlineSpan _toLinkInlineSpan(InlineSpan span, VoidCallback onTap) {
   if (span is TextSpan) {
-    return TextSpan(
+    span = TextSpan(
       text: span.text,
-      children: span.children?.map((e) => _toRawSpan(e, onTap)).toList(),
+      children: span.children?.map((e) => _toLinkInlineSpan(e, onTap)).toList(),
       style: span.style,
       recognizer: TapGestureRecognizer()..onTap = onTap,
       onEnter: span.onEnter,
@@ -79,56 +96,6 @@ InlineSpan _toRawSpan(InlineSpan span, VoidCallback onTap) {
       semanticsLabel: span.semanticsLabel,
       locale: span.locale,
       spellOut: span.spellOut,
-    );
-  } else if (span is WidgetSpan) {
-    return WidgetSpan(
-      child: InkWell(
-        child: span.child,
-        onTap: onTap,
-      ),
-      alignment: span.alignment,
-      baseline: span.baseline,
-      style: span.style,
-    );
-  }
-
-  return TextSpan();
-}
-
-// add a tap gesture recognizer to the span.
-InlineSpan _toLinkInlineSpan(InlineSpan span, VoidCallback onTap, String url, [Future<void> Function(String)? onCopy]) {
-  if (span is TextSpan) {
-    span = WidgetSpan(
-      alignment: PlaceholderAlignment.middle,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(
-            child: RichText(
-              text: TextSpan(
-                text: span.text,
-                children: span.children?.map((e) => _toRawSpan(e, onTap)).toList(),
-                style: span.style,
-                recognizer: TapGestureRecognizer()..onTap = onTap,
-                onEnter: span.onEnter,
-                onExit: span.onExit,
-                semanticsLabel: span.semanticsLabel,
-                locale: span.locale,
-                spellOut: span.spellOut,
-              ),
-            ),
-          ),
-          if (onCopy != null) ...[
-            SizedBox(width: 2),
-            CopyActionButton(
-              content: url,
-              micro: true,
-              tooltip: 'Copy URL: $url',
-              copyCallback: onCopy,
-            ),
-          ],
-        ],
-      ),
     );
   } else if (span is WidgetSpan) {
     span = WidgetSpan(
