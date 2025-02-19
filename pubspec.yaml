@@ -9,7 +9,7 @@ topics:
   - widgets
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.6.1 <4.0.0'
 
 dependencies:
   flutter:

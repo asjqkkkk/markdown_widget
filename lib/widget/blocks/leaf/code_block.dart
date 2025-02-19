@@ -53,12 +53,50 @@ class CodeBlockNode extends ElementNode {
       return WidgetSpan(child: codeBuilder.call(text, language ?? '', assetId));
     }
 
+    ScrollController controller = ScrollController();
+
+    /// **IMPORTANT**
+    /// This is wrapped in its own `SelectionArea` so it doesn't hijack taps & selections
+    /// from the surrounding widgets, which it was previously doing.
+    final widget = SelectionArea(
+      onSelectionChanged: onSelectionChanged,
+      child: Container(
+        decoration: preConfig.decoration,
+        margin: preConfig.margin,
+        padding: preConfig.padding,
+        width: double.infinity,
+        child: ScrollbarTheme(
+          data: ScrollbarThemeData(
+            thickness: WidgetStatePropertyAll(8),
+            interactive: true,
+          ),
+          child: Scrollbar(
+            controller: controller,
+            child: SingleChildScrollView(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              physics: ClampingScrollPhysics(),
+              child: Builder(
+                builder: (context) {
+                  return Text.rich(highlight(context, text, language), style: style);
+                }
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return WidgetSpan(child: preConfig.wrapper?.call(widget, text, language ?? '', assetId) ?? widget);
+  }
+
+  TextSpan highlight(BuildContext context, String text, String? language) {
     TextSpan highlighted;
     String? query = MarkdownRenderingState().query;
     String key = '$text-${query ?? ''}';
 
     /// Light & Dark Mode Caches for highlighting
-    if (ParticleAesthetics().darkMode) {
+    if (context.darkMode) {
       TextSpan? cached = MarkdownRenderingState().darkThemeCache[key];
       double? size = cached?.style?.fontSize;
       if (cached != null && size == style.fontSize) {
@@ -90,37 +128,7 @@ class CodeBlockNode extends ElementNode {
       }
     }
 
-    ScrollController controller = ScrollController();
-
-    /// **IMPORTANT**
-    /// This is wrapped in its own `SelectionArea` so it doesn't hijack taps & selections
-    /// from the surrounding widgets, which it was previously doing.
-    final widget = SelectionArea(
-      onSelectionChanged: onSelectionChanged,
-      child: Container(
-        decoration: preConfig.decoration,
-        margin: preConfig.margin,
-        padding: preConfig.padding,
-        width: double.infinity,
-        child: ScrollbarTheme(
-          data: ScrollbarThemeData(
-            thickness: WidgetStatePropertyAll(8),
-            interactive: true,
-          ),
-          child: Scrollbar(
-            controller: controller,
-            child: SingleChildScrollView(
-              controller: controller,
-              scrollDirection: Axis.horizontal,
-              physics: ClampingScrollPhysics(),
-              child: Text.rich(highlighted, style: style),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    return WidgetSpan(child: preConfig.wrapper?.call(widget, text, language ?? '', assetId) ?? widget);
+    return highlighted;
   }
 
   @override
