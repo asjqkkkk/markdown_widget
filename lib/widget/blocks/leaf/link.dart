@@ -26,19 +26,21 @@ class LinkNode extends ElementNode {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          RichText(
-            text: TextSpan(
-              children: [
-                for (final child in children)
-                  _toLinkInlineSpan(
-                    child.build(),
-                    () => _onLinkTap(linkConfig, url),
-                  ),
-                if (children.isNotEmpty)
-                  // FIXME: this is a workaround, maybe need fixed by flutter framework.
-                  // add a space to avoid the space area of line end can be tapped.
-                  TextSpan(text: ' '),
-              ],
+          Flexible(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  for (final child in children)
+                    _toLinkInlineSpan(
+                      child.build(),
+                      () => _onLinkTap(linkConfig, url),
+                    ),
+                  if (children.isNotEmpty)
+                    // FIXME: this is a workaround, maybe need fixed by flutter framework.
+                    // add a space to avoid the space area of line end can be tapped.
+                    TextSpan(text: ' '),
+                ],
+              ),
             ),
           ),
           if (linkConfig.onCopy != null) ...[

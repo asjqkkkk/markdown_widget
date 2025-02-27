@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:runtime_client/foundation.dart';
+import 'package:runtime_client/particle.dart';
 
 import '../../config/configs.dart';
 import '../../state/state.dart';
@@ -18,9 +20,24 @@ class CodeNode extends ElementNode {
     String? query = MarkdownRenderingState().query;
 
     if (query == null) {
-      return TextSpan(
-        text: text,
-        style: style,
+      return WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: codeConfig.style.backgroundColor,
+            borderRadius: ParticleRounding.extraSmall,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            child: Text(
+              text,
+              style: codeConfig.style.merge(parentStyle).codeFont.copyWith(
+                    fontSize: (codeConfig.style.fontSize ?? 14) * 0.9,
+                    backgroundColor: Colors.transparent,
+                  ),
+            ),
+          ),
+        ),
       );
     }
 

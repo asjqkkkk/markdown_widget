@@ -98,7 +98,7 @@ class ListNode extends ElementNode {
       );
     } else {
       marker = config.li.marker?.call(isOrdered, depth, index) ??
-          getDefaultMarker(isOrdered, depth, parentStyle?.color, index, parentStyleHeight / 2, config);
+          getDefaultMarker(isOrdered, depth, parentStyle?.color, index, parentStyleHeight / 3, config);
     }
     return WidgetSpan(
       alignment: PlaceholderAlignment.middle,
