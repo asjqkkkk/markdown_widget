@@ -21,38 +21,41 @@ class LinkNode extends ElementNode {
   @override
   InlineSpan build() {
     final url = attributes['href'] ?? '';
-    return WidgetSpan(
-      alignment: PlaceholderAlignment.middle,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  for (final child in children)
-                    _toLinkInlineSpan(
-                      child.build(),
-                      () => _onLinkTap(linkConfig, url),
-                    ),
-                  if (children.isNotEmpty)
-                    // FIXME: this is a workaround, maybe need fixed by flutter framework.
-                    // add a space to avoid the space area of line end can be tapped.
-                    TextSpan(text: ' '),
-                ],
-              ),
-            ),
-          ),
-          if (linkConfig.onCopy != null) ...[
-            CopyActionButton(
-              content: url,
-              micro: true,
-              tooltip: 'Copy URL: $url',
-              copyCallback: linkConfig.onCopy,
-            ),
-          ],
-        ],
-      ),
+
+    // Instead of wrapping everything in a WidgetSpan, return a list of inline spans
+    // for the text content and only use WidgetSpan for the copy button
+    List<InlineSpan> spans = [];
+
+    // Add the link text spans that can be selected
+    for (final child in children) {
+      spans.add(_toLinkInlineSpan(
+        child.build(),
+            () => _onLinkTap(linkConfig, url),
+      ));
+    }
+
+    // Add a space after the text
+    if (children.isNotEmpty) {
+      spans.add(TextSpan(text: ' '));
+    }
+
+    // Only use WidgetSpan for the copy button
+    if (linkConfig.onCopy != null) {
+      spans.add(WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: CopyActionButton(
+          content: url,
+          micro: true,
+          tooltip: 'Copy URL: $url',
+          copyCallback: linkConfig.onCopy,
+        ),
+      ));
+    }
+
+    // Return a TextSpan that wraps all the spans
+    return TextSpan(
+      children: spans,
+      style: style,
     );
   }
 
