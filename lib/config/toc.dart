@@ -67,6 +67,9 @@ class Toc {
   });
 }
 
+const defaultTocTextStyle = TextStyle(fontSize: 16);
+const defaultCurrentTocTextStyle = TextStyle(fontSize: 16, color: Colors.blue);
+
 class TocWidget extends StatefulWidget {
   ///[controller] must not be null
   final TocController controller;
@@ -83,6 +86,12 @@ class TocWidget extends StatefulWidget {
   ///use [itemBuilder] to return a custom widget
   final TocItemBuilder? itemBuilder;
 
+  /// use [tocTextStyle] to set the style of the toc item
+  final TextStyle tocTextStyle;
+
+  /// use [currentTocTextStyle] to set the style of the current toc item
+  final TextStyle currentTocTextStyle;
+
   const TocWidget({
     Key? key,
     required this.controller,
@@ -90,7 +99,11 @@ class TocWidget extends StatefulWidget {
     this.shrinkWrap = false,
     this.padding,
     this.itemBuilder,
-  }) : super(key: key);
+    TextStyle? tocTextStyle,
+    TextStyle? currentTocTextStyle,
+  })  : tocTextStyle = tocTextStyle ?? defaultTocTextStyle,
+        currentTocTextStyle = currentTocTextStyle ?? defaultCurrentTocTextStyle,
+        super(key: key);
 
   @override
   State<TocWidget> createState() => _TocWidgetState();
@@ -162,8 +175,7 @@ class _TocWidgetState extends State<TocWidget> {
         }
         final node = currentToc.node.copy(
             headingConfig: _TocHeadingConfig(
-                TextStyle(
-                    fontSize: 16, color: isCurrentToc ? Colors.blue : null),
+                isCurrentToc ? widget.currentTocTextStyle : widget.tocTextStyle,
                 currentToc.node.headingConfig.tag));
         final child = ListTile(
           title: Container(
