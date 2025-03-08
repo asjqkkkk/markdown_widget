@@ -7,6 +7,8 @@ import '../widget/widget_visitor.dart';
 import 'configs.dart';
 import 'toc.dart';
 
+typedef HeadingNodeFilter = bool Function(HeadingNode toc);
+
 ///use [MarkdownGenerator] to transform markdown data to [Widget] list, so you can render it by any type of [ListView]
 class MarkdownGenerator {
   final Iterable<m.InlineSyntax> inlineSyntaxList;
@@ -19,19 +21,26 @@ class MarkdownGenerator {
   final SpanNodeBuilder? spanNodeBuilder;
   final RichTextBuilder? richTextBuilder;
   final RegExp? splitRegExp;
+  final HeadingNodeFilter headingNodeFilter;
 
-  MarkdownGenerator({
-    this.inlineSyntaxList = const [],
-    this.blockSyntaxList = const [],
-    this.linesMargin = const EdgeInsets.symmetric(vertical: 8),
-    this.generators = const [],
-    this.onNodeAccepted,
-    this.extensionSet,
-    this.textGenerator,
-    this.spanNodeBuilder,
-    this.richTextBuilder,
-    this.splitRegExp,
-  });
+  /// Use [headingNodeFilter] to filter the levels of headings you want to show.
+  /// e.g.
+  /// ```dart
+  /// (HeadingNode node) => {'h1', 'h2'}.contains(node.headingConfig.tag)
+  /// ```
+  MarkdownGenerator(
+      {this.inlineSyntaxList = const [],
+      this.blockSyntaxList = const [],
+      this.linesMargin = const EdgeInsets.symmetric(vertical: 8),
+      this.generators = const [],
+      this.onNodeAccepted,
+      this.extensionSet,
+      this.textGenerator,
+      this.spanNodeBuilder,
+      this.richTextBuilder,
+      this.splitRegExp,
+      headingNodeFilter})
+      : headingNodeFilter = headingNodeFilter ?? allowAll;
 
   ///convert [data] to widgets
   ///[onTocList] can provider [Toc] list
@@ -56,7 +65,7 @@ class MarkdownGenerator {
         splitRegExp: regExp,
         onNodeAccepted: (node, index) {
           onNodeAccepted?.call(node, index);
-          if (node is HeadingNode) {
+          if (node is HeadingNode && headingNodeFilter(node)) {
             final listLength = tocList.length;
             tocList.add(
                 Toc(node: node, widgetIndex: index, selfIndex: listLength));
@@ -72,6 +81,8 @@ class MarkdownGenerator {
     }
     return widgets;
   }
+
+  static bool allowAll(HeadingNode toc) => true;
 }
 
 typedef SpanNodeBuilder = TextSpan Function(SpanNode spanNode);

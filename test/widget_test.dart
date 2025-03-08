@@ -9,6 +9,8 @@ import 'test_markdowns/network_image_mock.dart';
 import 'widget_visitor_test.dart';
 import 'package:path/path.dart' as p;
 
+typedef _TocFilterTestCase = (HeadingNodeFilter?, Matcher);
+
 void main() {
   const testMarkdown = '''
 | align left | centered | align right |
@@ -93,6 +95,54 @@ void main() {
     gesture.up();
     tocController.setTocList([list.removeLast()]);
     tocController.dispose();
+  });
+
+  group('toc filter tests', () {
+    final backupVisibilityDetectorUpdateInterval =
+        VisibilityDetectorController.instance.updateInterval;
+    TocController? tocController;
+    setUp(() {
+      VisibilityDetectorController.instance.updateInterval = Duration.zero;
+    });
+    tearDown(() {
+      VisibilityDetectorController.instance.updateInterval =
+          backupVisibilityDetectorUpdateInterval;
+      tocController?.dispose();
+    });
+    for (final (headingNodeFilter, matcher) in <_TocFilterTestCase>[
+      (null, hasLength(34)),
+      ((HeadingNode node) => false, isEmpty),
+      (
+        (HeadingNode node) => {'h1', 'h2'}.contains(node.headingConfig.tag),
+        hasLength(6)
+      ),
+    ]) {
+      testWidgets('test toc widget with filter "$matcher"', (tester) async {
+        tester.view.physicalSize = const Size(3840, 2160);
+        tocController = TocController();
+        await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+            body: Row(children: [
+              Expanded(
+                child: TocWidget(
+                  controller: tocController!,
+                ),
+              ),
+              Expanded(
+                child: MarkdownWidget(
+                  data: testMarkdown,
+                  tocController: tocController!,
+                  markdownGenerator:
+                      MarkdownGenerator(headingNodeFilter: headingNodeFilter),
+                ),
+              ),
+            ]),
+          ),
+        ));
+
+        expect(tocController!.tocList, matcher);
+      });
+    }
   });
 
   testWidgets('test markdown widget', (tester) async {
