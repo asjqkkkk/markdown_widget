@@ -140,18 +140,21 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
           isForward = direction == ScrollDirection.forward;
           return true;
         },
-        child: SingleChildScrollView(
-          physics: widget.physics,
-          controller: controller,
-          padding: widget.padding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-              _widgets.length,
-              (index) => wrapByAutoScroll(
-                index,
-                wrapByVisibilityDetector(index, _widgets[index]),
-                controller,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.text, // Apply text cursor consistently
+          child: SingleChildScrollView(
+            physics: widget.physics,
+            controller: controller,
+            padding: widget.padding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                _widgets.length,
+                (index) => wrapByAutoScroll(
+                  index,
+                  wrapByVisibilityDetector(index, _widgets[index]),
+                  controller,
+                ),
               ),
             ),
           ),
@@ -159,6 +162,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       );
     }
 
+    // This is the ONLY SelectionArea in the entire widget tree
     return widget.selectable
         ? SelectionArea(
             child: markdownWidget,

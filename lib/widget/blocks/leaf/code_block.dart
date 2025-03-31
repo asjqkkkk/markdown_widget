@@ -12,11 +12,11 @@ import 'package:runtime_flutter_code_highlighter/runtime_flutter_code_highlighte
 ///A code fence is a sequence of at least three consecutive backtick characters (`) or tildes (~)
 class CodeBlockNode extends ElementNode {
   CodeBlockNode(
-    this.element,
-    this.preConfig,
-    this.visitor, {
-    this.onSelectionChanged,
-  });
+      this.element,
+      this.preConfig,
+      this.visitor, {
+        this.onSelectionChanged,
+      });
 
   String get content => element.textContent;
   final PreConfig preConfig;
@@ -53,41 +53,34 @@ class CodeBlockNode extends ElementNode {
       return WidgetSpan(child: codeBuilder.call(text, language ?? '', assetId));
     }
 
-    ScrollController controller = ScrollController();
-
-    /// **IMPORTANT**
-    /// This is wrapped in its own `SelectionArea` so it doesn't hijack taps & selections
-    /// from the surrounding widgets, which it was previously doing.
-    final widget = SelectionArea(
-      onSelectionChanged: onSelectionChanged,
-      child: Container(
-        decoration: preConfig.decoration,
-        margin: preConfig.margin,
-        padding: preConfig.padding,
-        width: double.infinity,
-        child: ScrollbarTheme(
-          data: ScrollbarThemeData(
-            thickness: WidgetStatePropertyAll(8),
-            interactive: true,
-          ),
-          child: Scrollbar(
-            controller: controller,
-            child: SingleChildScrollView(
-              controller: controller,
-              scrollDirection: Axis.horizontal,
-              physics: ClampingScrollPhysics(),
-              child: Builder(
-                builder: (context) {
-                  return Text.rich(highlight(context, text, language), style: style);
-                }
-              ),
-            ),
-          ),
+    // Use a StatefulWidget to properly manage the ScrollController lifecycle
+    final widget = WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: preConfig.wrapper?.call(
+        _CodeBlockWidget(
+          text: text,
+          language: language,
+          preConfig: preConfig,
+          onSelectionChanged: onSelectionChanged,
+          highlight: (context, text, language) => highlight(context, text, language),
+          style: style,
         ),
-      ),
+        text,
+        language ?? '',
+        assetId,
+      ) ??
+          _CodeBlockWidget(
+            text: text,
+            language: language,
+            preConfig: preConfig,
+            onSelectionChanged: onSelectionChanged,
+            highlight: (context, text, language) => highlight(context, text, language),
+            style: style,
+          ),
     );
 
-    return WidgetSpan(child: preConfig.wrapper?.call(widget, text, language ?? '', assetId) ?? widget);
+    return widget;
   }
 
   TextSpan highlight(BuildContext context, String text, String? language) {
@@ -135,63 +128,82 @@ class CodeBlockNode extends ElementNode {
   TextStyle get style => preConfig.textStyle.merge(parentStyle);
 }
 
-///transform code to highlight code
-// List<InlineSpan> highLightSpans(
-//   String input, {
-//   String? language,
-//   bool autoDetectionLanguage = false,
-//   Map<String, TextStyle> theme = const {},
-//   TextStyle? textStyle,
-//   TextStyle? styleNotMatched,
-//   int tabSize = 8,
-// }) {
-//   return convertHiNodes(
-//       hi.highlight
-//           .parse(input.trimRight(),
-//               language: autoDetectionLanguage ? null : language, autoDetection: autoDetectionLanguage)
-//           .nodes!,
-//       theme,
-//       textStyle,
-//       styleNotMatched);
-// }
-//
-// List<TextSpan> convertHiNodes(
-//   List<hi.Node> nodes,
-//   Map<String, TextStyle> theme,
-//   TextStyle? style,
-//   TextStyle? styleNotMatched,
-// ) {
-//   List<TextSpan> spans = [];
-//   var currentSpans = spans;
-//   List<List<TextSpan>> stack = [];
-//
-//   void traverse(hi.Node node, TextStyle? parentStyle) {
-//     final nodeStyle = parentStyle ?? theme[node.className ?? ''];
-//     final finallyStyle = (nodeStyle ?? styleNotMatched)?.merge(style);
-//     if (node.value != null) {
-//       currentSpans.add(node.className == null
-//           ? TextSpan(text: node.value, style: finallyStyle)
-//           : TextSpan(text: node.value, style: finallyStyle));
-//     } else if (node.children != null) {
-//       List<TextSpan> tmp = [];
-//       currentSpans.add(TextSpan(children: tmp, style: finallyStyle));
-//       stack.add(currentSpans);
-//       currentSpans = tmp;
-//
-//       for (var n in node.children!) {
-//         traverse(n, nodeStyle);
-//         if (n == node.children!.last) {
-//           currentSpans = stack.isEmpty ? spans : stack.removeLast();
-//         }
-//       }
-//     }
-//   }
-//
-//   for (var node in nodes) {
-//     traverse(node, null);
-//   }
-//   return spans;
-// }
+// Separate StatefulWidget to properly manage ScrollController lifecycle
+class _CodeBlockWidget extends StatefulWidget {
+  final String text;
+  final String? language;
+  final PreConfig preConfig;
+  final void Function(SelectedContent? content)? onSelectionChanged;
+  final TextSpan Function(BuildContext, String, String?) highlight;
+  final TextStyle style;
+
+  const _CodeBlockWidget({
+    required this.text,
+    required this.language,
+    required this.preConfig,
+    required this.highlight,
+    required this.style,
+    this.onSelectionChanged,
+  });
+
+  @override
+  State<_CodeBlockWidget> createState() => _CodeBlockWidgetState();
+}
+
+class _CodeBlockWidgetState extends State<_CodeBlockWidget> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SelectionArea(
+      onSelectionChanged: widget.onSelectionChanged,
+      child: Container(
+        decoration: widget.preConfig.decoration,
+        margin: widget.preConfig.margin,
+        padding: widget.preConfig.padding,
+        width: double.infinity,
+        child: ScrollbarTheme(
+          data: ScrollbarThemeData(
+            interactive: true,
+            thumbVisibility: WidgetStatePropertyAll(true),
+            thumbColor: WidgetStatePropertyAll(context.scaffoldColor),
+          ),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.grab,
+            child: Scrollbar(
+              controller: _scrollController,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                physics: const ClampingScrollPhysics(),
+                child: Builder(
+                    builder: (context) {
+                      return Text.rich(
+                        widget.highlight(context, widget.text, widget.language),
+                        style: widget.style,
+                      );
+                    }
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 ///config class for pre
 class PreConfig implements LeafConfig {
@@ -225,12 +237,12 @@ class PreConfig implements LeafConfig {
   }) : assert(builder == null || wrapper == null);
 
   static PreConfig get darkConfig => const PreConfig(
-        decoration: BoxDecoration(
-          color: Color(0xff555555),
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-        ),
-        theme: RuntimeCodeHighlighterThemes.ONE_HALF_DARK,
-      );
+    decoration: BoxDecoration(
+      color: Color(0xff555555),
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+    ),
+    theme: RuntimeCodeHighlighterThemes.ONE_HALF_DARK,
+  );
 
   ///copy by other params
   PreConfig copy({

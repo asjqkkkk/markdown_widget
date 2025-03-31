@@ -33,18 +33,27 @@ class UlOrOLNode extends ElementNode {
 
   @override
   InlineSpan build() {
+    if (children.isEmpty) {
+      return const TextSpan();
+    }
+
     return WidgetSpan(
-      alignment: PlaceholderAlignment.middle,
+      alignment: PlaceholderAlignment.baseline, // Consistent alignment
+      baseline: TextBaseline.alphabetic,        // Use alphabetic baseline
       child: Padding(
         padding: EdgeInsets.only(top: parent == null ? 0 : config.marginBottom),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(
-            children.length,
-            (index) {
-              final childNode = children[index];
-              return ProxyRichText(childNode.build(), richTextBuilder: visitor.richTextBuilder);
-            },
+        child: Container(
+          color: Colors.transparent, // Add hit-testing surface
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min, // Minimize column size
+            children: List.generate(
+              children.length,
+                  (index) {
+                final childNode = children[index];
+                return ProxyRichText(childNode.build(), richTextBuilder: visitor.richTextBuilder);
+              },
+            ),
           ),
         ),
       ),
@@ -90,6 +99,7 @@ class ListNode extends ElementNode {
     final marginBottom = config.li.marginBottom;
     final parentStyleHeight = (parentStyle?.fontSize ?? config.p.textStyle.fontSize ?? 16.0) *
         (parentStyle?.height ?? config.p.textStyle.height ?? 1.2);
+
     Widget marker;
     if (isCheckbox) {
       marker = ProxyRichText(
@@ -100,35 +110,48 @@ class ListNode extends ElementNode {
       marker = config.li.marker?.call(isOrdered, depth, index) ??
           getDefaultMarker(isOrdered, depth, parentStyle?.color, index, parentStyleHeight / 3, config);
     }
+
+    // Create a combined list of all InlineSpan children
+    List<InlineSpan> childSpans = [];
+
+    if (children.isNotEmpty) {
+      childSpans.add(children.first.build());
+
+      for (final child in children.skip(1)) {
+        // Only add newline for nested lists, not every element
+        if (child is UlOrOLNode) {
+          childSpans.add(const TextSpan(text: '\n'));
+        }
+        childSpans.add(child.build());
+      }
+    }
+
     return WidgetSpan(
-      alignment: PlaceholderAlignment.middle,
+      alignment: PlaceholderAlignment.baseline, // Consistent alignment
+      baseline: TextBaseline.alphabetic,        // Use alphabetic baseline
       child: Padding(
         padding: EdgeInsets.only(bottom: marginBottom),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: space,
-              child: marker,
-            ),
-            Flexible(
-              child: ProxyRichText(
-                TextSpan(
-                  children: [
-                    if (children.isNotEmpty) children.first.build(),
-                    for (final child in children.skip(1)) ...[
-                      // Introducing a new line before the next list item.
-                      // Otherwise, it might be rendered on the same line, disrupting the layout.
-                      if (child is UlOrOLNode) const TextSpan(text: '\n'),
-                      child.build(),
-                    ],
-                  ],
+        child: Container(
+          color: Colors.transparent, // Add hit-testing surface
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Use ExcludeSemantics instead of SelectionContainer.disabled
+              ExcludeSemantics(
+                child: SizedBox(
+                  width: space,
+                  child: marker,
                 ),
-                richTextBuilder: visitor.richTextBuilder,
               ),
-            ),
-          ],
+              Flexible(
+                child: ProxyRichText(
+                  TextSpan(children: childSpans),
+                  richTextBuilder: visitor.richTextBuilder,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -215,13 +238,13 @@ class _OlMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectionContainer.disabled(child: Text('${index + 1}.', style: config.textStyle.copyWith(color: color)));
+    // Remove SelectionContainer.disabled
+    return Text('${index + 1}.', style: config.textStyle.copyWith(color: color));
   }
 }
 
 ///get default marker for list
 Widget getDefaultMarker(bool isOrdered, int depth, Color? color, int index, double paddingTop, MarkdownConfig config) {
-  Widget marker;
   if (isOrdered) {
     return _OlMarker(depth: depth, index: index, color: color, config: config.p);
   } else {

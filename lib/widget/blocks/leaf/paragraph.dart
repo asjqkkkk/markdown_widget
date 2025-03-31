@@ -13,11 +13,14 @@ class ParagraphNode extends ElementNode {
 
   @override
   InlineSpan build() {
+    // Ensure style is properly applied and maintain clean hierarchy
     return TextSpan(
-        children: List.generate(children.length, (index) {
-      final child = children[index];
-      return child.build();
-    }));
+      style: style,
+      children: List.generate(children.length, (index) {
+        final child = children[index];
+        return child.build();
+      }),
+    );
   }
 
   @override
@@ -43,6 +46,15 @@ class PConfig implements LeafConfig {
 ///double '~'swill be wrapped with an HTML <del> tag.
 class DelNode extends ElementNode {
   @override
+  InlineSpan build() {
+    // Create consistent TextSpan structure for inline elements
+    return TextSpan(
+      style: style,
+      children: List.generate(children.length, (index) => children[index].build()),
+    );
+  }
+
+  @override
   TextStyle get style =>
       parentStyle?.merge(_defaultDelStyle) ?? _defaultDelStyle;
 }
@@ -52,6 +64,15 @@ class DelNode extends ElementNode {
 /// double '*'s or '_'s will be wrapped with an HTML <strong> tag.
 class StrongNode extends ElementNode {
   @override
+  InlineSpan build() {
+    // Create consistent TextSpan structure for inline elements
+    return TextSpan(
+      style: style,
+      children: List.generate(children.length, (index) => children[index].build()),
+    );
+  }
+
+  @override
   TextStyle get style =>
       parentStyle?.merge(_defaultStrongStyle) ?? _defaultStrongStyle;
 }
@@ -60,6 +81,15 @@ class StrongNode extends ElementNode {
 ///
 /// emphasis, Markdown treats asterisks (*) and underscores (_) as indicators of emphasis
 class EmNode extends ElementNode {
+  @override
+  InlineSpan build() {
+    // Create consistent TextSpan structure for inline elements
+    return TextSpan(
+      style: style,
+      children: List.generate(children.length, (index) => children[index].build()),
+    );
+  }
+
   @override
   TextStyle get style => parentStyle?.merge(_defaultEmStyle) ?? _defaultEmStyle;
 }

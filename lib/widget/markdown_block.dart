@@ -30,11 +30,17 @@ class MarkdownBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final markdownGenerator = generator ?? MarkdownGenerator();
     final widgets = markdownGenerator.buildWidgets(data, config: config);
-    final column = Column(
-      children: widgets,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+
+    final column = MouseRegion(
+      cursor: SystemMouseCursors.text, // Add consistent cursor
+      child: Column(
+        children: widgets,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+      ),
     );
+
+    // This will be the only SelectionArea
     return selectable ? SelectionArea(child: column) : column;
   }
 }

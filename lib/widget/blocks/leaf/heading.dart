@@ -19,19 +19,26 @@ class HeadingNode extends ElementNode {
   InlineSpan build() {
     final divider = headingConfig.divider;
     if (divider == null) return childrenSpan;
+
     return WidgetSpan(
-      child: Padding(
-        padding: headingConfig.padding,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ProxyRichText(
-              childrenSpan,
-              richTextBuilder: visitor.richTextBuilder,
-            ),
-            _Divider(divider: divider.copy(color: parentStyle?.color)),
-          ],
+      alignment: PlaceholderAlignment.baseline, // Consistent alignment
+      baseline: TextBaseline.alphabetic,        // Use alphabetic baseline
+      child: Container(
+        color: Colors.transparent, // Add hit-testing surface
+        child: Padding(
+          padding: headingConfig.padding,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min, // Minimize size
+            children: <Widget>[
+              ProxyRichText(
+                childrenSpan,
+                richTextBuilder: visitor.richTextBuilder,
+              ),
+              _Divider(divider: divider.copy(color: parentStyle?.color)),
+            ],
+          ),
         ),
       ),
     );
@@ -76,8 +83,8 @@ class HeadingDivider {
 
   HeadingDivider(
       {this.space = 4.8,
-      this.color = const Color(0xFFd7dde3),
-      this.height = 1.0});
+        this.color = const Color(0xFFd7dde3),
+        this.height = 1.0});
 
   HeadingDivider copy({Color? color, double? space, double? height}) =>
       HeadingDivider(

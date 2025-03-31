@@ -8,16 +8,19 @@ class ProxyRichText extends StatelessWidget {
   final RichTextBuilder? richTextBuilder;
 
   const ProxyRichText(
-    this.textSpan, {
-    Key? key,
-    this.richTextBuilder,
-  }) : super(key: key);
+      this.textSpan, {
+        Key? key,
+        this.richTextBuilder,
+      }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.text,
-      child: richTextBuilder?.call(textSpan) ?? Text.rich(textSpan),
+      child: Container(
+        color: Colors.transparent, // Add hit-testing surface
+        child: richTextBuilder?.call(textSpan) ?? Text.rich(textSpan),
+      ),
     );
   }
 }
