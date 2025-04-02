@@ -131,27 +131,23 @@ class ListNode extends ElementNode {
       baseline: TextBaseline.alphabetic,        // Use alphabetic baseline
       child: Padding(
         padding: EdgeInsets.only(bottom: marginBottom),
-        child: Container(
-          color: Colors.transparent, // Add hit-testing surface
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Use ExcludeSemantics instead of SelectionContainer.disabled
-              ExcludeSemantics(
-                child: SizedBox(
-                  width: space,
-                  child: marker,
-                ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SelectionContainer.disabled(
+              child: SizedBox(
+                width: space,
+                child: marker,
               ),
-              Flexible(
-                child: ProxyRichText(
-                  TextSpan(children: childSpans),
-                  richTextBuilder: visitor.richTextBuilder,
-                ),
+            ),
+            Flexible(
+              child: ProxyRichText(
+                TextSpan(children: childSpans),
+                richTextBuilder: visitor.richTextBuilder,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
