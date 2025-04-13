@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:markdown_widget/config/toc_widget.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'test_markdowns/network_image_mock.dart';

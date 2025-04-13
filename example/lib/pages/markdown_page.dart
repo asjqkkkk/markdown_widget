@@ -1,3 +1,4 @@
+import 'package:example/pages/toc_widget_alt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -85,7 +86,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
     );
   }
 
-  Widget buildTocList() => TocWidget(controller: controller);
+  Widget buildTocList() => TocAltWidget(controller: controller);
 
   Widget buildMarkdown() {
     return Container(
@@ -169,12 +170,13 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   Widget buildWebBody() {
     return Row(
-      children: <Widget>[
-        Expanded(child: buildTocList()),
+      children: [
+        // Expanded(child: TocWidget(controller: controller)),
+        TocAltWidget(controller: controller),
         Expanded(
           child: buildMarkdown(),
           flex: 3,
-        )
+        ),
       ],
     );
   }
