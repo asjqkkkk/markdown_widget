@@ -169,6 +169,6 @@ Widget wrapByAutoScroll(
     controller: controller,
     index: index,
     child: child,
-    highlightColor: Colors.black.withOpacity(0.1),
+    highlightColor: Colors.black.toOpacity(0.1),
   );
 }

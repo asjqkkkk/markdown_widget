@@ -9,7 +9,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../markdown_custom/custom_node.dart';
 import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
-
 import '../platform_detector/platform_detector.dart';
 import '../state/root_state.dart';
 import '../widget/code_wrapper.dart';
@@ -101,8 +100,7 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                     inlineSyntaxList: [LatexSyntax()],
                     textGenerator: (node, config, visitor) =>
                         CustomTextNode(node.textContent, config, visitor),
-                    richTextBuilder: (span) =>
-                        Text.rich(span, textScaleFactor: 1),
+                    richTextBuilder: (span) => Text.rich(span),
                   ),
                 );
               }),
