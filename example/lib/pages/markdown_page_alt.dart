@@ -1,14 +1,11 @@
+import 'package:example/pages/toc_widget_alt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-
 import 'package:markdown_widget/markdown_widget.dart';
-import 'package:markdown_widget/toc_widget.dart';
 
 import '../markdown_custom/custom_node.dart';
 import '../markdown_custom/latex.dart';
 import '../markdown_custom/video.dart';
-import '../platform_detector/platform_detector.dart';
 import '../state/root_state.dart';
 import '../widget/code_wrapper.dart';
 
@@ -30,8 +27,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
   String? data;
   bool isEnglish = true;
   final TocController controller = TocController();
-
-  bool get isMobile => PlatformDetector.isAllMobile;
 
   @override
   void initState() {
@@ -68,56 +63,40 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   @override
   Widget build(BuildContext context) {
+    final config =
+        isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
+    final codeWrapper =
+        (child, text, language) => CodeWrapperWidget(child, text, language);
     return Scaffold(
       body: data == null
           ? Center(child: CircularProgressIndicator())
-          : (isMobile ? buildMobileBody() : buildWebBody()),
-      floatingActionButton: widget.assetsPath != null
-          ? isMobile
-              ? FloatingActionButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context, builder: (ctx) => buildTocList());
-                  },
-                  child: Icon(Icons.format_list_bulleted),
-                  heroTag: 'list',
-                )
-              : SizedBox()
-          : null,
+          : (Row(
+              children: [
+                // TocAltWidget(controller: controller),
+                Expanded(
+                  child: MarkdownWidget(
+                      data: data!,
+                      config: config.copy(configs: [
+                        isDark
+                            ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
+                            : PreConfig().copy(wrapper: codeWrapper)
+                      ]),
+                      tocController: controller,
+                      markdownGenerator: MarkdownGenerator(
+                        generators: [videoGeneratorWithTag, latexGenerator],
+                        inlineSyntaxList: [LatexSyntax()],
+                        textGenerator: (node, config, visitor) =>
+                            CustomTextNode(node.textContent, config, visitor),
+                        richTextBuilder: (span) => Text.rich(span),
+                      )),
+                ),
+                TocAltWidget(controller: controller),
+              ],
+            )),
     );
   }
 
-  Widget buildTocList() => TocWidget(controller: controller);
-
-  Widget buildMarkdown() {
-    return Container(
-      margin: EdgeInsets.all(10.0),
-      child: StoreConnector<RootState, ThemeState>(
-          converter: ThemeState.storeConverter,
-          builder: (context, snapshot) {
-            final config = isDark
-                ? MarkdownConfig.darkConfig
-                : MarkdownConfig.defaultConfig;
-            final codeWrapper = (child, text, language) =>
-                CodeWrapperWidget(child, text, language);
-            return MarkdownWidget(
-                data: data!,
-                config: config.copy(configs: [
-                  isDark
-                      ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
-                      : PreConfig().copy(wrapper: codeWrapper)
-                ]),
-                tocController: controller,
-                markdownGenerator: MarkdownGenerator(
-                  generators: [videoGeneratorWithTag, latexGenerator],
-                  inlineSyntaxList: [LatexSyntax()],
-                  textGenerator: (node, config, visitor) =>
-                      CustomTextNode(node.textContent, config, visitor),
-                  richTextBuilder: (span) => Text.rich(span),
-                ));
-          }),
-    );
-  }
+  Widget buildTocList() => TocAltWidget(controller: controller);
 
   Widget buildCodeBlock(Widget child, String text, bool isEnglish) {
     return Stack(
@@ -159,22 +138,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
               size: 10,
             ),
           ),
-        )
-      ],
-    );
-  }
-
-  Widget buildMobileBody() {
-    return buildMarkdown();
-  }
-
-  Widget buildWebBody() {
-    return Row(
-      children: <Widget>[
-        Expanded(child: buildTocList()),
-        Expanded(
-          child: buildMarkdown(),
-          flex: 3,
         )
       ],
     );

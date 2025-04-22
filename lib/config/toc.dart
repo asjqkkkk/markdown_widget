@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:markdown_widget/config/toc_widget.dart';
+import 'package:markdown_widget/toc_widget.dart';
 
 import '../widget/blocks/leaf/heading.dart';
 import '../widget/markdown.dart';

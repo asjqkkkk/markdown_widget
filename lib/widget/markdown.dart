@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:markdown_widget/config/toc_widget.dart';
+import 'package:markdown_widget/toc_widget.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
