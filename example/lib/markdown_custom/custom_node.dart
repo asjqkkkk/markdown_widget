@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/painting/inline_span.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown/markdown.dart' as m;

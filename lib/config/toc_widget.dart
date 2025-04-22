@@ -48,24 +48,17 @@ class _TocWidgetState extends State<TocWidget> {
   @override
   void initState() {
     super.initState();
-    tocController.onListChanged = (list) {
-      if (list.length < _tocList.length && currentIndex >= list.length) {
-        currentIndex = list.length - 1;
-      }
-      _refreshList(list);
+    // tocController.onListChanged = (list) {
+    //   if (list.length < _tocList.length && currentIndex >= list.length) {
+    //     currentIndex = list.length - 1;
+    //   }
+    //   _refreshList(list);
 
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        refresh();
-      });
-    };
-    tocController.onIndexChangedCallback = (index) {
-      final selfIndex = tocController.index2toc[index]?.selfIndex;
-      if (selfIndex != null && _tocList.length > selfIndex) {
-        refreshIndex(selfIndex);
-        controller.scrollToIndex(currentIndex,
-            preferPosition: AutoScrollPosition.begin);
-      }
-    };
+    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //     refresh();
+    //   });
+    // };
+
     _refreshList(tocController.tocList);
   }
 
@@ -79,8 +72,6 @@ class _TocWidgetState extends State<TocWidget> {
     super.dispose();
     controller.dispose();
     _tocList.clear();
-    tocController.onIndexChangedCallback = null;
-    tocController.onListChanged = null;
   }
 
   @override

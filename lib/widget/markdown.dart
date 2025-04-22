@@ -63,6 +63,8 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 
   ///every [VisibilityDetector]'s child which is visible will be kept with [indexTreeSet]
   final indexTreeSet = SplayTreeSet<int>((a, b) => a - b);
+  final Set<int> tocIndexes = {};
+  final Map<int, double> _indexVisibility = {};
 
   ///if the [ScrollDirection] of [ListView] is [ScrollDirection.forward], [isForward] will be true
   bool isForward = true;
@@ -71,9 +73,10 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   void initState() {
     super.initState();
     _tocController = widget.tocController;
-    _tocController?.jumpToIndexCallback = (index) {
-      controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
-    };
+    _tocController?.jumpIndex.addListener(_onJumpIndex);
+    // _tocController? jumpToIndexCallback = (index) {
+    //   controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
+    // };
     updateState();
   }
 
@@ -85,6 +88,9 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       widget.data,
       onTocList: (tocList) {
         _tocController?.setTocList(tocList);
+        tocIndexes
+          ..clear()
+          ..addAll(tocList.map((e) => e.widgetIndex));
       },
       config: widget.config,
     );
@@ -100,9 +106,16 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void dispose() {
     clearState();
+    _tocController?.jumpIndex.removeListener(_onJumpIndex);
     controller.dispose();
-    _tocController?.jumpToIndexCallback = null;
     super.dispose();
+  }
+
+  void _onJumpIndex() {
+    final index = _tocController?.jumpIndex.value;
+    if (index != null) {
+      controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
+    }
   }
 
   @override
@@ -136,18 +149,15 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     return VisibilityDetector(
       key: ValueKey(index.toString()),
       onVisibilityChanged: (VisibilityInfo info) {
-        final visibleFraction = info.visibleFraction;
-        if (isForward) {
-          visibleFraction == 0
-              ? indexTreeSet.remove(index)
-              : indexTreeSet.add(index);
-        } else {
-          visibleFraction == 1.0
-              ? indexTreeSet.add(index)
-              : indexTreeSet.remove(index);
-        }
-        if (indexTreeSet.isNotEmpty) {
-          _tocController?.onIndexChanged(indexTreeSet.first);
+        _indexVisibility[index] = info.visibleFraction;
+
+        final mostVisible = _indexVisibility.entries
+            .where((e) => e.value > 0)
+            .toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
+
+        if (mostVisible.isNotEmpty) {
+          _tocController?.onScrollIndexChanged(mostVisible.first.key);
         }
       },
       child: child,

@@ -9,25 +9,9 @@ class TocAltWidget extends StatefulWidget {
   ///[controller] must not be null
   final TocController controller;
 
-  ///set the desired scroll physics for the markdown item list
-  final ScrollPhysics? physics;
-
-  ///set shrinkWrap to obtained [ListView] (only available when [tocController] is null)
-  final bool shrinkWrap;
-
-  /// [ListView] padding
-  final EdgeInsetsGeometry? padding;
-
-  ///use [itemBuilder] to return a custom widget
-  final TocItemBuilder? itemBuilder;
-
   const TocAltWidget({
     Key? key,
     required this.controller,
-    this.physics,
-    this.shrinkWrap = false,
-    this.padding,
-    this.itemBuilder,
   }) : super(key: key);
 
   @override
@@ -50,39 +34,55 @@ class _TocAltWidgetState extends State<TocAltWidget> {
   @override
   void initState() {
     super.initState();
-    tocController.onListChanged = (list) {
-      if (list.length < _tocList.length && currentIndex >= list.length) {
-        currentIndex = list.length - 1;
-      }
-      _refreshList(list);
+    tocController.addListener(_onTocListChange);
+    tocController.currentScrollIndex.addListener(_onScrollUpdate);
 
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        refresh();
-      });
-    };
-    tocController.onIndexChangedCallback = (index) {
-      final selfIndex = tocController.index2toc[index]?.selfIndex;
-      if (selfIndex != null && _tocList.length > selfIndex) {
-        refreshIndex(selfIndex);
-        controller.scrollToIndex(currentIndex,
-            preferPosition: AutoScrollPosition.begin);
-      }
-    };
+    // tocController.onIndexChangedCallback = (index) {
+    //   final selfIndex = tocController._index2toc[index]?.selfIndex;
+    //   if (selfIndex != null && _tocList.length > selfIndex) {
+    //     refreshIndex(selfIndex);
+    //     controller.scrollToIndex(currentIndex,
+    //         preferPosition: AutoScrollPosition.begin);
+    //   }
+    // };
+
     _refreshList(tocController.tocList);
+  }
+
+  void _onTocListChange() {
+    final list = tocController.tocList;
+    if (list.length < _tocList.length && currentIndex >= list.length) {
+      currentIndex = list.length - 1;
+    }
+    _refreshList(list);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refresh();
+    });
+  }
+
+  void _onScrollUpdate() {
+    final index = tocController.currentScrollIndex.value;
+    if (index == null) return;
+    setState(() => currentIndex = index);
+  }
+
+  void _onTocItemTap(int index) {
+    tocController.jumpToIndex(index);
+    _refreshIndex(index);
   }
 
   void _refreshList(List<Toc> list) {
     _tocList.clear();
-    _tocList.addAll(List.unmodifiable(list));
+    _tocList.addAll(list);
   }
 
   @override
   void dispose() {
-    super.dispose();
-    controller.dispose();
+    tocController.currentScrollIndex.removeListener(_onScrollUpdate);
     _tocList.clear();
-    tocController.onIndexChangedCallback = null;
-    tocController.onListChanged = null;
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -106,68 +106,71 @@ class _TocAltWidgetState extends State<TocAltWidget> {
                 border: Border.all(color: Colors.black, width: 1),
               ),
               child: Column(
-                  spacing: 8,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(_tocList.length, (index) {
+                spacing: 8,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(
+                  _tocList.length,
+                  (index) {
                     final currentToc = _tocList[index];
-                    bool isCurrentToc = index == currentIndex;
+                    bool isActiveToc = index == currentIndex;
 
-                    final node = currentToc.node.copy(
-                      headingConfig: _TocHeadingConfig(
-                          TextStyle(
-                              fontSize: 14,
-                              color: isCurrentToc ? Colors.blue : null),
-                          currentToc.node.headingConfig.tag),
-                    );
+                    final node = _genTocHeadingNode(currentToc, isActiveToc);
+                    ;
                     final child = Container(
                       margin: EdgeInsets.only(
                           left: 20.0 *
                               (headingTag2Level[node.headingConfig.tag] ?? 1)),
                       child: InkWell(
-                        child: ProxyRichText(
-                          node.build(),
-                        ),
-                        onTap: () {
-                          tocController.jumpToIndex(currentToc.widgetIndex);
-                          refreshIndex(index);
-                        },
+                        child: ProxyRichText(node.build()),
+                        onTap: () => _onTocItemTap(index),
                       ),
                     );
                     return wrapByAutoScroll(index, child, controller);
-                  })),
+                  },
+                ),
+              ),
             ),
           );
         },
         child: Column(
-            spacing: 8,
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: List.generate(_tocList.length, (index) {
+          spacing: 8,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: List.generate(
+            _tocList.length,
+            (index) {
               final currentToc = _tocList[index];
-              bool isCurrentToc = index == currentIndex;
+              print('${_tocList[index].widgetIndex} == $currentIndex');
+              bool isActiveToc = index == currentIndex;
 
-              final node = currentToc.node.copy(
-                  headingConfig: _TocHeadingConfig(
-                      TextStyle(
-                          fontSize: 16,
-                          color: isCurrentToc ? Colors.blue : null),
-                      currentToc.node.headingConfig.tag));
-              final child = Container(
+              var tag = currentToc.node.headingConfig.tag;
+              return Container(
                 height: 2,
-                width: 10.0 *
-                    (7 - (headingTag2Level[node.headingConfig.tag] ?? 1)),
-                color: isCurrentToc ? Colors.blue : Colors.amber,
+                width: 10.0 * (7 - (headingTag2Level[tag] ?? 1)),
+                color: isActiveToc ? Colors.blue : Colors.amber,
               );
-              return child;
-              // return wrapByAutoScroll(index, child, controller);
-            })),
+            },
+          ),
+        ),
       ),
     );
   }
 
-  void refreshIndex(int index) {
+  HeadingNode _genTocHeadingNode(Toc currentToc, bool isActiveToc) {
+    return currentToc.node.copy(
+      headingConfig: _TocHeadingConfig(
+        TextStyle(
+          fontSize: 16,
+          color: isActiveToc ? Colors.blue : null,
+        ),
+        currentToc.node.headingConfig.tag,
+      ),
+    );
+  }
+
+  void _refreshIndex(int index) {
     currentIndex = index;
     refresh();
   }

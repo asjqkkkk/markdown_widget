@@ -43,7 +43,7 @@ class _HtmlPageState extends State<HtmlPage> {
                 refresh();
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
+                  backgroundColor: WidgetStateProperty.all(
                       Colors.lightBlue.withOpacity(0.2))),
               icon: Icon(isMobileDisplaying
                   ? Icons.arrow_back_ios

@@ -82,10 +82,10 @@ void main() {
     });
     tocController.setTocList(list);
     print(tocController.tocList);
-    tocController.jumpToIndexCallback = (i) {
-      print('jumpToIndexCallback:$i');
-    };
-    tocController.onIndexChanged(5);
+    // tocController.jumpToIndexCallback = (i) {
+    //   print('jumpToIndexCallback:$i');
+    // };
+    // tocController.onIndexChanged(5);
     tocController.jumpToIndex(2);
     await tester.scrollUntilVisible(
         find.text('8'), // what you want to find // widget you want to scroll
@@ -98,9 +98,9 @@ void main() {
 
   testWidgets('test markdown widget', (tester) async {
     final tocController = TocController();
-    tocController.jumpToIndexCallback = (i) {
-      print('jumpToIndexCallback  :$i');
-    };
+    // tocController.jumpToIndexCallback = (i) {
+    //   print('jumpToIndexCallback  :$i');
+    // };
     VisibilityDetectorController.instance.updateInterval = Duration.zero;
     String text = '';
     late StateSetter setter;

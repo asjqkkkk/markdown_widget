@@ -1,6 +1,5 @@
-import 'dart:collection';
+import 'package:flutter/foundation.dart';
 
-import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/config/toc_widget.dart';
 
 import '../widget/blocks/leaf/heading.dart';
@@ -9,37 +8,40 @@ import '../widget/markdown.dart';
 ///[TocController] combines [TocWidget] and [MarkdownWidget],
 ///you can use it to control the jump between the two,
 /// and each [TocWidget] corresponds to a [MarkdownWidget].
-class TocController {
-  ///key is index of widgets, value is [Toc]
-  LinkedHashMap<int, Toc> get index2toc => LinkedHashMap();
 
-  ValueCallback<int>? jumpToIndexCallback;
-  ValueCallback<int>? onIndexChangedCallback;
-  ValueCallback<List<Toc>>? onListChanged;
+import 'package:flutter/material.dart';
 
-  List<Toc> get tocList => List.unmodifiable(index2toc.values);
+class TocController extends ChangeNotifier {
+  final Map<int, Toc> _index2toc = {};
+  final ValueNotifier<int?> currentScrollIndex = ValueNotifier(null);
+  final ValueNotifier<int?> jumpIndex = ValueNotifier(null);
+
+  List<Toc> get tocList => _index2toc.values.toList(growable: false);
 
   void setTocList(List<Toc> list) {
-    index2toc.clear();
-    for (final toc in list) {
-      index2toc[toc.widgetIndex] = toc;
-    }
-    onListChanged?.call(list);
+    _index2toc
+      ..clear()
+      ..addEntries(list.map((e) => MapEntry(e.widgetIndex, e)));
+    notifyListeners();
   }
 
-  void dispose() {
-    index2toc.clear();
-    onIndexChangedCallback = null;
-    jumpToIndexCallback = null;
-    onListChanged = null;
+  void onScrollIndexChanged(int index) {
+    if (_index2toc.containsKey(index)) {
+      currentScrollIndex.value = getTocByWidgetIndex(index)?.selfIndex;
+    }
   }
 
   void jumpToIndex(int index) {
-    jumpToIndexCallback?.call(index);
+    jumpIndex.value = tocList[index].widgetIndex;
   }
 
-  void onIndexChanged(int index) {
-    onIndexChangedCallback?.call(index);
+  Toc? getTocByWidgetIndex(int index) => _index2toc[index];
+
+  @override
+  void dispose() {
+    currentScrollIndex.dispose();
+    jumpIndex.dispose();
+    super.dispose();
   }
 }
 
