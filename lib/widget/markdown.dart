@@ -74,9 +74,6 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     super.initState();
     _tocController = widget.tocController;
     _tocController?.jumpIndex.addListener(_onJumpIndex);
-    // _tocController? jumpToIndexCallback = (index) {
-    //   controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
-    // };
     updateState();
   }
 
