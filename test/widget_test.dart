@@ -10,6 +10,8 @@ import 'test_markdowns/network_image_mock.dart';
 import 'widget_visitor_test.dart';
 import 'package:path/path.dart' as p;
 
+typedef _TocFilterTestCase = (HeadingNodeFilter?, Matcher);
+
 void main() {
   const testMarkdown = '''
 | align left | centered | align right |
@@ -56,44 +58,115 @@ void main() {
 2. asdasdasd
 3. asdasdasd''';
 
-  testWidgets('test toc widget', (tester) async {
-    final tocController = TocController();
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: Directionality(
-            textDirection: TextDirection.ltr,
-            child: TocWidget(
-              controller: tocController,
-              itemBuilder: (data) {
-                if (data.index == 0) return Container();
-                return null;
-              },
-            )),
-      ),
-    ));
-    final list = List.generate(10, (index) {
-      final heading = HeadingNode(H1Config(), WidgetVisitor());
-      heading.accept(TextNode(text: "$index"));
-      return Toc(
-        node: heading,
-        widgetIndex: index,
-        selfIndex: index,
-      );
+  for (final config in [
+    _TocConfig(null, null),
+    _TocConfig(TextStyle(fontSize: 20, color: Colors.red),
+        TextStyle(fontSize: 24, color: Colors.purple))
+  ]) {
+    testWidgets('test toc widget with config $config', (tester) async {
+      final tocController = TocController();
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: Directionality(
+              textDirection: TextDirection.ltr,
+              child: TocWidget(
+                  controller: tocController,
+                  itemBuilder: (data) {
+                    if (data.index == 0) return Container();
+                    return null;
+                  },
+                  tocTextStyle: config.tocTextStyle,
+                  currentTocTextStyle: config.currentTocTextStyle)),
+        ),
+      ));
+      final list = List.generate(10, (index) {
+        final heading = HeadingNode(H1Config(), WidgetVisitor());
+        heading.accept(TextNode(text: "$index"));
+        return Toc(
+          node: heading,
+          widgetIndex: index,
+          selfIndex: index,
+        );
+      });
+      tocController.setTocList(list);
+      print(tocController.tocList);
+      tocController.jumpToIndexCallback = (i) {
+        print('jumpToIndexCallback:$i');
+      };
+      tocController.onIndexChanged(5);
+      tocController.jumpToIndex(2);
+      await tester.scrollUntilVisible(
+          find.text('8'), // what you want to find // widget you want to scroll
+          200);
+      final gesture = await tester.startGesture(Offset(0, 300));
+      await gesture.up();
+
+      final expectedTocTextStyle = (config.tocTextStyle ?? defaultTocTextStyle);
+      final tocTextStyleWidgets = find.byWidgetPredicate((widget) =>
+          widget is Text &&
+          widget.toString().contains("size: ${expectedTocTextStyle.fontSize}"));
+      expect(tocTextStyleWidgets, findsAtLeastNWidgets(1));
+
+      final expectedCurrentTocTextStyle =
+          (config.currentTocTextStyle ?? defaultCurrentTocTextStyle);
+      final currentTocTextStyleWidgets = find.byWidgetPredicate((widget) =>
+          widget is Text &&
+          widget
+              .toString()
+              .contains("size: ${expectedCurrentTocTextStyle.fontSize}"));
+      expect(currentTocTextStyleWidgets, findsAtLeastNWidgets(1));
+
+      tocController.setTocList([list.removeLast()]);
+      tocController.dispose();
     });
-    tocController.setTocList(list);
-    print(tocController.tocList);
-    // tocController.jumpToIndexCallback = (i) {
-    //   print('jumpToIndexCallback:$i');
-    // };
-    // tocController.onIndexChanged(5);
-    tocController.jumpToIndex(2);
-    await tester.scrollUntilVisible(
-        find.text('8'), // what you want to find // widget you want to scroll
-        200);
-    final gesture = await tester.startGesture(Offset(0, 300));
-    gesture.up();
-    tocController.setTocList([list.removeLast()]);
-    tocController.dispose();
+  }
+
+  group('toc filter tests', () {
+    final backupVisibilityDetectorUpdateInterval =
+        VisibilityDetectorController.instance.updateInterval;
+    TocController? tocController;
+    setUp(() {
+      VisibilityDetectorController.instance.updateInterval = Duration.zero;
+    });
+    tearDown(() {
+      VisibilityDetectorController.instance.updateInterval =
+          backupVisibilityDetectorUpdateInterval;
+      tocController?.dispose();
+    });
+    for (final (headingNodeFilter, matcher) in <_TocFilterTestCase>[
+      (null, hasLength(34)),
+      ((HeadingNode node) => false, isEmpty),
+      (
+        (HeadingNode node) => {'h1', 'h2'}.contains(node.headingConfig.tag),
+        hasLength(6)
+      ),
+    ]) {
+      testWidgets('test toc widget with filter "$matcher"', (tester) async {
+        tester.view.physicalSize = const Size(3840, 2160);
+        tocController = TocController();
+        await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+            body: Row(children: [
+              Expanded(
+                child: TocWidget(
+                  controller: tocController!,
+                ),
+              ),
+              Expanded(
+                child: MarkdownWidget(
+                  data: testMarkdown,
+                  tocController: tocController!,
+                  markdownGenerator:
+                      MarkdownGenerator(headingNodeFilter: headingNodeFilter),
+                ),
+              ),
+            ]),
+          ),
+        ));
+
+        expect(tocController!.tocList, matcher);
+      });
+    }
   });
 
   testWidgets('test markdown widget', (tester) async {
@@ -240,4 +313,16 @@ void main() {
     });
     await (await tester.startGesture(Offset(50, 50))).up();
   });
+}
+
+class _TocConfig {
+  final TextStyle? tocTextStyle;
+  final TextStyle? currentTocTextStyle;
+
+  _TocConfig(this.tocTextStyle, this.currentTocTextStyle);
+
+  @override
+  String toString() {
+    return '_TocConfig{tocTextStyle: $tocTextStyle, currentTocTextStyle: $currentTocTextStyle}';
+  }
 }

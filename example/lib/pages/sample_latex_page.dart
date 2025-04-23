@@ -42,8 +42,8 @@ class _LatexPageState extends State<LatexPage> {
                 refresh();
               },
               style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                      Colors.lightBlue.withOpacity(0.2))),
+                  backgroundColor:
+                      WidgetStateProperty.all(Colors.lightBlue.toOpacity(0.2))),
               icon: Icon(isMobileDisplaying
                   ? Icons.arrow_back_ios
                   : Icons.document_scanner),
@@ -56,23 +56,25 @@ class _LatexPageState extends State<LatexPage> {
 
   Widget buildBody() {
     if (isMobileDisplaying) return descriptionWidget();
-    return PlatformDetector.isAllMobile ? buildMobileBody() : buildWebBody();
+    return PlatformDetector.isAllMobile ? displayMarkdown() : buildWebBody();
   }
 
   Widget buildWebBody() {
     return Row(
       children: [
-        Expanded(child: displayMarkdown()),
-        VerticalDivider(
-          width: 3,
-        ),
-        Expanded(child: descriptionWidget()),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: displayMarkdown(),
+        )),
+        VerticalDivider(width: 3),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: descriptionWidget(),
+        )),
       ],
     );
-  }
-
-  Widget buildMobileBody() {
-    return displayMarkdown();
   }
 
   Widget displayMarkdown() {
@@ -93,7 +95,7 @@ class _LatexPageState extends State<LatexPage> {
             markdownGenerator: MarkdownGenerator(
               generators: [latexGenerator],
               inlineSyntaxList: [LatexSyntax()],
-              richTextBuilder: (span) => Text.rich(span, textScaleFactor: 1),
+              richTextBuilder: (span) => Text.rich(span),
             ),
           );
         });

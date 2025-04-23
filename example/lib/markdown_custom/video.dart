@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/config/configs.dart';
+import 'package:markdown_widget/config/all.dart';
 import 'package:markdown_widget/widget/span_node.dart';
 import 'package:markdown_widget/widget/widget_visitor.dart';
 import 'package:video_player/video_player.dart';
@@ -126,7 +126,7 @@ class _VideoWidgetState extends State<VideoWidget> {
         width: 80,
         height: 80,
         decoration: BoxDecoration(
-            shape: BoxShape.circle, color: Colors.grey.withOpacity(0.3)),
+            shape: BoxShape.circle, color: Colors.grey.toOpacity(0.3)),
         child: IconButton(
           icon: Icon(
             isPlaying ? Icons.pause : Icons.play_arrow,

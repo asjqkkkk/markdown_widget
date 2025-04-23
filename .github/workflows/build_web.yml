@@ -6,9 +6,6 @@ on:
       - dev
       - master
       - br_pre_2.0
-  pull_request:
-    branches:
-      - dev
 
 jobs:
   build:
@@ -16,14 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Flutter
-        uses: subosito/flutter-action@v1
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.13.2'
+          flutter-version: '3.27.4'
 
 
       - name: Get dependencies
@@ -42,7 +38,7 @@ jobs:
         run: dart run example/build_script/script_convert_asset.dart
 
       - name: Upload production-ready build files
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: production-files
           path: example/build/web
@@ -51,17 +47,17 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/master'
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: production-files
           path: example/build/web
 
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.ACTION_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: example/build/web
