@@ -61,10 +61,8 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   ///[AutoScrollController] provides the scroll to index mechanism
   final AutoScrollController controller = AutoScrollController();
 
-  ///every [VisibilityDetector]'s child which is visible will be kept with [indexTreeSet]
-  final indexTreeSet = SplayTreeSet<int>((a, b) => a - b);
-  final Set<int> tocIndexes = {};
-  final Map<int, double> _indexVisibility = {};
+  ///every [VisibilityDetector]'s child which is visible will be kept with [_indexTreeSet]
+  final _indexTreeSet = SplayTreeSet<int>((a, b) => a - b);
 
   ///if the [ScrollDirection] of [ListView] is [ScrollDirection.forward], [isForward] will be true
   bool isForward = true;
@@ -79,15 +77,12 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
   void updateState() {
-    indexTreeSet.clear();
+    _indexTreeSet.clear();
     markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
     final result = markdownGenerator.buildWidgets(
       widget.data,
       onTocList: (tocList) {
         _tocController?.setTocList(tocList);
-        tocIndexes
-          ..clear()
-          ..addAll(tocList.map((e) => e.widgetIndex));
       },
       config: widget.config,
     );
@@ -96,7 +91,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 
   ///this method will be called when [updateState] or [dispose]
   void clearState() {
-    indexTreeSet.clear();
+    _indexTreeSet.clear();
     _widgets.clear();
   }
 
@@ -146,15 +141,18 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     return VisibilityDetector(
       key: ValueKey(index.toString()),
       onVisibilityChanged: (VisibilityInfo info) {
-        _indexVisibility[index] = info.visibleFraction;
-
-        final mostVisible = _indexVisibility.entries
-            .where((e) => e.value > 0)
-            .toList()
-          ..sort((a, b) => b.value.compareTo(a.value));
-
-        if (mostVisible.isNotEmpty) {
-          _tocController?.onScrollIndexChanged(mostVisible.first.key);
+        final visibleFraction = info.visibleFraction;
+        if (isForward) {
+          visibleFraction == 0
+              ? _indexTreeSet.remove(index)
+              : _indexTreeSet.add(index);
+        } else {
+          visibleFraction == 1.0
+              ? _indexTreeSet.add(index)
+              : _indexTreeSet.remove(index);
+        }
+        if (_indexTreeSet.isNotEmpty) {
+          _tocController?.onScrollIndexChanged(_indexTreeSet.first);
         }
       },
       child: child,
