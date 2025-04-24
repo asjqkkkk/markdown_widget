@@ -30,7 +30,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Map<bool, String> dataMap = {};
   String? data;
   bool isEnglish = true;
-  bool customToc = false;
+  bool customToc = true;
   final TocController controller = TocController();
 
   bool get isMobile => PlatformDetector.isAllMobile;
@@ -176,11 +176,11 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Widget buildWebBody() {
     return Row(
       children: <Widget>[
-        Expanded(child: buildTocList()),
         Expanded(
           child: buildMarkdown(),
           flex: 3,
-        )
+        ),
+        Expanded(child: buildTocList()),
       ],
     );
   }

@@ -27,59 +27,18 @@ class _CustomTocWidgetState extends State<CustomTocWidget> {
 
   OverlayPortalController overlayPortalController = OverlayPortalController();
 
-  void refresh() {
-    if (mounted) setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
     tocController.addListener(_onTocListChange);
-    tocController.currentScrollIndex.addListener(_onScrollUpdate);
-
-    // tocController.onIndexChangedCallback = (index) {
-    //   final selfIndex = tocController._index2toc[index]?.selfIndex;
-    //   if (selfIndex != null && _tocList.length > selfIndex) {
-    //     refreshIndex(selfIndex);
-    //     controller.scrollToIndex(currentIndex,
-    //         preferPosition: AutoScrollPosition.begin);
-    //   }
-    // };
+    tocController.currentScrollIndex.addListener(_onScrollIndexChanged);
 
     _refreshList(tocController.tocList);
   }
 
-  void _onTocListChange() {
-    final list = tocController.tocList;
-    if (list.length < _tocList.length && currentIndex >= list.length) {
-      currentIndex = list.length - 1;
-    }
-    _refreshList(list);
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refresh();
-    });
-  }
-
-  void _onScrollUpdate() {
-    final index = tocController.currentScrollIndex.value;
-    if (index == null) return;
-    setState(() => currentIndex = index);
-  }
-
-  void _onTocItemTap(int index) {
-    tocController.jumpToIndex(index);
-    _refreshIndex(index);
-  }
-
-  void _refreshList(List<Toc> list) {
-    _tocList.clear();
-    _tocList.addAll(list);
-  }
-
   @override
   void dispose() {
-    tocController.currentScrollIndex.removeListener(_onScrollUpdate);
+    tocController.currentScrollIndex.removeListener(_onScrollIndexChanged);
     _tocList.clear();
     controller.dispose();
     super.dispose();
@@ -123,7 +82,7 @@ class _CustomTocWidgetState extends State<CustomTocWidget> {
                               (headingTag2Level[node.headingConfig.tag] ?? 1)),
                       child: InkWell(
                         child: ProxyRichText(node.build()),
-                        onTap: () => _onTocItemTap(index),
+                        onTap: () => _onTocItemTap(currentToc),
                       ),
                     );
                     return wrapByAutoScroll(index, child, controller);
@@ -142,7 +101,6 @@ class _CustomTocWidgetState extends State<CustomTocWidget> {
             _tocList.length,
             (index) {
               final currentToc = _tocList[index];
-              print('${_tocList[index].widgetIndex} == $currentIndex');
               bool isActiveToc = index == currentIndex;
 
               var tag = currentToc.node.headingConfig.tag;
@@ -170,9 +128,45 @@ class _CustomTocWidgetState extends State<CustomTocWidget> {
     );
   }
 
+  void _onTocItemTap(Toc item) {
+    tocController.jumpToIndex(item.widgetIndex);
+    _refreshIndex(item.selfIndex);
+  }
+
+  void _onScrollIndexChanged() {
+    final index = tocController.currentScrollIndex.value;
+    if (index == null) return;
+
+    final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
+    if (selfIndex != null && _tocList.length > selfIndex) {
+      _refreshIndex(selfIndex);
+    }
+  }
+
+  void _onTocListChange() {
+    final list = tocController.tocList;
+    if (list.length < _tocList.length && currentIndex >= list.length) {
+      currentIndex = list.length - 1;
+    }
+    _refreshList(list);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refresh();
+    });
+  }
+
+  void _refreshList(List<Toc> list) {
+    _tocList.clear();
+    _tocList.addAll(list);
+  }
+
   void _refreshIndex(int index) {
     currentIndex = index;
     refresh();
+  }
+
+  void refresh() {
+    if (mounted) setState(() {});
   }
 }
 

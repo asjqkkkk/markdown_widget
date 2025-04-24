@@ -82,7 +82,7 @@ class _TocWidgetState extends State<TocWidget> {
         final itemBuilder = widget.itemBuilder;
         if (itemBuilder != null) {
           final result = itemBuilder.call(TocItemBuilderData(
-              index, currentToc, currentIndex, refreshIndex));
+              index, currentToc, currentIndex, _refreshIndex));
           if (result != null) return result;
         }
         final node = currentToc.node.copy(
@@ -106,7 +106,7 @@ class _TocWidgetState extends State<TocWidget> {
 
   void _onTocItemTap(Toc item) {
     tocController.jumpToIndex(item.widgetIndex);
-    refreshIndex(item.selfIndex);
+    _refreshIndex(item.selfIndex);
     controller.scrollToIndex(currentIndex,
         preferPosition: AutoScrollPosition.begin);
   }
@@ -117,7 +117,7 @@ class _TocWidgetState extends State<TocWidget> {
 
     final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
     if (selfIndex != null && _tocList.length > selfIndex) {
-      refreshIndex(selfIndex);
+      _refreshIndex(selfIndex);
       controller.scrollToIndex(currentIndex,
           preferPosition: AutoScrollPosition.begin);
     }
@@ -131,7 +131,7 @@ class _TocWidgetState extends State<TocWidget> {
     _refreshList(list);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refresh();
+      _refresh();
     });
   }
 
@@ -140,12 +140,12 @@ class _TocWidgetState extends State<TocWidget> {
     _tocList.addAll(List.unmodifiable(list));
   }
 
-  void refreshIndex(int index) {
+  void _refreshIndex(int index) {
     currentIndex = index;
-    refresh();
+    _refresh();
   }
 
-  void refresh() {
+  void _refresh() {
     if (mounted) setState(() {});
   }
 }
