@@ -176,6 +176,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Widget buildWebBody() {
     return Row(
       children: <Widget>[
+        Expanded(child: buildTocList()),
         Expanded(
           child: buildMarkdown(),
           flex: 3,
