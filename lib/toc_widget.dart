@@ -54,59 +54,13 @@ class _TocWidgetState extends State<TocWidget> {
 
   TocController get tocController => widget.controller;
 
-  void refresh() {
-    if (mounted) setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
     tocController.addListener(_onListChanged);
     tocController.currentScrollIndex.addListener(_onScrollIndexChanged);
-    tocController.jumpIndex.addListener(_onJumpIndexChanged);
 
     _refreshList(tocController.tocList);
-  }
-
-  void _onScrollIndexChanged() {
-    final index = tocController.currentScrollIndex.value;
-    if (index == null) return;
-
-    final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
-    if (selfIndex != null && _tocList.length > selfIndex) {
-      refreshIndex(selfIndex);
-      controller.scrollToIndex(currentIndex,
-          preferPosition: AutoScrollPosition.begin);
-    }
-  }
-
-  void _onJumpIndexChanged() {
-    final index = tocController.jumpIndex.value;
-    if (index == null) return;
-
-    final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
-    if (selfIndex != null && _tocList.length > selfIndex) {
-      refreshIndex(selfIndex);
-      controller.scrollToIndex(currentIndex,
-          preferPosition: AutoScrollPosition.begin);
-    }
-  }
-
-  void _onListChanged() {
-    final list = tocController.tocList;
-    if (list.length < _tocList.length && currentIndex >= list.length) {
-      currentIndex = list.length - 1;
-    }
-    _refreshList(list);
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refresh();
-    });
-  }
-
-  void _refreshList(List<Toc> list) {
-    _tocList.clear();
-    _tocList.addAll(List.unmodifiable(list));
   }
 
   @override
@@ -141,10 +95,7 @@ class _TocWidgetState extends State<TocWidget> {
                 left: 20.0 * (headingTag2Level[node.headingConfig.tag] ?? 1)),
             child: ProxyRichText(node.build()),
           ),
-          onTap: () {
-            tocController.jumpToIndex(currentToc.widgetIndex);
-            refreshIndex(index);
-          },
+          onTap: () => _onTocItemTap(currentToc),
         );
         return wrapByAutoScroll(index, child, controller);
       },
@@ -153,9 +104,49 @@ class _TocWidgetState extends State<TocWidget> {
     );
   }
 
+  void _onTocItemTap(Toc item) {
+    tocController.jumpToIndex(item.widgetIndex);
+    refreshIndex(item.selfIndex);
+    controller.scrollToIndex(currentIndex,
+        preferPosition: AutoScrollPosition.begin);
+  }
+
+  void _onScrollIndexChanged() {
+    final index = tocController.currentScrollIndex.value;
+    if (index == null) return;
+
+    final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
+    if (selfIndex != null && _tocList.length > selfIndex) {
+      refreshIndex(selfIndex);
+      controller.scrollToIndex(currentIndex,
+          preferPosition: AutoScrollPosition.begin);
+    }
+  }
+
+  void _onListChanged() {
+    final list = tocController.tocList;
+    if (list.length < _tocList.length && currentIndex >= list.length) {
+      currentIndex = list.length - 1;
+    }
+    _refreshList(list);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refresh();
+    });
+  }
+
+  void _refreshList(List<Toc> list) {
+    _tocList.clear();
+    _tocList.addAll(List.unmodifiable(list));
+  }
+
   void refreshIndex(int index) {
     currentIndex = index;
     refresh();
+  }
+
+  void refresh() {
+    if (mounted) setState(() {});
   }
 }
 
