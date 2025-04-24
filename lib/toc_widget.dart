@@ -5,6 +5,9 @@ import 'package:markdown_widget/widget/markdown.dart';
 import 'package:markdown_widget/widget/proxy_rich_text.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+const defaultTocTextStyle = TextStyle(fontSize: 16);
+const defaultCurrentTocTextStyle = TextStyle(fontSize: 16, color: Colors.blue);
+
 class TocWidget extends StatefulWidget {
   ///[controller] must not be null
   final TocController controller;
@@ -21,6 +24,12 @@ class TocWidget extends StatefulWidget {
   ///use [itemBuilder] to return a custom widget
   final TocItemBuilder? itemBuilder;
 
+  /// use [tocTextStyle] to set the style of the toc item
+  final TextStyle tocTextStyle;
+
+  /// use [currentTocTextStyle] to set the style of the current toc item
+  final TextStyle currentTocTextStyle;
+
   const TocWidget({
     Key? key,
     required this.controller,
@@ -28,7 +37,11 @@ class TocWidget extends StatefulWidget {
     this.shrinkWrap = false,
     this.padding,
     this.itemBuilder,
-  }) : super(key: key);
+    TextStyle? tocTextStyle,
+    TextStyle? currentTocTextStyle,
+  })  : tocTextStyle = tocTextStyle ?? defaultTocTextStyle,
+        currentTocTextStyle = currentTocTextStyle ?? defaultCurrentTocTextStyle,
+        super(key: key);
 
   @override
   State<TocWidget> createState() => _TocWidgetState();
@@ -48,16 +61,28 @@ class _TocWidgetState extends State<TocWidget> {
   @override
   void initState() {
     super.initState();
-    // tocController.onListChanged = (list) {
-    //   if (list.length < _tocList.length && currentIndex >= list.length) {
-    //     currentIndex = list.length - 1;
-    //   }
-    //   _refreshList(list);
+    tocController.addListener(() {
+      final list = tocController.tocList;
+      if (list.length < _tocList.length && currentIndex >= list.length) {
+        currentIndex = list.length - 1;
+      }
+      _refreshList(list);
 
-    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //     refresh();
-    //   });
-    // };
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        refresh();
+      });
+    });
+    tocController.jumpIndex.addListener(() {
+      final index = tocController.jumpIndex.value;
+      if (index == null) return;
+
+      final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
+      if (selfIndex != null && _tocList.length > selfIndex) {
+        refreshIndex(selfIndex);
+        controller.scrollToIndex(currentIndex,
+            preferPosition: AutoScrollPosition.begin);
+      }
+    });
 
     _refreshList(tocController.tocList);
   }
@@ -91,8 +116,7 @@ class _TocWidgetState extends State<TocWidget> {
         }
         final node = currentToc.node.copy(
             headingConfig: _TocHeadingConfig(
-                TextStyle(
-                    fontSize: 16, color: isCurrentToc ? Colors.blue : null),
+                isCurrentToc ? widget.currentTocTextStyle : widget.tocTextStyle,
                 currentToc.node.headingConfig.tag));
         final child = ListTile(
           title: Container(

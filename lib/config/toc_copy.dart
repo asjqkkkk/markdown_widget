@@ -1,6 +1,5 @@
-import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
+
 import 'package:markdown_widget/toc_widget.dart';
 
 import '../widget/blocks/leaf/heading.dart';
@@ -9,10 +8,11 @@ import '../widget/markdown.dart';
 ///[TocController] combines [TocWidget] and [MarkdownWidget],
 ///you can use it to control the jump between the two,
 /// and each [TocWidget] corresponds to a [MarkdownWidget].
-class TocController extends ChangeNotifier {
-  ///key is index of widgets, value is [Toc]
-  final LinkedHashMap<int, Toc> _index2toc = LinkedHashMap();
 
+import 'package:flutter/material.dart';
+
+class TocController extends ChangeNotifier {
+  final Map<int, Toc> _index2toc = {};
   final ValueNotifier<int?> currentScrollIndex = ValueNotifier(null);
   final ValueNotifier<int?> jumpIndex = ValueNotifier(null);
 
@@ -26,19 +26,16 @@ class TocController extends ChangeNotifier {
   }
 
   void onScrollIndexChanged(int index) {
-    currentScrollIndex.value = getTocByWidgetIndex(index)?.widgetIndex;
+    if (_index2toc.containsKey(index)) {
+      currentScrollIndex.value = getTocByWidgetIndex(index)?.selfIndex;
+    }
   }
 
   void jumpToIndex(int index) {
-    jumpIndex.value = getTocByWidgetIndex(index)?.widgetIndex;
+    jumpIndex.value = tocList[index].widgetIndex;
   }
 
-  Toc? getTocByWidgetIndex(int index) {
-    if (_index2toc.containsKey(index)) {
-      return _index2toc[index];
-    }
-    return null;
-  }
+  Toc? getTocByWidgetIndex(int index) => _index2toc[index];
 
   @override
   void dispose() {

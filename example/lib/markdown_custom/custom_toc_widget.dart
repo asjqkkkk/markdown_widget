@@ -5,20 +5,20 @@ import 'package:markdown_widget/widget/markdown.dart';
 import 'package:markdown_widget/widget/proxy_rich_text.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-class TocAltWidget extends StatefulWidget {
+class CustomTocWidget extends StatefulWidget {
   ///[controller] must not be null
   final TocController controller;
 
-  const TocAltWidget({
+  const CustomTocWidget({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
   @override
-  State<TocAltWidget> createState() => _TocAltWidgetState();
+  State<CustomTocWidget> createState() => _CustomTocWidgetState();
 }
 
-class _TocAltWidgetState extends State<TocAltWidget> {
+class _CustomTocWidgetState extends State<CustomTocWidget> {
   final AutoScrollController controller = AutoScrollController();
   int currentIndex = 0;
   final List<Toc> _tocList = [];

@@ -90,10 +90,15 @@ void main() {
       });
       tocController.setTocList(list);
       print(tocController.tocList);
-      tocController.jumpToIndexCallback = (i) {
-        print('jumpToIndexCallback:$i');
-      };
-      tocController.onIndexChanged(5);
+      tocController.jumpIndex.addListener(() {
+        print('jump index listener:${tocController.jumpIndex.value}');
+      });
+      tocController.currentScrollIndex.addListener(() {
+        print(
+            'current scroll index listener:${tocController.currentScrollIndex.value}');
+      });
+
+      tocController.onScrollIndexChanged(5);
       tocController.jumpToIndex(2);
       await tester.scrollUntilVisible(
           find.text('8'), // what you want to find // widget you want to scroll

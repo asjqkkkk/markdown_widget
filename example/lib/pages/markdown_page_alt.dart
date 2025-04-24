@@ -1,4 +1,4 @@
-import 'package:example/pages/toc_widget_alt.dart';
+import 'package:example/markdown_custom/custom_toc_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_widget/markdown_widget.dart';
@@ -90,13 +90,13 @@ class _MarkdownPageState extends State<MarkdownPage> {
                         richTextBuilder: (span) => Text.rich(span),
                       )),
                 ),
-                TocAltWidget(controller: controller),
+                CustomTocWidget(controller: controller),
               ],
             )),
     );
   }
 
-  Widget buildTocList() => TocAltWidget(controller: controller);
+  Widget buildTocList() => CustomTocWidget(controller: controller);
 
   Widget buildCodeBlock(Widget child, String text, bool isEnglish) {
     return Stack(
