@@ -180,7 +180,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
         Expanded(
           child: buildMarkdown(),
           flex: 3,
-        ),
+        )
       ],
     );
   }

@@ -176,9 +176,9 @@ void main() {
 
   testWidgets('test markdown widget', (tester) async {
     final tocController = TocController();
-    // tocController.jumpToIndexCallback = (i) {
-    //   print('jumpToIndexCallback  :$i');
-    // };
+    tocController.jumpIndex.addListener(() {
+      print('jump index listener:${tocController.jumpIndex.value}');
+    });
     VisibilityDetectorController.instance.updateInterval = Duration.zero;
     String text = '';
     late StateSetter setter;

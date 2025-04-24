@@ -61,30 +61,47 @@ class _TocWidgetState extends State<TocWidget> {
   @override
   void initState() {
     super.initState();
-    tocController.addListener(() {
-      final list = tocController.tocList;
-      if (list.length < _tocList.length && currentIndex >= list.length) {
-        currentIndex = list.length - 1;
-      }
-      _refreshList(list);
-
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        refresh();
-      });
-    });
-    tocController.jumpIndex.addListener(() {
-      final index = tocController.jumpIndex.value;
-      if (index == null) return;
-
-      final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
-      if (selfIndex != null && _tocList.length > selfIndex) {
-        refreshIndex(selfIndex);
-        controller.scrollToIndex(currentIndex,
-            preferPosition: AutoScrollPosition.begin);
-      }
-    });
+    tocController.addListener(_onListChanged);
+    tocController.currentScrollIndex.addListener(_onScrollIndexChanged);
+    tocController.jumpIndex.addListener(_onJumpIndexChanged);
 
     _refreshList(tocController.tocList);
+  }
+
+  void _onScrollIndexChanged() {
+    final index = tocController.currentScrollIndex.value;
+    if (index == null) return;
+
+    final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
+    if (selfIndex != null && _tocList.length > selfIndex) {
+      refreshIndex(selfIndex);
+      controller.scrollToIndex(currentIndex,
+          preferPosition: AutoScrollPosition.begin);
+    }
+  }
+
+  void _onJumpIndexChanged() {
+    final index = tocController.jumpIndex.value;
+    if (index == null) return;
+
+    final selfIndex = tocController.getTocByWidgetIndex(index)?.selfIndex;
+    if (selfIndex != null && _tocList.length > selfIndex) {
+      refreshIndex(selfIndex);
+      controller.scrollToIndex(currentIndex,
+          preferPosition: AutoScrollPosition.begin);
+    }
+  }
+
+  void _onListChanged() {
+    final list = tocController.tocList;
+    if (list.length < _tocList.length && currentIndex >= list.length) {
+      currentIndex = list.length - 1;
+    }
+    _refreshList(list);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refresh();
+    });
   }
 
   void _refreshList(List<Toc> list) {
