@@ -19,13 +19,14 @@ class CustomTocWidget extends StatefulWidget {
 }
 
 class _CustomTocWidgetState extends State<CustomTocWidget> {
-  final AutoScrollController controller = AutoScrollController();
   int currentIndex = 0;
   final List<Toc> _tocList = [];
+  final LayerLink _layerLink = LayerLink();
+
+  final AutoScrollController autoScrollController = AutoScrollController();
+  OverlayPortalController overlayPortalController = OverlayPortalController();
 
   TocController get tocController => widget.controller;
-
-  OverlayPortalController overlayPortalController = OverlayPortalController();
 
   @override
   void initState() {
@@ -40,84 +41,92 @@ class _CustomTocWidgetState extends State<CustomTocWidget> {
   void dispose() {
     tocController.currentScrollIndex.removeListener(_onScrollIndexChanged);
     _tocList.clear();
-    controller.dispose();
+    autoScrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        overlayPortalController.toggle();
-      },
-      child: OverlayPortal(
-        controller: overlayPortalController,
-        overlayChildBuilder: (BuildContext context) {
-          return Positioned(
-            top: 100.0, // Simplified for now
-            left: 50.0, // Simplified for now
-            width: 200,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey[200],
-                border: Border.all(color: Colors.black, width: 1),
-              ),
-              child: Column(
-                spacing: 8,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(
-                  _tocList.length,
-                  (index) {
-                    final currentToc = _tocList[index];
-                    bool isActiveToc = index == currentIndex;
-
-                    final node = _genTocHeadingNode(currentToc, isActiveToc);
-                    ;
-                    final child = Container(
-                      margin: EdgeInsets.only(
-                          left: 20.0 *
-                              (headingTag2Level[node.headingConfig.tag] ?? 1)),
-                      child: InkWell(
-                        child: ProxyRichText(node.build()),
-                        onTap: () => _onTocItemTap(currentToc),
-                      ),
-                    );
-                    return wrapByAutoScroll(index, child, controller);
-                  },
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: InkWell(
+        onTap: overlayPortalController.toggle,
+        child: OverlayPortal(
+          controller: overlayPortalController,
+          overlayChildBuilder: (BuildContext context) {
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => overlayPortalController.hide(),
+                    child: Container(color: Colors.transparent),
+                  ),
                 ),
-              ),
+                Positioned(
+                  width: 300,
+                  height: 300,
+                  child: CompositedTransformFollower(
+                    link: _layerLink,
+                    targetAnchor: Alignment.centerLeft,
+                    followerAnchor: Alignment.centerRight,
+                    offset: const Offset(-8, 0),
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey[200],
+                        border: Border.all(color: Colors.black, width: 1),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          spacing: 8,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(
+                            _tocList.length,
+                            _buildTocItem,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          child: Column(
+            spacing: 8,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: List.generate(
+              _tocList.length,
+              _buildTocBullet,
             ),
-          );
-        },
-        child: Column(
-          spacing: 8,
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: List.generate(
-            _tocList.length,
-            (index) {
-              final currentToc = _tocList[index];
-              bool isActiveToc = index == currentIndex;
-
-              var tag = currentToc.node.headingConfig.tag;
-              return Container(
-                height: 2,
-                width: 10.0 * (7 - (headingTag2Level[tag] ?? 1)),
-                color: isActiveToc ? Colors.blue : Colors.amber,
-              );
-            },
           ),
         ),
       ),
     );
   }
 
-  HeadingNode _genTocHeadingNode(Toc currentToc, bool isActiveToc) {
-    return currentToc.node.copy(
+  Widget _buildTocBullet(index) {
+    final currentToc = _tocList[index];
+    bool isActiveToc = index == currentIndex;
+
+    var tag = currentToc.node.headingConfig.tag;
+    return Container(
+      height: 2,
+      width: 10.0 * (7 - (headingTag2Level[tag] ?? 1)),
+      color: isActiveToc ? Colors.blue : Colors.grey,
+    );
+  }
+
+  Widget _buildTocItem(index) {
+    final currentToc = _tocList[index];
+    bool isActiveToc = index == currentIndex;
+
+    final node = currentToc.node.copy(
       headingConfig: _TocHeadingConfig(
         TextStyle(
           fontSize: 16,
@@ -126,11 +135,19 @@ class _CustomTocWidgetState extends State<CustomTocWidget> {
         currentToc.node.headingConfig.tag,
       ),
     );
-  }
 
-  void _onTocItemTap(Toc item) {
-    tocController.jumpToIndex(item.widgetIndex);
-    _refreshIndex(item.selfIndex);
+    final child = Container(
+      margin: EdgeInsets.only(
+          left: 20.0 * (headingTag2Level[node.headingConfig.tag] ?? 1)),
+      child: InkWell(
+        child: ProxyRichText(node.build()),
+        onTap: () {
+          tocController.jumpToIndex(currentToc.widgetIndex);
+          _refreshIndex(currentToc.selfIndex);
+        },
+      ),
+    );
+    return wrapByAutoScroll(index, child, autoScrollController);
   }
 
   void _onScrollIndexChanged() {

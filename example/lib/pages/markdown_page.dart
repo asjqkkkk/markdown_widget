@@ -90,7 +90,6 @@ class _MarkdownPageState extends State<MarkdownPage> {
   }
 
   Widget buildTocList() {
-    if (customToc) return CustomTocWidget(controller: controller);
     return TocWidget(controller: controller);
   }
 
@@ -176,11 +175,12 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Widget buildWebBody() {
     return Row(
       children: <Widget>[
+        if (!customToc) Expanded(child: buildTocList()),
         Expanded(
           child: buildMarkdown(),
           flex: 3,
         ),
-        Expanded(child: buildTocList()),
+        if (customToc) CustomTocWidget(controller: controller),
       ],
     );
   }
