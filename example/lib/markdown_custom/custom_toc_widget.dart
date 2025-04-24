@@ -63,29 +63,37 @@ class _CustomTocWidgetState extends State<CustomTocWidget> {
                     child: Container(color: Colors.transparent),
                   ),
                 ),
-                Positioned(
-                  width: 300,
-                  height: 300,
-                  child: CompositedTransformFollower(
-                    link: _layerLink,
-                    targetAnchor: Alignment.centerLeft,
-                    followerAnchor: Alignment.centerRight,
-                    offset: const Offset(-8, 0),
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.black, width: 1),
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          spacing: 8,
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(
-                            _tocList.length,
-                            _buildTocItem,
+                CompositedTransformFollower(
+                  link: _layerLink,
+                  targetAnchor: Alignment.centerLeft,
+                  followerAnchor: Alignment.centerRight,
+                  offset: const Offset(-8, 0),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.7,
+                      maxWidth: 300,
+                      minWidth: 200,
+                    ),
+                    child: Material(
+                      elevation: 8,
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey[200],
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey[200],
+                          border: Border.all(color: Colors.black, width: 1),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            spacing: 8,
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List.generate(
+                              _tocList.length,
+                              _buildTocItem,
+                            ),
                           ),
                         ),
                       ),
