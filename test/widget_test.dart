@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:markdown_widget/toc_widget.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'test_markdowns/network_image_mock.dart';
@@ -89,10 +90,15 @@ void main() {
       });
       tocController.setTocList(list);
       print(tocController.tocList);
-      tocController.jumpToIndexCallback = (i) {
-        print('jumpToIndexCallback:$i');
-      };
-      tocController.onIndexChanged(5);
+      tocController.jumpIndex.addListener(() {
+        print('jump index listener:${tocController.jumpIndex.value}');
+      });
+      tocController.currentScrollIndex.addListener(() {
+        print(
+            'current scroll index listener:${tocController.currentScrollIndex.value}');
+      });
+
+      tocController.onScrollIndexChanged(5);
       tocController.jumpToIndex(2);
       await tester.scrollUntilVisible(
           find.text('8'), // what you want to find // widget you want to scroll
@@ -170,9 +176,9 @@ void main() {
 
   testWidgets('test markdown widget', (tester) async {
     final tocController = TocController();
-    tocController.jumpToIndexCallback = (i) {
-      print('jumpToIndexCallback  :$i');
-    };
+    tocController.jumpIndex.addListener(() {
+      print('jump index listener:${tocController.jumpIndex.value}');
+    });
     VisibilityDetectorController.instance.updateInterval = Duration.zero;
     String text = '';
     late StateSetter setter;

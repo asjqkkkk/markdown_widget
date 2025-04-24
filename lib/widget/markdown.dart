@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:markdown_widget/toc_widget.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -60,8 +61,8 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   ///[AutoScrollController] provides the scroll to index mechanism
   final AutoScrollController controller = AutoScrollController();
 
-  ///every [VisibilityDetector]'s child which is visible will be kept with [indexTreeSet]
-  final indexTreeSet = SplayTreeSet<int>((a, b) => a - b);
+  ///every [VisibilityDetector]'s child which is visible will be kept with [_indexTreeSet]
+  final _indexTreeSet = SplayTreeSet<int>((a, b) => a - b);
 
   ///if the [ScrollDirection] of [ListView] is [ScrollDirection.forward], [isForward] will be true
   bool isForward = true;
@@ -70,15 +71,13 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   void initState() {
     super.initState();
     _tocController = widget.tocController;
-    _tocController?.jumpToIndexCallback = (index) {
-      controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
-    };
+    _tocController?.jumpIndex.addListener(_onJumpIndex);
     updateState();
   }
 
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
   void updateState() {
-    indexTreeSet.clear();
+    _indexTreeSet.clear();
     markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
     final result = markdownGenerator.buildWidgets(
       widget.data,
@@ -92,16 +91,23 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 
   ///this method will be called when [updateState] or [dispose]
   void clearState() {
-    indexTreeSet.clear();
+    _indexTreeSet.clear();
     _widgets.clear();
   }
 
   @override
   void dispose() {
     clearState();
+    _tocController?.jumpIndex.removeListener(_onJumpIndex);
     controller.dispose();
-    _tocController?.jumpToIndexCallback = null;
     super.dispose();
+  }
+
+  void _onJumpIndex() {
+    final index = _tocController?.jumpIndex.value;
+    if (index != null) {
+      controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
+    }
   }
 
   @override
@@ -138,15 +144,15 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
         final visibleFraction = info.visibleFraction;
         if (isForward) {
           visibleFraction == 0
-              ? indexTreeSet.remove(index)
-              : indexTreeSet.add(index);
+              ? _indexTreeSet.remove(index)
+              : _indexTreeSet.add(index);
         } else {
           visibleFraction == 1.0
-              ? indexTreeSet.add(index)
-              : indexTreeSet.remove(index);
+              ? _indexTreeSet.add(index)
+              : _indexTreeSet.remove(index);
         }
-        if (indexTreeSet.isNotEmpty) {
-          _tocController?.onIndexChanged(indexTreeSet.first);
+        if (_indexTreeSet.isNotEmpty) {
+          _tocController?.onScrollIndexChanged(_indexTreeSet.first);
         }
       },
       child: child,

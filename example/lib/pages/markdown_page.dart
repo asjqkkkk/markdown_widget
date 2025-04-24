@@ -1,7 +1,10 @@
+import 'package:example/markdown_custom/custom_toc_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:markdown_widget/toc_widget.dart';
 
 import '../markdown_custom/custom_node.dart';
 import '../markdown_custom/latex.dart';
@@ -27,6 +30,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Map<bool, String> dataMap = {};
   String? data;
   bool isEnglish = true;
+  bool customToc = true;
   final TocController controller = TocController();
 
   bool get isMobile => PlatformDetector.isAllMobile;
@@ -85,7 +89,9 @@ class _MarkdownPageState extends State<MarkdownPage> {
     );
   }
 
-  Widget buildTocList() => TocWidget(controller: controller);
+  Widget buildTocList() {
+    return TocWidget(controller: controller);
+  }
 
   Widget buildMarkdown() {
     return Container(
@@ -169,11 +175,12 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Widget buildWebBody() {
     return Row(
       children: <Widget>[
-        Expanded(child: buildTocList()),
+        if (!customToc) Expanded(child: buildTocList()),
         Expanded(
           child: buildMarkdown(),
           flex: 3,
-        )
+        ),
+        if (customToc) CustomTocWidget(controller: controller),
       ],
     );
   }
