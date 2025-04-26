@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -20,10 +22,11 @@ class InputNode extends SpanNode {
     final parentStyleHeight =
         (parentStyle?.fontSize ?? config.p.textStyle.fontSize ?? 16.0) *
             (parentStyle?.height ?? config.p.textStyle.height ?? 1.5);
+    final marginTop = max((parentStyleHeight / 2) - 12, 0.0);
     return WidgetSpan(
       child: config.input.builder?.call(checked) ??
           Padding(
-            padding: EdgeInsets.fromLTRB(2, (parentStyleHeight / 2) - 12, 2, 0),
+            padding: EdgeInsets.fromLTRB(2, marginTop, 2, 0),
             child: MCheckBox(checked: checked),
           ),
     );
