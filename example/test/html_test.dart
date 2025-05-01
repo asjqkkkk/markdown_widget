@@ -1,8 +1,8 @@
-import 'package:example/markdown_custom/custom_node.dart';
 import 'package:flutter/src/painting/inline_span.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown/markdown.dart' as m;
+import 'package:markdown_widget/markdown_widget.dart';
+import 'package:markdown_widget_demo/markdown_custom/custom_node.dart';
 
 class DivNode extends ElementNode {
   final Map<String, String> attribute;

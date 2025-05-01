@@ -1,9 +1,9 @@
-import 'package:example/pages/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../pages/router.dart';
 import '../platform_detector/platform_detector.dart';
 import '../state/root_state.dart';
 import 'navigation_item.dart';

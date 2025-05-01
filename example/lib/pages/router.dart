@@ -1,13 +1,13 @@
-import 'package:example/pages/edit_markdown_page.dart';
-import 'package:example/pages/markdown_page.dart';
-import 'package:example/pages/sample_latex_page.dart';
-import 'package:example/state/root_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:go_router/go_router.dart';
 
+import '../state/root_state.dart';
+import 'edit_markdown_page.dart';
 import 'home_page.dart';
+import 'markdown_page.dart';
 import 'sample_html_page.dart';
+import 'sample_latex_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');

@@ -1,10 +1,10 @@
-import 'package:example/platform_detector/platform_detector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 import '../markdown_custom/latex.dart';
+import '../platform_detector/platform_detector.dart';
 import '../state/root_state.dart';
 import '../widget/code_wrapper.dart';
 

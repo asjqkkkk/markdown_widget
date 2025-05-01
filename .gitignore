@@ -82,3 +82,4 @@ coverage/
 .flutter
 .flutter_tool_state
 .metadata
+/example/macos/DerivedData/Runner/Logs
