@@ -80,12 +80,22 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void initState() {
     super.initState();
-    _tocController = widget.tocController;
-    _tocController?.jumpToIndexCallback = (index) {
-      controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
-    };
 
+    WidgetsBinding.instance.addPostFrameCallback((timer) {
+      _tocController = widget.tocController;
+      _tocController?.jumpToIndexCallback = (index) {
+        controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
+      };
+
+      updateState();
+    });
+  }
+
+  @override
+  void didUpdateWidget(MarkdownWidget oldWidget) {
+    clearState();
     updateState();
+    super.didUpdateWidget(widget);
   }
 
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
@@ -188,13 +198,6 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       },
       child: child,
     );
-  }
-
-  @override
-  void didUpdateWidget(MarkdownWidget oldWidget) {
-    clearState();
-    updateState();
-    super.didUpdateWidget(widget);
   }
 }
 
