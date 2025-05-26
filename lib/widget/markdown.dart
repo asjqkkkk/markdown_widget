@@ -105,6 +105,8 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     indexTreeSet.clear();
     markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
 
+    _widgets.clear();
+
     final result = markdownGenerator.buildWidgets(
       widget.data,
       onSelectionChanged: widget.onSelectionChanged,
