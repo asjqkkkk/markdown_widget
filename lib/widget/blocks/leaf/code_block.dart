@@ -12,11 +12,11 @@ import 'package:runtime_flutter_code_highlighter/runtime_flutter_code_highlighte
 ///A code fence is a sequence of at least three consecutive backtick characters (`) or tildes (~)
 class CodeBlockNode extends ElementNode {
   CodeBlockNode(
-      this.element,
-      this.preConfig,
-      this.visitor, {
-        this.onSelectionChanged,
-      });
+    this.element,
+    this.preConfig,
+    this.visitor, {
+    this.onSelectionChanged,
+  });
 
   String get content => element.textContent;
   final PreConfig preConfig;
@@ -58,18 +58,18 @@ class CodeBlockNode extends ElementNode {
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
       child: preConfig.wrapper?.call(
-        _CodeBlockWidget(
-          text: text,
-          language: language,
-          preConfig: preConfig,
-          onSelectionChanged: onSelectionChanged,
-          highlight: (context, text, language) => highlight(context, text, language),
-          style: style,
-        ),
-        text,
-        language ?? '',
-        assetId,
-      ) ??
+            _CodeBlockWidget(
+              text: text,
+              language: language,
+              preConfig: preConfig,
+              onSelectionChanged: onSelectionChanged,
+              highlight: (context, text, language) => highlight(context, text, language),
+              style: style,
+            ),
+            text,
+            language ?? '',
+            assetId,
+          ) ??
           _CodeBlockWidget(
             text: text,
             language: language,
@@ -160,12 +160,12 @@ class _CodeBlockWidgetState extends State<_CodeBlockWidget> {
                 scrollDirection: Axis.horizontal,
                 physics: const ClampingScrollPhysics(),
                 child: Builder(
-                    builder: (context) {
-                      return Text.rich(
-                        widget.highlight(context, widget.text, widget.language),
-                        style: widget.style,
-                      );
-                    }
+                  builder: (context) {
+                    return Text.rich(
+                      widget.highlight(context, widget.text, widget.language),
+                      style: widget.style,
+                    );
+                  },
                 ),
               ),
             ),
@@ -208,12 +208,12 @@ class PreConfig implements LeafConfig {
   }) : assert(builder == null || wrapper == null);
 
   static PreConfig get darkConfig => const PreConfig(
-    decoration: BoxDecoration(
-      color: Color(0xff555555),
-      borderRadius: BorderRadius.all(Radius.circular(8)),
-    ),
-    theme: RuntimeCodeHighlighterThemes.ONE_HALF_DARK,
-  );
+        decoration: BoxDecoration(
+          color: Color(0xff555555),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        theme: RuntimeCodeHighlighterThemes.ONE_HALF_DARK,
+      );
 
   ///copy by other params
   PreConfig copy({
