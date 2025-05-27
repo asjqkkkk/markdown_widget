@@ -81,6 +81,8 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   void initState() {
     super.initState();
 
+    markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
+
     WidgetsBinding.instance.addPostFrameCallback((timer) {
       _tocController = widget.tocController;
       _tocController?.jumpToIndexCallback = (index) {
@@ -103,7 +105,6 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     MarkdownRenderingState().query = widget.query;
 
     indexTreeSet.clear();
-    markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
 
     _widgets.clear();
 
@@ -131,48 +132,43 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     controller.dispose();
     _tocController?.jumpToIndexCallback = null;
     MarkdownRenderingState().query = null;
+
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => buildMarkdownWidget();
-
-  Widget buildMarkdownWidget() {
-    Widget markdownWidget;
-
-    if (widget.sliver) {
-      markdownWidget = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: _widgets,
-      );
-    } else {
-      markdownWidget = NotificationListener<UserScrollNotification>(
-        onNotification: (notification) {
-          final ScrollDirection direction = notification.direction;
-          isForward = direction == ScrollDirection.forward;
-          return true;
-        },
-        child: MouseRegion(
-          cursor: SystemMouseCursors.text, // Apply text cursor consistently
-          child: SingleChildScrollView(
-            physics: widget.physics,
-            controller: controller,
-            padding: widget.padding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                _widgets.length,
-                (index) => wrapByAutoScroll(
-                  index,
-                  wrapByVisibilityDetector(index, _widgets[index]),
-                  controller,
+  Widget build(BuildContext context) {
+    final Widget markdownWidget = widget.sliver
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _widgets,
+          )
+        : NotificationListener<UserScrollNotification>(
+            onNotification: (notification) {
+              final ScrollDirection direction = notification.direction;
+              isForward = direction == ScrollDirection.forward;
+              return true;
+            },
+            child: MouseRegion(
+              cursor: SystemMouseCursors.text, // Apply text cursor consistently
+              child: SingleChildScrollView(
+                physics: widget.physics,
+                controller: controller,
+                padding: widget.padding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                    _widgets.length,
+                    (index) => wrapByAutoScroll(
+                      index,
+                      wrapByVisibilityDetector(index, _widgets[index]),
+                      controller,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      );
-    }
+          );
 
     // This is the ONLY SelectionArea in the entire widget tree
     return widget.selectable
