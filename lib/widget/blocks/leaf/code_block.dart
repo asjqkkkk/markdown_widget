@@ -84,44 +84,15 @@ class CodeBlockNode extends ElementNode {
   }
 
   TextSpan highlight(BuildContext context, String text, String? language) {
-    TextSpan highlighted;
     String? query = MarkdownRenderingState().query;
-    String key = '$text-${query ?? ''}';
 
-    /// Light & Dark Mode Caches for highlighting
-    if (context.darkMode) {
-      TextSpan? cached = MarkdownRenderingState().darkThemeCache[key];
-      double? size = cached?.style?.fontSize;
-      if (cached != null && size == style.fontSize) {
-        highlighted = cached;
-      } else {
-        highlighted = RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
-          text,
-          RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
-          preConfig.theme.name,
-          style,
-          query != null ? MapEntry(query, TextStyle(color: Colors.black, backgroundColor: Colors.yellow)) : null,
-        );
-        MarkdownRenderingState().darkThemeCache[key] = highlighted;
-      }
-    } else {
-      TextSpan? cached = MarkdownRenderingState().lightThemeCache[key];
-      double? size = cached?.style?.fontSize;
-      if (cached != null && size == style.fontSize) {
-        highlighted = cached;
-      } else {
-        highlighted = RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
-          text,
-          RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
-          preConfig.theme.name,
-          style,
-          query != null ? MapEntry(query, TextStyle(color: Colors.black, backgroundColor: Colors.yellow)) : null,
-        );
-        MarkdownRenderingState().lightThemeCache[key] = highlighted;
-      }
-    }
-
-    return highlighted;
+    return RuntimeFlutterCodeHighlighter.highlightedWidgetTree(
+      text,
+      RuntimeCodeHighlighterLanguages.fromExtension(language ?? 'txt').classification(),
+      preConfig.theme.name,
+      style,
+      query != null ? MapEntry(query, TextStyle(color: Colors.black, backgroundColor: Colors.yellow)) : null,
+    );
   }
 
   @override
