@@ -80,20 +80,33 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void initState() {
     super.initState();
-    _tocController = widget.tocController;
-    _tocController?.jumpToIndexCallback = (index) {
-      controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
-    };
 
-    updateState();
+    markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
+
+    WidgetsBinding.instance.addPostFrameCallback((timer) {
+      _tocController = widget.tocController;
+      _tocController?.jumpToIndexCallback = (index) {
+        controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
+      };
+
+      updateState();
+    });
+  }
+
+  @override
+  void didUpdateWidget(MarkdownWidget oldWidget) {
+    super.didUpdateWidget(widget);
+
+    if (oldWidget.data != widget.data || oldWidget.query != widget.query) {
+      // If the data or query has changed, we need to update the state
+      clearState();
+      updateState();
+    }
   }
 
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
   void updateState() {
     MarkdownRenderingState().query = widget.query;
-
-    indexTreeSet.clear();
-    markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
 
     final result = markdownGenerator.buildWidgets(
       widget.data,
@@ -119,48 +132,43 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     controller.dispose();
     _tocController?.jumpToIndexCallback = null;
     MarkdownRenderingState().query = null;
+
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => buildMarkdownWidget();
-
-  Widget buildMarkdownWidget() {
-    Widget markdownWidget;
-
-    if (widget.sliver) {
-      markdownWidget = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: _widgets,
-      );
-    } else {
-      markdownWidget = NotificationListener<UserScrollNotification>(
-        onNotification: (notification) {
-          final ScrollDirection direction = notification.direction;
-          isForward = direction == ScrollDirection.forward;
-          return true;
-        },
-        child: MouseRegion(
-          cursor: SystemMouseCursors.text, // Apply text cursor consistently
-          child: SingleChildScrollView(
-            physics: widget.physics,
-            controller: controller,
-            padding: widget.padding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                _widgets.length,
-                (index) => wrapByAutoScroll(
-                  index,
-                  wrapByVisibilityDetector(index, _widgets[index]),
-                  controller,
+  Widget build(BuildContext context) {
+    final Widget markdownWidget = widget.sliver
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _widgets,
+          )
+        : NotificationListener<UserScrollNotification>(
+            onNotification: (notification) {
+              final ScrollDirection direction = notification.direction;
+              isForward = direction == ScrollDirection.forward;
+              return true;
+            },
+            child: MouseRegion(
+              cursor: SystemMouseCursors.text, // Apply text cursor consistently
+              child: SingleChildScrollView(
+                physics: widget.physics,
+                controller: controller,
+                padding: widget.padding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                    _widgets.length,
+                    (index) => wrapByAutoScroll(
+                      index,
+                      wrapByVisibilityDetector(index, _widgets[index]),
+                      controller,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      );
-    }
+          );
 
     // This is the ONLY SelectionArea in the entire widget tree
     return widget.selectable
@@ -188,13 +196,6 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       },
       child: child,
     );
-  }
-
-  @override
-  void didUpdateWidget(MarkdownWidget oldWidget) {
-    clearState();
-    updateState();
-    super.didUpdateWidget(widget);
   }
 }
 
