@@ -81,8 +81,6 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   void initState() {
     super.initState();
 
-    markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
-
     _tocController = widget.tocController;
     _tocController?.jumpToIndexCallback = (index) {
       controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
@@ -99,17 +97,16 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void didUpdateWidget(MarkdownWidget oldWidget) {
     super.didUpdateWidget(widget);
-
-    if (oldWidget.data != widget.data || oldWidget.query != widget.query) {
-      // If the data or query has changed, we need to update the state
-      clearState();
-      updateState();
-    }
+    clearState();
+    updateState();
   }
 
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
   void updateState() {
     MarkdownRenderingState().query = widget.query;
+
+    indexTreeSet.clear();
+    markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
 
     final result = markdownGenerator.buildWidgets(
       widget.data,
