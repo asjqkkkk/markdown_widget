@@ -83,14 +83,12 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
 
     markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
 
-    WidgetsBinding.instance.addPostFrameCallback((timer) {
-      _tocController = widget.tocController;
-      _tocController?.jumpToIndexCallback = (index) {
-        controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
-      };
+    _tocController = widget.tocController;
+    _tocController?.jumpToIndexCallback = (index) {
+      controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
+    };
 
-      updateState();
-    });
+    updateState();
   }
 
   @override
