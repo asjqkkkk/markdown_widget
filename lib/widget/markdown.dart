@@ -86,12 +86,11 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
     };
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      setState(() {
-        updateState();
-      });
-    });
+    /// NOTE: This is not in a postFrameCallback due to it causing odd scroll behavior with certain
+    /// chats (I believe related to the _tocController.controller.scrollToIndex as declared above).
+    ///
+    /// This works just fine and was originally designed to fire right out of the gate in initState.
+    updateState();
   }
 
   @override
