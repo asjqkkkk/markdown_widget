@@ -89,6 +89,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     };
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       setState(() {
         updateState();
       });
