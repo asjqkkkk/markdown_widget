@@ -88,7 +88,11 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
       controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
     };
 
-    updateState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        updateState();
+      });
+    });
   }
 
   @override
