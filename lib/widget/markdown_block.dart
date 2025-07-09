@@ -18,12 +18,16 @@ class MarkdownBlock extends StatelessWidget {
   ///to generator markdown data
   final MarkdownGenerator? generator;
 
+  ///the selection controls
+  final TextSelectionControls? selectionControls;
+
   const MarkdownBlock({
     Key? key,
     required this.data,
     this.selectable = true,
     this.config,
     this.generator,
+    this.selectionControls,
   }) : super(key: key);
 
   @override
@@ -35,6 +39,6 @@ class MarkdownBlock extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
     );
-    return selectable ? SelectionArea(child: column) : column;
+    return selectable ? SelectionArea(child: column, selectionControls: selectionControls) : column;
   }
 }
