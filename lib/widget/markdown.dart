@@ -121,6 +121,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
         return true;
       },
       child: ListView.builder(
+        cacheExtent: 9999,
         shrinkWrap: widget.shrinkWrap,
         physics: widget.physics,
         controller: _controller,
