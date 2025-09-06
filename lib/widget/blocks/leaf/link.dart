@@ -26,10 +26,10 @@ class LinkNode extends ElementNode {
           child.build(),
           () => _onLinkTap(linkConfig, url),
         ),
-      if (children.isNotEmpty)
-        // FIXME: this is a workaround, maybe need fixed by flutter framework.
-        // add a space to avoid the space area of line end can be tapped.
-        TextSpan(text: ' '),
+      // if (children.isNotEmpty)
+      //   // FIXME: this is a workaround, maybe need fixed by flutter framework.
+      //   // add a space to avoid the space area of line end can be tapped.
+      //   TextSpan(text: ' '),
     ]);
   }
 

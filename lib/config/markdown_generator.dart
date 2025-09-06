@@ -23,6 +23,15 @@ class MarkdownGenerator {
   final RegExp? splitRegExp;
   final HeadingNodeFilter headingNodeFilter;
 
+  ///如果使用默认的解析器，此属性必须设置为true，默认值为false
+  final bool withDefaultBlockSyntaxes;
+
+  ///如果使用默认的解析器，此属性必须设置为true，默认值为false
+  final bool withDefaultInlineSyntaxes;
+
+  ///指定哪些标签需要被解析，如果不指定，则所有标签都将被解析
+  final List<String> tags;
+
   /// Use [headingNodeFilter] to filter the levels of headings you want to show.
   /// e.g.
   /// ```dart
@@ -39,6 +48,9 @@ class MarkdownGenerator {
       this.spanNodeBuilder,
       this.richTextBuilder,
       this.splitRegExp,
+      this.withDefaultBlockSyntaxes = false,
+      this.withDefaultInlineSyntaxes = false,
+      this.tags = const [],
       headingNodeFilter})
       : headingNodeFilter = headingNodeFilter ?? allowAll;
 
@@ -52,12 +64,15 @@ class MarkdownGenerator {
       encodeHtml: false,
       inlineSyntaxes: inlineSyntaxList,
       blockSyntaxes: blockSyntaxList,
+      withDefaultBlockSyntaxes: withDefaultBlockSyntaxes,
+      withDefaultInlineSyntaxes: withDefaultInlineSyntaxes,
     );
     final regExp = splitRegExp ?? WidgetVisitor.defaultSplitRegExp;
     final List<String> lines = data.split(regExp);
     final List<m.Node> nodes = document.parseLines(lines);
     final List<Toc> tocList = [];
     final visitor = WidgetVisitor(
+        tags: tags,
         config: mdConfig,
         generators: generators,
         textGenerator: textGenerator,
@@ -74,10 +89,15 @@ class MarkdownGenerator {
     final spans = visitor.visit(nodes);
     onTocList?.call(tocList);
     final List<Widget> widgets = [];
-    for (var span in spans) {
+    for (var i = 0; i < spans.length; i++) {
+      final span = spans[i];
       final textSpan = spanNodeBuilder?.call(span) ?? span.build();
       final richText = richTextBuilder?.call(textSpan) ?? Text.rich(textSpan);
-      widgets.add(Padding(padding: linesMargin, child: richText));
+      if (i == spans.length - 1) {
+        widgets.add(richText);
+      } else {
+        widgets.add(Padding(padding: linesMargin, child: richText));
+      }
     }
     return widgets;
   }
