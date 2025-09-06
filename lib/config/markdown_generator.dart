@@ -89,10 +89,15 @@ class MarkdownGenerator {
     final spans = visitor.visit(nodes);
     onTocList?.call(tocList);
     final List<Widget> widgets = [];
-    for (var span in spans) {
+    for (var i = 0; i < spans.length; i++) {
+      final span = spans[i];
       final textSpan = spanNodeBuilder?.call(span) ?? span.build();
       final richText = richTextBuilder?.call(textSpan) ?? Text.rich(textSpan);
+      if (i == spans.length - 1) {
+      widgets.add(richText);
+      } else {
       widgets.add(Padding(padding: linesMargin, child: richText));
+      }
     }
     return widgets;
   }
