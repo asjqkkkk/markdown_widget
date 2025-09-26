@@ -104,7 +104,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void dispose() {
     clearState();
-    if (widget.autoScrollController != null) _controller.dispose();
+    if (widget.autoScrollController == null) _controller.dispose();
     _tocController?.jumpToIndexCallback = null;
     super.dispose();
   }
