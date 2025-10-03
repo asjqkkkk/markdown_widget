@@ -13,6 +13,9 @@ class MarkdownWidget extends StatefulWidget {
   ///if [tocController] is not null, you can use [tocListener] to get current TOC index
   final TocController? tocController;
 
+  ///[AutoScrollController] provides the scroll to index mechanism
+  final AutoScrollController? autoScrollController;
+
   ///set the desired scroll physics for the markdown item list
   final ScrollPhysics? physics;
 
@@ -35,6 +38,7 @@ class MarkdownWidget extends StatefulWidget {
     Key? key,
     required this.data,
     this.tocController,
+    this.autoScrollController,
     this.physics,
     this.shrinkWrap = false,
     this.selectable = true,
@@ -58,7 +62,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   TocController? _tocController;
 
   ///[AutoScrollController] provides the scroll to index mechanism
-  final AutoScrollController controller = AutoScrollController();
+  late AutoScrollController _controller;
 
   ///every [VisibilityDetector]'s child which is visible will be kept with [indexTreeSet]
   final indexTreeSet = SplayTreeSet<int>((a, b) => a - b);
@@ -69,9 +73,10 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void initState() {
     super.initState();
+    _controller = widget.autoScrollController ?? AutoScrollController();
     _tocController = widget.tocController;
     _tocController?.jumpToIndexCallback = (index) {
-      controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
+      _controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
     };
     updateState();
   }
@@ -99,7 +104,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   @override
   void dispose() {
     clearState();
-    controller.dispose();
+    if (widget.autoScrollController == null) _controller.dispose();
     _tocController?.jumpToIndexCallback = null;
     super.dispose();
   }
@@ -116,11 +121,12 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
         return true;
       },
       child: ListView.builder(
+        cacheExtent: 9999,
         shrinkWrap: widget.shrinkWrap,
         physics: widget.physics,
-        controller: controller,
+        controller: _controller,
         itemBuilder: (ctx, index) => wrapByAutoScroll(index,
-            wrapByVisibilityDetector(index, _widgets[index]), controller),
+            wrapByVisibilityDetector(index, _widgets[index]), _controller),
         itemCount: _widgets.length,
         padding: widget.padding,
       ),
