@@ -2,10 +2,7 @@ name: Build & deploy
 
 on:
   push:
-    branches:
-      - dev
-      - master
-      - br_pre_2.0
+    branches: [main,test_action]
 
 jobs:
   build:
