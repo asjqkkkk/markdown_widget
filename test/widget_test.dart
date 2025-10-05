@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'test_markdowns/network_image_mock.dart';
 import 'widget_visitor_test.dart';
 import 'package:path/path.dart' as p;
 
@@ -235,13 +234,11 @@ void main() {
       final content = json['markdown'];
       final widgets = testMarkdownGenerator(content);
       for (var widget in widgets) {
-        await mockNetworkImagesFor(() async {
-          await tester.pumpWidget(MaterialApp(
-            home: Scaffold(
-                body: Directionality(
-                    textDirection: TextDirection.ltr, child: widget)),
-          ));
-        });
+        await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: Directionality(
+                  textDirection: TextDirection.ltr, child: widget)),
+        ));
       }
     }
   });
@@ -252,31 +249,29 @@ void main() {
     final jsonPath = p.join(current.path, 'example', 'assets', 'editor.md');
     File jsonFile = File(jsonPath);
     final content = jsonFile.readAsStringSync();
-    await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: MarkdownWidget(
-                  data: content,
-                  config: MarkdownConfig.defaultConfig.copy(configs: [
-                    BlockquoteConfig(),
-                    ListConfig(),
-                    TableConfig(),
-                    LinkConfig(),
-                    ImgConfig(),
-                    CheckBoxConfig(),
-                  ]),
-                  markdownGenerator: MarkdownGenerator(generators: [
-                    SpanNodeGeneratorWithTag(
-                        tag: 'test',
-                        generator: (e, config, visitor) {
-                          return TextNode(text: e.textContent);
-                        })
-                  ]),
-                ))),
-      ));
-    });
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+          body: Directionality(
+              textDirection: TextDirection.ltr,
+              child: MarkdownWidget(
+                data: content,
+                config: MarkdownConfig.defaultConfig.copy(configs: [
+                  BlockquoteConfig(),
+                  ListConfig(),
+                  TableConfig(),
+                  LinkConfig(),
+                  ImgConfig(),
+                  CheckBoxConfig(),
+                ]),
+                markdownGenerator: MarkdownGenerator(generators: [
+                  SpanNodeGeneratorWithTag(
+                      tag: 'test',
+                      generator: (e, config, visitor) {
+                        return TextNode(text: e.textContent);
+                      })
+                ]),
+              ))),
+    ));
   });
 
   testWidgets('MCheckBox test', (tester) async {
@@ -294,10 +289,8 @@ void main() {
   });
 
   testWidgets('test ImageViewer iconButton pressed', (tester) async {
-    await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(MaterialApp(
-          home: ImageViewer(child: Container(width: 100, height: 100))));
-    });
+    await tester.pumpWidget(MaterialApp(
+        home: ImageViewer(child: Container(width: 100, height: 100))));
     final buttons = tester
         .widgetList(find.byWidgetPredicate((widget) => widget is IconButton));
     for (var button in buttons) {
@@ -306,10 +299,8 @@ void main() {
   });
 
   testWidgets('test ImageViewer gesture taped', (tester) async {
-    await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(MaterialApp(
-          home: ImageViewer(child: Container(width: 100, height: 100))));
-    });
+    await tester.pumpWidget(MaterialApp(
+        home: ImageViewer(child: Container(width: 100, height: 100))));
     await (await tester.startGesture(Offset(50, 50))).up();
   });
 }

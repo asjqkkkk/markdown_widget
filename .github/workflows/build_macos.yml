@@ -1,0 +1,39 @@
+name: Build-macOS-Desktop
+
+on:
+  push:
+    branches: [main,test_action]
+  pull_request:
+    branches: [main,test_action]
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter_version != '' && inputs.flutter_version || vars.FLUTTER_VERSION || '3.27.4' }}
+  JAVA_VERSION:    ${{ vars.JAVA_VERSION || '21' }}
+
+jobs:
+  macos-desktop:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - run: flutter config --enable-macos-desktop
+
+      - name: Build macOS desktop
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter build macos --release
+
+      - name: Tar binaries
+        working-directory: example
+        run: |
+          APP=$(find build/macos/Build/Products/Release -maxdepth 1 -name '*.app' -print -quit)
+          echo "App bundle found: $APP"
+          tar -C "$(dirname "$APP")" -czf macos-x64.tar.gz "$(basename "$APP")"

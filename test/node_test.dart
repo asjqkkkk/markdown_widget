@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import 'test_markdowns/network_image_mock.dart';
 import 'package:highlight/highlight.dart' as hi;
 
 void main() {
@@ -10,14 +9,12 @@ void main() {
         {'width': '100', 'height': '200', 'src': ''},
         MarkdownConfig.defaultConfig.copy(configs: [PreConfig().copy()]),
         WidgetVisitor());
-    await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(imgNode.build()))),
-      ));
-    });
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+          body: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text.rich(imgNode.build()))),
+    ));
     await (await tester.startGesture(Offset(0, 0))).up();
     final imgWidget =
         tester.firstWidget(find.byWidgetPredicate((widget) => widget is Image))
@@ -28,15 +25,13 @@ void main() {
   testWidgets('test online img node', (tester) async {
     final imgNode = ImageNode({'width': '100', 'height': '200', 'src': 'http'},
         MarkdownConfig.defaultConfig, WidgetVisitor());
-    await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(MaterialApp(
-        navigatorObservers: [_CustomObserver()],
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(imgNode.build()))),
-      ));
-    });
+    await tester.pumpWidget(MaterialApp(
+      navigatorObservers: [_CustomObserver()],
+      home: Scaffold(
+          body: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text.rich(imgNode.build()))),
+    ));
     await (await tester.startGesture(Offset(0, 50))).up();
     final imgWidget =
         tester.firstWidget(find.byWidgetPredicate((widget) => widget is Image))
@@ -53,14 +48,12 @@ void main() {
           }),
         ]),
         WidgetVisitor());
-    await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(imgNode.build()))),
-      ));
-    });
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+          body: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text.rich(imgNode.build()))),
+    ));
     await (await tester.startGesture(Offset(0, 50))).up();
   });
 
@@ -75,14 +68,12 @@ void main() {
         ]),
         WidgetVisitor()));
     linkNode.children.add(TextNode(text: 'test'));
-    await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(linkNode.build()))),
-      ));
-    });
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+          body: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text.rich(linkNode.build()))),
+    ));
     await (await tester.startGesture(Offset(0, 50))).up();
     await (await tester.startGesture(Offset(0, 100))).up();
   });
@@ -92,14 +83,12 @@ void main() {
       print('on url taped:$url');
     }));
     linkNode.children.add(TextNode(text: 'test'));
-    await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text.rich(linkNode.build()))),
-      ));
-    });
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+          body: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text.rich(linkNode.build()))),
+    ));
     await (await tester.startGesture(Offset(0, 0))).up();
     await (await tester.startGesture(Offset(0, 100))).up();
   });

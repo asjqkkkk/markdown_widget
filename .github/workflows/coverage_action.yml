@@ -2,19 +2,17 @@ name: Test Coveralls
 
 on:
   push:
-    branches:
-      - master
-      - dev
+    branches: [main,test_action]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.13.2'
+          flutter-version: '3.27.4'
       - run: flutter pub get
       - run: flutter packages pub run build_runner build
       - run: flutter test --coverage ./test/

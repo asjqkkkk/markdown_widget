@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generate pubspec hash
         id: hash
-        run: echo "pubspec_hash=$(sha1sum pubspec.lock | cut -d ' ' -f 1)" >> $GITHUB_OUTPUT
+        run: echo "pubspec_hash=$(sha1sum pubspec.lock | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
 
   build:
     needs: setup
@@ -31,7 +31,6 @@ jobs:
           - os: ubuntu-latest
             platforms: [android, web, linux]
           - os: macos-latest
-#            platforms: [ios, macos]
             platforms: [macos]
           - os: windows-latest
             platforms: [windows]
@@ -42,6 +41,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Cache Flutter
+        id: cache
         uses: actions/cache@v3
         with:
           path: |
@@ -59,14 +59,13 @@ jobs:
 
       - name: Enable Desktop
         if: contains(matrix.platforms, 'linux') || contains(matrix.platforms, 'macos') || contains(matrix.platforms, 'windows')
+        shell: bash
         run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            flutter config --enable-linux-desktop
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-            flutter config --enable-macos-desktop
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            flutter config --enable-windows-desktop
-          fi
+          case "${{ matrix.os }}" in
+            ubuntu-latest) flutter config --enable-linux-desktop ;;
+            macos-latest)  flutter config --enable-macos-desktop ;;
+            windows-latest) flutter config --enable-windows-desktop ;;
+          esac
 
       - name: Install Dependencies
         run: flutter pub get
@@ -75,28 +74,8 @@ jobs:
         if: contains(matrix.platforms, 'android')
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '17'
-
-#      - name: Setup Xcode (iOS)
-#        if: contains(matrix.platforms, 'ios')
-#        run: |
-#          sudo xcode-select -s /Applications/Xcode.app
-#          sudo xcodebuild -runFirstLaunch
-#
-#      - name: Build Android
-#        if: contains(matrix.platforms, 'android')
-#        run: |
-#          flutter build apk --release \
-#            --dart-define=APP_ENV=prod \
-#            --split-debug-info=debug-info/android
-#
-#      - name: Build iOS
-#        if: contains(matrix.platforms, 'ios')
-#        run: |
-#          flutter build ipa --release \
-#            --dart-define=APP_ENV=prod \
-#            --export-options-plist=ios/ExportOptions.plist
+          distribution: zulu
+          java-version: 17
 
       - name: Build Web
         if: contains(matrix.platforms, 'web')
@@ -108,18 +87,17 @@ jobs:
       - name: Build Linux
         if: contains(matrix.platforms, 'linux')
         run: |
-          sudo apt-get install -y clang cmake ninja-build
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev
           flutter build linux --release
 
       - name: Build macOS
         if: contains(matrix.platforms, 'macos')
-        run: |
-          flutter build macos --release
+        run: flutter build macos --release
 
       - name: Build Windows
         if: contains(matrix.platforms, 'windows')
-        run: |
-          flutter build windows --release
+        run: flutter build windows --release
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -127,7 +105,6 @@ jobs:
           name: ${{ matrix.os }}-build-${{ github.run_number }}
           path: |
             build/app/outputs/**/*.apk
-#            build/ios/**/*.ipa
             build/web/**/*
             build/**/release/**/*
             build/**/*.app
@@ -137,10 +114,10 @@ jobs:
         if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           files: |
             build/app/outputs/**/*.apk
-#            build/ios/**/*.ipa
             build/web/**/*
           tag_name: v${{ github.run_number }}
           draft: true
-          pre_release: false
+          prerelease: false
