@@ -21,7 +21,7 @@ dependencies:
   flutter_math_fork: 0.7.3
 
   # for 'video' tag
-  video_player: ^2.7.2
+  video_player: ^2.10.0
   # for router
   go_router: ^6.2.0
   # for complex table

@@ -1,0 +1,59 @@
+name: Build-Android-APK
+
+on:
+  push:
+    branches: [main, test_action]
+  pull_request:
+    branches: [main, test_action]
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter_version != '' && inputs.flutter_version || vars.FLUTTER_VERSION || '3.27.4' }}
+  JAVA_VERSION:    ${{ vars.JAVA_VERSION || '17' }}
+  ANDROID_HOME:    /usr/local/lib/android/sdk
+
+jobs:
+  android-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: master
+          cache: true
+
+      - name: Decode Keystore
+        working-directory: example
+        run: |
+          printf '%s' "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/keystore.jks
+
+      - name: Create key.properties
+        working-directory: example/android
+        run: |
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}"         >> key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}"   >> key.properties
+          echo "storeFile=keystore.jks"                    >> key.properties
+
+      - name: Build signed APK
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter doctor -v
+          flutter build apk --release \
+            --target-platform android-arm64 \
+            --split-debug-info=symbols
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: example/build/app/outputs/flutter-apk/app-release.apk

@@ -6,7 +6,6 @@ on:
 
 env:
   FLUTTER_VERSION: ${{ inputs.flutter_version != '' && inputs.flutter_version || vars.FLUTTER_VERSION || '3.27.4' }}
-  JAVA_VERSION:    ${{ vars.JAVA_VERSION || '21' }}
 
 jobs:
   build:
