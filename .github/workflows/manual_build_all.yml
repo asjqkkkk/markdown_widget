@@ -136,8 +136,37 @@ jobs:
           mv build/app/outputs/bundle/release/app-release.aab ./${{ matrix.platform }}.aab
 
       # ---------- Upload ----------
-      - name: Upload artifact
+      - name: Upload Windows
+        if: matrix.platform == 'windows'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.platform }}
+          name: windows
+          path: example/${{ matrix.platform }}.zip
+
+      - name: Upload macOS
+        if: matrix.platform == 'macos'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: example/${{ matrix.platform }}.tar.gz
+
+      - name: Upload Linux
+        if: matrix.platform == 'linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-${{ env.ARCH }}
+          path: example/${{ matrix.platform }}-*-*.tar.gz
+
+      - name: Upload iOS
+        if: matrix.platform == 'ios'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios
+          path: example/${{ matrix.platform }}.ipa
+
+      - name: Upload Android
+        if: matrix.platform == 'android'
+        uses: actions/upload-artifact@v4
+        with:
+          name: android
           path: example/${{ matrix.platform }}.*
