@@ -1,0 +1,128 @@
+name: Manual Build All Platforms
+
+on:
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'the platforms or a comma-separated list (windows,macos,linux,ios,android)'
+        required: true
+        default: 'all'
+      flutter_version:
+        description: 'Flutter version (empty = repo variable or 3.27.4)'
+        required: false
+        default: ''
+      build_name:
+        description: 'Version name, e.g., 1.2.0'
+        required: false
+        default: ''
+      build_number:
+        description: 'Version number, e.g., 42'
+        required: false
+        default: ''
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter_version != '' && inputs.flutter_version || vars.FLUTTER_VERSION || '3.27.4' }}
+  JAVA_VERSION:    ${{ vars.JAVA_VERSION || '17' }}
+  ANDROID_HOME:    /usr/local/lib/android/sdk
+
+jobs:
+  # 1. resolve platform list
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          IFS=',' read -ra PLATS <<< "${{ inputs.platforms }}"
+          if [[ "${PLATS[*]}" =~ "all" ]]; then
+            PLATS=(windows macos linux ios android)
+          fi
+          # generate runner matrix
+          MATRIX="["
+          for p in "${PLATS[@]}"; do
+            case $p in
+              windows)  runner="windows-latest" ;;
+              macos)    runner="macos-latest"   ;;
+              linux)    runner="ubuntu-latest"  ;;
+              ios)      runner="macos-latest"   ;;
+              android)  runner="ubuntu-latest"  ;;
+            esac
+            MATRIX+="{\"platform\":\"$p\",\"runner\":\"$runner\"},"
+          done
+          MATRIX="${MATRIX%,}]"
+          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+
+  # 2. building
+  build:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.matrix != '[]' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.prepare.outputs.matrix) }}
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      # ---------- Platform Specific ----------
+      - name: Windows
+        if: matrix.platform == 'windows'
+        working-directory: example
+        run: |
+          flutter config --enable-windows-desktop
+          flutter pub get
+          flutter build windows --release
+          7z a ../${{ matrix.platform }}.zip ./build/windows/x64/runner/Release/*
+
+      - name: macOS
+        if: matrix.platform == 'macos'
+        working-directory: example
+        run: |
+          flutter config --enable-macos-desktop
+          flutter pub get
+          flutter build macos --release
+          APP=$(ls build/macos/Build/Products/release/*.app)
+          tar -C build/macos/Build/Products/release -czf ../${{ matrix.platform }}.tar.gz "$(basename "$APP")"
+
+      - name: Linux
+        if: matrix.platform == 'linux'
+        working-directory: example
+        run: |
+          sudo apt update && sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+          flutter config --enable-linux-desktop
+          flutter pub get
+          flutter build linux --release
+          ARCH=$(ls build/linux/)
+          tar -C build/linux/$ARCH/release/bundle -czf ../${{ matrix.platform }}-$ARCH.tar.gz .
+
+      - name: iOS
+        if: matrix.platform == 'ios'
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter build ipa --release --export-options-plist=../ios/ExportOptions.plist
+          mv build/ios/ipa/*.ipa ../${{ matrix.platform }}.ipa
+
+      - name: Android
+        if: matrix.platform == 'android'
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter build apk --release
+          flutter build appbundle --release
+          mv build/app/outputs/flutter-apk/app-release.apk ../${{ matrix.platform }}.apk
+          mv build/app/outputs/bundle/release/app-release.aab ../${{ matrix.platform }}.aab
+
+      # ---------- Upload ----------
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}
+          path: example/${{ matrix.platform }}.*

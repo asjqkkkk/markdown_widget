@@ -2,9 +2,9 @@ name: Build-Android-APK
 
 on:
   push:
-    branches: [main, test_action]
+    branches: [main]
   pull_request:
-    branches: [main, test_action]
+    branches: [main]
 
 env:
   FLUTTER_VERSION: ${{ inputs.flutter_version != '' && inputs.flutter_version || vars.FLUTTER_VERSION || '3.27.4' }}

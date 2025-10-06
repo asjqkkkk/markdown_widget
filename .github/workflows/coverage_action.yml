@@ -2,7 +2,7 @@ name: Test Coveralls
 
 on:
   push:
-    branches: [main,test_action]
+    branches: [main]
 
 jobs:
   build:
