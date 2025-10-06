@@ -88,8 +88,9 @@ jobs:
           flutter config --enable-macos-desktop
           flutter pub get
           flutter build macos --release
-          APP=$(ls build/macos/Build/Products/release/*.app)
-          tar -C build/macos/Build/Products/release -czf ../${{ matrix.platform }}.tar.gz "$(basename "$APP")"
+          APP=$(find build/macos/Build/Products/Release -maxdepth 1 -name '*.app' -print -quit)
+          echo "App bundle found: $APP"
+          tar -C "$(dirname "$APP")" -czf ../${{ matrix.platform }}.tar.gz "$(basename "$APP")"
 
       - name: Linux
         if: matrix.platform == 'linux'
@@ -107,7 +108,7 @@ jobs:
         working-directory: example
         run: |
           flutter pub get
-          flutter build ipa --release --export-options-plist=../ios/ExportOptions.plist
+          flutter build ipa --release --no-codesign
           mv build/ios/ipa/*.ipa ../${{ matrix.platform }}.ipa
 
       - name: Android
@@ -115,6 +116,11 @@ jobs:
         working-directory: example
         run: |
           flutter pub get
+          printf '%s' "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/keystore.jks
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}"         >> key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}"   >> key.properties
+          echo "storeFile=keystore.jks"                    >> key.properties
           flutter build apk --release
           flutter build appbundle --release
           mv build/app/outputs/flutter-apk/app-release.apk ../${{ matrix.platform }}.apk

@@ -42,9 +42,3 @@ jobs:
           cd "$DIR"
           zip -r ios-unsigned.ipa Payload
           mv ios-unsigned.ipa $GITHUB_WORKSPACE/
-
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-unsigned-ipa
-          path: ios-unsigned.ipa
