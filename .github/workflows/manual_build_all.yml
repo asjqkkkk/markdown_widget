@@ -108,19 +108,23 @@ jobs:
         working-directory: example
         run: |
           flutter pub get
-          flutter build ipa --release --no-codesign
+          flutter build ios --release --no-codesign
           mv build/ios/ipa/*.ipa ../${{ matrix.platform }}.ipa
 
-      - name: Android
+      - name: Android setup keys
         if: matrix.platform == 'android'
-        working-directory: example
+        working-directory: example/android
         run: |
-          flutter pub get
           printf '%s' "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/keystore.jks
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> key.properties
           echo "keyAlias=${{ secrets.KEY_ALIAS }}"         >> key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}"   >> key.properties
           echo "storeFile=keystore.jks"                    >> key.properties
+      - name: Android build apk
+        if: matrix.platform == 'android'
+        working-directory: example
+        run: |
+          flutter pub get
           flutter build apk --release
           flutter build appbundle --release
           mv build/app/outputs/flutter-apk/app-release.apk ../${{ matrix.platform }}.apk
