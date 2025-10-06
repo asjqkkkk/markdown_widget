@@ -109,13 +109,18 @@ jobs:
         run: |
           flutter pub get
           flutter build ios --release --no-codesign
-          mv build/ios/ipa/*.ipa ../${{ matrix.platform }}.ipa
+          APP=$(find example/build/ios/iphoneos -name '*.app' -type d | head -n1)
+          DIR=$(mktemp -d)
+          cp -R "$APP" "$DIR/Payload"
+          cd "$DIR"
+          zip -r ios-unsigned.ipa Payload
+          mv ios-unsigned.ipa ../${{ matrix.platform }}.ipa
 
       - name: Android setup keys
         if: matrix.platform == 'android'
         working-directory: example/android
         run: |
-          printf '%s' "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/keystore.jks
+          printf '%s' "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > app/keystore.jks
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> key.properties
           echo "keyAlias=${{ secrets.KEY_ALIAS }}"         >> key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}"   >> key.properties
