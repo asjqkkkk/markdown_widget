@@ -79,7 +79,7 @@ jobs:
           flutter config --enable-windows-desktop
           flutter pub get
           flutter build windows --release
-          7z a ../${{ matrix.platform }}.zip ./build/windows/x64/runner/Release/*
+          7z a ./${{ matrix.platform }}.zip ./build/windows/x64/runner/Release/*
 
       - name: macOS
         if: matrix.platform == 'macos'
@@ -90,7 +90,7 @@ jobs:
           flutter build macos --release
           APP=$(find build/macos/Build/Products/Release -maxdepth 1 -name '*.app' -print -quit)
           echo "App bundle found: $APP"
-          tar -C "$(dirname "$APP")" -czf ../${{ matrix.platform }}.tar.gz "$(basename "$APP")"
+          tar -C "$(dirname "$APP")" -czf ./${{ matrix.platform }}.tar.gz "$(basename "$APP")"
 
       - name: Linux
         if: matrix.platform == 'linux'
@@ -101,7 +101,7 @@ jobs:
           flutter pub get
           flutter build linux --release
           ARCH=$(ls build/linux/)
-          tar -C build/linux/$ARCH/release/bundle -czf ../${{ matrix.platform }}-$ARCH.tar.gz .
+          tar -C build/linux/$ARCH/release/bundle -czf ./${{ matrix.platform }}-$ARCH.tar.gz .
 
       - name: iOS
         if: matrix.platform == 'ios'
@@ -109,12 +109,12 @@ jobs:
         run: |
           flutter pub get
           flutter build ios --release --no-codesign
-          APP=$(find example/build/ios/iphoneos -name '*.app' -type d | head -n1)
+          APP=$(find build/ios/iphoneos -name '*.app' -type d | head -n1)
           DIR=$(mktemp -d)
           cp -R "$APP" "$DIR/Payload"
           cd "$DIR"
           zip -r ios-unsigned.ipa Payload
-          mv ios-unsigned.ipa ../${{ matrix.platform }}.ipa
+          mv ios-unsigned.ipa ./${{ matrix.platform }}.ipa
 
       - name: Android setup keys
         if: matrix.platform == 'android'
@@ -132,8 +132,8 @@ jobs:
           flutter pub get
           flutter build apk --release
           flutter build appbundle --release
-          mv build/app/outputs/flutter-apk/app-release.apk ../${{ matrix.platform }}.apk
-          mv build/app/outputs/bundle/release/app-release.aab ../${{ matrix.platform }}.aab
+          mv build/app/outputs/flutter-apk/app-release.apk ./${{ matrix.platform }}.apk
+          mv build/app/outputs/bundle/release/app-release.aab ./${{ matrix.platform }}.aab
 
       # ---------- Upload ----------
       - name: Upload artifact
