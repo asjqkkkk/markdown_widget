@@ -154,10 +154,22 @@ class ListConfig implements ContainerConfig {
   ///the marker widget for list
   final ListMarker? marker;
 
+  ///callback for word tap events
+  final ValueCallback<String>? onTapWord;
+
+  ///style for highlighted words
+  final TextStyle? highlightStyle;
+
+  ///the currently highlighted word
+  final String? highlightedWord;
+
   const ListConfig({
     this.marginLeft = 32.0,
     this.marginBottom = 4.0,
     this.marker,
+    this.onTapWord,
+    this.highlightStyle,
+    this.highlightedWord,
   });
 
   @nonVirtual

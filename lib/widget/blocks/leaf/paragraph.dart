@@ -27,8 +27,16 @@ class ParagraphNode extends ElementNode {
 ///config class for paragraphs, tag: p
 class PConfig implements LeafConfig {
   final TextStyle textStyle;
+  final ValueCallback<String>? onTapWord;
+  final TextStyle? highlightStyle;
+  final String? highlightedWord;
 
-  const PConfig({this.textStyle = const TextStyle(fontSize: 16)});
+  const PConfig({
+    this.textStyle = const TextStyle(fontSize: 16),
+    this.onTapWord,
+    this.highlightStyle,
+    this.highlightedWord,
+  });
 
   static PConfig get darkConfig =>
       PConfig(textStyle: const TextStyle(fontSize: 16));

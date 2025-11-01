@@ -74,6 +74,16 @@ class Menu extends StatelessWidget {
                     if (isMobile) Navigator.of(context).pop();
                   },
                 ),
+                NavItem(
+                  title: 'Word Tap Demo',
+                  trailing: '👆',
+                  isSelected: isSelected(RouterEnum.word_tap),
+                  isCollapsed: isCollapsed,
+                  onTap: () {
+                    GoRouter.of(context).go(RouterEnum.word_tap.path);
+                    if (isMobile) Navigator.of(context).pop();
+                  },
+                ),
               ],
             ),
           ),

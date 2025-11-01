@@ -94,10 +94,34 @@ class WidgetVisitor implements m.NodeVisitor {
     final last = _spansStack.last;
     if (last is ElementNode) {
       final textNode = textGenerator?.call(text, config, this) ??
-          TextNode(text: text.text, style: config.p.textStyle);
+          _createTextNode(text, last);
       last.accept(textNode);
       onNodeAccepted?.call(textNode, _currentSpanIndex);
     }
+  }
+
+  SpanNode _createTextNode(m.Text text, ElementNode parent) {
+    if (parent is ParagraphNode && parent.pConfig.onTapWord != null) {
+      return TappableTextNode(
+        text: text.text,
+        style: config.p.textStyle,
+        onTapWord: parent.pConfig.onTapWord,
+        highlightStyle: parent.pConfig.highlightStyle,
+        highlightedWord: parent.pConfig.highlightedWord,
+      );
+    }
+
+    if (parent is ListNode && config.li.onTapWord != null) {
+      return TappableTextNode(
+        text: text.text,
+        style: config.p.textStyle,
+        onTapWord: config.li.onTapWord,
+        highlightStyle: config.li.highlightStyle,
+        highlightedWord: config.li.highlightedWord,
+      );
+    }
+
+    return TextNode(text: text.text, style: config.p.textStyle);
   }
 
   ///every tag has it's own [SpanNodeGenerator]

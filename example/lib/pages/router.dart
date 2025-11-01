@@ -8,6 +8,7 @@ import 'home_page.dart';
 import 'markdown_page.dart';
 import 'sample_html_page.dart';
 import 'sample_latex_page.dart';
+import '../word_tap_example.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -39,6 +40,7 @@ final GoRouter router = GoRouter(
         _buildRoute(RouterEnum.editor, EditMarkdownPage()),
         _buildRoute(RouterEnum.sample_latex, LatexPage()),
         _buildRoute(RouterEnum.sample_html, HtmlPage()),
+        _buildRoute(RouterEnum.word_tap, WordTapExample()),
       ],
     ),
   ],
@@ -95,6 +97,7 @@ enum RouterEnum {
   editor,
   sample_latex,
   sample_html,
+  word_tap,
 }
 
 extension RoutePath on RouterEnum {
