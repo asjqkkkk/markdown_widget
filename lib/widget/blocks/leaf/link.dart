@@ -17,14 +17,15 @@ class LinkNode extends ElementNode {
 
   LinkNode(this.attributes, this.linkConfig);
 
+  String get _url => attributes['href'] ?? '';
+
   @override
   InlineSpan build() {
-    final url = attributes['href'] ?? '';
     return TextSpan(children: [
       for (final child in children)
         _toLinkInlineSpan(
           child.build(),
-          () => _onLinkTap(linkConfig, url),
+          () => _onLinkTap(linkConfig, _url),
         ),
       if (children.isNotEmpty)
         // FIXME: this is a workaround, maybe need fixed by flutter framework.
@@ -42,18 +43,22 @@ class LinkNode extends ElementNode {
   }
 
   @override
-  TextStyle get style =>
-      parentStyle?.merge(linkConfig.style) ?? linkConfig.style;
+  TextStyle get style {
+    final style = linkConfig.styleBuilder?.call(_url) ?? linkConfig.style;
+    return parentStyle?.merge(style) ?? style;
+  }
 }
 
 ///config class for link, tag: a
 class LinkConfig implements LeafConfig {
+  final TextStyle Function(String url)? styleBuilder;
   final TextStyle style;
   final ValueCallback<String>? onTap;
 
   const LinkConfig(
       {this.style = const TextStyle(
           color: Color(0xff0969da), decoration: TextDecoration.underline),
+      this.styleBuilder,
       this.onTap});
 
   @nonVirtual
