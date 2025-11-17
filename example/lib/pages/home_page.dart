@@ -1,8 +1,9 @@
-import 'package:example/widget/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../platform_detector/platform_detector.dart';
 import '../state/root_state.dart';
+import '../widget/menu.dart';
 
 class HomePage extends StatefulWidget {
   final Widget child;

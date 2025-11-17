@@ -1,10 +1,10 @@
-import 'package:example/markdown_custom/video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 import '../markdown_custom/custom_node.dart';
+import '../markdown_custom/video.dart';
 import '../platform_detector/platform_detector.dart';
 import '../state/root_state.dart';
 import '../widget/code_wrapper.dart';

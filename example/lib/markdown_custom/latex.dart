@@ -1,8 +1,9 @@
-import 'package:example/state/root_state.dart';
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:markdown/markdown.dart' as m;
+import 'package:markdown_widget/markdown_widget.dart';
+
+import '../state/root_state.dart';
 
 SpanNodeGeneratorWithTag latexGenerator = SpanNodeGeneratorWithTag(
     tag: _latexTag,

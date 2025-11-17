@@ -1,0 +1,44 @@
+name: Build-iOS-IPA
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter_version != '' && inputs.flutter_version || vars.FLUTTER_VERSION || '3.27.4' }}
+
+jobs:
+  ios-ipa:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Build IPA (no signing)
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter build ios --release --no-codesign
+
+      - name: Install CocoaPods deps
+        working-directory: example/ios
+        run: |
+          pod repo update
+          pod install --repo-update
+          
+      - name: Create unsigned IPA payload
+        run: |
+          APP=$(find example/build/ios/iphoneos -name '*.app' -type d | head -n1)
+          DIR=$(mktemp -d)
+          cp -R "$APP" "$DIR/Payload"
+          cd "$DIR"
+          zip -r ios-unsigned.ipa Payload
+          mv ios-unsigned.ipa $GITHUB_WORKSPACE/

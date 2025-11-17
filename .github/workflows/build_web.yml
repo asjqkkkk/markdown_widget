@@ -2,10 +2,10 @@ name: Build & deploy
 
 on:
   push:
-    branches:
-      - dev
-      - master
-      - br_pre_2.0
+    branches: [main]
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter_version != '' && inputs.flutter_version || vars.FLUTTER_VERSION || '3.27.4' }}
 
 jobs:
   build:
@@ -18,8 +18,9 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
-          flutter-version: '3.27.4'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
 
 
       - name: Get dependencies
