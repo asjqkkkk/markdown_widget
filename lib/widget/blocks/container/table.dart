@@ -142,7 +142,7 @@ class TBodyNode extends ElementNode {
 
   @override
   TextStyle? get style =>
-      config.table.headerStyle?.merge(parentStyle) ??
+      config.table.bodyStyle?.merge(parentStyle) ??
       parentStyle ??
       config.p.textStyle;
 }
