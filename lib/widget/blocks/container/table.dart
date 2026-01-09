@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../config/configs.dart';
+import '../../../config/markdown_generator.dart';
 import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
 import '../../widget_visitor.dart';
@@ -19,6 +20,7 @@ class TableConfig implements ContainerConfig {
   final EdgeInsets headPadding;
   final EdgeInsets bodyPadding;
   final WidgetWrapper? wrapper;
+  final RichTextBuilder? richTextBuilder;
 
   const TableConfig({
     this.columnWidths,
@@ -34,6 +36,7 @@ class TableConfig implements ContainerConfig {
     this.wrapper,
     this.headPadding = const EdgeInsets.fromLTRB(8, 4, 8, 4),
     this.bodyPadding = const EdgeInsets.fromLTRB(8, 4, 8, 4),
+    this.richTextBuilder,
   });
 
   @nonVirtual
@@ -100,7 +103,8 @@ class THeadNode extends ElementNode {
                     padding: config.table.headPadding,
                     child: ProxyRichText(
                       currentTh.build(),
-                      richTextBuilder: visitor.richTextBuilder,
+                      richTextBuilder: config.table.richTextBuilder ??
+                          visitor.richTextBuilder,
                     )),
               );
             }));
@@ -132,7 +136,8 @@ class TBodyNode extends ElementNode {
             padding: config.table.bodyPadding,
             child: ProxyRichText(
               c.build(),
-              richTextBuilder: visitor.richTextBuilder,
+              richTextBuilder:
+                  config.table.richTextBuilder ?? visitor.richTextBuilder,
             ));
       }
       return TableRow(
@@ -160,8 +165,9 @@ class ThNode extends ElementNode {
 class TdNode extends ElementNode {
   final Map<String, String> attribute;
   final WidgetVisitor visitor;
+  final MarkdownConfig config;
 
-  TdNode(this.attribute, this.visitor);
+  TdNode(this.attribute, this.visitor, this.config);
 
   @override
   InlineSpan build() {
@@ -173,7 +179,8 @@ class TdNode extends ElementNode {
               alignment: Alignment.centerLeft,
               child: ProxyRichText(
                 childrenSpan,
-                richTextBuilder: visitor.richTextBuilder,
+                richTextBuilder:
+                    config.table.richTextBuilder ?? visitor.richTextBuilder,
               )));
     } else if (align.contains('center')) {
       result = WidgetSpan(
@@ -181,7 +188,8 @@ class TdNode extends ElementNode {
               alignment: Alignment.center,
               child: ProxyRichText(
                 childrenSpan,
-                richTextBuilder: visitor.richTextBuilder,
+                richTextBuilder:
+                    config.table.richTextBuilder ?? visitor.richTextBuilder,
               )));
     } else if (align.contains('right')) {
       result = WidgetSpan(
@@ -189,7 +197,8 @@ class TdNode extends ElementNode {
               alignment: Alignment.centerRight,
               child: ProxyRichText(
                 childrenSpan,
-                richTextBuilder: visitor.richTextBuilder,
+                richTextBuilder:
+                    config.table.richTextBuilder ?? visitor.richTextBuilder,
               )));
     }
     return result;
