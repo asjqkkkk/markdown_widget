@@ -58,7 +58,8 @@ class CodeBlockNode extends ElementNode {
                   styleNotMatched: preConfig.styleNotMatched,
                 ),
               ),
-              richTextBuilder: visitor.richTextBuilder,
+              richTextBuilder:
+                  preConfig.richTextBuilder ?? visitor.richTextBuilder,
             );
           }),
         ),
@@ -143,6 +144,7 @@ class PreConfig implements LeafConfig {
   final TextStyle? styleNotMatched;
   final CodeWrapper? wrapper;
   final CodeBuilder? builder;
+  final RichTextBuilder? richTextBuilder;
 
   ///see package:flutter_highlight/themes/
   final Map<String, TextStyle> theme;
@@ -161,6 +163,7 @@ class PreConfig implements LeafConfig {
     this.language = 'dart',
     this.wrapper,
     this.builder,
+    this.richTextBuilder,
   }) : assert(builder == null || wrapper == null);
 
   static PreConfig get darkConfig => const PreConfig(
@@ -181,6 +184,7 @@ class PreConfig implements LeafConfig {
     CodeWrapper? wrapper,
     Map<String, TextStyle>? theme,
     String? language,
+    RichTextBuilder? richTextBuilder,
   }) {
     return PreConfig(
       padding: padding ?? this.padding,
@@ -191,6 +195,7 @@ class PreConfig implements LeafConfig {
       wrapper: wrapper ?? this.wrapper,
       theme: theme ?? this.theme,
       language: language ?? this.language,
+      richTextBuilder: richTextBuilder ?? this.richTextBuilder,
     );
   }
 

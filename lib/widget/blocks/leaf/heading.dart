@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../config/configs.dart';
+import '../../../config/markdown_generator.dart';
 import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
 import '../../widget_visitor.dart';
@@ -28,13 +28,30 @@ class HeadingNode extends ElementNode {
           children: <Widget>[
             ProxyRichText(
               childrenSpan,
-              richTextBuilder: visitor.richTextBuilder,
+              richTextBuilder: _getRichTextBuilder() ?? visitor.richTextBuilder,
             ),
             _Divider(divider: divider.copy(color: parentStyle?.color)),
           ],
         ),
       ),
     );
+  }
+
+  RichTextBuilder? _getRichTextBuilder() {
+    if (headingConfig is H1Config) {
+      return (headingConfig as H1Config).richTextBuilder;
+    } else if (headingConfig is H2Config) {
+      return (headingConfig as H2Config).richTextBuilder;
+    } else if (headingConfig is H3Config) {
+      return (headingConfig as H3Config).richTextBuilder;
+    } else if (headingConfig is H4Config) {
+      return (headingConfig as H4Config).richTextBuilder;
+    } else if (headingConfig is H5Config) {
+      return (headingConfig as H5Config).richTextBuilder;
+    } else if (headingConfig is H6Config) {
+      return (headingConfig as H6Config).richTextBuilder;
+    }
+    return null;
   }
 
   HeadingNode copy({HeadingConfig? headingConfig}) {
@@ -101,21 +118,26 @@ abstract class HeadingConfig implements LeafConfig {
   HeadingDivider? get divider => null;
 
   EdgeInsets get padding => EdgeInsets.only(top: 8, bottom: 4);
+
+  RichTextBuilder? get richTextBuilder => null;
 }
 
 ///config class for h1
 class H1Config extends HeadingConfig {
   @override
   final TextStyle style;
+  @override
+  final RichTextBuilder? richTextBuilder;
 
-  const H1Config(
-      {this.style = const TextStyle(
-        fontSize: 32,
-        height: 40 / 32,
-        fontWeight: FontWeight.bold,
-      )});
+  const H1Config({
+    this.style = const TextStyle(
+      fontSize: 32,
+      height: 40 / 32,
+      fontWeight: FontWeight.bold,
+    ),
+    this.richTextBuilder,
+  });
 
-  @nonVirtual
   @override
   String get tag => MarkdownTag.h1.name;
 
@@ -135,15 +157,18 @@ class H1Config extends HeadingConfig {
 class H2Config extends HeadingConfig {
   @override
   final TextStyle style;
+  @override
+  final RichTextBuilder? richTextBuilder;
 
-  const H2Config(
-      {this.style = const TextStyle(
-        fontSize: 24,
-        height: 30 / 24,
-        fontWeight: FontWeight.bold,
-      )});
+  const H2Config({
+    this.style = const TextStyle(
+      fontSize: 24,
+      height: 30 / 24,
+      fontWeight: FontWeight.bold,
+    ),
+    this.richTextBuilder,
+  });
 
-  @nonVirtual
   @override
   String get tag => MarkdownTag.h2.name;
 
@@ -163,15 +188,18 @@ class H2Config extends HeadingConfig {
 class H3Config extends HeadingConfig {
   @override
   final TextStyle style;
+  @override
+  final RichTextBuilder? richTextBuilder;
 
-  const H3Config(
-      {this.style = const TextStyle(
-        fontSize: 20,
-        height: 25 / 20,
-        fontWeight: FontWeight.bold,
-      )});
+  const H3Config({
+    this.style = const TextStyle(
+      fontSize: 20,
+      height: 25 / 20,
+      fontWeight: FontWeight.bold,
+    ),
+    this.richTextBuilder,
+  });
 
-  @nonVirtual
   @override
   String get tag => MarkdownTag.h3.name;
 
@@ -191,15 +219,18 @@ class H3Config extends HeadingConfig {
 class H4Config extends HeadingConfig {
   @override
   final TextStyle style;
+  @override
+  final RichTextBuilder? richTextBuilder;
 
-  const H4Config(
-      {this.style = const TextStyle(
-        fontSize: 16,
-        height: 20 / 16,
-        fontWeight: FontWeight.bold,
-      )});
+  const H4Config({
+    this.style = const TextStyle(
+      fontSize: 16,
+      height: 20 / 16,
+      fontWeight: FontWeight.bold,
+    ),
+    this.richTextBuilder,
+  });
 
-  @nonVirtual
   @override
   String get tag => MarkdownTag.h4.name;
 
@@ -216,15 +247,18 @@ class H4Config extends HeadingConfig {
 class H5Config extends HeadingConfig {
   @override
   final TextStyle style;
+  @override
+  final RichTextBuilder? richTextBuilder;
 
-  const H5Config(
-      {this.style = const TextStyle(
-        fontSize: 16,
-        height: 20 / 16,
-        fontWeight: FontWeight.bold,
-      )});
+  const H5Config({
+    this.style = const TextStyle(
+      fontSize: 16,
+      height: 20 / 16,
+      fontWeight: FontWeight.bold,
+    ),
+    this.richTextBuilder,
+  });
 
-  @nonVirtual
   @override
   String get tag => MarkdownTag.h5.name;
 
@@ -241,15 +275,18 @@ class H5Config extends HeadingConfig {
 class H6Config extends HeadingConfig {
   @override
   final TextStyle style;
+  @override
+  final RichTextBuilder? richTextBuilder;
 
-  const H6Config(
-      {this.style = const TextStyle(
-        fontSize: 16,
-        height: 20 / 16,
-        fontWeight: FontWeight.bold,
-      )});
+  const H6Config({
+    this.style = const TextStyle(
+      fontSize: 16,
+      height: 20 / 16,
+      fontWeight: FontWeight.bold,
+    ),
+    this.richTextBuilder,
+  });
 
-  @nonVirtual
   @override
   String get tag => MarkdownTag.h6.name;
 

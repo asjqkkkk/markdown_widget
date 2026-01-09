@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/configs.dart';
+import '../../../config/markdown_generator.dart';
 import '../../proxy_rich_text.dart';
 import '../../span_node.dart';
 import '../../widget_visitor.dart';
@@ -26,8 +27,8 @@ class BlockquoteNode extends ElementNode {
       )),
       padding: config.padding,
       margin: config.margin,
-      child:
-          ProxyRichText(childrenSpan, richTextBuilder: visitor.richTextBuilder),
+      child: ProxyRichText(childrenSpan,
+          richTextBuilder: config.richTextBuilder ?? visitor.richTextBuilder),
     ));
   }
 
@@ -42,6 +43,7 @@ class BlockquoteConfig implements ContainerConfig {
   final double sideWith;
   final EdgeInsets padding;
   final EdgeInsets margin;
+  final RichTextBuilder? richTextBuilder;
 
   const BlockquoteConfig({
     this.sideColor = const Color(0xffd0d7de),
@@ -49,6 +51,7 @@ class BlockquoteConfig implements ContainerConfig {
     this.sideWith = 4.0,
     this.padding = const EdgeInsets.fromLTRB(16, 2, 0, 2),
     this.margin = const EdgeInsets.fromLTRB(0, 8, 0, 8),
+    this.richTextBuilder,
   });
 
   static BlockquoteConfig get darkConfig =>
