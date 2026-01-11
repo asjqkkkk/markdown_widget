@@ -23,8 +23,10 @@ class CodeBlockNode extends ElementNode {
     String? language = preConfig.language;
     try {
       final languageValue =
-          (element.children?.first as m.Element).attributes['class']!;
-      language = languageValue.split('-').last;
+          (element.children?.first as m.Element).attributes['class'];
+      if (languageValue != null) {
+        language = languageValue.split('-').last;
+      }
     } catch (e) {
       language = null;
       debugPrint('get language error:$e');
@@ -37,33 +39,38 @@ class CodeBlockNode extends ElementNode {
     if (codeBuilder != null) {
       return WidgetSpan(child: codeBuilder.call(content, language ?? ''));
     }
+
+    final codeContent = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(splitContents.length, (index) {
+        final currentContent = splitContents[index];
+        return ProxyRichText(
+          TextSpan(
+            children: highLightSpans(
+              currentContent,
+              language: language ?? preConfig.language,
+              theme: preConfig.theme,
+              textStyle: style,
+              styleNotMatched: preConfig.styleNotMatched,
+            ),
+          ),
+          richTextBuilder:
+              preConfig.richTextBuilder ?? visitor.richTextBuilder,
+        );
+      }),
+    );
+
     final widget = Container(
       decoration: preConfig.decoration,
       margin: preConfig.margin,
       padding: preConfig.padding,
       width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(splitContents.length, (index) {
-            final currentContent = splitContents[index];
-            return ProxyRichText(
-              TextSpan(
-                children: highLightSpans(
-                  currentContent,
-                  language: language ?? preConfig.language,
-                  theme: preConfig.theme,
-                  textStyle: style,
-                  styleNotMatched: preConfig.styleNotMatched,
-                ),
-              ),
-              richTextBuilder:
-                  preConfig.richTextBuilder ?? visitor.richTextBuilder,
-            );
-          }),
-        ),
-      ),
+      child: preConfig.wrapCode
+          ? codeContent
+          : SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: codeContent,
+            ),
     );
     return WidgetSpan(
         child:
@@ -150,6 +157,11 @@ class PreConfig implements LeafConfig {
   final Map<String, TextStyle> theme;
   final String language;
 
+  ///Whether to wrap the code when it exceeds the width of the code block.
+  ///If false (default), the code will be horizontally scrollable.
+  ///If true, the code will wrap to fit the width.
+  final bool wrapCode;
+
   const PreConfig({
     this.padding = const EdgeInsets.all(16.0),
     this.decoration = const BoxDecoration(
@@ -164,6 +176,7 @@ class PreConfig implements LeafConfig {
     this.wrapper,
     this.builder,
     this.richTextBuilder,
+    this.wrapCode = false,
   }) : assert(builder == null || wrapper == null);
 
   static PreConfig get darkConfig => const PreConfig(
@@ -185,6 +198,7 @@ class PreConfig implements LeafConfig {
     Map<String, TextStyle>? theme,
     String? language,
     RichTextBuilder? richTextBuilder,
+    bool? wrapCode,
   }) {
     return PreConfig(
       padding: padding ?? this.padding,
@@ -196,6 +210,7 @@ class PreConfig implements LeafConfig {
       theme: theme ?? this.theme,
       language: language ?? this.language,
       richTextBuilder: richTextBuilder ?? this.richTextBuilder,
+      wrapCode: wrapCode ?? this.wrapCode,
     );
   }
 
