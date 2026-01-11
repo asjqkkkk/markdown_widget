@@ -94,7 +94,7 @@ void main() {
       tocController.onIndexChanged(5);
       tocController.jumpToIndex(2);
       await tester.scrollUntilVisible(
-          find.text('8'), // what you want to find // widget you want to scroll
+          find.text('8'), /// what you want to find /// widget you want to scroll
           200);
       final gesture = await tester.startGesture(Offset(0, 300));
       await gesture.up();

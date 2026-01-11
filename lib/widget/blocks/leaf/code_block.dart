@@ -23,8 +23,10 @@ class CodeBlockNode extends ElementNode {
     String? language = preConfig.language;
     try {
       final languageValue =
-          (element.children?.first as m.Element).attributes['class']!;
-      language = languageValue.split('-').last;
+          (element.children?.first as m.Element).attributes['class'];
+      if (languageValue != null) {
+        language = languageValue.split('-').last;
+      }
     } catch (e) {
       language = null;
       debugPrint('get language error:$e');
