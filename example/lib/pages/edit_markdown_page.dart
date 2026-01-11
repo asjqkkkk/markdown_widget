@@ -95,7 +95,10 @@ class _EditMarkdownPageState extends State<EditMarkdownPage> {
                   ]),
                   markdownGenerator: MarkdownGenerator(
                     generators: [videoGeneratorWithTag, latexGenerator],
-                    inlineSyntaxList: [LatexSyntax()],
+                    inlineSyntaxList: [
+                      LatexSyntax(),
+                      AutolinkNoLeadingSpaceSyntax(),
+                    ],
                     textGenerator: (node, config, visitor) =>
                         CustomTextNode(node.textContent, config, visitor),
                     richTextBuilder: (span) => Text.rich(span),

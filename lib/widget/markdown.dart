@@ -79,7 +79,10 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   ///when we've got the data, we need update data without setState() to avoid the flicker of the view
   void updateState() {
     indexTreeSet.clear();
-    markdownGenerator = widget.markdownGenerator ?? MarkdownGenerator();
+    markdownGenerator = widget.markdownGenerator ??
+        MarkdownGenerator(
+          inlineSyntaxList: [AutolinkNoLeadingSpaceSyntax()],
+        );
     final result = markdownGenerator.buildWidgets(
       widget.data,
       onTocList: (tocList) {
