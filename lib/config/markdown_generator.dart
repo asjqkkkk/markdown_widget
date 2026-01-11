@@ -28,19 +28,19 @@ class MarkdownGenerator {
   /// ```dart
   /// (HeadingNode node) => {'h1', 'h2'}.contains(node.headingConfig.tag)
   /// ```
-  MarkdownGenerator(
-      {this.inlineSyntaxList = const [],
-      this.blockSyntaxList = const [],
-      this.linesMargin = const EdgeInsets.symmetric(vertical: 8),
-      this.generators = const [],
-      this.onNodeAccepted,
-      this.extensionSet,
-      this.textGenerator,
-      this.spanNodeBuilder,
-      this.richTextBuilder,
-      this.splitRegExp,
-      headingNodeFilter})
-      : headingNodeFilter = headingNodeFilter ?? allowAll;
+  MarkdownGenerator({
+    this.inlineSyntaxList = const [],
+    this.blockSyntaxList = const [],
+    this.linesMargin = const EdgeInsets.symmetric(vertical: 8),
+    this.generators = const [],
+    this.onNodeAccepted,
+    this.extensionSet,
+    this.textGenerator,
+    this.spanNodeBuilder,
+    this.richTextBuilder,
+    this.splitRegExp,
+    headingNodeFilter,
+  }) : headingNodeFilter = headingNodeFilter ?? allowAll;
 
   ///convert [data] to widgets
   ///[onTocList] can provider [Toc] list
