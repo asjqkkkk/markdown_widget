@@ -19,7 +19,7 @@ void main() {
 ## Heading 2
 ### Heading 3''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
 
       expect(tocList, isNotNull);
@@ -39,7 +39,7 @@ void main() {
 ## H2
 ### H3''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
 
       expect(filterCalled, isTrue);
@@ -53,7 +53,7 @@ void main() {
 ## H2
 ### H3''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
 
       expect(tocList, hasLength(3));
@@ -296,7 +296,7 @@ code here
 
 [Link](https://example.com)''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       final widgets = generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
 
       expect(widgets, isNotEmpty);
@@ -315,7 +315,7 @@ code here
 ### H3
 #### H4''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
 
       expect(tocList, hasLength(3));
@@ -337,7 +337,7 @@ code here
 ##### H5
 ###### H6''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
 
       expect(tocList, hasLength(2));
@@ -352,7 +352,7 @@ code here
 ## H2
 ### H3''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
 
       expect(tocList, isEmpty);
@@ -563,7 +563,7 @@ This is **bold** and *italic*.''';
 
 ### Heading 3''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       final widgets = generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
 
       expect(widgets, isNotEmpty);

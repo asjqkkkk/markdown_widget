@@ -13,7 +13,7 @@ class TocItemWidget extends StatelessWidget {
   }) : super(key: key);
 
   final bool isCurrent;
-  final Toc toc;
+  final TocItem toc;
   final VoidCallback? onTap;
   final double fontSize;
 
@@ -22,7 +22,7 @@ class TocItemWidget extends StatelessWidget {
     return getNodeWidget(toc, context);
   }
 
-  Widget getNodeWidget(Toc toc, BuildContext context) {
+  Widget getNodeWidget(TocItem toc, BuildContext context) {
     final color = Theme.of(context).primaryColor;
     final tag = toc.node.headingConfig.tag;
     final level = _tag2Level[tag] ?? 1;

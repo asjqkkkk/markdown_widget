@@ -259,7 +259,7 @@ void main() {
 ## H2
 ### H3''';
 
-      List<Toc>? tocList;
+      List<TocItem>? tocList;
       generator.buildWidgets(markdown, config: config, onTocList: (list) => tocList = list);
 
       expect(tocList, isNotNull);

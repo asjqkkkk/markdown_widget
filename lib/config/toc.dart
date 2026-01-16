@@ -1,99 +1,241 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/config/configs.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../widget/blocks/leaf/heading.dart';
 import '../widget/markdown.dart';
 import '../widget/proxy_rich_text.dart';
 
-///[TocController] combines [TocWidget] and [MarkdownWidget],
-///you can use it to control the jump between the two,
-/// and each [TocWidget] corresponds to a [MarkdownWidget].
+/// Callback type for index change events
+typedef TocIndexCallback = void Function(int index);
+
+/// Callback type for TOC list change events
+typedef TocListCallback = void Function(List<TocItem> list);
+
+/// [TocController] manages the state and coordination between [TocWidget] and [MarkdownWidget].
+///
+/// It provides:
+/// - Jump functionality: TOC items can scroll to specific headings in the markdown content
+/// - Bidirectional synchronization: Scroll position changes notify the TOC to update the current item
+/// - External listener support: External code can listen to index and list changes
+///
+/// Each [TocController] instance should be used with one [TocWidget] and one [MarkdownWidget].
 class TocController {
-  ///key is index of widgets, value is [Toc]
-  final LinkedHashMap<int, Toc> _index2toc = LinkedHashMap();
+  /// Maps the widget index in the markdown tree to the corresponding TOC item
+  final LinkedHashMap<int, TocItem> _widgetIndex2TocItem = LinkedHashMap();
 
-  ValueCallback<int>? _jumpToIndexCallback;
-  ValueCallback<int>? _onIndexChangedCallback;
-  ValueCallback<List<Toc>>? _onListChanged;
+  /// Internal callback to jump to a specific index in the markdown content
+  /// Set by the MarkdownWidget to handle scroll-to-index operations
+  TocIndexCallback? _jumpToWidgetIndexCallback;
 
-  void setTocList(List<Toc> list) {
-    _index2toc.clear();
-    for (final toc in list) {
-      _index2toc[toc.widgetIndex] = toc;
+  /// Listeners notified when the current heading index changes
+  final Set<TocIndexCallback> _indexChangeListeners = {};
+
+  /// Listeners notified when the TOC list is updated
+  final Set<TocListCallback> _listChangeListeners = {};
+
+  /// Whether the controller has been disposed
+  bool _isDisposed = false;
+
+  /// Returns the current list of TOC items.
+  ///
+  /// The list is unmodifiable to prevent external modifications.
+  List<TocItem> get tocList => List.unmodifiable(_widgetIndex2TocItem.values);
+
+  /// Whether the controller has been disposed
+  bool get isDisposed => _isDisposed;
+
+  /// Sets the callback that handles jumping to a specific widget index.
+  ///
+  /// This is typically set by the MarkdownWidget to enable
+  /// scroll-to-index functionality when TOC items are tapped.
+  ///
+  /// The callback parameter is the index in the MarkdownGenerator's widget tree.
+  set jumpToWidgetIndexCallback(TocIndexCallback? callback) {
+    _jumpToWidgetIndexCallback = callback;
+  }
+
+  /// Adds a listener that is called when the current heading index changes.
+  ///
+  /// The [listener] will be called with the new widget index.
+  /// Use [removeIndexListener] to remove the listener when done.
+  ///
+  /// Example:
+  /// ```dart
+  /// controller.addIndexListener((index) {
+  ///   print('Current heading index: $index');
+  /// });
+  /// ```
+  void addIndexListener(TocIndexCallback listener) {
+    if (_isDisposed) return;
+    _indexChangeListeners.add(listener);
+  }
+
+  /// Removes a previously added index change listener.
+  void removeIndexListener(TocIndexCallback listener) {
+    _indexChangeListeners.remove(listener);
+  }
+
+  /// Adds a listener that is called when the TOC list is updated.
+  ///
+  /// The [listener] will be called with the new list of TOC items.
+  /// Use [removeTocListListener] to remove the listener when done.
+  void addTocListListener(TocListCallback listener) {
+    if (_isDisposed) return;
+    _listChangeListeners.add(listener);
+  }
+
+  /// Removes a previously added list change listener.
+  void removeTocListListener(TocListCallback listener) {
+    _listChangeListeners.remove(listener);
+  }
+
+  /// Updates the TOC list with new items.
+  ///
+  /// This method is called when the markdown content is parsed and
+  /// headings are extracted. It replaces the existing TOC items.
+  void setTocList(List<TocItem> list) {
+    if (_isDisposed) return;
+
+    _widgetIndex2TocItem.clear();
+    for (final item in list) {
+      _widgetIndex2TocItem[item.widgetIndex] = item;
     }
-    _onListChanged?.call(list);
+    _notifyListChanged(List.unmodifiable(list));
   }
 
-  set jumpToIndexCallback(ValueCallback<int>? value) {
-    _jumpToIndexCallback = value;
+  /// Finds the TOC item for a given widget index.
+  ///
+  /// Returns null if no TOC item exists for the given index.
+  TocItem? findTocItemByWidgetIndex(int widgetIndex) {
+    return _widgetIndex2TocItem[widgetIndex];
   }
 
-  List<Toc> get tocList => List.unmodifiable(_index2toc.values);
+  /// Scrolls the markdown content to the heading at the specified widget index.
+  ///
+  /// The [widgetIndex] corresponds to the index in the MarkdownGenerator's widget tree.
+  /// This triggers the [_jumpToWidgetIndexCallback] if it has been set.
+  void jumpToWidgetIndex(int widgetIndex) {
+    if (_isDisposed) return;
+    _jumpToWidgetIndexCallback?.call(widgetIndex);
+  }
 
+  /// Notifies all listeners that the current heading index has changed.
+  ///
+  /// This is called by the MarkdownWidget when scrolling causes
+  /// a new heading to become visible.
+  ///
+  /// The [widgetIndex] is the index in the MarkdownGenerator's widget tree
+  /// of the newly visible heading.
+  void notifyIndexChanged(int widgetIndex) {
+    if (_isDisposed) return;
+
+    for (final listener in _indexChangeListeners) {
+      try {
+        listener.call(widgetIndex);
+      } catch (e) {
+        // Ignore errors in listeners to prevent one bad listener from breaking others
+        debugPrint('Error in TocIndexCallback: $e');
+      }
+    }
+  }
+
+  /// Notifies all listeners that the TOC list has changed.
+  void _notifyListChanged(List<TocItem> list) {
+    for (final listener in _listChangeListeners) {
+      try {
+        listener.call(list);
+      } catch (e) {
+        debugPrint('Error in TocListCallback: $e');
+      }
+    }
+  }
+
+  /// Releases all resources and listeners associated with this controller.
+  ///
+  /// After calling dispose, the controller should not be used.
   void dispose() {
-    _index2toc.clear();
-    _onIndexChangedCallback = null;
-    _jumpToIndexCallback = null;
-    _onListChanged = null;
-  }
+    if (_isDisposed) return;
 
-  void jumpToIndex(int index) {
-    _jumpToIndexCallback?.call(index);
-  }
-
-  void onIndexChanged(int index) {
-    _onIndexChangedCallback?.call(index);
+    _isDisposed = true;
+    _widgetIndex2TocItem.clear();
+    _indexChangeListeners.clear();
+    _listChangeListeners.clear();
+    _jumpToWidgetIndexCallback = null;
   }
 }
 
-///config for toc
-class Toc {
-  ///the HeadingNode
+/// Represents a single item in the Table of Contents.
+///
+/// Each [TocItem] corresponds to a heading in the markdown document
+/// and contains information needed for TOC display and navigation.
+class TocItem {
+  /// The heading node containing the heading text, level, and styling
   final HeadingNode node;
 
-  ///index of [MarkdownGenerator]'s _children
+  /// The index of this heading in the MarkdownGenerator's widget tree.
+  ///
+  /// This index is used to scroll to the correct position when
+  /// the TOC item is tapped.
   final int widgetIndex;
 
-  ///index of [TocController.tocList]
-  final int selfIndex;
+  /// The index of this item in the TOC list.
+  ///
+  /// This is used for positioning within the TOC UI itself.
+  final int tocListIndex;
 
-  Toc({
+  TocItem({
     required this.node,
-    this.widgetIndex = 0,
-    this.selfIndex = 0,
+    required this.widgetIndex,
+    required this.tocListIndex,
   });
+
+  @override
+  String toString() =>
+      'TocItem(widgetIndex: $widgetIndex, tocListIndex: $tocListIndex, level: ${node.headingConfig.tag})';
 }
 
 const defaultTocTextStyle = TextStyle(fontSize: 16);
 const defaultCurrentTocTextStyle = TextStyle(fontSize: 16, color: Colors.blue);
 
+/// A widget that displays a Table of Contents for markdown content.
+///
+/// The [TocWidget] shows a list of all headings in the markdown document.
+/// It automatically highlights the currently visible heading and supports
+/// tap-to-scroll functionality.
 class TocWidget extends StatefulWidget {
-  ///[controller] must not be null
+  /// The controller that manages TOC state and coordination.
+  ///
+  /// This must not be null and should be shared with the corresponding
+  /// [MarkdownWidget].
   final TocController controller;
 
-  ///set the desired scroll physics for the markdown item list
+  /// The scroll physics for the TOC list view.
   final ScrollPhysics? physics;
 
-  ///set shrinkWrap to obtained [ListView] (only available when [tocController] is null)
+  /// Whether the list view should shrink-wrap its content.
+  ///
+  /// When true, the list takes up only as much vertical space as needed.
   final bool shrinkWrap;
 
-  /// [ListView] padding
+  /// Padding for the list view.
   final EdgeInsetsGeometry? padding;
 
-  ///use [itemBuilder] to return a custom widget
+  /// Custom builder for TOC items.
+  ///
+  /// If provided, this will be called for each TOC item to build
+  /// a custom widget. Return null to use the default ListTile.
   final TocItemBuilder? itemBuilder;
 
-  /// use [tocTextStyle] to set the style of the toc item
+  /// Text style for non-current TOC items.
   final TextStyle tocTextStyle;
 
-  /// use [currentTocTextStyle] to set the style of the current toc item
+  /// Text style for the currently active TOC item.
   final TextStyle currentTocTextStyle;
 
   const TocWidget({
-    Key? key,
+    super.key,
     required this.controller,
     this.physics,
     this.shrinkWrap = false,
@@ -102,60 +244,95 @@ class TocWidget extends StatefulWidget {
     TextStyle? tocTextStyle,
     TextStyle? currentTocTextStyle,
   })  : tocTextStyle = tocTextStyle ?? defaultTocTextStyle,
-        currentTocTextStyle = currentTocTextStyle ?? defaultCurrentTocTextStyle,
-        super(key: key);
+        currentTocTextStyle = currentTocTextStyle ?? defaultCurrentTocTextStyle;
 
   @override
   State<TocWidget> createState() => _TocWidgetState();
 }
 
 class _TocWidgetState extends State<TocWidget> {
-  final AutoScrollController controller = AutoScrollController();
-  int currentIndex = 0;
-  final List<Toc> _tocList = [];
+  final AutoScrollController _scrollController = AutoScrollController();
+  int _currentTocListIndex = 0;
+  final List<TocItem> _tocList = [];
 
-  TocController get tocController => widget.controller;
+  TocController get controller => widget.controller;
 
+  /// Refreshes the widget to rebuild the UI.
   void refresh() {
     if (mounted) setState(() {});
+  }
+
+  /// Updates the current TOC index and refreshes the UI.
+  void refreshCurrentIndex(int tocListIndex) {
+    _currentTocListIndex = tocListIndex;
+    refresh();
   }
 
   @override
   void initState() {
     super.initState();
-    tocController._onListChanged = (list) {
-      if (list.length < _tocList.length && currentIndex >= list.length) {
-        currentIndex = list.length - 1;
-      }
-      _refreshList(list);
-
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        refresh();
-      });
-    };
-    tocController._onIndexChangedCallback = (index) {
-      final selfIndex = tocController._index2toc[index]?.selfIndex;
-      if (selfIndex != null && _tocList.length > selfIndex) {
-        refreshIndex(selfIndex);
-        controller.scrollToIndex(currentIndex,
-            preferPosition: AutoScrollPosition.begin);
-      }
-    };
-    _refreshList(tocController.tocList);
+    _initListeners();
+    _refreshList(controller.tocList);
   }
 
-  void _refreshList(List<Toc> list) {
+  void _initListeners() {
+    // Listen for TOC list changes
+    controller.addTocListListener(_onTocListChanged);
+
+    // Listen for index changes (when markdown scrolling causes new heading to become visible)
+    controller.addIndexListener(_onWidgetIndexChanged);
+  }
+
+  void _onTocListChanged(List<TocItem> list) {
+    if (list.length < _tocList.length && _currentTocListIndex >= list.length) {
+      _currentTocListIndex = list.length - 1;
+    }
+    _refreshList(list);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      refresh();
+    });
+  }
+
+  void _onWidgetIndexChanged(int widgetIndex) {
+    final tocItem = controller.findTocItemByWidgetIndex(widgetIndex);
+    if (tocItem != null && _tocList.length > tocItem.tocListIndex) {
+      refreshCurrentIndex(tocItem.tocListIndex);
+      _scrollToCurrentItem();
+    }
+  }
+
+  void _scrollToCurrentItem() {
+    _scrollController.scrollToIndex(_currentTocListIndex,
+        preferPosition: AutoScrollPosition.begin);
+  }
+
+  void _refreshList(List<TocItem> list) {
     _tocList.clear();
     _tocList.addAll(List.unmodifiable(list));
   }
 
   @override
+  void didUpdateWidget(TocWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      // Remove listeners from old controller
+      oldWidget.controller.removeTocListListener(_onTocListChanged);
+      oldWidget.controller.removeIndexListener(_onWidgetIndexChanged);
+
+      // Add listeners to new controller
+      _initListeners();
+      _refreshList(widget.controller.tocList);
+    }
+  }
+
+  @override
   void dispose() {
-    super.dispose();
-    controller.dispose();
+    controller.removeTocListListener(_onTocListChanged);
+    controller.removeIndexListener(_onWidgetIndexChanged);
+    _scrollController.dispose();
     _tocList.clear();
-    tocController._onIndexChangedCallback = null;
-    tocController._onListChanged = null;
+    super.dispose();
   }
 
   @override
@@ -163,20 +340,30 @@ class _TocWidgetState extends State<TocWidget> {
     return ListView.builder(
       shrinkWrap: widget.shrinkWrap,
       physics: widget.physics,
-      controller: controller,
-      itemBuilder: (ctx, index) {
+      controller: _scrollController,
+      itemBuilder: (context, index) {
         final currentToc = _tocList[index];
-        bool isCurrentToc = index == currentIndex;
+        final isCurrentToc = index == _currentTocListIndex;
+
+        // Use custom builder if provided
         final itemBuilder = widget.itemBuilder;
         if (itemBuilder != null) {
           final result = itemBuilder.call(TocItemBuilderData(
-              index, currentToc, currentIndex, refreshIndex));
+            index: index,
+            toc: currentToc,
+            currentIndex: _currentTocListIndex,
+            refreshIndexCallback: refreshCurrentIndex,
+            autoScrollController: _scrollController,
+          ));
           if (result != null) return result;
         }
+
+        // Default TOC item widget
         final node = currentToc.node.copy(
             headingConfig: _TocHeadingConfig(
                 isCurrentToc ? widget.currentTocTextStyle : widget.tocTextStyle,
                 currentToc.node.headingConfig.tag));
+
         final child = ListTile(
           title: Container(
             margin: EdgeInsets.only(
@@ -184,45 +371,55 @@ class _TocWidgetState extends State<TocWidget> {
             child: ProxyRichText(node.build()),
           ),
           onTap: () {
-            tocController.jumpToIndex(currentToc.widgetIndex);
-            refreshIndex(index);
+            controller.jumpToWidgetIndex(currentToc.widgetIndex);
+            refreshCurrentIndex(index);
           },
         );
-        return wrapByAutoScroll(index, child, controller);
+
+        return wrapByAutoScroll(index, child, _scrollController);
       },
       itemCount: _tocList.length,
       padding: widget.padding,
     );
   }
-
-  void refreshIndex(int index) {
-    currentIndex = index;
-    refresh();
-  }
 }
 
-///use [TocItemBuilder] to return a custom widget
+/// Builder function for creating custom TOC item widgets.
+///
+/// Returns a custom widget for the TOC item, or null to use the default ListTile.
 typedef TocItemBuilder = Widget? Function(TocItemBuilderData data);
 
-///pass [TocItemBuilderData] to help build your own [TocItemBuilder]
+/// Data passed to [TocItemBuilder] for building custom TOC items.
 class TocItemBuilderData {
-  ///the index of item
+  /// The index of this item in the TOC list
   final int index;
 
-  ///the toc data
-  final Toc toc;
+  /// The TOC item data
+  final TocItem toc;
 
-  ///current selected index of item
+  /// The currently selected TOC list index
   final int currentIndex;
 
-  ///use [refreshIndexCallback] to change [currentIndex]
+  /// Callback to change the current index.
+  ///
+  /// Use this to update which TOC item is highlighted.
   final ValueChanged<int> refreshIndexCallback;
 
-  TocItemBuilderData(
-      this.index, this.toc, this.currentIndex, this.refreshIndexCallback);
+  /// The [AutoScrollController] used for scrolling the TOC list.
+  final AutoScrollController autoScrollController;
+
+  TocItemBuilderData({
+    required this.index,
+    required this.toc,
+    required this.currentIndex,
+    required this.refreshIndexCallback,
+    required this.autoScrollController,
+  });
 }
 
-///every heading tag has a special level
+/// Maps heading tag names to their hierarchy level.
+///
+/// Used for indentation in the TOC display.
 final headingTag2Level = <String, int>{
   'h1': 1,
   'h2': 2,
@@ -232,9 +429,13 @@ final headingTag2Level = <String, int>{
   'h6': 6,
 };
 
+/// Internal [HeadingConfig] implementation for TOC items.
+///
+/// Uses the TOC's text styles instead of the default heading styles.
 class _TocHeadingConfig extends HeadingConfig {
   @override
   final TextStyle style;
+
   @override
   final String tag;
 
