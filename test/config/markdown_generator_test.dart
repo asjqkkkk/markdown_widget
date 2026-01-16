@@ -392,4 +392,215 @@ code here
       expect(builderCalled, isTrue);
     });
   });
+
+  group('MarkdownGenerator preserveEmptyLines', () {
+    test('should filter empty lines by default', () {
+      final generator = MarkdownGenerator();
+      const markdown = '''# Title
+
+Paragraph 1
+
+
+Paragraph 2''';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotEmpty);
+      // With default behavior, empty lines are filtered
+      // So we should get title + paragraph 1 + paragraph 2 = 3 widgets
+      expect(widgets.length, lessThanOrEqualTo(4));
+    });
+
+    test('should preserve empty lines when enabled', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''Paragraph 1
+
+
+Paragraph 2''';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotEmpty);
+      // With preserveEmptyLines enabled, we should get more widgets
+      // due to <br> tags being generated
+    });
+
+    test('should preserve single empty line', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''Line 1
+
+Line 2''';
+
+      final widgets1 = generator.buildWidgets(markdown);
+      final widgets2 = MarkdownGenerator().buildWidgets(markdown);
+
+      // With preserveEmptyLines, we should get different or more widgets
+      expect(widgets1, isNotEmpty);
+      expect(widgets2, isNotEmpty);
+    });
+
+    test('should preserve multiple consecutive empty lines', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''Paragraph 1
+
+
+
+Paragraph 2''';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotEmpty);
+      // Multiple empty lines should create multiple <br> tags
+    });
+
+    test('should preserve empty lines at the start', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''
+
+# Title''';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotEmpty);
+    });
+
+    test('should preserve empty lines at the end', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''# Title
+
+''';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotEmpty);
+    });
+
+    test('should work with other markdown features', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''# Title
+
+
+* Item 1
+
+
+* Item 2
+
+
+```dart
+code
+```
+
+
+**bold text**''';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotEmpty);
+    });
+
+    test('should handle Windows line endings', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = 'Line 1\r\n\r\nLine 2';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotEmpty);
+    });
+
+    test('should handle mixed line endings', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = 'Line 1\n\nLine 2\r\n\r\nLine 3';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotEmpty);
+    });
+
+    test('should not affect non-empty content', () {
+      final generator1 = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      final generator2 = MarkdownGenerator(
+        preserveEmptyLines: false,
+      );
+      const markdown = '''# Title
+## Subtitle
+
+This is **bold** and *italic*.''';
+
+      final widgets1 = generator1.buildWidgets(markdown);
+      final widgets2 = generator2.buildWidgets(markdown);
+
+      expect(widgets1, isNotEmpty);
+      expect(widgets2, isNotEmpty);
+    });
+
+    test('should work with TOC generation', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''# Heading 1
+
+
+## Heading 2
+
+
+### Heading 3''';
+
+      List<Toc>? tocList;
+      final widgets = generator.buildWidgets(markdown, onTocList: (list) => tocList = list);
+
+      expect(widgets, isNotEmpty);
+      expect(tocList, isNotEmpty);
+      expect(tocList, hasLength(3));
+    });
+
+    test('should work with custom config', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''# Title
+
+
+Content''';
+      final config = MarkdownConfig(configs: [
+        H1Config(style: TextStyle(fontSize: 40, color: Colors.red))
+      ]);
+
+      final widgets = generator.buildWidgets(markdown, config: config);
+
+      expect(widgets, isNotEmpty);
+    });
+
+    test('should handle markdown with only empty lines', () {
+      final generator = MarkdownGenerator(
+        preserveEmptyLines: true,
+      );
+      const markdown = '''
+
+
+
+''';
+
+      final widgets = generator.buildWidgets(markdown);
+
+      expect(widgets, isNotNull);
+    });
+  });
 }

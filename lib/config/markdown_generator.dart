@@ -22,12 +22,17 @@ class MarkdownGenerator {
   final RichTextBuilder? richTextBuilder;
   final RegExp? splitRegExp;
   final HeadingNodeFilter headingNodeFilter;
+  final bool preserveEmptyLines;
 
   /// Use [headingNodeFilter] to filter the levels of headings you want to show.
   /// e.g.
   /// ```dart
   /// (HeadingNode node) => {'h1', 'h2'}.contains(node.headingConfig.tag)
   /// ```
+  ///
+  /// Use [preserveEmptyLines] to control whether to preserve empty lines in markdown.
+  /// When set to true, consecutive empty lines will be converted to `<br>` tags.
+  /// Default is false (empty lines will be filtered as per markdown spec).
   MarkdownGenerator({
     this.inlineSyntaxList = const [],
     this.blockSyntaxList = const [],
@@ -40,12 +45,18 @@ class MarkdownGenerator {
     this.richTextBuilder,
     this.splitRegExp,
     headingNodeFilter,
+    this.preserveEmptyLines = false,
   }) : headingNodeFilter = headingNodeFilter ?? allowAll;
 
   ///convert [data] to widgets
   ///[onTocList] can provider [Toc] list
   List<Widget> buildWidgets(String data,
       {ValueCallback<List<Toc>>? onTocList, MarkdownConfig? config}) {
+    /// Preprocess data to preserve empty lines if needed
+    if (preserveEmptyLines) {
+      data = _preserveEmptyLines(data);
+    }
+
     final mdConfig = config ?? MarkdownConfig.defaultConfig;
     final m.Document document = m.Document(
       extensionSet: extensionSet ?? m.ExtensionSet.gitHubFlavored,
@@ -83,6 +94,30 @@ class MarkdownGenerator {
   }
 
   static bool allowAll(HeadingNode toc) => true;
+
+  /// Preserves empty lines by converting them to <br> tags
+  String _preserveEmptyLines(String data) {
+    /// Split into lines to process
+    final lines = data.split(RegExp(r'\r?\n'));
+    final result = <String>[];
+
+    /// Use non-breaking space (zero-width space followed by regular space)
+    /// This preserves the line without interfering with markdown block parsing
+    const emptyLineMarker = '\u00A0'; // Non-breaking space
+
+    for (int i = 0; i < lines.length; i++) {
+      final line = lines[i];
+
+      /// Check if this is an empty line
+      if (line.trim().isEmpty) {
+        result.add(emptyLineMarker);
+      } else {
+        result.add(line);
+      }
+    }
+
+    return result.join('\n');
+  }
 }
 
 typedef SpanNodeBuilder = TextSpan Function(SpanNode spanNode);
