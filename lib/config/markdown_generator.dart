@@ -49,9 +49,9 @@ class MarkdownGenerator {
   }) : headingNodeFilter = headingNodeFilter ?? allowAll;
 
   ///convert [data] to widgets
-  ///[onTocList] can provider [Toc] list
+  ///[onTocList] can provider [TocItem] list
   List<Widget> buildWidgets(String data,
-      {ValueCallback<List<Toc>>? onTocList, MarkdownConfig? config}) {
+      {ValueCallback<List<TocItem>>? onTocList, MarkdownConfig? config}) {
     /// Preprocess data to preserve empty lines if needed
     if (preserveEmptyLines) {
       data = _preserveEmptyLines(data);
@@ -67,7 +67,7 @@ class MarkdownGenerator {
     final regExp = splitRegExp ?? WidgetVisitor.defaultSplitRegExp;
     final List<String> lines = data.split(regExp);
     final List<m.Node> nodes = document.parseLines(lines);
-    final List<Toc> tocList = [];
+    final List<TocItem> tocList = [];
     final visitor = WidgetVisitor(
         config: mdConfig,
         generators: generators,
@@ -79,7 +79,7 @@ class MarkdownGenerator {
           if (node is HeadingNode && headingNodeFilter(node)) {
             final listLength = tocList.length;
             tocList.add(
-                Toc(node: node, widgetIndex: index, selfIndex: listLength));
+                TocItem(node: node, widgetIndex: index, tocListIndex: listLength));
           }
         });
     final spans = visitor.visit(nodes);

@@ -80,19 +80,19 @@ void main() {
       final list = List.generate(10, (index) {
         final heading = HeadingNode(H1Config(), WidgetVisitor());
         heading.accept(TextNode(text: "$index"));
-        return Toc(
+        return TocItem(
           node: heading,
           widgetIndex: index,
-          selfIndex: index,
+          tocListIndex: index,
         );
       });
       tocController.setTocList(list);
       print(tocController.tocList);
-      tocController.jumpToIndexCallback = (i) {
-        print('jumpToIndexCallback:$i');
+      tocController.jumpToWidgetIndexCallback = (i) {
+        print('jumpToWidgetIndexCallback:$i');
       };
-      tocController.onIndexChanged(5);
-      tocController.jumpToIndex(2);
+      tocController.notifyIndexChanged(5);
+      tocController.jumpToWidgetIndex(2);
       await tester.scrollUntilVisible(
           find.text('8'), /// what you want to find /// widget you want to scroll
           200);
@@ -169,8 +169,8 @@ void main() {
 
   testWidgets('test markdown widget', (tester) async {
     final tocController = TocController();
-    tocController.jumpToIndexCallback = (i) {
-      print('jumpToIndexCallback  :$i');
+    tocController.jumpToWidgetIndexCallback = (i) {
+      print('jumpToWidgetIndexCallback  :$i');
     };
     VisibilityDetectorController.instance.updateInterval = Duration.zero;
     String text = '';
@@ -193,12 +193,12 @@ void main() {
             })),
       ),
     ));
-    tocController.jumpToIndex(0);
+    tocController.jumpToWidgetIndex(0);
     setter(() {
       text = testMarkdown;
     });
     await tester.scrollUntilVisible(find.text('akslfjklasjf22'), 50);
-    tocController.jumpToIndex(0);
+    tocController.jumpToWidgetIndex(0);
     await tester.scrollUntilVisible(find.text('akslfjklasjf33'), 50);
     final widget = tester.firstWidget(find.byWidgetPredicate(
             (widget) => widget is NotificationListener<UserScrollNotification>))

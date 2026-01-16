@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 void main() {
   group('TocController', () {
@@ -20,7 +21,7 @@ void main() {
 
     test('should set toc list', () {
       final headingNode = HeadingNode(H1Config(), WidgetVisitor());
-      final toc = Toc(node: headingNode, widgetIndex: 0, selfIndex: 0);
+      final toc = TocItem(node: headingNode, widgetIndex: 0, tocListIndex: 0);
       controller.setTocList([toc]);
 
       expect(controller.tocList, hasLength(1));
@@ -30,8 +31,8 @@ void main() {
     test('should replace toc list when setting new list', () {
       final headingNode1 = HeadingNode(H1Config(), WidgetVisitor());
       final headingNode2 = HeadingNode(H2Config(), WidgetVisitor());
-      final toc1 = Toc(node: headingNode1, widgetIndex: 0, selfIndex: 0);
-      final toc2 = Toc(node: headingNode2, widgetIndex: 1, selfIndex: 1);
+      final toc1 = TocItem(node: headingNode1, widgetIndex: 0, tocListIndex: 0);
+      final toc2 = TocItem(node: headingNode2, widgetIndex: 1, tocListIndex: 1);
 
       controller.setTocList([toc1]);
       expect(controller.tocList, hasLength(1));
@@ -41,19 +42,19 @@ void main() {
       expect(controller.tocList.first.node, headingNode2);
     });
 
-    test('should set and call jumpToIndexCallback', () {
+    test('should set and call jumpToWidgetIndexCallback', () {
       int? jumpedIndex;
-      controller.jumpToIndexCallback = (index) {
+      controller.jumpToWidgetIndexCallback = (index) {
         jumpedIndex = index;
       };
 
-      controller.jumpToIndex(5);
+      controller.jumpToWidgetIndex(5);
       expect(jumpedIndex, 5);
     });
 
     test('should clear all data on dispose', () {
       final headingNode = HeadingNode(H1Config(), WidgetVisitor());
-      final toc = Toc(node: headingNode, widgetIndex: 0, selfIndex: 0);
+      final toc = TocItem(node: headingNode, widgetIndex: 0, tocListIndex: 0);
       controller.setTocList([toc]);
 
       controller.dispose();
@@ -62,26 +63,26 @@ void main() {
     });
   });
 
-  group('Toc', () {
+  group('TocItem', () {
     test('should create with required parameters', () {
       final headingNode = HeadingNode(H1Config(), WidgetVisitor());
-      final toc = Toc(
+      final toc = TocItem(
         node: headingNode,
         widgetIndex: 5,
-        selfIndex: 10,
+        tocListIndex: 10,
       );
 
       expect(toc.node, headingNode);
       expect(toc.widgetIndex, 5);
-      expect(toc.selfIndex, 10);
+      expect(toc.tocListIndex, 10);
     });
 
     test('should have default index values', () {
       final headingNode = HeadingNode(H1Config(), WidgetVisitor());
-      final toc = Toc(node: headingNode);
+      final toc = TocItem(node: headingNode, widgetIndex: 0, tocListIndex: 0);
 
       expect(toc.widgetIndex, 0);
-      expect(toc.selfIndex, 0);
+      expect(toc.tocListIndex, 0);
     });
   });
 
@@ -119,8 +120,13 @@ void main() {
   group('TocItemBuilderData', () {
     test('should create with all parameters', () {
       final headingNode = HeadingNode(H1Config(), WidgetVisitor());
-      final toc = Toc(node: headingNode, widgetIndex: 0, selfIndex: 0);
-      final data = TocItemBuilderData(5, toc, 10, (index) {});
+      final toc = TocItem(node: headingNode, widgetIndex: 0, tocListIndex: 0);
+      final data = TocItemBuilderData(
+          index: 5,
+          toc: toc,
+          currentIndex: 10,
+          refreshIndexCallback: (index) {},
+          autoScrollController: AutoScrollController());
 
       expect(data.index, 5);
       expect(data.toc, toc);
@@ -132,7 +138,7 @@ void main() {
   testWidgets('TocWidget should build with default styles', (tester) async {
     final controller = TocController();
     final headingNode = HeadingNode(H1Config(), WidgetVisitor());
-    final toc = Toc(node: headingNode, widgetIndex: 0, selfIndex: 0);
+    final toc = TocItem(node: headingNode, widgetIndex: 0, tocListIndex: 0);
     controller.setTocList([toc]);
 
     await tester.pumpWidget(MaterialApp(
@@ -149,7 +155,7 @@ void main() {
     final headingNode = HeadingNode(H1Config(), WidgetVisitor());
     final textNode = TextNode(text: 'Heading 1');
     headingNode.accept(textNode);
-    final toc = Toc(node: headingNode, widgetIndex: 0, selfIndex: 0);
+    final toc = TocItem(node: headingNode, widgetIndex: 0, tocListIndex: 0);
     controller.setTocList([toc]);
 
     const customStyle = TextStyle(fontSize: 20, color: Colors.red);
@@ -168,13 +174,12 @@ void main() {
     expect(find.byType(TocWidget), findsOneWidget);
   });
 
-  testWidgets('TocWidget should use itemBuilder when provided',
-      (tester) async {
+  testWidgets('TocWidget should use itemBuilder when provided', (tester) async {
     final controller = TocController();
     final headingNode = HeadingNode(H1Config(), WidgetVisitor());
     final textNode = TextNode(text: 'Heading 1');
     headingNode.accept(textNode);
-    final toc = Toc(node: headingNode, widgetIndex: 0, selfIndex: 0);
+    final toc = TocItem(node: headingNode, widgetIndex: 0, tocListIndex: 0);
     controller.setTocList([toc]);
 
     await tester.pumpWidget(MaterialApp(

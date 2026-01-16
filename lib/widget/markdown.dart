@@ -70,7 +70,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   void initState() {
     super.initState();
     _tocController = widget.tocController;
-    _tocController?.jumpToIndexCallback = (index) {
+    _tocController?.jumpToWidgetIndexCallback = (index) {
       controller.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
     };
     updateState();
@@ -103,7 +103,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   void dispose() {
     clearState();
     controller.dispose();
-    _tocController?.jumpToIndexCallback = null;
+    _tocController?.jumpToWidgetIndexCallback = null;
     super.dispose();
   }
 
@@ -149,7 +149,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
               : indexTreeSet.remove(index);
         }
         if (indexTreeSet.isNotEmpty) {
-          _tocController?.onIndexChanged(indexTreeSet.first);
+          _tocController?.notifyIndexChanged(indexTreeSet.first);
         }
       },
       child: child,
