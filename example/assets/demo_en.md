@@ -1,11 +1,11 @@
-Language：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md)
+Language：[简体中文](https://github.com/asjqkkkk/markdown_widget/blob/master/README_ZH.md) | [English](https://github.com/asjqkkkk/markdown_widget/blob/master/README.md) | [日本語](https://github.com/asjqkkkk/markdown_widget/blob/master/README_JP.md)
+
+
+![screen](https://github.com/asjqkkkk/asjqkkkk.github.io/assets/30992818/4185bf1a-0be3-460d-ba12-9e4764f5c035)
 
 # 📖markdown_widget
 
-![screenshot](assets/script_medias/1676100926803.png)
-
-
-[![Coverage Status](assets/script_medias/1675527914508.png)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](assets/script_medias/1675527915217.png)](https://pub.dartlang.org/packages/markdown_widget) [![demo](assets/script_medias/1675527916292.png)](https://asjqkkkk.github.io/markdown_widget/)
+[![Coverage Status](https://coveralls.io/repos/github/asjqkkkk/markdown_widget/badge.svg?branch=dev)](https://coveralls.io/github/asjqkkkk/markdown_widget?branch=dev) [![pub package](https://img.shields.io/pub/v/markdown_widget.svg)](https://pub.dartlang.org/packages/markdown_widget) [![demo](https://img.shields.io/badge/demo-online-brightgreen)](https://asjqkkkk.github.io/markdown_widget/)
 
 A simple and easy-to-use markdown rendering component.
 
@@ -17,7 +17,7 @@ A simple and easy-to-use markdown rendering component.
 
 Before starting, you can try out the online demo by clicking [demo](https://asjqkkkk.github.io/markdown_widget/)
 
-```dart
+```
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
@@ -34,14 +34,14 @@ class MarkdownPage extends StatelessWidget {
 ```
 If you want to use your own Column or other list widget, you can use `MarkdownGenerator`
 
-```dart
+```
   Widget buildMarkdown() =>
       Column(children: MarkdownGenerator().buildWidgets(data));
 ```
 
 Or use `MarkdownBlock`
 
-```dart
+```
   Widget buildMarkdown() =>
       SingleChildScrollView(child: MarkdownBlock(data: data));
 ```
@@ -50,7 +50,7 @@ Or use `MarkdownBlock`
 
 `markdown_widget` supports night mode by default. Simply use a different `MarkdownConfig` to enable it.
 
-```dart
+```
   Widget buildMarkdown(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final config = isDark
@@ -70,14 +70,14 @@ Or use `MarkdownBlock`
 
 Default mode | Night mode
 ---|---
-<img src="assets/script_medias/1675527917554.png" width=400> | <img src="assets/script_medias/1675527923101.png" width=400>
+<img src="https://user-images.githubusercontent.com/30992818/211159089-ec4acd11-ee02-46f2-af4f-f8c47eb28410.png" width=400> | <img src="https://user-images.githubusercontent.com/30992818/211159108-4c20de2d-fb1d-4bcb-b23f-3ceb91291661.png" width=400>
 
 
 ## 🔗Link
 
 You can customize the style and click events of links, like this
 
-```dart
+```
   Widget buildMarkdown() => MarkdownWidget(
       data: data,
       config: MarkdownConfig(configs: [
@@ -97,7 +97,7 @@ You can customize the style and click events of links, like this
 
 Using the TOC is very simple
 
-```dart
+```
   final tocController = TocController();
 
   Widget buildTocWidget() => TocWidget(controller: tocController);
@@ -120,7 +120,7 @@ Using the TOC is very simple
 
 Highlighting code supports multiple themes.
 
-```dart
+```
 import 'package:flutter_highlight/themes/a11y-light.dart';
 
   Widget buildMarkdown() => MarkdownWidget(
@@ -134,7 +134,7 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
 
 Cross-platform support for Select All and Copy function.
 
-![image](assets/script_medias/1679144416355.png)
+![image](https://user-images.githubusercontent.com/30992818/226107076-f32a919e-9a0c-4138-8a0b-266c6337e0af.png)
 
 ## 🌐Html tag
 
@@ -147,6 +147,53 @@ Here is the [online HTML demo showcase](https://asjqkkkk.github.io/markdown_widg
 The example also includes simple support for LaTeX, which can be implemented by referring to the implementation in [latex.dart](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/latex.dart)
 
 Here is the [online latex demo showcase](https://asjqkkkk.github.io/markdown_widget/#/sample_latex)
+
+## 🔷Mermaid diagram support
+
+The example includes support for Mermaid diagrams, which can render flowcharts, sequence diagrams, state diagrams, and more. Refer to the implementation in [mermaid.dart](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/mermaid.dart)
+
+Features:
+- Multiple diagram types (flowchart, sequence diagram, state diagram, ER diagram, etc.)
+- Theme support (auto light/dark mode)
+- Interactive display modes (code only, diagram only, or both)
+- Fullscreen viewer with pan & zoom support
+- Independent horizontal scrolling for wide diagrams
+- Smart caching and debouncing for optimal performance
+
+Here is the [online Mermaid demo showcase](https://asjqkkkk.github.io/markdown_widget/#/sample_mermaid)
+
+```dart
+import 'package:markdown_widget/markdown_widget.dart';
+import 'markdown_custom/mermaid.dart';
+
+// Basic usage
+final isDark = Theme.of(context).brightness == Brightness.dark;
+final preConfig = PreConfig(
+  wrapper: createMermaidWrapper(
+    config: const MermaidConfig(),
+    isDark: isDark,
+    preConfig: preConfig,
+  ),
+);
+
+MarkdownWidget(
+  data: markdown,
+  config: config.copy(configs: [preConfig]),
+)
+
+// With custom configuration
+final preConfig = PreConfig(
+  wrapper: createMermaidWrapper(
+    config: MermaidConfig(
+      displayMode: MermaidDisplayMode.codeAndDiagram,
+      diagramPadding: EdgeInsets.all(16.0),
+      showLoadingIndicator: true,
+    ),
+    isDark: isDark,
+    preConfig: preConfig,
+  ),
+);
+```
 
 ## 🍑Custom tag implementation
 

@@ -74,6 +74,16 @@ class Menu extends StatelessWidget {
                     if (isMobile) Navigator.of(context).pop();
                   },
                 ),
+                NavItem(
+                  title: 'Sample: Mermaid',
+                  trailing: '🔷',
+                  isSelected: isSelected(RouterEnum.sample_mermaid),
+                  isCollapsed: isCollapsed,
+                  onTap: () {
+                    GoRouter.of(context).go(RouterEnum.sample_mermaid.path);
+                    if (isMobile) Navigator.of(context).pop();
+                  },
+                ),
               ],
             ),
           ),
