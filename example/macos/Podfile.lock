@@ -22,7 +22,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   url_launcher_macos: c83b920a14ed6c0ec4d6069c3ec3e19222607405
-  video_player_avfoundation: 74584d47d3e53b88362a9948ab61d4a0d2aa42d2
+  video_player_avfoundation: 2cef49524dd1f16c5300b9cd6efd9611ce03639b
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 

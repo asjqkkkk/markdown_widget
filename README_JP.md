@@ -147,6 +147,53 @@ import 'package:flutter_highlight/themes/a11y-light.dart';
 
 こちらが[オンラインlatexデモショーケース](https://asjqkkkk.github.io/markdown_widget/#/sample_latex)です。
 
+## 🔷Mermaid図サポート
+
+例にはMermaid図のサポートが含まれており、フローチャート、シーケンス図、状態図などをレンダリングできます。実装については[mermaid.dart](https://github.com/asjqkkkk/markdown_widget/blob/dev/example/lib/markdown_custom/mermaid.dart)を参照してください。
+
+機能：
+- 複数の図タイプ（フローチャート、シーケンス図、状態図、ER図など）
+- テーマサポート（自動ライト/ダークモード）
+- インタラクティブな表示モード（コードのみ、図のみ、または両方）
+- フルスクリーンビューア（パンとズームをサポート）
+- 幅の広い図の独立した水平スクロール
+- パフォーマンス最適化のためのスマートキャッシュとデバウンス
+
+こちらが[オンラインMermaidデモショーケース](https://asjqkkkk.github.io/markdown_widget/#/sample_mermaid)です。
+
+```dart
+import 'package:markdown_widget/markdown_widget.dart';
+import 'markdown_custom/mermaid.dart';
+
+// 基本的な使い方
+final isDark = Theme.of(context).brightness == Brightness.dark;
+final preConfig = PreConfig(
+  wrapper: createMermaidWrapper(
+    config: const MermaidConfig(),
+    isDark: isDark,
+    preConfig: preConfig,
+  ),
+);
+
+MarkdownWidget(
+  data: markdown,
+  config: config.copy(configs: [preConfig]),
+)
+
+// カスタム設定
+final preConfig = PreConfig(
+  wrapper: createMermaidWrapper(
+    config: MermaidConfig(
+      displayMode: MermaidDisplayMode.codeAndDiagram,
+      diagramPadding: EdgeInsets.all(16.0),
+      showLoadingIndicator: true,
+    ),
+    isDark: isDark,
+    preConfig: preConfig,
+  ),
+);
+```
+
 ## 🍑カスタムタグの実装
 
 `MarkdownGeneratorConfig`に`SpanNodeGeneratorWithTag`を渡すことで、新しいタグとそのタグに対応する`SpanNode`を追加できます。また、既存のタグを使用して対応する`SpanNode`を上書きすることもできます。
