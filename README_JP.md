@@ -45,6 +45,18 @@ class MarkdownPage extends StatelessWidget {
       SingleChildScrollView(child: MarkdownBlock(data: data));
 ```
 
+## 📁 その他の例
+
+高度な使用例については、リポジトリの [example/lib/markdown_custom](https://github.com/asjqkkkk/markdown_widget/tree/dev/example/lib/markdown_custom) フォルダを参照してください：
+
+- **video.dart** - カスタムvideoタグのサポート
+- **latex.dart** - LaTeX数式レンダリング
+- **mermaid.dart** - Mermaid図のサポート（フローチャート、シーケンス図など）
+- **html_support.dart** - HTMLタグの拡張
+- **custom_node.dart** - カスタムノードの実装例
+
+これらの例は、カスタムタグと機能を使用してパッケージを拡張する方法を示しています。
+
 ## 🌠ナイトモード
 
 `markdown_widget`はデフォルトでナイトモードをサポートしています。異なる`MarkdownConfig`を使用するだけで有効にできます。
