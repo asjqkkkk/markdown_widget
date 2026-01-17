@@ -46,6 +46,18 @@ Or use `MarkdownBlock`
       SingleChildScrollView(child: MarkdownBlock(data: data));
 ```
 
+## 📁 More Examples
+
+For advanced usage examples, check out the [example/lib/markdown_custom](https://github.com/asjqkkkk/markdown_widget/tree/dev/example/lib/markdown_custom) folder in the repository:
+
+- **video.dart** - Custom video tag support
+- **latex.dart** - LaTeX math formula rendering
+- **mermaid.dart** - Mermaid diagram support (flowcharts, sequence diagrams, etc.)
+- **html_support.dart** - HTML tag extension
+- **custom_node.dart** - Custom node implementation examples
+
+These examples demonstrate how to extend the package with custom tags and features.
+
 ## 🌠Night mode
 
 `markdown_widget` supports night mode by default. Simply use a different `MarkdownConfig` to enable it.

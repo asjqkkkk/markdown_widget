@@ -46,6 +46,18 @@ class MarkdownPage extends StatelessWidget {
       SingleChildScrollView(child: MarkdownBlock(data: data));
 ```
 
+## 📁 更多示例
+
+更多高级用法示例，请参考仓库中的 [example/lib/markdown_custom](https://github.com/asjqkkkk/markdown_widget/tree/dev/example/lib/markdown_custom) 文件夹：
+
+- **video.dart** - 自定义 video 标签支持
+- **latex.dart** - LaTeX 数学公式渲染
+- **mermaid.dart** - Mermaid 图表支持（流程图、时序图等）
+- **html_support.dart** - HTML 标签扩展
+- **custom_node.dart** - 自定义节点实现示例
+
+这些示例展示了如何通过自定义标签和功能来扩展本包。
+
 ## 🌠夜间模式
 
 `markdown_widget` 默认支持夜间模式，只需要使用不同的 `MarkdownConfig` 即可
