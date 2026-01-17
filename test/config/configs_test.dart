@@ -194,6 +194,49 @@ void main() {
       );
     });
 
+    test('should assert when both builder and contentWrapper are provided',
+        () {
+      expect(
+        () => PreConfig(
+          builder: (code, lang) => Text(code),
+          contentWrapper: (child, code, lang) => Container(child: child),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('should assert when both wrapper and contentWrapper are provided', () {
+      expect(
+        () => PreConfig(
+          wrapper: (child, code, lang) => Container(child: child),
+          contentWrapper: (child, code, lang) => Container(child: child),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('should assert when all three are provided', () {
+      expect(
+        () => PreConfig(
+          builder: (code, lang) => Text(code),
+          wrapper: (child, code, lang) => Container(child: child),
+          contentWrapper: (child, code, lang) => Container(child: child),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('should assert when copy with both builder and wrapper', () {
+      final config = const PreConfig();
+      expect(
+        () => config.copy(
+          builder: (code, lang) => Text(code),
+          wrapper: (child, code, lang) => Container(child: child),
+        ),
+        throwsAssertionError,
+      );
+    });
+
     test('should copy with new values', () {
       final config = const PreConfig();
       final copied = config.copy(language: 'python', wrapCode: true);

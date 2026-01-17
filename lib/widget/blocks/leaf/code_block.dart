@@ -187,7 +187,13 @@ class PreConfig implements LeafConfig {
     this.builder,
     this.richTextBuilder,
     this.wrapCode = false,
-  }) : assert(builder == null || wrapper == null || contentWrapper == null);
+  }) : assert(
+          (builder != null ? 1 : 0) +
+                  (wrapper != null ? 1 : 0) +
+                  (contentWrapper != null ? 1 : 0) <=
+              1,
+          'At most one of builder, wrapper, or contentWrapper can be non-null',
+        );
 
   static PreConfig get darkConfig => const PreConfig(
         decoration: BoxDecoration(
@@ -206,6 +212,7 @@ class PreConfig implements LeafConfig {
     TextStyle? styleNotMatched,
     CodeWrapper? wrapper,
     CodeContentWrapper? contentWrapper,
+    CodeBuilder? builder,
     Map<String, TextStyle>? theme,
     String? language,
     RichTextBuilder? richTextBuilder,
@@ -219,6 +226,7 @@ class PreConfig implements LeafConfig {
       styleNotMatched: styleNotMatched ?? this.styleNotMatched,
       wrapper: wrapper ?? this.wrapper,
       contentWrapper: contentWrapper ?? this.contentWrapper,
+      builder: builder ?? this.builder,
       theme: theme ?? this.theme,
       language: language ?? this.language,
       richTextBuilder: richTextBuilder ?? this.richTextBuilder,
