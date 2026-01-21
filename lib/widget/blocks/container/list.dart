@@ -90,9 +90,6 @@ class ListNode extends ElementNode {
   InlineSpan build() {
     final space = config.li.marginLeft;
     final marginBottom = config.li.marginBottom;
-    final parentStyleHeight =
-        (parentStyle?.fontSize ?? config.p.textStyle.fontSize ?? 16.0) *
-            (parentStyle?.height ?? config.p.textStyle.height ?? 1.2);
     Widget marker;
     if (isCheckbox) {
       marker = ProxyRichText(
@@ -100,9 +97,9 @@ class ListNode extends ElementNode {
         richTextBuilder: config.li.richTextBuilder ?? visitor.richTextBuilder,
       );
     } else {
-      marker = config.li.marker?.call(isOrdered, depth, index) ??
-          getDefaultMarker(isOrdered, depth, parentStyle?.color, index,
-              parentStyleHeight / 2, config);
+      marker = config.li.marker
+              ?.call(isOrdered, depth, index, parentStyle, config) ??
+          getDefaultMarker(isOrdered, depth, index, parentStyle, config);
     }
     return WidgetSpan(
       child: Padding(
@@ -172,7 +169,8 @@ class ListConfig implements ContainerConfig {
 }
 
 ///the function to get marker widget
-typedef ListMarker = Widget? Function(bool isOrdered, int depth, int index);
+typedef ListMarker = Widget? Function(bool isOrdered, int depth, int index,
+    TextStyle? parentStyle, MarkdownConfig config);
 
 ///the default marker widget for unordered list
 class _UlMarker extends StatelessWidget {
@@ -235,21 +233,26 @@ class _OlMarker extends StatelessWidget {
 }
 
 ///get default marker for list
-Widget getDefaultMarker(bool isOrdered, int depth, Color? color, int index,
-    double paddingTop, MarkdownConfig config) {
-  Widget marker;
+Widget getDefaultMarker(bool isOrdered, int depth, int index,
+    TextStyle? parentStyle, MarkdownConfig config) {
+  final parentStyleHeight =
+      (parentStyle?.fontSize ?? config.p.textStyle.fontSize ?? 16.0) *
+          (parentStyle?.height ?? config.p.textStyle.height ?? 1.2);
+
   if (isOrdered) {
-    marker = Container(
+    return Container(
         alignment: Alignment.topRight,
         padding: EdgeInsets.only(right: 1),
         child: _OlMarker(
-            depth: depth, index: index, color: color, config: config.p));
+            depth: depth,
+            index: index,
+            color: parentStyle?.color,
+            config: config.p));
   } else {
-    marker = Padding(
-        padding: EdgeInsets.only(top: paddingTop - 1.5),
-        child: _UlMarker(depth: depth, color: color));
+    return Padding(
+        padding: EdgeInsets.only(top: parentStyleHeight / 2 - 1.5),
+        child: _UlMarker(depth: depth, color: parentStyle?.color));
   }
-  return marker;
 }
 
 const _listTag = {'ul', 'ol'};
