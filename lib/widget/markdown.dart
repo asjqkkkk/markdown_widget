@@ -31,6 +31,9 @@ class MarkdownWidget extends StatefulWidget {
   ///config for [MarkdownGenerator]
   final MarkdownGenerator? markdownGenerator;
 
+  //for rendering in slivers
+  final bool sliverMode;
+
   const MarkdownWidget({
     Key? key,
     required this.data,
@@ -38,6 +41,7 @@ class MarkdownWidget extends StatefulWidget {
     this.physics,
     this.shrinkWrap = false,
     this.selectable = true,
+    this.sliverMode = false,
     this.padding,
     this.config,
     this.markdownGenerator,
@@ -108,7 +112,7 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => buildMarkdownWidget();
+  Widget build(BuildContext context) => widget.sliverMode ? buildMarkdownSliver() : buildMarkdownWidget();
 
   ///
   Widget buildMarkdownWidget() {
@@ -131,6 +135,17 @@ class MarkdownWidgetState extends State<MarkdownWidget> {
     return widget.selectable
         ? SelectionArea(child: markdownWidget)
         : markdownWidget;
+  }
+
+  Widget buildMarkdownSliver() {
+    return SliverList.builder(
+      itemBuilder: (ctx, index) => wrapByAutoScroll(
+        index,
+        wrapByVisibilityDetector(index, _widgets[index]),
+        controller,
+      ),
+      itemCount: _widgets.length,
+    );
   }
 
   ///wrap widget by [VisibilityDetector] that can know if [child] is visible
