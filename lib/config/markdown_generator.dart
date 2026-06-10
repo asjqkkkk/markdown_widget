@@ -61,7 +61,7 @@ class MarkdownGenerator {
     final m.Document document = m.Document(
       extensionSet: extensionSet ?? m.ExtensionSet.gitHubFlavored,
       encodeHtml: false,
-      inlineSyntaxes: inlineSyntaxList,
+      inlineSyntaxes: [_SingleTildeSyntax(), ...inlineSyntaxList],
       blockSyntaxes: blockSyntaxList,
     );
     final regExp = splitRegExp ?? WidgetVisitor.defaultSplitRegExp;
@@ -123,3 +123,17 @@ class MarkdownGenerator {
 typedef SpanNodeBuilder = TextSpan Function(SpanNode spanNode);
 
 typedef RichTextBuilder = Widget Function(InlineSpan span);
+
+/// Prevents isolated single tildes from being misinterpreted as strikethrough
+/// delimiters. GFM's StrikethroughSyntax uses `~+`, so `a~b` and `c~d`
+/// would pair their tildes into a strikethrough span. This syntax intercepts
+/// any `~` that is not part of a `~~` run and emits it as literal text.
+class _SingleTildeSyntax extends m.InlineSyntax {
+  _SingleTildeSyntax() : super(r'(?<!~)~(?!~)');
+
+  @override
+  bool onMatch(m.InlineParser parser, Match match) {
+    parser.addNode(m.Text('~'));
+    return true;
+  }
+}
