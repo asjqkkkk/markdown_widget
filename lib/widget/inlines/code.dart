@@ -16,7 +16,8 @@ class CodeNode extends ElementNode {
   InlineSpan build() => TextSpan(style: style, text: text);
 
   @override
-  TextStyle get style => codeConfig.style.merge(parentStyle);
+  TextStyle get style =>
+      parentStyle?.merge(codeConfig.style) ?? codeConfig.style;
 }
 
 ///config class for code, tag: code
